@@ -1,8 +1,11 @@
 /*
   ACCUMULATOR
+
+  Circuit:
+    Pull-up resistor between ground and node with control signal and digital pin 2.
   
   Input:
-    Control signal to Pin 2
+    Control signal to Pin 2.
 
   Output:
     Elapsed time that control signal was HIGH for.
