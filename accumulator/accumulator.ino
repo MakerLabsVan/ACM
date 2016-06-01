@@ -24,7 +24,6 @@ const int ledPin =  13;      // the number of the LED pin
 const int buttonPin = 2;     // the number of the pushbutton pin
 int buttonState = 0;
 int previous_state = 0;
-int accumulator = 0;
 unsigned long start_time = 0;
 unsigned long elapsed_time = 0;
 
