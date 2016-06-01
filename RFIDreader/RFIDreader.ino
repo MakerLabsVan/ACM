@@ -21,14 +21,18 @@ char txrxbuffer[255];
 
 // command packet - start, address, data length, command, data[0 to 2], end
 // response packet when idle - 0xAA, 0x00, 0x02, 0x01, 0x83, 0x80, 0xBB
+const int ledPin = 13;
+const int signalPin = 4;
 char get_readID[] = { 0xAA , 0x00, 0x03, 0x25, 0x26, 0x00, 0x00, 0xBB };
 byte response[11];
-const int ledPin = 13;
+bool standby;
+unsigned long elapsed_time = 0;
 
 void setup() {
   Serial.begin(57600);
   RDM880.begin(9600);
   pinMode(ledPin, OUTPUT);
+  pinMode(signalPin, INPUT);
 }
 
 void loop() { 
@@ -36,7 +40,8 @@ void loop() {
   RDM880.write(get_readID, 8);
   delay(100);
   digitalWrite(ledPin, LOW); 
-  response[7] = 0xFF;
+  standby = true;
+  response[7] = NULL;
 
   // read response from RDM880 and print
   int i = 0;
@@ -47,9 +52,44 @@ void loop() {
     i++;
 
     // LED on if an RFID is detected
-    if(response[7] != 0xFF) {
+    if(response[7] != NULL) {
       digitalWrite(ledPin, HIGH);
+      // Machine is ready to fire, get ready to track time
+      standby = false;
+      elapsed_time = accumulator(standby) / 1000;
+      }
     }
   }
   Serial.println();
 }
+
+unsigned long accumulator(bool standby) {
+  unsigned long startTime, endTime = 0;
+  int signalState, previousState = 0;
+  
+  while(!standby) {
+    // read signal state
+    signalState = digitalRead(signalPin);
+
+    // check for new ON signal
+    if (previousState == LOW && signalState == HIGH) {
+      startTime = millis();
+      previousState = signalState;
+    }
+    // check for OFF signal
+    else if (previousState == HIGH && signalState == LOW) {
+      endTime = millis();
+      // calculate elapsed time
+      return endTime - startTime;
+    }
+    // no event
+    else {
+      previousState = signalState;
+    }
+  
+  }
+}
+
+
+
+
