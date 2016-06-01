@@ -6,9 +6,11 @@
 
    Input:
       RFID tag
+      Signal from Pin 4
 
    Output:
       Serial number of tag scanned
+      Elapsed time
 
    Operation:
       Reader waits until a tag is scanned, then prints the serial number of the tag
@@ -26,7 +28,7 @@ const int signalPin = 4;
 char get_readID[] = { 0xAA , 0x00, 0x03, 0x25, 0x26, 0x00, 0x00, 0xBB };
 byte response[11];
 bool standby;
-unsigned long elapsed_time = 0;
+unsigned long elapsed_time;
 
 void setup() {
   Serial.begin(57600);
@@ -42,6 +44,7 @@ void loop() {
   digitalWrite(ledPin, LOW); 
   standby = true;
   response[7] = NULL;
+  elapsed_time = 0;
 
   // read response from RDM880 and print
   int i = 0;
@@ -57,6 +60,8 @@ void loop() {
       // Machine is ready to fire, get ready to track time
       standby = false;
       elapsed_time = accumulator(standby) / 1000;
+      Serial.print("Elapsed Time: ");
+      Serial.print(elapsed_time);
       }
     }
   }
