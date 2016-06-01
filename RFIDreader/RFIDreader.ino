@@ -3,6 +3,7 @@
 /* RFID Reader
    Uses RDM880 breakout board with RX connected to pin 2 and TX connected to pin 3. 
    Another serial interface is added by including the Software Serial library.
+   Dummy signal from 3.3 V is connected to pin 4.
 
    Input:
       RFID tag
@@ -23,12 +24,12 @@ char txrxbuffer[255];
 
 // command packet - start, address, data length, command, data[0 to 2], end
 // response packet when idle - 0xAA, 0x00, 0x02, 0x01, 0x83, 0x80, 0xBB
-const int ledPin = 13;
-const int signalPin = 4;
 char get_readID[] = { 0xAA , 0x00, 0x03, 0x25, 0x26, 0x00, 0x00, 0xBB };
 byte response[11];
 bool standby;
 unsigned long elapsed_time;
+const int ledPin = 13;
+const int signalPin = 4;
 
 void setup() {
   Serial.begin(57600);
@@ -54,7 +55,7 @@ void loop() {
     Serial.print(" ");
     i++;
 
-    // LED on if an RFID is detected
+    // LED on if an RFID is detected (idle packet only contains 7 bytes)
     if(response[7] != NULL) {
       digitalWrite(ledPin, HIGH);
       // Machine is ready to fire, get ready to track time
@@ -70,7 +71,8 @@ void loop() {
 
 unsigned long accumulator(bool standby) {
   unsigned long startTime, endTime = 0;
-  int signalState, previousState = 0;
+  int signalState = 0;
+  int previousState = NULL;
   
   while(!standby) {
     // read signal state
@@ -91,8 +93,8 @@ unsigned long accumulator(bool standby) {
     else {
       previousState = signalState;
     }
-  
   }
+  return 0;
 }
 
 
