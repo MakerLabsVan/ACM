@@ -61,8 +61,9 @@ void loop() {
       // Machine is ready to fire, get ready to track time
       standby = false;
       elapsed_time = accumulator(standby) / 1000;
-      Serial.print("Elapsed Time: ");
-      Serial.print(elapsed_time);
+      if (elapsed_time != 0) {
+        Serial.print("Elapsed Time: ");
+        Serial.print(elapsed_time);
       }
     }
   }
@@ -71,7 +72,7 @@ void loop() {
 
 unsigned long accumulator(bool standby) {
   unsigned long startTime, endTime = 0;
-  int signalState = 0;
+  int signalState;
   int previousState = NULL;
   
   while(!standby) {
