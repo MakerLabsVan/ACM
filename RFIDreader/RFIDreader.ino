@@ -1,7 +1,5 @@
 #include <SoftwareSerial.h> 
 
-
-
 /* RFID Reader
    Uses RDM880 breakout board with RX connected to pin 2 and TX connected to pin 3. 
    Another serial interface is added by including the Software Serial library.
@@ -27,11 +25,11 @@ char txrxbuffer[255];
 // command packet - start, address, data length, command, data[0 to 2], end
 // response packet when idle - 0xAA, 0x00, 0x02, 0x01, 0x83, 0x80, 0xBB
 char get_readID[] = { 0xAA , 0x00, 0x03, 0x25, 0x26, 0x00, 0x00, 0xBB };
-byte response[11];
+byte response[15];
+
 const int ledPin = 13;
 const int signalPin = 4;
-bool standby;
-unsigned long elapsedTime;
+const int debounce = 25;
 
 void setup() {
   Serial.begin(57600);
@@ -41,12 +39,14 @@ void setup() {
 }
 
 void loop() { 
+  bool standby = true;
+  response[7] = NULL;
+  unsigned long elapsedTime = 0;
+  
   // send command packet to RDM880 to read serial number every second
   RDM880.write(get_readID, 8);
   delay(100);
   digitalWrite(ledPin, LOW);
-  response[7] = NULL;
-  standby = true;
 
   // read response packet from RDM880 and print
   int i = 0;
@@ -71,10 +71,11 @@ unsigned long accumulator(bool standby) {
   unsigned long startTime, endTime = 0;
   int signalState;
   int previousState = NULL;
+  
   while(standby == false) {
     // read signal state
     signalState = digitalRead(signalPin);
-    delay(25);
+    delay(debounce);
 
     // debounce check
     if (signalState == digitalRead(signalPin)) {
