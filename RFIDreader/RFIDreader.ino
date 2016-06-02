@@ -69,30 +69,36 @@ unsigned long accumulator(bool standby) {
   unsigned long startTime, endTime = 0;
   int signalState;
   int previousState = NULL;
-  
   while(standby == false) {
     // read signal state
     signalState = digitalRead(signalPin);
+    delay(100);
 
-    // check for new ON signal
-    if (previousState == LOW && signalState == HIGH) {
-      startTime = millis();
-      previousState = signalState;
-    }
-    // check for OFF signal
-    else if (previousState == HIGH && signalState == LOW) {
-      endTime = (millis() - startTime)/1000;
-      if (endTime != 0) {
-        Serial.print("Elapsed time: ");
-        Serial.println(endTime);
+    // debounce check
+    if (signalState == digitalRead(signalPin)) {
+      
+      // check for new ON signal
+      if (previousState == LOW && signalState == HIGH) {
+        startTime = millis();
+        previousState = signalState;
       }
-      previousState = signalState;
-      standby = true;
+      // check for OFF signal
+      else if (previousState == HIGH && signalState == LOW) {
+        endTime = (millis() - startTime)/1000;
+        if (endTime != 0) {
+          Serial.print("Elapsed time: ");
+          Serial.println(endTime);
+        }
+        previousState = signalState;
+        standby = true;
+      }
+      // no event
+      else {
+        previousState = signalState;
+      }
+      
     }
-    // no event
-    else {
-      previousState = signalState;
-    }
+    
   }
 }
 
