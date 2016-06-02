@@ -1,5 +1,7 @@
 #include <SoftwareSerial.h> 
 
+
+
 /* RFID Reader
    Uses RDM880 breakout board with RX connected to pin 2 and TX connected to pin 3. 
    Another serial interface is added by including the Software Serial library.
@@ -14,8 +16,8 @@
       Elapsed time
 
    Operation:
-      Reader waits until a tag is scanned, then prints the serial number of the tag
-      and turns on an LED.
+      Reader waits until a tag is scanned, then prints the serial number of the tag.
+      Reader now waits for "control" signal, and when that signal goes high, counts time.
 
 */
 
@@ -39,14 +41,14 @@ void setup() {
 }
 
 void loop() { 
-  // send command packet to RDM880
+  // send command packet to RDM880 to read serial number every second
   RDM880.write(get_readID, 8);
   delay(100);
   digitalWrite(ledPin, LOW);
   response[7] = NULL;
   standby = true;
 
-  // read response from RDM880 and print
+  // read response packet from RDM880 and print
   int i = 0;
   while(RDM880.available()) {
     response[i] = RDM880.read();
@@ -72,7 +74,7 @@ unsigned long accumulator(bool standby) {
   while(standby == false) {
     // read signal state
     signalState = digitalRead(signalPin);
-    delay(100);
+    delay(25);
 
     // debounce check
     if (signalState == digitalRead(signalPin)) {
@@ -87,7 +89,7 @@ unsigned long accumulator(bool standby) {
         endTime = (millis() - startTime)/1000;
         if (endTime != 0) {
           Serial.print("Elapsed time: ");
-          Serial.println(endTime);
+          Serial.print(endTime);
         }
         previousState = signalState;
         standby = true;
