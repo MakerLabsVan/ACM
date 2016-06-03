@@ -25,7 +25,7 @@ char txrxbuffer[255];
 // command packet - start, address, data length, command, data[0 to 2], end
 // response packet when idle - 0xAA, 0x00, 0x02, 0x01, 0x83, 0x80, 0xBB
 char get_readID[] = { 0xAA , 0x00, 0x03, 0x25, 0x26, 0x00, 0x00, 0xBB };
-byte response[15];
+byte response[16];
 
 const int ledPin = 13;
 const int signalPin = 4;
