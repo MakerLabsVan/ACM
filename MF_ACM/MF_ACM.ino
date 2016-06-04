@@ -50,18 +50,19 @@ void setup() {
 
 void loop() { 
   bool standby = true;
-  unsigned char responseFlag = NULL;
+  bool responseFlag = false;
   unsigned long elapsedTime = 0;
   
   // send command packet to RDM880 to read serial number every second
   MF_GET_SNR(0x00);
   delay(100);
   digitalWrite(ledPin, LOW);
-
+  
+  // get response packet and return a flag if a packet other than idle is detected
   responseFlag = getResponse(responseFlag);
   
   // LED on if an RFID is detected (idle packet only contains 7 bytes)
-  if(responseFlag != NULL) {
+  if(responseFlag == true) {
     digitalWrite(ledPin, HIGH);
     // Machine is ready to fire, get ready to track time
     standby = false;
@@ -108,7 +109,7 @@ unsigned long accumulator(bool standby) {
   }
 }
 
-unsigned char getResponse(unsigned char responseFlag) {
+unsigned char getResponse(bool responseFlag) {
   int i = 0;
   unsigned char response[bufferSize];
   response[7] = NULL;
@@ -121,13 +122,41 @@ unsigned char getResponse(unsigned char responseFlag) {
   }
 
   if (response[7] != NULL)
-    return response[7];
+    return true;
   else
-    return NULL;   
+    return false;   
+}
+
+unsigned char checksum(unsigned char A[], int numElements) {
+  int i = 0;
+  unsigned char BCC = A[0];
+  
+  for(i = 1; i < numElements - 1; i++) {
+    BCC ^= A[i]; 
+  }
+
+  return BCC;
 }
 
 void MF_GET_SNR(unsigned char DADD) {
-  unsigned char CMD[] = { STX, DADD, 0x03, CMD_GET_SNR, 0x26, 0x00, 0x00, ETX};
+  BCC = checksum( { DADD, 0x03, CMD_GET_SNR, 0x26, 0x00 }, 5);
+  unsigned char CMD[] = { STX, DADD, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX};
   RDM880.write(CMD, 8);
+}
+
+void MF_READ(unsigned char numBlocks, unsigned char startSector) {
+  int i = 0;
+  BCC = checksum( { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }, 12);
+  unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
+                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
+  unsigned char response[bufferSize];
+
+  while(RDM880.available()) {
+    response[i] = RDM880.read();
+    Serial.print(response[i], HEX);
+    Serial.print(" ");
+    i++;
+  }
+  
 }
 
