@@ -169,7 +169,6 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
   while(RDM880.available()) {
     response[i] = RDM880.read();
     Serial.print(response[i], HEX);
-    if()
     Serial.print(" ");
     i++;
   }
