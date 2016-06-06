@@ -22,10 +22,20 @@ void setup() {
 }
 
 void loop() {
-	bool standby = true;
 	bool responseFlag = false;
 
-	
+	MF_SNR(0x00);
+	delay(100);
+	digitalWrite(ledPin, LOW);
+
+	responseFlag = detectCard(false);
+
+	if(responseFlag == true) {
+		digitalWrite(ledPin, HIGH);
+		// read 3 blocks starting at address 1
+		MF_READ(0x03, 0x01);
+	}
+
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
@@ -66,7 +76,7 @@ unsigned char detectCard(bool responseFlag) {
 
 void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 	int i = 0;
-	unsigned A[] = { TX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
+	unsigned char A[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
                         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
     unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
     unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
@@ -84,7 +94,6 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 			Serial.println();
 		else if(i == 23 || i == 39 || i == 55 || i == 71 || i == 87) 
 			Serial.println();
-		else if()
 		else 
 			Serial.print(" ");
 		i++;
