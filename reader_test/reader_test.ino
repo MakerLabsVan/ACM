@@ -34,6 +34,7 @@ void loop() {
 		digitalWrite(ledPin, HIGH);
 		// read 4 blocks starting at address 3
 		MF_READ(0x04, 0x03);
+		delay(2000);
 	}
 
 }
