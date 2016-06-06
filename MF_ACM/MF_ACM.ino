@@ -14,22 +14,26 @@
 #define CMD_INCREMENT 0x24
 #define CMD_GET_SNR 0x25
 
-/* RFID Reader
-   Uses RDM880 breakout board with RX connected to pin 2 and TX connected to pin 3. 
-   Another serial interface is added by including the Software Serial library.
-   Dummy signal from 3.3 V is connected to pin 4.
+/* 
+RFID Reader
+  Uses RDM880 breakout board with RX connected to pin 2 and TX connected to pin 3. 
+  Another serial interface is added by including the Software Serial library.
+  Dummy signal from 3.3 V is connected to pin 4.
 
-   Input:
-      RFID tags
-      Signal from Pin 4
+Input:
+  RFID tags
+  Signal from Pin 4
 
-   Output:
-      Serial number of tag scanned
-      Elapsed time
+Output:
+  Serial number of tag scanned
+  Elapsed time
 
-   Operation:
-      Reader waits until a tag is scanned, then prints the serial number of the tag.
-      Reader now waits for "control" signal, and when that signal goes high, counts time.
+Operation:
+  Reader waits until a tag is scanned, then prints the serial number of the tag.
+  Reader now waits for "control" signal, and when that signal goes high, counts time.
+
+Notes:
+  Consult ISO14443 documentation on command/receive packet structures
 
 */
 
@@ -109,6 +113,7 @@ unsigned long accumulator(bool standby) {
   }
 }
 
+// Prints serial number to monitor, sets flag if a packet other than idle is detected
 unsigned char getResponse(bool responseFlag) {
   int i = 0;
   unsigned char response[bufferSize];
@@ -127,6 +132,7 @@ unsigned char getResponse(bool responseFlag) {
     return false;   
 }
 
+// calculates checksum by XOR-ing all bytes except STX and ETX
 unsigned char checksum(unsigned char A[], int numElements) {
   int i = 0;
   unsigned char BCC = A[0];
@@ -138,12 +144,14 @@ unsigned char checksum(unsigned char A[], int numElements) {
   return BCC;
 }
 
+// Get serial number of detected card, prints serial number of selected card if > 1 near reader
 void MF_GET_SNR(unsigned char DADD) {
   BCC = checksum( { DADD, 0x03, CMD_GET_SNR, 0x26, 0x00 }, 5);
   unsigned char CMD[] = { STX, DADD, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX};
-  RDM880.write(CMD, 8);
+  RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
 }
 
+// Read up to 4 blocks (16 bytes each) from sectors 0 - 63
 void MF_READ(unsigned char numBlocks, unsigned char startSector) {
   int i = 0;
   BCC = checksum( { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }, 12);
@@ -151,6 +159,10 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
   unsigned char response[bufferSize];
 
+  // send command
+  RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
+
+  // get response packet and print
   while(RDM880.available()) {
     response[i] = RDM880.read();
     Serial.print(response[i], HEX);
@@ -160,3 +172,19 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
   
 }
 
+// Write a block at a sector with 16 bytes (can do up to 4 blocks)
+void MF_WRITE(unsigned char numBlocks, unsigned char startSector, unsigned char time) {
+  BCC = checksum({ 0x00, 0x1A, CMD_WRITE, 0x01, 0x01, startSector,
+                    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                    time }, 28);
+  unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, 0x01, startSector,
+                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                          time, BCC, ETX };
+  unsigned char response[bufferSize];
+
+  // send command
+  RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
+
+}
