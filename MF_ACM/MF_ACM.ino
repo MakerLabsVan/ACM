@@ -63,7 +63,7 @@ void loop() {
   digitalWrite(ledPin, LOW);
   
   // get response packet and return a flag if a packet other than idle is detected
-  responseFlag = getResponse(responseFlag);
+  responseFlag = detectCard(responseFlag);
   
   // LED on if an RFID is detected (idle packet only contains 7 bytes)
   if(responseFlag == true) {
@@ -114,7 +114,7 @@ unsigned long accumulator(bool standby) {
 }
 
 // Prints serial number to monitor, sets flag if a packet other than idle is detected
-unsigned char getResponse(bool responseFlag) {
+unsigned char detectCard(bool responseFlag) {
   int i = 0;
   unsigned char response[bufferSize];
   response[7] = NULL;
@@ -146,7 +146,8 @@ unsigned char checksum(unsigned char A[], int numElements) {
 
 // Get serial number of detected card, prints serial number of selected card if > 1 near reader
 void MF_GET_SNR(unsigned char DADD) {
-  BCC = checksum( { DADD, 0x03, CMD_GET_SNR, 0x26, 0x00 }, 5);
+  unsigned char A[] = { DADD, 0x03, CMD_GET_SNR, 0x26, 0x00 };
+  unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
   unsigned char CMD[] = { STX, DADD, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX};
   RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
 }
@@ -154,7 +155,9 @@ void MF_GET_SNR(unsigned char DADD) {
 // Read up to 4 blocks (16 bytes each) from sectors 0 - 63
 void MF_READ(unsigned char numBlocks, unsigned char startSector) {
   int i = 0;
-  BCC = checksum( { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }, 12);
+  unsigned char A[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
+                        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+  unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
   unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
   unsigned char response[bufferSize];
@@ -166,6 +169,7 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
   while(RDM880.available()) {
     response[i] = RDM880.read();
     Serial.print(response[i], HEX);
+    if()
     Serial.print(" ");
     i++;
   }
@@ -174,15 +178,15 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 
 // Write a block at a sector with 16 bytes (can do up to 4 blocks)
 void MF_WRITE(unsigned char numBlocks, unsigned char startSector, unsigned char time) {
-  BCC = checksum({ 0x00, 0x1A, CMD_WRITE, 0x01, 0x01, startSector,
+  unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, 0x01, startSector,
                     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                    time }, 28);
+                    time };
+  unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
   unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, 0x01, startSector,
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                          time, BCC, ETX };
-  unsigned char response[bufferSize];
+                          time, 0x2B, ETX };
 
   // send command
   RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
