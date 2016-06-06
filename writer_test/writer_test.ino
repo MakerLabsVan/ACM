@@ -39,7 +39,7 @@ void loop() {
 		MF_READ(0x04, 0x03);
 		delay(10000);
 	}
-
+	Serial.println();
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
@@ -60,7 +60,7 @@ void MF_SNR(unsigned char DADD) {
 	RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
 }
 
-unsigned char detectCard(bool responseFlag) {
+bool detectCard(bool responseFlag) {
   int i = 0;
   unsigned char response[bufferSize];
   response[7] = NULL;
@@ -72,7 +72,7 @@ unsigned char detectCard(bool responseFlag) {
     i++;
   }
 
-  if (response[7] != NULL)
+  if (response[5] != 0x80)
     return true;
   else
     return false;   

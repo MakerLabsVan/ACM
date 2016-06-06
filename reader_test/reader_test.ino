@@ -25,18 +25,17 @@ void loop() {
 	bool responseFlag = false;
 
 	MF_SNR(0x00);
-	delay(100);
+	delay(1000);
 	digitalWrite(ledPin, LOW);
 
 	responseFlag = detectCard(false);
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
-		// read 4 blocks starting at address 3
-		MF_READ(0x04, 0x03);
+		MF_READ(0x01, 0x10);
 		delay(2000);
 	}
-
+	Serial.println(); 
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
@@ -57,10 +56,9 @@ void MF_SNR(unsigned char DADD) {
 	RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
 }
 
-unsigned char detectCard(bool responseFlag) {
+bool detectCard(bool responseFlag) {
   int i = 0;
   unsigned char response[bufferSize];
-  response[7] = NULL;
   
   while(RDM880.available()) {
     response[i] = RDM880.read();
@@ -69,7 +67,7 @@ unsigned char detectCard(bool responseFlag) {
     i++;
   }
 
-  if (response[7] != NULL)
+  if (response[5] != 0x80)
     return true;
   else
     return false;   
@@ -81,7 +79,7 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
                         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
     unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
     unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
-                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
+                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x3A, ETX };
 	unsigned char response[bufferSize];
 
   	// send command
@@ -99,4 +97,5 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 			Serial.print(" ");
 		i++;
 	}
+	//AA 0 15 0 C2 48 91 5D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 53 BB
 }
