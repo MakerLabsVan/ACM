@@ -8,6 +8,7 @@
 #define ETX 0xBB
 
 #define CMD_READ 0x20
+#define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
@@ -32,10 +33,11 @@ void loop() {
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
+		//MF_WRITE(0x01, 0x04, 0xCC);
 		MF_READ(0x01, 0x04);
-		delay(2000);
 	}
-	Serial.println(); 
+
+	Serial.println();
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
@@ -59,7 +61,7 @@ void MF_SNR(unsigned char DADD) {
 bool detectCard(bool responseFlag) {
 	int i = 0;
 	unsigned char response[bufferSize];
-	
+
 	while(RDM880.available()) {
 		response[i] = RDM880.read();
 		Serial.print(response[i], HEX);
@@ -73,10 +75,35 @@ bool detectCard(bool responseFlag) {
 		return false;   
 }
 
+void MF_WRITE(unsigned char numBlocks, unsigned char startSector, unsigned char time) {
+	int i = 0;
+	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startSector,
+						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						0xDD, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						time };
+	unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
+	unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startSector,
+							0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+							0xDD, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+							time, BCC, ETX };
+	unsigned char response[bufferSize];
+
+  	// send command
+	RDM880.write(CMD, sizeof(CMD)/sizeof(CMD[0]));
+
+	// get response packet and print
+	while(RDM880.available()) {
+		response[i] = RDM880.read();
+		Serial.print(response[i], HEX);
+		Serial.print(" ");
+		i++;
+	}
+}
+
 void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 	int i = 0;
 	unsigned char A[] = { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
-                        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+    					0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
     unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
     unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startSector,
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
