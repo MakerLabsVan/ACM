@@ -17,7 +17,7 @@ SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 char txrxbuffer[bufferSize];
 
 const int ledPin = 13;
-const int signalPin = 4
+const int signalPin = 4;
 const int debounce = 25;
 
 void setup() {
@@ -54,7 +54,7 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 		BCC = BCC ^ A[i];
 	}
 
-	return BCC
+	return BCC;
 }
 
 void MF_SNR(unsigned char DADD) {
@@ -85,15 +85,16 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 	int i = 0;
 	unsigned char timeByte0 = time & MSB;
 	unsigned char timeByte1 = (time >> 4) & MSB;
-	unsigned char timeByte2 = (time >> 8) & MSB:
+	unsigned char timeByte2 = (time >> 8) & MSB;
 	unsigned char timeByte3 = (time >> 12) & MSB;
 
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						timeByte3, timeByte2, timeByte1, timeByte0 };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
 	unsigned char CMD[31];
+	unsigned char response[bufferSize];
 
 	CMD[0] = STX;
 	memcpy( CMD + 1, A, sizeof(A)/sizeof(A[0]) );
