@@ -59,7 +59,7 @@ void MF_SNR(unsigned char DADD) {
 bool detectCard(bool responseFlag) {
 	int i = 0;
 	unsigned char response[bufferSize];
-	
+
 	while(RDM880.available()) {
 		response[i] = RDM880.read();
 		Serial.print(response[i], HEX);
@@ -89,6 +89,7 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 	while(RDM880.available()) {
 		response[i] = RDM880.read();
 		Serial.print(response[i], HEX);
+		Serial.print(" ");
 		i++;
 	}
 }
