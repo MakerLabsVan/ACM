@@ -40,7 +40,6 @@ void loop() {
 	if(responseFlag == true) {
 		MF_READ(0x01, 0x04);
 		elapsedTime = accumulator(false);
-		responseFlag = false;
 	}
 
 	MF_WRITE(0x01, 0x04, elapsedTime);
@@ -98,7 +97,20 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 
 	CMD[0] = STX;
 	memcpy( CMD + 1, A, sizeof(A)/sizeof(A[0]) );
-	
+	CMD[29] = BCC;
+	CMD[30] = ETX;
+
+	Serial.print("Attempting to write block ");
+	Serial.println(startAddress);
+
+	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+
+	while(RDM880.available()) {
+		response[i] = RDM880.read();
+		Serial.print(response[i], HEX);
+		Serial.print(" ");
+		i++;
+	}
 
 }
 
