@@ -32,7 +32,7 @@ void loop() {
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
-		MF_READ(0x03, 0x11);
+		MF_READ(0x01, 0x04);
 		delay(2000);
 	}
 	Serial.println(); 
@@ -57,20 +57,20 @@ void MF_SNR(unsigned char DADD) {
 }
 
 bool detectCard(bool responseFlag) {
-  int i = 0;
-  unsigned char response[bufferSize];
-  
-  while(RDM880.available()) {
-    response[i] = RDM880.read();
-    Serial.print(response[i], HEX);
-    Serial.print(" ");
-    i++;
-  }
+	int i = 0;
+	unsigned char response[bufferSize];
+	
+	while(RDM880.available()) {
+		response[i] = RDM880.read();
+		Serial.print(response[i], HEX);
+		Serial.print(" ");
+		i++;
+	}
 
-  if (response[5] != 0x80)
-    return true;
-  else
-    return false;   
+	if (response[5] != 0x80)
+		return true;
+	else
+		return false;   
 }
 
 void MF_READ(unsigned char numBlocks, unsigned char startSector) {
@@ -89,15 +89,6 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 	while(RDM880.available()) {
 		response[i] = RDM880.read();
 		Serial.print(response[i], HEX);
-		if(i == 7) {
-			Serial.println();
-		}
-		else if(i == 23 || i == 39 || i == 55 || i == 71 || i == 87) { 
-			Serial.println();
-		}
-		else { 
-			Serial.print(" ");
-		}
 		i++;
 	}
 }
