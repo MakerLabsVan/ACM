@@ -25,7 +25,7 @@ void loop() {
 	bool responseFlag = false;
 
 	MF_SNR(0x00);
-	delay(1000);
+	delay(200);
 	digitalWrite(ledPin, LOW);
 
 	responseFlag = detectCard(false);

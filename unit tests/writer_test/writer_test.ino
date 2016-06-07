@@ -26,15 +26,16 @@ void loop() {
 	bool responseFlag = false;
 
 	MF_SNR(0x00);
-	delay(1000);
+	delay(200);
 	digitalWrite(ledPin, LOW);
 
 	responseFlag = detectCard(false);
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
-		//MF_WRITE(0x01, 0x04, 0xCC);
+		MF_WRITE(0x01, 0x04, 0xCC);
 		MF_READ(0x01, 0x04);
+		RDM880.flush();
 	}
 
 	Serial.println();
