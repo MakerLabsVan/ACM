@@ -11,6 +11,8 @@
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
+#define MSB 0x000000FF
+
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 char txrxbuffer[bufferSize];
 
@@ -82,11 +84,22 @@ bool detectCard(bool responseFlag) {
 
 void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
+	unsigned char timeByte0 = time & MSB;
+	unsigned char timeByte1 = (time >> 4) & MSB;
+	unsigned char timeByte2 = (time >> 8) & MSB:
+	unsigned char timeByte3 = (time >> 12) & MSB;
 
-	
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF };
+						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+						timeByte3, timeByte2, timeByte1, timeByte0 };
+	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
+	unsigned char CMD[31];
+
+	CMD[0] = STX;
+	memcpy( CMD + 1, A, sizeof(A)/sizeof(A[0]) );
+	
+
 }
 
 void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
