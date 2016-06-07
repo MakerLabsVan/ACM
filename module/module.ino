@@ -19,6 +19,7 @@ char txrxbuffer[bufferSize];
 const int ledPin = 13;
 const int signalPin = 4;
 const int debounce = 25;
+const unsigned long readDelay = 100;
 
 void setup() {
 	Serial.begin(57600);
@@ -29,21 +30,51 @@ void setup() {
 void loop() {
 	bool responseFlag = false;
 	unsigned long elapsedTime = 0;
+	unsigned long readStart, readEnd = 0;
 	digitalWrite(ledPin, LOW);
 
 	while(responseFlag == false) {
 		MF_SNR(0x00);
 		delay(200);
-		responseFlag = detectCard(false);
+		responseFlag = getResponse();
 	}
 
 	if(responseFlag == true) {
+		readStart = millis();
 		MF_READ(0x01, 0x05);
-		elapsedTime = accumulator(false);
+		while((readEnd - readStart) < readDelay) {
+			readEnd = millis();
+		}
+		responseFlag = getResponse();
+		if(responseFlag == false)
+			Serial.println("Unexpected result");
 	}
 
-	MF_WRITE(0x01, 0x05, elapsedTime);
+	elapsedTime = accumulator(false);
 
+	MF_WRITE(0x01, 0x05, elapsedTime);
+	responseFlag = getResponse();
+	if(responseFlag == false) 
+		Serial.println("Unexpected result");
+	delay(100000);
+}
+
+bool getResponse(void) {
+	int i = 0;
+	unsigned char response[bufferSize];
+
+	while(RDM880.available()) {
+		response[i] = RDM880.read();
+		Serial.print(response[i], HEX);
+		Serial.print(" ");
+		i++;
+	}
+	Serial.println();
+
+	if(response[3] == 0x00)
+		return true;
+	else
+		return false;
 }
 
 unsigned char checksum(unsigned char A[], int numBytes) {
@@ -64,22 +95,17 @@ void MF_SNR(unsigned char DADD) {
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
 
-bool detectCard(bool responseFlag) {
+/*bool detectCard(bool responseFlag) {
 	int i = 0;
 	unsigned char response[bufferSize];
 
-	while(RDM880.available()) {
-		response[i] = RDM880.read();
-		Serial.print(response[i], HEX);
-		Serial.print(" ");
-		i++;
-	}
+	getResponse();
 
 	if (response[5] != 0x80)
 		return true;
 	else
 		return false;
-}
+}*/
 
 void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
@@ -93,26 +119,16 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						timeByte3, timeByte2, timeByte1, timeByte0 };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[31];
-	unsigned char response[bufferSize];
-
-	CMD[0] = STX;
-	memcpy( CMD + 1, A, sizeof(A)/sizeof(A[0]) );
-	CMD[29] = BCC;
-	CMD[30] = ETX;
+	unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
+						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						timeByte3, timeByte2, timeByte1, timeByte0,
+						BCC, ETX };
 
 	Serial.print("Attempting to write block ");
 	Serial.println(startAddress);
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-
-	while(RDM880.available()) {
-		response[i] = RDM880.read();
-		Serial.print(response[i], HEX);
-		Serial.print(" ");
-		i++;
-	}
-
 }
 
 void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
@@ -120,25 +136,14 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 	unsigned char A[] = { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[15];
-	unsigned char response[bufferSize];
-
-	CMD[0] = STX;
-	memcpy( CMD + 1, A, sizeof(A)/sizeof(A[0]) );
-	CMD[13] = BCC;
-	CMD[14] = ETX;
+	unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
+                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
 
 	Serial.print("Attempting to read block ");
 	Serial.println(startAddress);
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 
-	while(RDM880.available()) {
-		response[i] = RDM880.read();
-		Serial.print(response[i], HEX);
-		Serial.print(" ");
-		i++;
-	}
 }
 
 unsigned long accumulator(bool standby) {
