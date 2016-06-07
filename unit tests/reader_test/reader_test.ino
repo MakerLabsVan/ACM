@@ -32,7 +32,7 @@ void loop() {
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
-		MF_READ(0x01, 0x04);
+		MF_READ(0x01, 0x05);
 		delay(2000);
 	}
 	Serial.println(); 

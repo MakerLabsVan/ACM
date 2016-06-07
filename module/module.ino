@@ -38,11 +38,11 @@ void loop() {
 	}
 
 	if(responseFlag == true) {
-		MF_READ(0x01, 0x04);
+		MF_READ(0x01, 0x05);
 		elapsedTime = accumulator(false);
 	}
 
-	MF_WRITE(0x01, 0x04, elapsedTime);
+	MF_WRITE(0x01, 0x05, elapsedTime);
 
 }
 
