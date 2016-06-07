@@ -33,9 +33,8 @@ void loop() {
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
+		// initialize card with time = 0, id = 0xDD
 		MF_WRITE(0x01, 0x04);
-		MF_READ(0x01, 0x04);
-		RDM880.flush();
 	}
 
 	Serial.println();

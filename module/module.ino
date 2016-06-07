@@ -26,6 +26,7 @@ void setup() {
 
 void loop() {
 	bool responseFlag = false;
+	unsigned long elapsedTime = 0;
 	digitalWrite(ledPin, LOW);
 
 	while(responseFlag == false) {
@@ -33,6 +34,14 @@ void loop() {
 		delay(200);
 		responseFlag = detectCard(false);
 	}
+
+	if(responseFlag == true) {
+		MF_READ(0x01, 0x04);
+		elapsedTime = accumulator(false);
+		responseFlag = false;
+	}
+
+	MF_WRITE(0x01, 0x04, elapsedTime);
 
 }
 
@@ -72,7 +81,12 @@ bool detectCard(bool responseFlag) {
 }
 
 void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
+	int i = 0;
 
+	
+	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
+						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF };
 }
 
 void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
@@ -101,14 +115,33 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 	}
 }
 
-unsigned long accumulator(bool standy) {
+unsigned long accumulator(bool standby) {
 	unsigned long startTime, endTime = 0;
 	int signalState;
 	int previousState = NULL;
 
 	while(standby == false) {
 		signalState = digitalRead(signalPin);
+		delay(debounce);
+
+		if(signalState == digitalRead(signalPin)) {
+			if(previousState == LOW && signalState == HIGH) {
+				startTime = millis();
+				previousState = signalState;
+			}
+			else if(previousState == HIGH && signalState == LOW) {
+				endTime = (millis() - startTime)/1000;
+				if(endTime != 0) {
+					Serial.print("Elapsed time: ");
+					Serial.println(endTime);
+					return endTime;
+				}
+				previousState = signalState;
+				standby = true;
+			}
+			else
+				previousState = signalState;
+		}
+
 	}
-
-
 }
