@@ -45,13 +45,11 @@ void loop() {
 	}
 
 	// RFID tag detected, read block that contains time data
-	if(responseFlag == true) {
-		digitalWrite(ledPin, HIGH);
-		MF_READ(0x01, 0x05);
-		delay(200);
-		responseFlag = getResponse();
-		if(responseFlag == false) Serial.println("Unexpected result");
-	}
+	digitalWrite(ledPin, HIGH);
+	MF_READ(0x01, 0x05);
+	delay(200);
+	responseFlag = getResponse();
+	if(responseFlag == false) Serial.println("Unexpected result");
 
 	// Get ready to accumulate time
 	elapsedTime = accumulator();
@@ -85,13 +83,12 @@ bool getResponse(void) {
 }
 
 /*
-	Checksum: Function that calculates the checksum of a packet to ensure
-			  data integrity.
+	Calculates the checksum of a packet to ensure data integrity.
 
 	Param: A[] 		- array containing all bytes in a packet
 		   numBytes - number of bytes in the array
 
-	Post: Returns checksum.
+	Returns: checksum
 
 */
 unsigned char checksum(unsigned char A[], int numBytes) {
@@ -106,7 +103,7 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 }
 
 /*
-	MiFare Classic SNR: Function that gets the serial number of an RFID tag.
+	Gets the serial number of an RFID tag.
 
 	Post: Response packet contains OK status and serial number of the tag selected
 
@@ -119,7 +116,7 @@ void MF_SNR(void) {
 }
 
 /*
-	MiFare Classic Write: Function that writes to the selected RFID tag.
+	Writes to the selected RFID tag.
 
 	Param: numBlocks 	- number of 16 byte blocks to be written to (max 3)
 		   startAddress - address of the first block (0 - 63)
@@ -159,7 +156,7 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 }
 
 /*
-	MiFare Classic Read: Function that reads the selected RFID tag.
+	Reads the selected RFID tag.
 	
 	Param: numBlocks	- number of 16 byte blocks to be read (max 3)
 		   startAddress - address of first block to read (0 - 63)
@@ -182,10 +179,10 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 
 }
 /*
-	Accumulator: Function that waits for a control signal to go high and counts
-				 time that control signal is high for.
+	Function that waits for a control signal to go high and counts time 
+	that control signal is high for.
 	
-	Post: Returns time accumulated.
+	Return: time accumulated
 
 */
 unsigned long accumulator(void) {
