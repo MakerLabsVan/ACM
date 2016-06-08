@@ -34,6 +34,7 @@ void setup() {
 void loop() {
 	bool responseFlag = false;
 	unsigned long elapsedTime = 0;
+	unsigned char readData[bufferSize/2];
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
@@ -62,7 +63,7 @@ void loop() {
 
 }
 
-bool getResponse(void) {
+bool getResponse(unsigned char ) {
 	int i = 0;
 	// buffer for response packet
 	unsigned char response[bufferSize];
