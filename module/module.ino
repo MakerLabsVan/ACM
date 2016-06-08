@@ -38,7 +38,7 @@ void loop() {
 
 	// Scan for RFID tags
 	while(responseFlag == false) {
-		MF_SNR(0x00);
+		MF_SNR();
 		delay(200);
 		// getResponse determines if the response packet is OK
 		responseFlag = getResponse();
@@ -111,8 +111,8 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 	Post: Response packet contains OK status and serial number of the tag selected
 
 */
-void MF_SNR(unsigned char DADD) {
-	unsigned char A[] = { DADD, 0x03, CMD_GET_SNR, 0x26, 0x00 };
+void MF_SNR(void) {
+	unsigned char A[] = { 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00 };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
 	unsigned char CMD[] = { STX, DADD, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX };
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
@@ -137,9 +137,9 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 
 	// prepare data to be written
 	unsigned char timeByte0 = time & MSB;
-	unsigned char timeByte1 = (time >> 4) & MSB;
-	unsigned char timeByte2 = (time >> 8) & MSB;
-	unsigned char timeByte3 = (time >> 12) & MSB;
+	unsigned char timeByte1 = (time >> 8) & MSB;
+	unsigned char timeByte2 = (time >> 16) & MSB;
+	unsigned char timeByte3 = (time >> 24) & MSB;
 
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
