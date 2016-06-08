@@ -30,7 +30,6 @@ void setup() {
 void loop() {
 	bool responseFlag = false;
 	unsigned long elapsedTime = 0;
-	unsigned long readStart, readEnd = 0;
 	digitalWrite(ledPin, LOW);
 
 	while(responseFlag == false) {
@@ -40,23 +39,22 @@ void loop() {
 	}
 
 	if(responseFlag == true) {
-		readStart = millis();
+		digitalWrite(ledPin, HIGH);
 		MF_READ(0x01, 0x05);
-		while((readEnd - readStart) < readDelay) {
-			readEnd = millis();
-		}
+		delay(200);
 		responseFlag = getResponse();
 		if(responseFlag == false)
 			Serial.println("Unexpected result");
+		responseFlag = false;
 	}
 
 	elapsedTime = accumulator(false);
 
 	MF_WRITE(0x01, 0x05, elapsedTime);
+	delay(200);
 	responseFlag = getResponse();
 	if(responseFlag == false) 
 		Serial.println("Unexpected result");
-	delay(100000);
 }
 
 bool getResponse(void) {
