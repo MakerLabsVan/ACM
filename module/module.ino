@@ -34,7 +34,7 @@ void setup() {
 void loop() {
 	bool responseFlag = false;
 	unsigned long elapsedTime = 0;
-	unsigned char readData[bufferSize/2];
+	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
@@ -42,14 +42,15 @@ void loop() {
 		MF_SNR();
 		delay(200);
 		// getResponse determines if the response packet is OK
-		responseFlag = getResponse();
+		responseFlag = getResponse(readData);
 	}
 
 	// RFID tag detected, read block that contains time data
 	digitalWrite(ledPin, HIGH);
 	MF_READ(0x01, 0x05);
 	delay(200);
-	responseFlag = getResponse();
+	responseFlag = getResponse(readData);
+	// Analyze data
 	if(responseFlag == false) Serial.println("Unexpected result");
 
 	// Get ready to accumulate time
@@ -58,12 +59,12 @@ void loop() {
 	// Write time data to card
 	MF_WRITE(0x01, 0x05, elapsedTime);
 	delay(200);
-	responseFlag = getResponse();
+	responseFlag = getResponse(readData);
 	if(responseFlag == false) Serial.println("Unexpected result");
 
 }
 
-bool getResponse(unsigned char ) {
+bool getResponse(unsigned char response[]) {
 	int i = 0;
 	// buffer for response packet
 	unsigned char response[bufferSize];
