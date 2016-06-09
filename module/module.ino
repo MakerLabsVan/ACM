@@ -39,6 +39,7 @@ void loop() {
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
+	Serial.println("Scanning...");
 	while(responseFlag == false) {
 		MF_SNR();
 		delay(200);
@@ -53,12 +54,15 @@ void loop() {
 	delay(50);
 	responseFlag = getResponse(readData);
 	// Analyze response packet and data
-	if(responseFlag == false) 
+	if(responseFlag == false) {
 		Serial.println("Read unsuccessful, please try again.");
+		Serial.println();
+	}
 	else {
 		existingTime = getTime(readData);
 		if(existingTime >= quota) {
 			Serial.println("You have reached your quota for this month.");
+			Serial.println();
 			delay(5000);
 		}
 		else {
@@ -66,6 +70,7 @@ void loop() {
 			elapsedTime = accumulator();
 			Serial.print("Total time used: ");
 			Serial.println(elapsedTime + existingTime);
+			Serial.println();
 			delay(5000);
 		}
 	}
@@ -85,11 +90,11 @@ bool getResponse(unsigned char response[]) {
 
 	while(RDM880.available()) {
 		response[i] = RDM880.read();
-		Serial.print(response[i], HEX);
-		Serial.print(" ");
+		/*Serial.print(response[i], HEX);
+		Serial.print(" ");*/
 		i++;
 	}
-	Serial.println();
+	//Serial.println();
 
 	// 3rd byte of response packet is the STATUS byte, 0x00 means OK
 	if(response[3] == 0x00)
@@ -204,7 +209,7 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 	unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
 
-	Serial.print("Reading data...");
+	Serial.println("Reading data...");
 	//Serial.println(startAddress);
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
