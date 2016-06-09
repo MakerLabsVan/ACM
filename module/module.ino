@@ -47,6 +47,7 @@ void loop() {
 	}
 
 	// RFID tag detected, read block that contains time data
+	Serial.println("Card detected.");
 	digitalWrite(ledPin, HIGH);
 	MF_READ(0x01, 0x05);
 	delay(50);
@@ -203,8 +204,8 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 	unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
                           0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
 
-	Serial.print("Attempting to read block ");
-	Serial.println(startAddress);
+	Serial.print("Reading data...");
+	//Serial.println(startAddress);
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 
