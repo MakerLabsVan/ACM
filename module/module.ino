@@ -59,7 +59,7 @@ void loop() {
 	else {
 		existingTime = getTime(readData);
 		if(readData[8] != 0xDD) {
-			Serial.println("You are not authorized to use the machine.");
+			Serial.println("You are not authorized to use this machine.");
 			Serial.println();
 			delay(5000);
 		}
@@ -107,12 +107,12 @@ bool getResponse(unsigned char response[]) {
 }
 
 unsigned long getTime (unsigned char readData[]) {
+	int i = 0;
 	unsigned long existingTime = 0;
 
-	existingTime = existingTime ^ readData[20];
-	existingTime = (existingTime << 8) ^ readData[21];
-	existingTime = (existingTime << 8) ^ readData[22];
-	existingTime = (existingTime << 8) ^ readData[23];
+	for(i = 0; i < 4; i++) {
+		existingTime = (existingTime << 8) ^ readData[i + 20];
+	}
 	
 	Serial.print("Time used this month: ");
 	Serial.println(existingTime);
