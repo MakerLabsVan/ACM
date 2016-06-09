@@ -33,11 +33,12 @@ void loop() {
 
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
-		// initialize card with time = 0, id = 0xDD
+		// initialize card
 		MF_WRITE(0x01, 0x05);
+		delay(200);
+		MF_READ(0x01, 0x05);
+		delay(200);
 	}
-
-	Serial.println();
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
@@ -68,6 +69,7 @@ bool detectCard(bool responseFlag) {
 		Serial.print(" ");
 		i++;
 	}
+	Serial.println();
 
 	if (response[5] != 0x80)
 		return true;
@@ -79,13 +81,13 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startSector) {
 	int i = 0;
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startSector,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00,
-						0x00 };
+						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x0E,
+						0x10 };
 	unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
 	unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startSector,
 							0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-							0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00,
-							0x00, BCC, ETX };
+							0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x0E,
+							0x10, BCC, ETX };
 	unsigned char response[bufferSize];
 
   	// send command
@@ -98,6 +100,7 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startSector) {
 		Serial.print(" ");
 		i++;
 	}
+	Serial.println();
 }
 
 void MF_READ(unsigned char numBlocks, unsigned char startSector) {
@@ -119,4 +122,5 @@ void MF_READ(unsigned char numBlocks, unsigned char startSector) {
 		Serial.print(" ");
 		i++;
 	}
+	Serial.println();
 }
