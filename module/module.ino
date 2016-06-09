@@ -53,14 +53,18 @@ void loop() {
 	responseFlag = getResponse(readData);
 	// Analyze response packet and data
 	if(responseFlag == false) 
-		Serial.println("Read unsuccesful, please try again");
+		Serial.println("Read unsuccessful, please try again.");
 	else {
-		existingTime = getTime(readData);
+		//existingTime = getTime(readData);
+		existingTime = 3600;
 		if(readData[8] != 0xDD)
 			Serial.println("Invalid card");
 		else if(existingTime >= quota)
-			Serial.println("You have reached your quota for this month");
+			Serial.println("You have reached your quota for this month.");
 		else {
+			Serial.print("Time used this month: ");
+			Serial.println(existingTime);
+			Serial.println("User authenticated. Machine is ready to fire");
 			elapsedTime = accumulator();
 			Serial.print("Total time used: ");
 			Serial.println(elapsedTime + existingTime);
