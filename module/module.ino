@@ -14,9 +14,6 @@
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
-// Bit mask used for logic to store time
-#define MSB 0x000000FF
-
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 char txrxbuffer[bufferSize];
 
@@ -47,12 +44,13 @@ void loop() {
 		responseFlag = getResponse(readData);
 	}
 
-	// RFID tag detected, read block that contains time data
+	// RFID tag detected, read block that contains time data (for this machine)
 	Serial.println("Card detected.");
 	digitalWrite(ledPin, HIGH);
 	MF_READ(0x01, 0x05);
 	delay(50);
 	responseFlag = getResponse(readData);
+
 	// Analyze response packet and data
 	if(responseFlag == false) {
 		Serial.println("Read unsuccessful, please try again.");
