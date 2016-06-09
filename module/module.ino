@@ -58,7 +58,12 @@ void loop() {
 	}
 	else {
 		existingTime = getTime(readData);
-		if(existingTime >= quota) {
+		if(readData[8] != 0xDD) {
+			Serial.println("You are not authorized to use the machine.");
+			Serial.println();
+			delay(5000);
+		}
+		else if(existingTime >= quota) {
 			Serial.println("You have reached your quota for this month.");
 			Serial.println();
 			delay(5000);
