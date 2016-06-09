@@ -48,19 +48,25 @@ void loop() {
 	// RFID tag detected, read block that contains time data
 	digitalWrite(ledPin, HIGH);
 	MF_READ(0x01, 0x05);
-	delay(200);
+	delay(50);
 	responseFlag = getResponse(readData);
-	// Analyze data
-	if(responseFlag == false) Serial.println("Unexpected result");
+	// Analyze response packet and data
+	if(responseFlag == false) 
+		Serial.println("Read unsuccesful, please try again");
+	else {
+
+	}
+
 
 	// Get ready to accumulate time
 	elapsedTime = accumulator();
 
-	// Write time data to card
+	/*// Write time data to card
 	MF_WRITE(0x01, 0x05, elapsedTime);
 	delay(200);
 	responseFlag = getResponse(readData);
 	if(responseFlag == false) Serial.println("Unexpected result");
+	*/
 
 }
 
@@ -80,6 +86,18 @@ bool getResponse(unsigned char response[]) {
 		return true;
 	else
 		return false;
+}
+
+unsigned long getTime (unsigned char readData[]) {
+	unsigned long existingTime = 0xFFFFFFFF;
+
+	existingTime = existingTime & readData[23];
+	existingTime = (existingTime >> 8) & readData[22];
+	existingTime = (existingTime >> 16) & readData[21];
+	existingTime = (existingTime >> 24) & readData[20];
+
+	return existingTime;
+
 }
 
 /*
@@ -111,7 +129,7 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 void MF_SNR(void) {
 	unsigned char A[] = { 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00 };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[] = { STX, DADD, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX };
+	unsigned char CMD[] = { STX, 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX };
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
 
@@ -129,7 +147,8 @@ void MF_SNR(void) {
 		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 
 */
-void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
+
+/*void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
 
 	// prepare data to be written
@@ -153,7 +172,7 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 	Serial.println(startAddress);
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-}
+}*/
 
 /*
 	Reads the selected RFID tag.
@@ -178,6 +197,7 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 
 }
+
 /*
 	Function that waits for a control signal to go high and counts time 
 	that control signal is high for.
