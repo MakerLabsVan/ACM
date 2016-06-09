@@ -55,15 +55,13 @@ void loop() {
 	if(responseFlag == false) 
 		Serial.println("Read unsuccessful, please try again.");
 	else {
-		//existingTime = getTime(readData);
-		existingTime = 3600;
+		existingTime = getTime(readData);
+		//existingTime = 2000;
 		if(readData[8] != 0xDD)
 			Serial.println("Invalid card");
 		else if(existingTime >= quota)
 			Serial.println("You have reached your quota for this month.");
 		else {
-			Serial.print("Time used this month: ");
-			Serial.println(existingTime);
 			Serial.println("User authenticated. Machine is ready to fire");
 			elapsedTime = accumulator();
 			Serial.print("Total time used: ");
@@ -100,13 +98,13 @@ bool getResponse(unsigned char response[]) {
 }
 
 unsigned long getTime (unsigned char readData[]) {
-	unsigned long existingTime = 0xFFFFFFFF;
+	unsigned long existingTime = 0;
 
-	existingTime = existingTime & readData[23];
-	existingTime = (existingTime >> 8) & readData[22];
-	existingTime = (existingTime >> 16) & readData[21];
-	existingTime = (existingTime >> 24) & readData[20];
-
+	existingTime = existingTime ^ readData[20];
+	existingTime = (existingTime << 8) ^ readData[21];
+	existingTime = (existingTime << 8) ^ readData[22];
+	existingTime = (existingTime << 8) ^ readData[23];
+	
 	Serial.print("Time used this month: ");
 	Serial.println(existingTime);
 
