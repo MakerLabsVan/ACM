@@ -66,8 +66,6 @@ void loop() {
 
 bool getResponse(unsigned char response[]) {
 	int i = 0;
-	// buffer for response packet
-	unsigned char response[bufferSize];
 
 	while(RDM880.available()) {
 		response[i] = RDM880.read();
