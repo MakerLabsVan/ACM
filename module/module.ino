@@ -23,6 +23,7 @@ char txrxbuffer[bufferSize];
 const int ledPin = 13;
 const int signalPin = 4;
 const int debounce = 25;
+const int quota = 3600;
 
 void setup() {
 	Serial.begin(57600);
@@ -33,7 +34,7 @@ void setup() {
 
 void loop() {
 	bool responseFlag = false;
-	unsigned long elapsedTime = 0;
+	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
 
@@ -54,12 +55,18 @@ void loop() {
 	if(responseFlag == false) 
 		Serial.println("Read unsuccesful, please try again");
 	else {
-
+		existingTime = getTime(readData);
+		if(readData[8] != 0xDD)
+			Serial.println("Invalid card");
+		else if(existingTime >= quota)
+			Serial.println("You have reached your quota for this month");
+		else {
+			elapsedTime = accumulator();
+			Serial.print("Total time used: ");
+			Serial.println(elapsedTime + existingTime);
+		}
 	}
 
-
-	// Get ready to accumulate time
-	elapsedTime = accumulator();
 
 	/*// Write time data to card
 	MF_WRITE(0x01, 0x05, elapsedTime);
@@ -95,6 +102,9 @@ unsigned long getTime (unsigned char readData[]) {
 	existingTime = (existingTime >> 8) & readData[22];
 	existingTime = (existingTime >> 16) & readData[21];
 	existingTime = (existingTime >> 24) & readData[20];
+
+	Serial.print("Time used this month: ");
+	Serial.println(existingTime);
 
 	return existingTime;
 
