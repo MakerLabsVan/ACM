@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 
 // Pins that interface with RDM880
-#define RDM880_RX 2
+#define RDM880_RX 2 // Purple
 #define RDM880_TX 3
 #define bufferSize 68
 
