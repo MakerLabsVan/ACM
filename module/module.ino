@@ -19,6 +19,7 @@ char txrxbuffer[bufferSize];
 
 const int ledPin = 13;
 const int signalPin = 4;
+const int speakerPin = 8;
 const int debounce = 25;
 const int quota = 3600;
 
@@ -27,6 +28,7 @@ void setup() {
 	RDM880.begin(9600);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
+	pinMode(speakerPin, OUTPUT);
 }
 
 void loop() {
@@ -53,20 +55,25 @@ void loop() {
 
 	// Analyze response packet and data
 	if(responseFlag == false) {
+		soundFeedback(true);
 		Serial.println("Read unsuccessful, please try again.");
 		Serial.println();
+		delay(500);
 	}
 	else {
 		existingTime = getTime(readData);
 		if(readData[8] != 0xDD) {
+			soundFeedback(true);
 			Serial.println("You are not authorized to use this machine.");
 			Serial.println();
 		}
 		else if(existingTime >= quota) {
+			soundFeedback(true);
 			Serial.println("You have reached your quota for this month.");
 			Serial.println();
 		}
 		else {
+			soundFeedback(false);
 			Serial.println("User authenticated. Machine is ready to fire.");
 			elapsedTime = accumulator();
 			Serial.print("Total time used: ");
@@ -83,6 +90,18 @@ void loop() {
 	if(responseFlag == false) Serial.println("Unexpected result");
 	*/
 
+}
+
+void soundFeedback(bool reject) {
+	if(reject) {
+		tone(8, 123, 250);
+		delay(300);
+		tone(8, 123, 250);
+		delay(300);
+		tone(8, 123, 250);
+	}
+	else
+		tone(8, 440, 500);
 }
 
 bool getResponse(unsigned char response[]) {
