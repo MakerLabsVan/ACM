@@ -91,9 +91,9 @@ void loop() {
 		delay(200);
 		responseFlag = getResponse(readData);
 		if(responseFlag == false) Serial.println("Unexpected result");
+		Serial.println("You may now remove your card");
 	}
-	delay(5000);
-
+	delay(3000);
 }
 
 void soundFeedback(bool reject) {
@@ -251,18 +251,17 @@ unsigned long accumulator(void) {
 	unsigned long pollCounter = 0;
 	int signalState;
 	int previousState;
+	bool cardPresent;
 	unsigned char A[bufferSize];
 
 	while(1) {
 		// poll for card
 		MF_SNR();
+		cardPresent = getResponse(A);
+		delay(cardTimeout);
 		if(!getResponse(A)) {
-			delay(cardTimeout);
-			if(!getResponse(A)) {
-				Serial.println("Card not detected.");
-				soundFeedback(reject);
-				return 0;
-			}
+			Serial.println("Card not detected.");
+			return 0;
 		}
 
 		// read signal state
