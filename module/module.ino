@@ -92,6 +92,8 @@ void loop() {
 		Serial.println("Card updated. You may now remove it.\n");
 	}
 	else Serial.println();
+	
+	// Allow user time to remove card
 	delay(5000);
 }
 
