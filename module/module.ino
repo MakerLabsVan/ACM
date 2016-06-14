@@ -58,29 +58,25 @@ void loop() {
 	// Analyze response packet and data
 	if(responseFlag == false) {
 		soundFeedback(reject);
-		Serial.println("Read unsuccessful, please try again.");
-		Serial.println();
+		Serial.println("Read unsuccessful, please try again.\n");
 		delay(500);
 	}
 	else {
 		existingTime = getTime(readData);
 		if(readData[8] != 0xDD) {
 			soundFeedback(reject);
-			Serial.println("You are not authorized to use this machine.");
-			Serial.println();
+			Serial.println("You are not authorized to use this machine.\n");
 		}
 		else if(existingTime >= quota) {
 			soundFeedback(reject);
-			Serial.println("You have reached your quota for this month.");
-			Serial.println();
+			Serial.println("You have reached your quota for this month.\n");
 		}
 		else {
 			soundFeedback(!reject);
 			Serial.println("User authenticated. Machine is ready to fire. Please do not remove your card.");
 			elapsedTime = accumulator();
-			Serial.print("Total time used: ");
+			Serial.print("Total time used this month: ");
 			Serial.println(elapsedTime + existingTime);
-			Serial.println();
 		}
 	}
 
@@ -91,9 +87,10 @@ void loop() {
 		delay(200);
 		responseFlag = getResponse(readData);
 		if(responseFlag == false) Serial.println("Unexpected result");
-		Serial.println("You may now remove your card");
+		Serial.println("You may now remove your card\n");
 	}
-	delay(3000);
+	else Serial.println();
+	delay(5000);
 }
 
 void soundFeedback(bool reject) {
@@ -257,11 +254,19 @@ unsigned long accumulator(void) {
 	while(1) {
 		// poll for card
 		MF_SNR();
-		cardPresent = getResponse(A);
+		/*cardPresent = getResponse(A);
 		delay(cardTimeout);
 		if(!getResponse(A)) {
 			Serial.println("Card not detected.");
 			return 0;
+		}*/
+
+		if(!getResponse(A)) {
+			delay(cardTimeout);
+			if(!getResponse(A)) {
+				Serial.println("Card not detected.");
+				return 0;
+			}
 		}
 
 		// read signal state
