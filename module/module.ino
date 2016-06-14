@@ -85,12 +85,14 @@ void loop() {
 	}
 
 
-	/*// Write time data to card
-	MF_WRITE(0x01, 0x05, elapsedTime);
-	delay(200);
-	responseFlag = getResponse(readData);
-	if(responseFlag == false) Serial.println("Unexpected result");*/
-	
+	// Write time data to card
+	if(elapsedTime != 0) {
+		MF_WRITE(0x01, 0x05, elapsedTime + existingTime);
+		delay(200);
+		responseFlag = getResponse(readData);
+		if(responseFlag == false) Serial.println("Unexpected result");
+	}
+	delay(5000);
 
 }
 
@@ -207,8 +209,8 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 						timeByte3, timeByte2, timeByte1, timeByte0,
 						BCC, ETX };
 
-	Serial.print("Attempting to write block ");
-	Serial.println(startAddress);
+	/*Serial.print("Attempting to write block ");
+	Serial.println(startAddress);*/
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
@@ -258,6 +260,7 @@ unsigned long accumulator(void) {
 			delay(cardTimeout);
 			if(!getResponse(A)) {
 				Serial.println("Card not detected.");
+				soundFeedback(reject);
 				return 0;
 			}
 		}
