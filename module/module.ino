@@ -8,6 +8,7 @@
 // Start and End bytes for command/response packets
 #define STX 0xAA
 #define ETX 0xBB
+#define MSB 0xFF
 
 // MiFare Classic commands
 #define CMD_READ 0x20
@@ -15,7 +16,6 @@
 #define CMD_GET_SNR 0x25
 
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
-//char txrxbuffer[bufferSize];
 
 const int ledPin = 13;
 const int signalPin = 4;
@@ -85,11 +85,11 @@ void loop() {
 	}
 
 
-	// Write time data to card
+	/*// Write time data to card
 	MF_WRITE(0x01, 0x05, elapsedTime);
 	delay(200);
 	responseFlag = getResponse(readData);
-	if(responseFlag == false) Serial.println("Unexpected result");
+	if(responseFlag == false) Serial.println("Unexpected result");*/
 	
 
 }
@@ -246,20 +246,20 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 */
 unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
-	int pollCounter = 0;
+	unsigned long pollCounter = 0;
 	int signalState;
 	int previousState;
-	bool cardPresent;
+	unsigned char A[bufferSize];
 
 	while(1) {
 		// poll for card
 		MF_SNR();
-		cardPresent = getResponse();
-		delay(cardTimeout);
-		pollCounter += 1;
-		if(!getResponse()) {
-			Serial.println("Card not detected.");
-			return 0;
+		if(!getResponse(A)) {
+			delay(cardTimeout);
+			if(!getResponse(A)) {
+				Serial.println("Card not detected.");
+				return 0;
+			}
 		}
 
 		// read signal state
@@ -277,7 +277,7 @@ unsigned long accumulator(void) {
 			// check for OFF signal aka falling edge
 			else if(previousState == HIGH && signalState == LOW) {
 				// calculate elapsed time
-				endTime = (millis() - startTime)/1000 - (2 * pollCounter);
+				endTime = (millis() - startTime)/1000;
 				if(endTime != 0) {
 					Serial.print("Elapsed time: ");
 					Serial.println(endTime);
