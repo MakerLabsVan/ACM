@@ -87,7 +87,7 @@ void loop() {
 		delay(200);
 		responseFlag = getResponse(readData);
 		if(responseFlag == false) Serial.println("Unexpected result");
-		Serial.println("You may now remove your card\n");
+		Serial.println("Card updated. You may now remove it.\n");
 	}
 	else Serial.println();
 	delay(5000);
