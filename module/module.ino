@@ -73,6 +73,8 @@ void loop() {
 		}
 		else {
 			soundFeedback(!reject);
+			Serial.print("Time used this month: ");
+			Serial.println(existingTime);
 			Serial.println("User authenticated. Machine is ready to fire. Please do not remove your card.");
 			elapsedTime = accumulator();
 			Serial.print("Total time used this month: ");
@@ -130,9 +132,6 @@ unsigned long getTime (unsigned char readData[]) {
 	for(i = 0; i < 4; i++) {
 		existingTime = (existingTime << 8) ^ readData[i + 20];
 	}
-	
-	Serial.print("Time used this month: ");
-	Serial.println(existingTime);
 
 	return existingTime;
 
