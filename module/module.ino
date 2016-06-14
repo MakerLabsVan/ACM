@@ -8,6 +8,7 @@
 // Start and End bytes for command/response packets
 #define STX 0xAA
 #define ETX 0xBB
+#define MSB 0xFF
 
 // MiFare Classic commands
 #define CMD_READ 0x20
@@ -21,6 +22,8 @@ const int signalPin = 4;
 const int speakerPin = 8;
 const int debounce = 25;
 const int quota = 3600;
+const bool reject = true;
+const unsigned long cardTimeout = 2000;
 
 void setup() {
 	Serial.begin(57600);
@@ -54,7 +57,7 @@ void loop() {
 
 	// Analyze response packet and data
 	if(responseFlag == false) {
-		soundFeedback(true);
+		soundFeedback(reject);
 		Serial.println("Read unsuccessful, please try again.");
 		Serial.println();
 		delay(500);
@@ -62,18 +65,18 @@ void loop() {
 	else {
 		existingTime = getTime(readData);
 		if(readData[8] != 0xDD) {
-			soundFeedback(true);
+			soundFeedback(reject);
 			Serial.println("You are not authorized to use this machine.");
 			Serial.println();
 		}
 		else if(existingTime >= quota) {
-			soundFeedback(true);
+			soundFeedback(reject);
 			Serial.println("You have reached your quota for this month.");
 			Serial.println();
 		}
 		else {
-			soundFeedback(false);
-			Serial.println("User authenticated. Machine is ready to fire.");
+			soundFeedback(!reject);
+			Serial.println("User authenticated. Machine is ready to fire. Please do not remove your card.");
 			elapsedTime = accumulator();
 			Serial.print("Total time used: ");
 			Serial.println(elapsedTime + existingTime);
@@ -82,12 +85,14 @@ void loop() {
 	}
 
 
-	/*// Write time data to card
-	MF_WRITE(0x01, 0x05, elapsedTime);
-	delay(200);
-	responseFlag = getResponse(readData);
-	if(responseFlag == false) Serial.println("Unexpected result");
-	*/
+	// Write time data to card
+	if(elapsedTime != 0) {
+		MF_WRITE(0x01, 0x05, elapsedTime + existingTime);
+		delay(200);
+		responseFlag = getResponse(readData);
+		if(responseFlag == false) Serial.println("Unexpected result");
+	}
+	delay(5000);
 
 }
 
@@ -184,7 +189,7 @@ void MF_SNR(void) {
 
 */
 
-/*void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
+void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
 
 	// prepare data to be written
@@ -204,11 +209,11 @@ void MF_SNR(void) {
 						timeByte3, timeByte2, timeByte1, timeByte0,
 						BCC, ETX };
 
-	Serial.print("Attempting to write block ");
-	Serial.println(startAddress);
+	/*Serial.print("Attempting to write block ");
+	Serial.println(startAddress);*/
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-}*/
+}
 
 /*
 	Reads the selected RFID tag.
@@ -243,10 +248,23 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 */
 unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
+	unsigned long pollCounter = 0;
 	int signalState;
 	int previousState;
+	unsigned char A[bufferSize];
 
 	while(1) {
+		// poll for card
+		MF_SNR();
+		if(!getResponse(A)) {
+			delay(cardTimeout);
+			if(!getResponse(A)) {
+				Serial.println("Card not detected.");
+				soundFeedback(reject);
+				return 0;
+			}
+		}
+
 		// read signal state
 		signalState = digitalRead(signalPin);
 		delay(debounce);
@@ -254,12 +272,12 @@ unsigned long accumulator(void) {
 		// debounce check
 		if(signalState == digitalRead(signalPin)) {
 
-			// check for new ON signal
+			// check for new ON signal aka rising edge
 			if(previousState == LOW && signalState == HIGH) {
 				startTime = millis();
 				previousState = signalState;
 			}
-			// check for OFF signal
+			// check for OFF signal aka falling edge
 			else if(previousState == HIGH && signalState == LOW) {
 				// calculate elapsed time
 				endTime = (millis() - startTime)/1000;
