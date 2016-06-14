@@ -185,7 +185,7 @@ void MF_SNR(void) {
 
 */
 
-/*void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
+void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
 
 	// prepare data to be written
@@ -209,7 +209,7 @@ void MF_SNR(void) {
 	Serial.println(startAddress);
 
 	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-}*/
+}
 
 /*
 	Reads the selected RFID tag.
