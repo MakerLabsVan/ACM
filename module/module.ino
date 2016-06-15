@@ -92,7 +92,7 @@ void loop() {
 		Serial.println("Card updated. You may now remove it.\n");
 	}
 	else Serial.println();
-	
+
 	// Allow user time to remove card
 	delay(5000);
 }
@@ -255,12 +255,6 @@ unsigned long accumulator(void) {
 	while(1) {
 		// poll for card
 		MF_SNR();
-		/*cardPresent = getResponse(A);
-		delay(cardTimeout);
-		if(!getResponse(A)) {
-			Serial.println("Card not detected.");
-			return 0;
-		}*/
 
 		if(!getResponse(A)) {
 			delay(cardTimeout);
