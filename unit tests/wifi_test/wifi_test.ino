@@ -6,14 +6,16 @@ void setup()
 {
     Serial.begin(9600);
     ESP.begin(9600);
-    Serial.println("such wow");
 }
 void loop()
 {
+    unsigned long startTime = millis();
+
     while (ESP.available()) {
         Serial.write(ESP.read());
     }
-    while (Serial.available()) {
-        ESP.write(Serial.read());
+    while ( (millis() - startTime) < 500 ) {
     }
+
+    ESP.write("AT\r\n");
 }
