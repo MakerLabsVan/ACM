@@ -17,7 +17,7 @@ void setup() {
     delay(1000);
     startConnection();
     HTTPGET();
-    //delay(5000);
+    //delay(2000);
     //closeConnection();
 }
 void loop() {
