@@ -4,23 +4,32 @@ SoftwareSerial ESP(2,3);
 
 #define debug true
 
+bool requestMade = true;
+
 void setup() {
     Serial.begin(9600);
     ESP.begin(9600);
+    pinMode(4, OUTPUT);
+
     Serial.write("Initializing...\n");
+
     connectWiFi();
     delay(1000);
     startConnection();
-    delay(5000);
-    closeConnection();
+    HTTPGET();
+    //delay(5000);
+    //closeConnection();
 }
 void loop() {
+
     while (ESP.available()) {
         Serial.write(ESP.read());
     }
+    // This is for manual commands
     while (Serial.available()) {
         ESP.write(Serial.read());
     }
+
 }
 
 void connectWiFi(void) {
@@ -30,7 +39,7 @@ void connectWiFi(void) {
     delay(50);
     ESP.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");
     while(!ESP.find("WIFI GOT IP"));
-    Serial.write("Connected\n");
+    Serial.write("Connected. ");
     while(!ESP.find("OK"));
     Serial.write("Ready\n\n");
 }
@@ -43,6 +52,10 @@ void startConnection(void) {
     while(!ESP.find("CONNECT"));
     while(!ESP.find("OK"));
     Serial.write("Connection established\n\n");
+    ESP.write("AT+CIPSEND=0,44\r\n");
+    while(!ESP.find("ERROR"));
+    ESP.write("AT+CIPSEND=0,44\r\n");
+    delay(50);
 }
 
 void closeConnection(void) {
@@ -51,4 +64,9 @@ void closeConnection(void) {
     while(!ESP.find("CLOSED"));
     while(!ESP.find("OK"));
     Serial.write("Connection closed\n\n");
+}
+
+void HTTPGET(void) {
+    delay(100);
+    ESP.write("GET / HTTP/1.1\r\n Host: www.makerlabs.com\r\n\r\n");
 }
