@@ -2,10 +2,6 @@
 
 SoftwareSerial ESP(2,3);
 
-#define debug true
-
-bool requestMade = true;
-
 void setup() {
     Serial.begin(9600);
     ESP.begin(9600);
@@ -17,8 +13,6 @@ void setup() {
     delay(1000);
     startConnection();
     HTTPGET();
-    //delay(2000);
-    //closeConnection();
 }
 void loop() {
 
@@ -48,13 +42,13 @@ void startConnection(void) {
     Serial.write("Connecting...\n");
     ESP.write("AT+CIPMUX=1\r\n");
     delay(50);
-    ESP.write("AT+CIPSTART=0,\"TCP\",\"www.makerlabs.com\",80\r\n");
+    ESP.write("AT+CIPSTART=0,\"TCP\",\"www.httpbin.org\",80\r\n");
     while(!ESP.find("CONNECT"));
     while(!ESP.find("OK"));
     Serial.write("Connection established\n\n");
-    ESP.write("AT+CIPSEND=0,44\r\n");
+    ESP.write("AT+CIPSEND=0,43\r\n");
     while(!ESP.find("ERROR"));
-    ESP.write("AT+CIPSEND=0,44\r\n");
+    ESP.write("AT+CIPSEND=0,43\r\n");
     delay(50);
 }
 
@@ -68,5 +62,7 @@ void closeConnection(void) {
 
 void HTTPGET(void) {
     delay(100);
-    ESP.write("GET / HTTP/1.1\r\n Host: www.makerlabs.com\r\n\r\n");
+    ESP.write("GET /ip HTTP/1.1\r\nHost: www.httpbin.org\r\n\r\n");
+    delay(1000);
+    closeConnection();
 }
