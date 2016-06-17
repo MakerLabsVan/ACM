@@ -16,10 +16,24 @@
 #define CMD_GET_SNR 0x25
 
 #define rejectNote 123
+#define rejectDuration 250
+#define rejectInterval 300
 #define acceptNote 440
+#define acceptDuration 500
 
 #define classCheck 0xDD
+#define blockID 0x01
 #define machineID 0x05
+
+#define waitforSerialResponse 200
+#define waitforReadResponse 50
+#define timeToRemoveCard 3000
+#define scanInterval 2000
+
+#define statusOffset 3
+#define numTimeBytes 4
+#define classOffset 8
+#define timeOffset 20
 
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 
@@ -28,8 +42,11 @@ const int signalPin = 4;
 const int speakerPin = 8;
 const int debounce = 25;
 const int quota = 3600;
+const int pollInterval = 1000;
 const bool reject = true;
 const unsigned long cardTimeout = 2000;
+const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned char readData[bufferSize];
 
 void setup() {
 	Serial.begin(57600);
@@ -42,37 +59,35 @@ void setup() {
 void loop() {
 	bool responseFlag = false;
 	unsigned long existingTime, elapsedTime = 0;
-	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
 	Serial.println("Scanning...");
-	while(responseFlag == false) {
-		MF_SNR();
-		delay(200);
+	while (responseFlag == false) {
+		getSerialNumber();
+		delay(waitforSerialResponse);
 		responseFlag = getResponse(readData);
 	}
 
 	// RFID tag detected, read block that contains time data (for this machine)
 	Serial.println("Card detected.");
 	digitalWrite(ledPin, HIGH);
-	MF_READ(0x01, machineID);
-	delay(50);
+	readCard(blockID, machineID);
+	delay(waitforReadResponse);
 	responseFlag = getResponse(readData);
 
 	// Analyze response packet and data
-	if(responseFlag == false) {
+	if (!responseFlag) {
 		soundFeedback(reject);
 		Serial.println("Read unsuccessful, please try again.\n");
-		delay(500);
 	}
 	else {
 		existingTime = getTime(readData);
-		if(readData[8] != classCheck) {
+		if (readData[classOffset] != classCheck) {
 			soundFeedback(reject);
 			Serial.println("You are not authorized to use this machine.\n");
 		}
-		else if(existingTime >= quota) {
+		else if (existingTime >= quota) {
 			soundFeedback(reject);
 			Serial.println("You have reached your quota for this month.\n");
 		}
@@ -89,34 +104,40 @@ void loop() {
 
 
 	// Write time data to card
-	if(elapsedTime != 0) {
-		MF_WRITE(0x01, machineID, elapsedTime + existingTime);
-		delay(200);
+	if (elapsedTime != 0) {
+		writeCard(blockID, machineID, elapsedTime + existingTime);
+		delay(waitforSerialResponse);
 		responseFlag = getResponse(readData);
-		if(responseFlag == false) Serial.println("Unexpected result");
+		if (!responseFlag) {
+			Serial.println("Unexpected result");
+		}
 		Serial.println("Card updated. You may now remove it.\n");
+		delay(timeToRemoveCard);
 	}
-	else Serial.println();
+	else {
+		Serial.println();
+	}
 
-	// Allow user time to remove card
-	delay(5000);
+	delay(scanInterval);
 }
 
 void soundFeedback(bool reject) {
-	if(reject) {
-		tone(speakerPin, rejectNote, 250);
-		delay(300);
-		tone(speakerPin, rejectNote, 250);
-		delay(300);
-		tone(speakerPin, rejectNote, 250);
+	if (reject) {
+		tone(speakerPin, rejectNote, rejectDuration);
+		delay(rejectInterval);
+		tone(speakerPin, rejectNote, rejectDuration);
+		delay(rejectInterval);
+		tone(speakerPin, rejectNote, rejectDuration);
 	}
-	else tone(speakerPin, acceptNote, 500);
+	else {
+		tone(speakerPin, acceptNote, acceptDuration);
+	}
 }
 
 bool getResponse(unsigned char response[]) {
 	int i = 0;
 
-	while(RDM880.available()) {
+	while (RDM880.available()) {
 		response[i] = RDM880.read();
 		/*Serial.print(response[i], HEX);
 		Serial.print(" ");*/
@@ -125,18 +146,30 @@ bool getResponse(unsigned char response[]) {
 	//Serial.println();
 
 	// 3rd byte of response packet is the STATUS byte, 0x00 means OK
-	if(response[3] == 0x00)
+	if (response[statusOffset] == 0x00)
 		return true;
 	else
 		return false;
 }
+/*
+	Reads time data from card and stores it in one 4 byte chunk
 
+	Param: readData - array containing all bytes read from card
+
+	Function: Time is encoded as four 1 byte chunks 0xAA 0xBB 0xCC 0xDD.
+			  existingTime is one 4 byte chuck 0x00000000
+			  This function XORs the most significant byte with each time byte,
+			  and left shifts it 1 byte size every iteration.
+			  First iteration: 0x000000AA, Second iteration: 0x0000AABB, etc.
+
+	Returns: existing time from card
+*/
 unsigned long getTime (unsigned char readData[]) {
 	int i = 0;
 	unsigned long existingTime = 0;
 
-	for(i = 0; i < 4; i++) {
-		existingTime = (existingTime << 8) ^ readData[i + 20];
+	for (i = 0; i < numTimeBytes; i++) {
+		existingTime = (existingTime << 8) ^ readData[i + timeOffset];
 	}
 
 	return existingTime;
@@ -169,7 +202,7 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 	Post: Response packet contains OK status and serial number of the tag selected
 
 */
-void MF_SNR(void) {
+void getSerialNumber(void) {
 	unsigned char A[] = { 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00 };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
 	unsigned char CMD[] = { STX, 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX };
@@ -191,24 +224,25 @@ void MF_SNR(void) {
 
 */
 
-void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
+void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
+	int j = 24;
 
 	// prepare data to be written, time is in format 0xAABBCCDD
 	// timeByte is in format { 0xAA, 0xBB, 0xCC, 0xDD }
-	unsigned char timeByte[4];
-	timeByte[3] = time & MSB;
-	timeByte[2] = (time >> 8) & MSB;
-	timeByte[1] = (time >> 16) & MSB;
-	timeByte[0] = (time >> 24) & MSB;
+	unsigned char timeByte[numTimeBytes];
+	for(i = 0; i < numTimeBytes; i++) {
+		timeByte[i] = (time >> j) & MSB;
+		j -= 8;
+	}
 
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
-						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
 						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						timeByte[0], timeByte[1], timeByte[2], timeByte[3] };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
 	unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
-						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
 						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						timeByte[0], timeByte[1], timeByte[2], timeByte[3],
 						BCC, ETX };
@@ -228,13 +262,13 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 	Post: Response packet contains serial number of selected tag and data.
 
 */
-void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
+void readCard(unsigned char numBlocks, unsigned char startAddress) {
 	int i = 0;
 	unsigned char A[] = { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
-						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5] };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
 	unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
-                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, BCC, ETX };
+                          keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5], BCC, ETX };
 
 	Serial.println("Reading data...");
 	//Serial.println(startAddress);
@@ -252,16 +286,16 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 */
 unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
+	int lastPolltime = millis();
 	int signalState;
 	int previousState;
-	unsigned char A[bufferSize];
 
-	while(1) {
+	while (1) {
 		// poll for card
-		MF_SNR();
-		if(!getResponse(A)) {
+		getSerialNumber();
+		if(!getResponse(readData)) {
 			delay(cardTimeout);
-			if(!getResponse(A)) {
+			if(!getResponse(readData)) {
 				Serial.println("Card not detected.");
 				return 0;
 			}
@@ -280,7 +314,7 @@ unsigned long accumulator(void) {
 			}
 			// check for OFF signal aka falling edge
 			else if(previousState == HIGH && signalState == LOW) {
-				// calculate elapsed time
+				// calculate elapsed time in seconds
 				endTime = (millis() - startTime)/1000;
 				if(endTime != 0) {
 					Serial.print("Elapsed time: ");
@@ -289,8 +323,9 @@ unsigned long accumulator(void) {
 				}
 			}
 			// no event
-			else
+			else {
 				previousState = signalState;
+			}
 		}
 
 	}
