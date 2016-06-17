@@ -63,6 +63,4 @@ void closeConnection(void) {
 void HTTPGET(void) {
     delay(100);
     ESP.write("GET /ip HTTP/1.1\r\nHost: www.httpbin.org\r\n\r\n");
-    delay(1000);
-    closeConnection();
 }
