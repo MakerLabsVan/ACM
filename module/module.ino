@@ -197,10 +197,10 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 	// prepare data to be written, time is in format 0xAABBCCDD
 	// timeByte is in format { 0xAA, 0xBB, 0xCC, 0xDD }
 	unsigned char timeByte[4];
-	unsigned char timeByte[3] = time & MSB;
-	unsigned char timeByte[2] = (time >> 8) & MSB;
-	unsigned char timeByte[1] = (time >> 16) & MSB;
-	unsigned char timeByte[0] = (time >> 24) & MSB;
+	timeByte[3] = time & MSB;
+	timeByte[2] = (time >> 8) & MSB;
+	timeByte[1] = (time >> 16) & MSB;
+	timeByte[0] = (time >> 24) & MSB;
 
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
