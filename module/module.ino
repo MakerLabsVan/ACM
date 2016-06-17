@@ -15,6 +15,12 @@
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
+#define rejectNote 123
+#define acceptNote 440
+
+#define classCheck 0xDD
+#define machineID 0x05
+
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 
 const int ledPin = 13;
@@ -44,14 +50,13 @@ void loop() {
 	while(responseFlag == false) {
 		MF_SNR();
 		delay(200);
-		// getResponse determines if the response packet is OK
 		responseFlag = getResponse(readData);
 	}
 
 	// RFID tag detected, read block that contains time data (for this machine)
 	Serial.println("Card detected.");
 	digitalWrite(ledPin, HIGH);
-	MF_READ(0x01, 0x05);
+	MF_READ(0x01, machineID);
 	delay(50);
 	responseFlag = getResponse(readData);
 
@@ -63,7 +68,7 @@ void loop() {
 	}
 	else {
 		existingTime = getTime(readData);
-		if(readData[8] != 0xDD) {
+		if(readData[8] != classCheck) {
 			soundFeedback(reject);
 			Serial.println("You are not authorized to use this machine.\n");
 		}
@@ -85,7 +90,7 @@ void loop() {
 
 	// Write time data to card
 	if(elapsedTime != 0) {
-		MF_WRITE(0x01, 0x05, elapsedTime + existingTime);
+		MF_WRITE(0x01, machineID, elapsedTime + existingTime);
 		delay(200);
 		responseFlag = getResponse(readData);
 		if(responseFlag == false) Serial.println("Unexpected result");
@@ -99,14 +104,14 @@ void loop() {
 
 void soundFeedback(bool reject) {
 	if(reject) {
-		tone(8, 123, 250);
+		tone(speakerPin, rejectNote, 250);
 		delay(300);
-		tone(8, 123, 250);
+		tone(speakerPin, rejectNote, 250);
 		delay(300);
-		tone(8, 123, 250);
+		tone(speakerPin, rejectNote, 250);
 	}
 	else
-		tone(8, 440, 500);
+		tone(speakerPin, acceptNote, 500);
 }
 
 bool getResponse(unsigned char response[]) {
@@ -190,7 +195,7 @@ void MF_SNR(void) {
 void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
 
-	// prepare data to be written
+	// prepare data to be written, time is in format 0xAABBCCDD
 	unsigned char timeByte[4];
 	unsigned char timeByte[3] = time & MSB;
 	unsigned char timeByte[2] = (time >> 8) & MSB;
@@ -205,7 +210,7 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 	unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-						timeByte3, timeByte2, timeByte1, timeByte0,
+						timeByte[0], timeByte[1], timeByte[2], timeByte[3],
 						BCC, ETX };
 
 	/*Serial.print("Attempting to write block ");
@@ -247,16 +252,13 @@ void MF_READ(unsigned char numBlocks, unsigned char startAddress) {
 */
 unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
-	unsigned long pollCounter = 0;
 	int signalState;
 	int previousState;
-	bool cardPresent;
 	unsigned char A[bufferSize];
 
 	while(1) {
 		// poll for card
 		MF_SNR();
-
 		if(!getResponse(A)) {
 			delay(cardTimeout);
 			if(!getResponse(A)) {
@@ -271,7 +273,6 @@ unsigned long accumulator(void) {
 
 		// debounce check
 		if(signalState == digitalRead(signalPin)) {
-
 			// check for new ON signal aka rising edge
 			if(previousState == LOW && signalState == HIGH) {
 				startTime = millis();
@@ -286,7 +287,6 @@ unsigned long accumulator(void) {
 					Serial.println(endTime);
 					return endTime;
 				}
-				previousState = signalState;
 			}
 			// no event
 			else
