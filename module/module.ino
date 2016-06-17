@@ -110,8 +110,7 @@ void soundFeedback(bool reject) {
 		delay(300);
 		tone(speakerPin, rejectNote, 250);
 	}
-	else
-		tone(speakerPin, acceptNote, 500);
+	else tone(speakerPin, acceptNote, 500);
 }
 
 bool getResponse(unsigned char response[]) {
@@ -196,6 +195,7 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startAddress, unsigned long
 	int i = 0;
 
 	// prepare data to be written, time is in format 0xAABBCCDD
+	// timeByte is in format { 0xAA, 0xBB, 0xCC, 0xDD }
 	unsigned char timeByte[4];
 	unsigned char timeByte[3] = time & MSB;
 	unsigned char timeByte[2] = (time >> 8) & MSB;
