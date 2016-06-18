@@ -15,12 +15,14 @@
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
+// Can be unique for each machine
 #define classCheck 0xDD
 #define blockID 0x01
 #define machineID 0x05
 
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
+#define debounce 25
 #define timeToRemoveCard 3000
 #define scanInterval 2000
 
