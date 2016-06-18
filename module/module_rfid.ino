@@ -5,8 +5,8 @@
 bool getResponse(unsigned char response[]) {
 	int i = 0;
 
-	while (RDM880.available()) {
-		response[i] = RDM880.read();
+	while (RFID.available()) {
+		response[i] = RFID.read();
 		/*Serial.print(response[i], HEX);
 		Serial.print(" ");*/
 		i++;
@@ -74,7 +74,7 @@ void getSerialNumber(void) {
 	unsigned char A[] = { 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00 };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
 	unsigned char CMD[] = { STX, 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX };
-	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
 
 /*
@@ -118,7 +118,7 @@ void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned lon
 	/*Serial.print("Attempting to write block ");
 	Serial.println(startAddress);*/
 
-	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
 
 /*
@@ -141,6 +141,6 @@ void readCard(unsigned char numBlocks, unsigned char startAddress) {
 	Serial.println("Reading data...");
 	//Serial.println(startAddress);
 
-	RDM880.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 
 }

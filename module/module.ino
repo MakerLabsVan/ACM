@@ -1,21 +1,24 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
+#define monitorBaud 57600
+#define moduleBaud 9600
+
+SoftwareSerial RFID(RFID_RX, RFID_TX);
+unsigned char readData[bufferSize];
 
 const int ledPin = 13;
 const int signalPin = 4;
 const int speakerPin = 8;
 const int quota = 3600;
+const int pollTimeout = 2;
 const int pollInterval = 1000;
 const bool reject = true;
-const unsigned long cardTimeout = 2000;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-unsigned char readData[bufferSize];
 
 void setup() {
-	Serial.begin(57600);
-	RDM880.begin(9600);
+	Serial.begin(monitorBaud);
+	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
 	pinMode(speakerPin, OUTPUT);
@@ -111,8 +114,7 @@ unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
 	int lastPolltime = millis();
 	int pollCounter = 0;
-	int signalState;
-	int previousState;
+	int signalState, previousState;
 
 	while (1) {
 		// poll for card every second
@@ -120,7 +122,7 @@ unsigned long accumulator(void) {
 			getSerialNumber();
 			if(!getResponse(readData)) {
 				pollCounter += 1;
-				if(pollCounter == 4) {
+				if(pollCounter == pollTimeout) {
 					soundFeedback(reject);
 					Serial.println("Card not detected.");
 					return 0;
