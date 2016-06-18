@@ -102,6 +102,31 @@ void soundFeedback(bool reject) {
 	}
 }
 
+/*
+	Reads time data from card and stores it in one 4 byte chunk
+
+	Param: readData - array containing all bytes read from card
+
+	Function: Time is encoded as four 1 byte chunks 0xAA 0xBB 0xCC 0xDD.
+			  existingTime is one 4 byte chuck 0x00000000
+			  This function XORs the most significant byte with each time byte,
+			  and left shifts it 1 byte size every iteration.
+			  First iteration: 0x000000AA, Second iteration: 0x0000AABB, etc.
+
+	Returns: existing time from card
+*/
+unsigned long getTime (unsigned char readData[]) {
+	int i = 0;
+	unsigned long existingTime = 0;
+
+	for (i = 0; i < numTimeBytes; i++) {
+		existingTime = (existingTime << 8) ^ readData[i + timeOffset];
+	}
+
+	return existingTime;
+
+}
+
 
 /*
 	Function that waits for a control signal to go high and counts time 
