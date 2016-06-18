@@ -33,7 +33,7 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 	int i = 0;
 	unsigned char BCC = A[i];
 
-	for(i = 1; i < numBytes; i++) {
+	for (i = 1; i < numBytes; i++) {
 		BCC = BCC ^ A[i];
 	}
 
@@ -70,7 +70,7 @@ void getSerialNumber(void) {
 
 void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
-	int j = 24;
+	int j = 24; // only need to shift 3 times
 
 	// prepare data to be written, time is in format 0xAABBCCDD
 	// timeByte is in format { 0xAA, 0xBB, 0xCC, 0xDD }
