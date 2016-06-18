@@ -1,29 +1,6 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial ESP(2,3);
-
-void setup() {
-    Serial.begin(9600);
-    ESP.begin(9600);
-    pinMode(4, OUTPUT);
-
-    Serial.write("Initializing...\n");
-
-    connectWiFi();
-    startConnection();
-    GET();
-}
-void loop() {
-
-    while (ESP.available()) {
-        Serial.write(ESP.read());
-    }
-    // This is for manual commands
-    while (Serial.available()) {
-        ESP.write(Serial.read());
-    }
-
-}
+SoftwareSerial ESP(5,6);
 
 void connectWiFi(void) {
     ESP.write("AT+CWQAP\r\n");
