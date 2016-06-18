@@ -108,7 +108,7 @@ void soundFeedback(bool reject) {
 	Param: readData - array containing all bytes read from card
 
 	Function: Time is encoded as four 1 byte chunks 0xAA 0xBB 0xCC 0xDD.
-			  existingTime is one 4 byte chuck 0x00000000
+			  existingTime is one 4 byte chunk 0x00000000
 			  This function XORs the most significant byte with each time byte,
 			  and left shifts it 1 byte size every iteration.
 			  First iteration: 0x000000AA, Second iteration: 0x0000AABB, etc.

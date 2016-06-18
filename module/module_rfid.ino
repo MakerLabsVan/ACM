@@ -67,7 +67,6 @@ void getSerialNumber(void) {
 		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 
 */
-
 void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	int i = 0;
 	int j = 24; // only need to shift 3 times
