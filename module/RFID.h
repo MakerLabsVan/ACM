@@ -24,7 +24,7 @@
 
 // Serial Number Read constants
 #define requestMode 0x26 // idle
-#define noHalt // do not need to execute halt command
+#define noHalt 0x00 // do not need to execute halt command
 #define snrLength 0x03
 
 // Can be unique for each machine
@@ -34,6 +34,7 @@
 
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
+#define waitforWriteResponse 250
 #define debounce 25
 #define timeToRemoveCard 3000
 #define scanInterval 2000

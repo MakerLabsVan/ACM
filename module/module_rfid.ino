@@ -12,13 +12,13 @@ bool getResponse(unsigned char response[]) {
 
 	while (RFID.available()) {
 		response[i] = RFID.read();
-		/*Serial.print(response[i], HEX);
-		Serial.print(" ");*/
+		//Serial.print(response[i], HEX);
+		//Serial.print(" ");
 		i++;
 	}
 	//Serial.println();
 
-	// 3rd byte of response packet is the STATUS byte, 0x00 means OK
+	// 4th byte of response packet is the STATUS byte, 0x00 means OK
 	if (response[statusOffset] == 0x00)
 		return true;
 	else

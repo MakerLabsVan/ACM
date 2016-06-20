@@ -6,7 +6,6 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
-unsigned char readData[bufferSize];
 
 const int ledPin = 13;
 const int signalPin = 4;
@@ -19,17 +18,18 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 void setup() {
 	Serial.begin(monitorBaud);
+	Serial.print("Initializing... ");
 	RFID.begin(moduleBaud);
-	WIFI.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
 	pinMode(speakerPin, OUTPUT);
-	connectWIFI();
+	Serial.println("Done.");
 }
 
 void loop() {
 	bool responseFlag = false;
 	unsigned long existingTime, elapsedTime = 0;
+	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
@@ -77,7 +77,7 @@ void loop() {
 	// Write time data to card
 	if (elapsedTime != 0) {
 		writeCard(blockID, machineID, elapsedTime + existingTime);
-		delay(waitforSerialResponse);
+		delay(waitforWriteResponse);
 		responseFlag = getResponse(readData);
 		if (!responseFlag) {
 			Serial.println("Unexpected result");
@@ -88,7 +88,6 @@ void loop() {
 	else {
 		Serial.println();
 	}
-
 	delay(scanInterval);
 }
 
@@ -140,6 +139,7 @@ unsigned long getTime (unsigned char readData[]) {
 */
 unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
+	unsigned char A[bufferSize];
 	int lastPolltime = millis();
 	int pollCounter = 0;
 	int signalState, previousState;
@@ -149,7 +149,7 @@ unsigned long accumulator(void) {
 		if ((millis() - lastPolltime) >= pollInterval) {
 			getSerialNumber();
 			// if card is missing, increment a counter
-			if (!getResponse(readData)) {
+			if (!getResponse(A)) {
 				pollCounter += 1;
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
@@ -161,10 +161,9 @@ unsigned long accumulator(void) {
 			lastPolltime = millis();
 		}
 
-		// read signal state
+		// read signal state and debounce check
 		signalState = digitalRead(signalPin);
 		delay(debounce);
-		// debounce check
 		if(signalState == digitalRead(signalPin)) {
 			// check for new ON signal aka rising edge
 			if(previousState == LOW && signalState == HIGH) {
