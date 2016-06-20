@@ -20,9 +20,11 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 void setup() {
 	Serial.begin(monitorBaud);
 	RFID.begin(moduleBaud);
+	ESP.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
 	pinMode(speakerPin, OUTPUT);
+	connectWIFI();
 }
 
 void loop() {

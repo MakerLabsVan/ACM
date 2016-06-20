@@ -1,7 +1,7 @@
 /*
     All Wi-Fi related functions
 */
-void connectWiFi(void) {
+void connectWIFI(void) {
     ESP.write("AT+CWQAP\r\n");
     delay(50);
     ESP.write("AT+CWMODE=1\r\n");
