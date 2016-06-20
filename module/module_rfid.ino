@@ -128,23 +128,31 @@ void readCard(unsigned char numBlocks, unsigned char startAddress) {
 
 }
 
-/*
-void sendCommand(unsigned char command, unsigned char keyA[], unsigned char numBlocks, unsigned char startAddress) {
+
+void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, const unsigned char keyA[]) {
+
 	if (command == CMD_GET_SNR) {
-		
-	}
+		unsigned char CMD[] = { 0x00, DADD, snrLength, CMD_GET_SNR, requestMode, noHalt, 0x00, 0x00 };
+		CMD[sizeof(CMD)/sizeof(CMD[0]) - 2] = checksum( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+	}	
 	else if(command == CMD_READ) {
-
+		unsigned char CMD[] = { 0x00, DADD, readLength, CMD_READ, authTypeA, numBlocks, startAddress,
+                          		keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5], 0x00, 0x00 };
+		CMD[sizeof(CMD)/sizeof(CMD[0]) - 2] = checksum( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 	}
-	else if(command == CMD_WRITE) {
-
-	}
+	/*else if(command == CMD_WRITE) {
+		unsigned char CMD[] = { 0x00, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
+						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
+						0xDD, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						timeByte[0], timeByte[1], timeByte[2], timeByte[3],
+						0x00, 0x00 };
+		CMD[sizeof(CMD)/sizeof(CMD[0]) - 1] = checksum( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+	}*/
 	else {
 		Serial.println("Unexpected command.");
-		return
 	}
 
-
-
+	CMD[0] = STX;
+	CMD[sizeof(CMD)/sizeof(CMD[0]) - 1] = ETX;
+	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
-*/

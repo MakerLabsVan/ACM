@@ -37,7 +37,7 @@ void loop() {
 	// Scan for RFID tags
 	Serial.println("Scanning...");
 	while (!responseFlag) {
-		getSerialNumber();
+		sendCommand(CMD_GET_SNR, blockID, machineID, keyA);
 		delay(waitforSerialResponse);
 		responseFlag = getResponse(readData);
 	}
