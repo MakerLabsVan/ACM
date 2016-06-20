@@ -1,7 +1,12 @@
 /*
-	All RFID related functions
+	All RFID related functions 
+	For details on implementation, see documentation on ISO14443A protocol in ACM/Documentation
+	Specific functions are MF_SNR, MF_READ, and MF_WRITE
 */
 
+/*
+	Stores the response packet in a buffer and returns true if a valid response has been received.
+*/
 bool getResponse(unsigned char response[]) {
 	int i = 0;
 
@@ -21,7 +26,8 @@ bool getResponse(unsigned char response[]) {
 }
 
 /*
-	Calculates the checksum of a packet to ensure data integrity.
+	Calculates the checksum of a packet to ensure data integrity. All bytes excluding STX and ETX
+	are XOR'd together.
 
 	Param: A[] 		- array containing all bytes in a packet
 		   numBytes - number of bytes in the array
