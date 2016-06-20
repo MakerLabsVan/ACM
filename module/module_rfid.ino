@@ -128,6 +128,7 @@ void readCard(unsigned char numBlocks, unsigned char startAddress) {
 
 }
 
+/*
 void sendCommand(unsigned char command, unsigned char keyA[], unsigned char numBlocks, unsigned char startAddress) {
 	if (command == CMD_GET_SNR) {
 		
@@ -146,3 +147,4 @@ void sendCommand(unsigned char command, unsigned char keyA[], unsigned char numB
 
 
 }
+*/
