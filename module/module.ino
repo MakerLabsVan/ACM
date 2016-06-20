@@ -5,7 +5,7 @@
 #define moduleBaud 9600
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
-SoftwareSerial ESP(WIFI_RX, WIFI_TX);
+SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 unsigned char readData[bufferSize];
 
 const int ledPin = 13;
