@@ -1,7 +1,6 @@
-#include <SoftwareSerial.h>
-
-SoftwareSerial ESP(5,6);
-
+/*
+    All Wi-Fi related functions
+*/
 void connectWiFi(void) {
     ESP.write("AT+CWQAP\r\n");
     delay(50);

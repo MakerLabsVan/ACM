@@ -5,6 +5,7 @@
 #define moduleBaud 9600
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
+SoftwareSerial ESP(WIFI_RX, WIFI_TX);
 unsigned char readData[bufferSize];
 
 const int ledPin = 13;
@@ -145,9 +146,11 @@ unsigned long accumulator(void) {
 		// poll for card every second
 		if ((millis() - lastPolltime) >= pollInterval) {
 			getSerialNumber();
-			if(!getResponse(readData)) {
+			// if card is missing, increment a counter
+			if (!getResponse(readData)) {
 				pollCounter += 1;
-				if(pollCounter == pollTimeout) {
+				// if the counter reaches a specified timeout, return
+				if (pollCounter == pollTimeout) {
 					soundFeedback(reject);
 					Serial.println("Card not detected.");
 					return 0;

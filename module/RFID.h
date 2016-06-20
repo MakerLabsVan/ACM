@@ -1,8 +1,10 @@
 #include "Arduino.h"
 
-// Pins that interface with RDM880
+// Pins that interface with RDM880 and ESP8266
 #define RFID_RX 2 // Purple
 #define RFID_TX 3
+#define WIFI_RX 5
+#define WIFI_TX 6
 #define bufferSize 64
 
 // Start and End bytes for command/response packets
