@@ -10,12 +10,22 @@
 // Start and End bytes for command/response packets
 #define STX 0xAA
 #define ETX 0xBB
+#define DADD 0x00
 #define MSB 0xFF
 
 // MiFare Classic commands
 #define CMD_READ 0x20
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
+
+// Read constants
+#define authTypeA 0x01 // use KeyA
+#define readLength 0x0A
+
+// Serial Number Read constants
+#define requestMode 0x26 // idle
+#define noHalt // do not need to execute halt command
+#define snrLength 0x03
 
 // Can be unique for each machine
 #define classCheck 0xDD

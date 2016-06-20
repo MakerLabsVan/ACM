@@ -53,9 +53,9 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 
 */
 void getSerialNumber(void) {
-	unsigned char A[] = { 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00 };
+	unsigned char A[] = { DADD, snrLength, CMD_GET_SNR, requestMode, noHalt };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[] = { STX, 0x00, 0x03, CMD_GET_SNR, 0x26, 0x00, BCC, ETX };
+	unsigned char CMD[] = { STX, DADD, snrLength, CMD_GET_SNR, requestMode, noHalt, BCC, ETX };
 	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
 }
 
@@ -115,15 +115,34 @@ void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned lon
 */
 void readCard(unsigned char numBlocks, unsigned char startAddress) {
 	int i = 0;
-	unsigned char A[] = { 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
+	unsigned char A[] = { DADD, readLength, CMD_READ, authTypeA, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5] };
 	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[] = { STX, 0x00, 0x0A, CMD_READ, 0x01, numBlocks, startAddress,
+	unsigned char CMD[] = { STX, DADD, readLength, CMD_READ, authTypeA, numBlocks, startAddress,
                           keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5], BCC, ETX };
 
 	Serial.println("Reading data...");
 	//Serial.println(startAddress);
 
 	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+
+}
+
+void sendCommand(unsigned char command, unsigned char keyA[], unsigned char numBlocks, unsigned char startAddress) {
+	if (command == CMD_GET_SNR) {
+		
+	}
+	else if(command == CMD_READ) {
+
+	}
+	else if(command == CMD_WRITE) {
+
+	}
+	else {
+		Serial.println("Unexpected command.");
+		return
+	}
+
+
 
 }
