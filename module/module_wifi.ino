@@ -10,7 +10,6 @@ void connectWIFI(void) {
     while(!WIFI.find("WIFI GOT IP"));
     Serial.write("Connected. ");
     while(!WIFI.find("OK"));
-    Serial.write("Ready.\n\n");
 }
 
 void startConnection(void) {

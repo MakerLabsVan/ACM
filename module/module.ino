@@ -11,14 +11,16 @@ const int ledPin = 13;
 const int signalPin = 4;
 const int speakerPin = 8;
 const int quota = 3600;
-const int pollTimeout = 2;
+const int pollTimeout = 5;
 const int pollInterval = 1000;
 const bool reject = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 void setup() {
 	Serial.begin(monitorBaud);
-	Serial.print("Initializing... ");
+	Serial.print("Initializing...\n");
+	WIFI.begin(moduleBaud);
+	connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
@@ -145,45 +147,50 @@ unsigned long accumulator(void) {
 	int signalState, previousState;
 
 	while (1) {
-		// poll for card every second
-		if ((millis() - lastPolltime) >= pollInterval) {
+		// run every second
+		int currentTime = millis();
+		if ((currentTime - lastPolltime) >= pollInterval) {
 			getSerialNumber();
+
 			// if card is missing, increment a counter
 			if (!getResponse(A)) {
 				pollCounter += 1;
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
 					soundFeedback(reject);
-					Serial.println("Card not detected.");
+					Serial.println("Card not detected. Operation cancelled.");
 					return 0;
 				}
 			}
-			lastPolltime = millis();
-		}
-
-		// read signal state and debounce check
-		signalState = digitalRead(signalPin);
-		delay(debounce);
-		if(signalState == digitalRead(signalPin)) {
-			// check for new ON signal aka rising edge
-			if(previousState == LOW && signalState == HIGH) {
-				startTime = millis();
-				previousState = signalState;
+			else {
+				pollCounter = 0;
 			}
-			// check for OFF signal aka falling edge
-			else if(previousState == HIGH && signalState == LOW) {
+
+			// read signal state and debounce check
+			signalState = digitalRead(signalPin);
+			delay(debounce);
+			if(signalState == digitalRead(signalPin)) {
+				// check for new ON signal aka rising edge
+				if(previousState == LOW && signalState == HIGH) {
+					startTime = millis();
+					previousState = signalState;
+				}
+				// check for OFF signal aka falling edge
+				else if(previousState == HIGH && signalState == LOW) {
 				// calculate elapsed time in seconds
-				endTime = (millis() - startTime)/1000;
-				if(endTime != 0) {
-					Serial.print("Elapsed time: ");
-					Serial.println(endTime);
-					return endTime;
+					endTime = (millis() - startTime)/1000;
+					if(endTime != 0) {
+						Serial.print("Elapsed time: ");
+						Serial.println(endTime);
+						return endTime;
+					}
+				}
+				// no event
+				else {
+					previousState = signalState;
 				}
 			}
-			// no event
-			else {
-				previousState = signalState;
-			}
+			lastPolltime = millis();
 		}
 	}
 }
