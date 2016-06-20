@@ -19,8 +19,8 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print("Initializing...\n");
-	WIFI.begin(moduleBaud);
-	connectWIFI();
+	//WIFI.begin(moduleBaud);
+	//connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
