@@ -25,7 +25,7 @@ void setup() {
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
 	pinMode(speakerPin, OUTPUT);
-	Serial.println("Done.");
+	Serial.print("Done.\n");
 }
 
 void loop() {
