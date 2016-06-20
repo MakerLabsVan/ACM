@@ -77,8 +77,10 @@ void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned lon
 	int i = 0;
 	int j = 24; // only need to shift 3 times
 
-	// prepare data to be written, time is in format 0xAABBCCDD
+	// prepare data to be written, time should be in format 0xAABBCCDD
 	// timeByte is in format { 0xAA, 0xBB, 0xCC, 0xDD }
+	// in the first iteration, time gets shifted 3 bytes to get 0x000000AA
+	// then bitwise AND operation with 0xFF, then store in timeByte
 	unsigned char timeByte[numTimeBytes];
 	for(i = 0; i < numTimeBytes; i++) {
 		timeByte[i] = (time >> j) & MSB;
