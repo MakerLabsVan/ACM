@@ -94,7 +94,6 @@ void loop() {
 	WIFI.listen();
 	startConnection();
 	GET();
-
 	bool done = false;
 	while (!done) {
 		while (WIFI.available()) {
@@ -105,6 +104,7 @@ void loop() {
 		}
 	}
 
+	Serial.println();
 	RFID.listen();
 	delay(scanInterval);
 }
