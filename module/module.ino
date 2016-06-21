@@ -10,6 +10,7 @@ SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 const int ledPin = 13;
 const int signalPin = 4;
 const int speakerPin = 8;
+const int eightBits = 8;
 const int quota = 3600;
 const int pollTimeout = 5;
 const int pollInterval = 1000;
@@ -38,7 +39,7 @@ void loop() {
 	// Scan for RFID tags
 	Serial.print(messages.scan);
 	while (!responseFlag) {
-		sendCommand(CMD_GET_SNR, blockID, machineID, keyA);
+		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		delay(waitforSerialResponse);
 		responseFlag = getResponse(readData);
 	}
@@ -46,7 +47,7 @@ void loop() {
 	// RFID tag detected, read block that contains time data (for this machine)
 	Serial.print(messages.detected);
 	digitalWrite(ledPin, HIGH);
-	sendCommand(CMD_READ, blockID, machineID, keyA);
+	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
 	responseFlag = getResponse(readData);
 
@@ -79,14 +80,16 @@ void loop() {
 
 	// Write time data to card
 	if (elapsedTime != 0) {
-		writeCard(blockID, machineID, elapsedTime + existingTime);
+		//writeCard(blockID, machineID, elapsedTime + existingTime);
+		sendCommand(CMD_WRITE, blockID, machineID, keyA, elapsedTime + existingTime);
 		delay(waitforWriteResponse);
 		responseFlag = getResponse(readData);
 		if (!responseFlag) {
 			Serial.println(messages.error);
 		}
 		Serial.print(messages.cardUpdated);
-		wifiReady = true;
+		// enable or disable wifi functionality heres
+		wifiReady = false;
 	}
 	else {
 		Serial.println();
@@ -143,7 +146,7 @@ unsigned long getTime (unsigned char readData[]) {
 	unsigned long existingTime = 0;
 
 	for (i = 0; i < numTimeBytes; i++) {
-		existingTime = (existingTime << 8) ^ readData[i + timeOffset];
+		existingTime = (existingTime << eightBits) ^ readData[i + timeOffset];
 	}
 
 	return existingTime;
@@ -169,7 +172,7 @@ unsigned long accumulator(void) {
 		// run every second
 		int currentTime = millis();
 		if ((currentTime - lastPolltime) >= pollInterval) {
-			sendCommand(CMD_GET_SNR, blockID, machineID, keyA);
+			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 
 			// if card is missing, increment a counter
 			if (!getResponse(A)) {
@@ -178,7 +181,7 @@ unsigned long accumulator(void) {
 				if (pollCounter == pollTimeout) {
 					soundFeedback(reject);
 					Serial.print(messages.cancel);
-					return 0;
+					return endTime;
 				}
 			}
 			else {

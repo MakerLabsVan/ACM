@@ -27,6 +27,9 @@
 #define noHalt 0x00 // do not need to execute halt command
 #define snrLength 0x03
 
+// Write constants
+#define writeLength 0x1A
+
 // Can be unique for each machine
 #define classCheck 0xDD
 #define blockID 0x01
@@ -63,7 +66,8 @@ const struct {
 	String cancel;
 	String accumulatedTime;
 	String displayNewTime;
-	String error;
+	String errorRead;
+	String errorCommand;
 	String cardUpdated;
 
 } messages = {
@@ -80,5 +84,6 @@ const struct {
 	"Elapsed time: ",
 	"Total time used this month: ",
 	"Unexpected result\n",
+	"Unexpected command\n",
 	"Card updated. You may now remove it.\n\n"
 };
