@@ -49,3 +49,36 @@
 #define numTimeBytes 4
 #define classOffset 8
 #define timeOffset 20
+
+const struct {
+	String initialize;
+	String done;
+	String scan;
+	String detected;
+	String readUnsuccessful;
+	String notAuthorized;
+	String quotaMet;
+	String displayUsedTime;
+	String authorized;
+	String cancel;
+	String accumulatedTime;
+	String displayNewTime;
+	String error;
+	String cardUpdated;
+
+} messages = {
+	"Initializing...\n",
+	"Done.\n",
+	"Scanning...\n",
+	"Card detected.\n",
+	"Read unsuccessful. Please try again.\n",
+	"You are not authorized to use this machine.\n\n",
+	"You have reached your quota for this month.\n\n",
+	"Time used this month: ",
+	"User authenticated. Machine is ready to fire. Please do not remove your card.\n",
+	"Card not detected. Operation cancelled.\n",
+	"Elapsed time: ",
+	"Total time used this month: ",
+	"Unexpected result\n",
+	"Card updated. You may now remove it.\n\n"
+};

@@ -18,24 +18,25 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 void setup() {
 	Serial.begin(monitorBaud);
-	Serial.print("Initializing...\n");
+	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
 	connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
 	pinMode(speakerPin, OUTPUT);
-	Serial.print("Done.\n");
+	Serial.print(messages.done);
 }
 
 void loop() {
 	bool responseFlag = false;
+	bool wifiReady = false;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
-	Serial.println("Scanning...");
+	Serial.print(messages.scan);
 	while (!responseFlag) {
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA);
 		delay(waitforSerialResponse);
@@ -43,7 +44,7 @@ void loop() {
 	}
 
 	// RFID tag detected, read block that contains time data (for this machine)
-	Serial.println("Card detected.");
+	Serial.print(messages.detected);
 	digitalWrite(ledPin, HIGH);
 	sendCommand(CMD_READ, blockID, machineID, keyA);
 	delay(waitforReadResponse);
@@ -52,25 +53,25 @@ void loop() {
 	// Analyze response packet and data
 	if (!responseFlag) {
 		soundFeedback(reject);
-		Serial.println("Read unsuccessful, please try again.\n");
+		Serial.print(messages.readUnsuccessful);
 	}
 	else {
 		existingTime = getTime(readData);
 		if (readData[classOffset] != classCheck) {
 			soundFeedback(reject);
-			Serial.println("You are not authorized to use this machine.\n");
+			Serial.print(messages.notAuthorized);
 		}
 		else if (existingTime >= quota) {
 			soundFeedback(reject);
-			Serial.println("You have reached your quota for this month.\n");
+			Serial.print(messages.quotaMet);
 		}
 		else {
 			soundFeedback(!reject);
-			Serial.print("Time used this month: ");
+			Serial.print(messages.displayUsedTime);
 			Serial.println(existingTime);
-			Serial.println("User authenticated. Machine is ready to fire. Please do not remove your card.");
+			Serial.print(messages.authorized);
 			elapsedTime = accumulator();
-			Serial.print("Total time used this month: ");
+			Serial.print(messages.displayNewTime);
 			Serial.println(elapsedTime + existingTime);
 		}
 	}
@@ -82,30 +83,32 @@ void loop() {
 		delay(waitforWriteResponse);
 		responseFlag = getResponse(readData);
 		if (!responseFlag) {
-			Serial.println("Unexpected result");
+			Serial.println(messages.error);
 		}
-		Serial.println("Card updated. You may now remove it.\n");
+		Serial.print(messages.cardUpdated);
+		wifiReady = true;
 	}
 	else {
 		Serial.println();
 	}
 
 	// Begin Wi-Fi functionality
-	WIFI.listen();
-	startConnection();
-	GET();
-	bool done = false;
-	while (!done) {
-		while (WIFI.available()) {
-			Serial.write(WIFI.read());
+	if (wifiReady) {
+		WIFI.listen();
+		startConnection();
+		GET();
+		bool done = false;
+		while (!done) {
+			while (WIFI.available()) {
+				Serial.write(WIFI.read());
+			}
+			if(digitalRead(speakerPin) == HIGH) {
+				done = true;
+			}
 		}
-		if(digitalRead(speakerPin) == HIGH) {
-			done = true;
-		}
+		Serial.println();
+		RFID.listen();
 	}
-
-	Serial.println();
-	RFID.listen();
 	delay(scanInterval);
 }
 
@@ -174,7 +177,7 @@ unsigned long accumulator(void) {
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
 					soundFeedback(reject);
-					Serial.println("Card not detected. Operation cancelled.");
+					Serial.print(messages.cancel);
 					return 0;
 				}
 			}
@@ -196,7 +199,7 @@ unsigned long accumulator(void) {
 				// calculate elapsed time in seconds
 					endTime = (millis() - startTime)/1000;
 					if(endTime != 0) {
-						Serial.print("Elapsed time: ");
+						Serial.print(messages.accumulatedTime);
 						Serial.println(endTime);
 						return endTime;
 					}
