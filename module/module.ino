@@ -99,7 +99,7 @@ void loop() {
 			while (WIFI.available()) {
 				Serial.write(WIFI.read());
 			}
-			if ((millis() - httpTime) > 3*pollInterval) {
+			if ((millis() - httpTime) > closeInterval) {
 				done = true;
 			}
 		}

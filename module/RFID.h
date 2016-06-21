@@ -61,6 +61,7 @@ const int quota = 3600;
 const int pollTimeout = 5;
 const int pollInterval = 1000;
 const bool reject = true;
+const unsigned long closeInterval = 3000;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const struct {
