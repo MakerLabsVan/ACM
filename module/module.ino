@@ -62,6 +62,7 @@ void loop() {
 			Serial.print(messages.displayUsedTime);
 			Serial.println(existingTime);
 			Serial.print(messages.authorized);
+			// get ready to record time
 			elapsedTime = accumulator();
 			Serial.print(messages.displayNewTime);
 			Serial.println(elapsedTime + existingTime);
@@ -80,7 +81,7 @@ void loop() {
 		else {
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
-			wifiReady = true;
+			wifiReady = false;
 		}
 	}
 	else {
@@ -93,14 +94,16 @@ void loop() {
 		startConnection();
 		GET();
 		bool done = false;
+		unsigned long httpTime = millis();
 		while (!done) {
 			while (WIFI.available()) {
 				Serial.write(WIFI.read());
 			}
-			if(digitalRead(speakerPin) == HIGH) {
+			if ((millis() - httpTime) > 3*pollInterval) {
 				done = true;
 			}
 		}
+		closeConnection();
 		Serial.println();
 		RFID.listen();
 	}
