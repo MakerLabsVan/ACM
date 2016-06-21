@@ -159,7 +159,7 @@ unsigned long accumulator(void) {
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
 					soundFeedback(reject);
-					Serial.println("Card not detected. Operation canceled.");
+					Serial.println("Card not detected. Operation cancelled.");
 					return 0;
 				}
 			}
