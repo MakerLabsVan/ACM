@@ -85,12 +85,34 @@ void loop() {
 			Serial.println("Unexpected result");
 		}
 		Serial.println("Card updated. You may now remove it.\n");
-		delay(timeToRemoveCard);
 	}
 	else {
 		Serial.println();
 	}
 
+	// Begin Wi-Fi functionality
+	WIFI.listen();
+	startConnection();
+	GET();
+
+	bool done = false;
+	unsigned long httpTime = millis();
+	while (!done) {
+		while (WIFI.available()) {
+			Serial.write(WIFI.read());
+		}
+		while ((millis() - httpTime) >= 1000) {
+			RFID.listen();
+			delay(1000);
+			Serial.println("hi");
+			if (!getResponse(readData)) {
+				httpTime = millis();
+				done = true;
+			}
+		}
+	}
+
+	Serial.println("hi 2");
 	delay(scanInterval);
 }
 
