@@ -47,19 +47,6 @@ unsigned char checksum(unsigned char A[], int numBytes) {
 }
 
 /*
-	Gets the serial number of an RFID tag.
-
-	Post: Response packet contains OK status and serial number of the tag selected
-
-*/
-void getSerialNumber(void) {
-	unsigned char A[] = { DADD, snrLength, CMD_GET_SNR, requestMode, noHalt };
-	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[] = { STX, DADD, snrLength, CMD_GET_SNR, requestMode, noHalt, BCC, ETX };
-	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-}
-
-/*
 	Writes to the selected RFID tag.
 
 	Param: numBlocks 	- number of 16 byte blocks to be written to (max 3)
@@ -105,45 +92,27 @@ void writeCard(unsigned char numBlocks, unsigned char startAddress, unsigned lon
 }
 
 /*
-	Reads the selected RFID tag.
-	
-	Param: numBlocks	- number of 16 byte blocks to be read (max 3)
-		   startAddress - address of first block to read (0 - 63)
+	Constructs the packet for the chosen command.
 
-	Post: Response packet contains serial number of selected tag and data.
+	numBlocks - number of 16 byte blocks to read/write (1 for best performance)
+	startAddress - block to start reading or writing (0 - 63)
 
+	NOTE: Block 0 contains manufacturer data. 
+		  Sector trailers (multiples of 4) should also not be written to.
+		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 */
-void readCard(unsigned char numBlocks, unsigned char startAddress) {
-	int i = 0;
-	unsigned char A[] = { DADD, readLength, CMD_READ, authTypeA, numBlocks, startAddress,
-						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5] };
-	unsigned char BCC = checksum( A, sizeof(A)/sizeof(A[0]) );
-	unsigned char CMD[] = { STX, DADD, readLength, CMD_READ, authTypeA, numBlocks, startAddress,
-                          keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5], BCC, ETX };
-
-	Serial.println("Reading data...");
-	//Serial.println(startAddress);
-
-	RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-
-}
-
-
 void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, const unsigned char keyA[]) {
 	if (command == CMD_GET_SNR) {
 		unsigned char CMD[] = { 0x00, DADD, snrLength, CMD_GET_SNR, requestMode, noHalt, 0x00, 0x00 };
-		CMD[sizeof(CMD)/sizeof(CMD[0]) - 2] = checksum( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-		// CMD[0] = STX;
-		// CMD[sizeof(CMD)/sizeof(CMD[0]) - 1] = ETX;
-		// RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-		sendToRFID(CMD);
+		int size = sizeof(CMD)/sizeof(CMD[0]);
+		sendToRFID(CMD, size);
 	}
 	else if(command == CMD_READ) {
 		unsigned char CMD[] = { 0x00, DADD, readLength, CMD_READ, authTypeA, numBlocks, startAddress,
-			keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5], 0x00, 0x00 };
-			CMD[sizeof(CMD)/sizeof(CMD[0]) - 2] = checksum( CMD, sizeof(CMD)/sizeof(CMD[0]) );
-			sendToRFID(CMD);
-		}
+								keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5], 0x00, 0x00 };
+		int size = sizeof(CMD)/sizeof(CMD[0]);
+		sendToRFID(CMD, size);
+	}
 	/*else if(command == CMD_WRITE) {
 		unsigned char CMD[] = { 0x00, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
@@ -156,9 +125,24 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		Serial.println("Unexpected command.");
 	}
 }
+/*
+	Calculates checksum based on command packet. 
+	Inserts checksum, start, and end bytes.
+	Sends the complete command packet.
+*/
+void sendToRFID(unsigned char CMD[], int size) {
+	// calculate checksum by XOR-ing every byte together
+	int i = 0;
+	unsigned char BCC = CMD[i];
+	for (i = 1; i < size; i++) {
+		BCC ^= CMD[i];
+	}
 
-void sendToRFID(unsigned char CMD[]) {
-		CMD[0] = STX;
-		CMD[sizeof(CMD)/sizeof(CMD[0]) - 1] = ETX;
-		RFID.write( CMD, sizeof(CMD)/sizeof(CMD[0]) );
+	// insert start, checksum and end bytes
+	CMD[0] = STX;
+	CMD[size - 1] = ETX;
+	CMD[size - 2] = BCC;
+
+	// send command packet
+	RFID.write(CMD, size);
 }

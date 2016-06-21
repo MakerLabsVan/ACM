@@ -19,8 +19,8 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print("Initializing...\n");
-	//WIFI.begin(moduleBaud);
-	//connectWIFI();
+	WIFI.begin(moduleBaud);
+	connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
@@ -45,7 +45,7 @@ void loop() {
 	// RFID tag detected, read block that contains time data (for this machine)
 	Serial.println("Card detected.");
 	digitalWrite(ledPin, HIGH);
-	readCard(blockID, machineID);
+	sendCommand(CMD_READ, blockID, machineID, keyA);
 	delay(waitforReadResponse);
 	responseFlag = getResponse(readData);
 
@@ -90,6 +90,7 @@ void loop() {
 	else {
 		Serial.println();
 	}
+
 	delay(scanInterval);
 }
 
@@ -150,7 +151,7 @@ unsigned long accumulator(void) {
 		// run every second
 		int currentTime = millis();
 		if ((currentTime - lastPolltime) >= pollInterval) {
-			getSerialNumber();
+			sendCommand(CMD_GET_SNR, blockID, machineID, keyA);
 
 			// if card is missing, increment a counter
 			if (!getResponse(A)) {
@@ -158,7 +159,7 @@ unsigned long accumulator(void) {
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
 					soundFeedback(reject);
-					Serial.println("Card not detected. Operation cancelled.");
+					Serial.println("Card not detected. Operation canceled.");
 					return 0;
 				}
 			}
