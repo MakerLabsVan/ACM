@@ -7,16 +7,6 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
-const int ledPin = 13;
-const int signalPin = 4;
-const int speakerPin = 8;
-const int eightBits = 8;
-const int quota = 3600;
-const int pollTimeout = 5;
-const int pollInterval = 1000;
-const bool reject = true;
-const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-
 void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
@@ -39,6 +29,7 @@ void loop() {
 	// Scan for RFID tags
 	Serial.print(messages.scan);
 	while (!responseFlag) {
+		// no payload, so pass NULL
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		delay(waitforSerialResponse);
 		responseFlag = getResponse(readData);
@@ -79,17 +70,18 @@ void loop() {
 
 
 	// Write time data to card
-	if (elapsedTime != 0) {
-		//writeCard(blockID, machineID, elapsedTime + existingTime);
+	if (elapsedTime > 0) {
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, elapsedTime + existingTime);
 		delay(waitforWriteResponse);
 		responseFlag = getResponse(readData);
 		if (!responseFlag) {
-			Serial.println(messages.error);
+			Serial.print(messages.errorRead);
 		}
-		Serial.print(messages.cardUpdated);
-		// enable or disable wifi functionality heres
-		wifiReady = false;
+		else {
+			Serial.print(messages.cardUpdated);
+			delay(timeToRemoveCard);
+			wifiReady = true;
+		}
 	}
 	else {
 		Serial.println();
