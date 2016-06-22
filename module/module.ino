@@ -10,8 +10,8 @@ SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
-	WIFI.begin(moduleBaud);
-	connectWIFI();
+	//WIFI.begin(moduleBaud);
+	//connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
