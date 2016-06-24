@@ -20,7 +20,7 @@ void startConnection(void) {
     while(!WIFI.find("CONNECT"));
     while(!WIFI.find("OK"));
     Serial.write("Connection established.\n\n");
-    
+    delay(50);
 }
 
 void closeConnection(void) {
@@ -33,8 +33,8 @@ void closeConnection(void) {
 
 void GET(void) {
     WIFI.write("AT+CIPSEND=0,43\r\n");
-    while(!WIFI.find("ERROR"));
-    WIFI.write("AT+CIPSEND=0,43\r\n");
+    //while(!WIFI.find("ERROR"));
+    //WIFI.write("AT+CIPSEND=0,43\r\n");
     delay(50);
     WIFI.write("GET /ip HTTP/1.1\r\nHost: www.httpbin.org\r\n\r\n");
 }
