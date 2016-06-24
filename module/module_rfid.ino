@@ -44,12 +44,12 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		sendToRFID(CMD, size);
 	}
 	else if(command == CMD_WRITE) {
-		// prepare data to be written, time should be in format 0xAABBCCDD
-		// timeByte is in format { 0xAA, 0xBB, 0xCC, 0xDD }
+		// prepare data to be written, time should be in format 0x00AABBCC
+		// timeByte is in format { 0xAA, 0xBB, 0xCC }
 		// in the first iteration, time gets shifted 3 bytes to get 0x000000AA
 		// then bitwise AND operation with 0xFF, then store in timeByte
 		int i = 0;
-		int j = 3 * eightBits; // only need to shift 3 times, 1 byte == 8 bits
+		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
 		unsigned char timeByte[numTimeBytes];
 		for(i = 0; i < numTimeBytes; i++) {
 			timeByte[i] = (time >> j) & MSB;
@@ -57,7 +57,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		}
 		unsigned char CMD[] = { 0x00, DADD, writeLength, CMD_WRITE, authTypeA, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
-						classCheck, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, timeByte[0], timeByte[1], timeByte[2], timeByte[3],
+						classCheck, timeByte[0], timeByte[1], timeByte[2], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						0x00, 0x00 };
 		int size = sizeof(CMD)/sizeof(CMD[0]);
 		sendToRFID(CMD, size);

@@ -1,10 +1,10 @@
 #include "Arduino.h"
 
 // Pins that interface with RDM880 and ESP8266
-#define RFID_RX 2 // Purple
-#define RFID_TX 3
-#define WIFI_RX 5
-#define WIFI_TX 6
+#define RFID_RX 5
+#define RFID_TX 6
+#define WIFI_RX 2
+#define WIFI_TX 3
 #define bufferSize 64
 
 // Start and End bytes for command/response packets
@@ -31,9 +31,9 @@
 #define writeLength 0x1A
 
 // Can be unique for each machine
-#define classCheck 0xDD
+#define classCheck 0xCC
 #define blockID 0x01
-#define machineID 0x05
+#define machineID 0x04
 
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
@@ -49,9 +49,9 @@
 #define acceptDuration 500
 
 #define statusOffset 3
-#define numTimeBytes 4
+#define numTimeBytes 3
 #define classOffset 8
-#define timeOffset 20
+#define timeOffset 9
 
 const int ledPin = 13;
 const int signalPin = 4;
