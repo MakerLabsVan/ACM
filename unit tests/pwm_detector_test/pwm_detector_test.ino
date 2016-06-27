@@ -1,7 +1,8 @@
-const int inPin = 4;
-const int debounce = 500;
-const unsigned long lower = 58;
-const unsigned long upper = 69;
+const int driverX = 4;
+const int driverY = 5;
+const int debounce = 10;
+const unsigned long lowerBound = 58;
+const unsigned long upperBound = 69;
 const unsigned long pollInterval = 1000;
 
 unsigned long lastPeriod;
@@ -11,7 +12,8 @@ unsigned long period, periodCount;
 void setup() {
 	Serial.begin(57600);
 	Serial.print("Initializing...\n");
-	pinMode(inPin, INPUT);
+	pinMode(driverX, INPUT);
+	pinMode(driverY, INPUT);
 }
 
 void loop() {
@@ -24,8 +26,8 @@ void loop() {
 	//Serial.print(period);
 
 	// if pulseIn returns a value between the accepted range
-	//if ( (lower <= period) && (period <= upper) ) {
-	if (period > 0) {
+	if ( (lower <= period) && (period <= upper) ) {
+	//if (period > 0) {
 		//Serial.print(" Inside. ");
 		periodCount += 1;
 		Serial.println(periodCount);
@@ -36,7 +38,7 @@ void loop() {
 		//Serial.println(lastPeriod);
 
 		if ( (lastPeriod <= lower) || (upper <= lastPeriod) ) {
-			Serial.println("Started accumulating");
+			//Serial.println("Started accumulating");
 			startTime = millis();
 		}
 
@@ -51,14 +53,24 @@ void loop() {
 		//Serial.print("Last Period: ");
 		//Serial.println(lastPeriod);
 		if ( (lower <= lastPeriod) && (lastPeriod <= upper) ) {
-			endTime = (millis() - startTime)/1000;
-			Serial.print("Time elapsed: ");
-			Serial.println(endTime);
-			delay(5000);
+			//endTime = (millis() - startTime)/1000;
+			//Serial.print("Time elapsed: ");
+			//Serial.println(endTime);
+			periodCount = 0;
+			Serial.println("Done");
 		}
 
 		lastPeriod = period;
 	}
 
-	//delay(500);
+	delay(pollInterval);
+}
+
+bool inRange(unsigned long period) {
+	if ( (lowerBound <= period) && (period <= upperBound) ) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
