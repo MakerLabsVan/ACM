@@ -1,13 +1,14 @@
 const int driverX = 4;
-const int driverY = 5;
+const int driverY = 7;
 const int debounce = 10;
 const unsigned long lowerBound = 58;
 const unsigned long upperBound = 69;
 const unsigned long pollInterval = 1000;
 
-unsigned long lastPeriod;
 unsigned long startTime, endTime = 0;
-unsigned long period, periodCount;
+unsigned long periodX, periodY;
+unsigned long lastPeriodX, lastPeriodY; 
+unsigned long periodCount;
 
 void setup() {
 	Serial.begin(57600);
@@ -19,48 +20,35 @@ void setup() {
 void loop() {
 	
 	// read signal state and debounce check
-	period = pulseIn(inPin, HIGH);
+	periodX = pulseIn(driverX, HIGH);
 	delay(debounce);
-	period = pulseIn(inPin, HIGH);
-	//Serial.print("Period: ");
-	//Serial.print(period);
+	periodX = pulseIn(driverX, HIGH);
 
-	// if pulseIn returns a value between the accepted range
-	if ( (lower <= period) && (period <= upper) ) {
-	//if (period > 0) {
-		//Serial.print(" Inside. ");
+	// if periodX is in the accepted range
+	if ( inRange(periodX) ) {
 		periodCount += 1;
-		Serial.println(periodCount);
 		// check for new ON signal aka rising edge
 		// so, if the lastPeriod was out of the accepted range,
 		// begin accumulating time
-		//Serial.print("Last Period: ");
-		//Serial.println(lastPeriod);
-
-		if ( (lastPeriod <= lower) || (upper <= lastPeriod) ) {
+		if ( !inRange(lastPeriodX) ) {
 			//Serial.println("Started accumulating");
 			startTime = millis();
+			Serial.println(periodCount);
 		}
 
-		lastPeriod = period;
+		lastPeriodX = periodX;
 	}
-	// if pulseIn returns a value outside the accepted range
+	// if periodX is outside the accepted range
 	else {
-		//Serial.print(" Outside. ");
 		// check for new OFF signal aka falling edge
 		// so, if the lastPeriod was in the accepted range,
 		// calculate elapsed time
-		//Serial.print("Last Period: ");
-		//Serial.println(lastPeriod);
-		if ( (lower <= lastPeriod) && (lastPeriod <= upper) ) {
-			//endTime = (millis() - startTime)/1000;
-			//Serial.print("Time elapsed: ");
-			//Serial.println(endTime);
+		if ( inRange(lastPeriodX) ) {
 			periodCount = 0;
 			Serial.println("Done");
 		}
 
-		lastPeriod = period;
+		lastPeriodX = periodX;
 	}
 
 	delay(pollInterval);
