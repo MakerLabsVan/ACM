@@ -11,7 +11,7 @@ void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
-	connectWIFI();
+	//connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);

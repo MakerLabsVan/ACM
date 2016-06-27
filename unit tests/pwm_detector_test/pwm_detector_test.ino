@@ -1,3 +1,5 @@
+#define debug true
+
 const int driverX = 4;
 const int driverY = 7;
 const int debounce = 10;
@@ -8,13 +10,12 @@ const unsigned long pollInterval = 1000;
 unsigned long startTime, endTime = 0;
 unsigned long periodX, periodY;
 unsigned long lastPeriodX, lastPeriodY; 
-unsigned long periodCount;
+unsigned long periodCount = 0;
 
 void setup() {
 	Serial.begin(57600);
-	Serial.print("Initializing...\n");
+	Serial.println("Initializing...");
 	pinMode(driverX, INPUT);
-	pinMode(driverY, INPUT);
 }
 
 void loop() {
@@ -23,6 +24,14 @@ void loop() {
 	periodX = pulseIn(driverX, HIGH);
 	delay(debounce);
 	periodX = pulseIn(driverX, HIGH);
+	if (debug) {
+		Serial.print("Period: ");
+		Serial.print(periodX);
+		Serial.print(" Last Period: ");
+		Serial.print(lastPeriodX);
+		Serial.print(" Count: ");
+		Serial.println(periodCount);
+	}
 
 	// if periodX is in the accepted range
 	if ( inRange(periodX) ) {
