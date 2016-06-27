@@ -1,46 +1,57 @@
-const int pwmPin = 5;
-const int isrPin = 2;
-const int halfduty = 127;
-const unsigned long frequency = 14550;
-const unsigned long pollInterval = 3000;
-volatile unsigned long pulseCount = 0;
+const int inPin = 4;
+const int debounce = 500;
+const unsigned long lower = 64;
+const unsigned long upper = 68;
+const unsigned long pollInterval = 1000;
 
 void setup() {
 	Serial.begin(57600);
-	Serial.print("Initializing...");
-	pinMode(pwmPin, OUTPUT);
-	pinMode(isrPin, INPUT);
-	//attachInterrupt(digitalPinToInterrupt(isrPin), pwmDetect, FALLING);
-	analogWrite(pwmPin, halfduty);
+	Serial.print("Initializing...\n");
+	pinMode(inPin, INPUT);
 }
 
 void loop() {
-	unsigned long startTime = 0;
-	volatile unsigned long currentCount = 0;
-	unsigned long period = 0;
+	unsigned long startTime, endTime = 0;
+	unsigned long period, lastPeriod = 0;
+	
+	// read signal state and debounce check
+	period = pulseIn(inPin, HIGH);
+	delay(debounce);
+	period = pulseIn(inPin, HIGH);
+	Serial.print("Period: ");
+	Serial.print(period);
 
-	/*if (pulseCount == 1) {
-		startTime = millis();
-		Serial.println("First pulse detected");
+	// if pulseIn returns a value between the accepted range
+	if ( (lower <= period) && (period <= upper) ) {
+		Serial.println(" Inside");
+		// check for new ON signal aka rising edge
+		// so, if the lastPeriod was out of the accepted range,
+		// begin accumulating time
+		if ( (lastPeriod <= lower) || (upper <= lastPeriod) ) {
+			startTime = millis();
+			Serial.println(startTime);
+		}
+
+		lastPeriod = period;
 	}
-	else if (pulseCount > 1) {
-		currentCount = pulseCount;
-		Serial.print(currentCount);
-		Serial.print(" ");
-		Serial.println(currentCount/frequency);
-	}
+	// if pulseIn returns a value outside the accepted range
 	else {
-		pulseCount = 0;
-	}*/
+		Serial.println(" Outside");
+		// check for new OFF signal aka falling edge
+		// so, if the lastPeriod was in the accepted range,
+		// calculate elapsed time
+		if ( (lower <= lastPeriod) && (lastPeriod <= upper) ) {
+			endTime = (millis() - startTime)/1000;
+			if (endTime != 0) {
+				Serial.print("Time elapsed: ");
+				Serial.println(endTime);
+				delay(5000);
+			}
+		}
 
-	period = pulseIn(isrPin, HIGH);
-	Serial.println(period);
+		lastPeriod = period;
+	}
 
-}
+	delay(500);
 
-
-
-
-void pwmDetect() {
-	pulseCount += 1;
 }

@@ -79,6 +79,7 @@ void loop() {
 			Serial.print(messages.errorRead);
 		}
 		else {
+			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
 			wifiReady = true;

@@ -10,11 +10,9 @@
 */
 
 void setup() {
-	Serial.begin(57600);
-	Serial.print("Setup loop\n");
+	
 }
 
 void loop() {
-	Serial.print("Loop\n");
-	delay(2000);
+
 }
