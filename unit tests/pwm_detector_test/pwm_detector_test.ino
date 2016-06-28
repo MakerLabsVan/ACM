@@ -3,8 +3,8 @@
 const int driverX = 4;
 const int driverY = 7;
 const int debounce = 10;
-const unsigned long lowerBound = 58;
-const unsigned long upperBound = 69;
+const unsigned long lowerBound = 1;
+const unsigned long upperBound = 8;
 const unsigned long pollInterval = 1000;
 
 unsigned long startTime, endTime = 0;
@@ -16,25 +16,28 @@ void setup() {
 	Serial.begin(57600);
 	Serial.println("Initializing...");
 	pinMode(driverX, INPUT);
+	pinMode(driverY, INPUT);
 }
 
 void loop() {
 	
 	// read signal state and debounce check
 	periodX = pulseIn(driverX, HIGH);
-	delay(debounce);
+	periodY = pulseIn(driverY, HIGH);
+	/*delay(debounce);
 	periodX = pulseIn(driverX, HIGH);
+	periodY = pulseIn(driverY, HIGH);*/
 	if (debug) {
-		Serial.print("Period: ");
+		Serial.print("PeriodX: ");
 		Serial.print(periodX);
-		Serial.print(" Last Period: ");
-		Serial.print(lastPeriodX);
+		Serial.print(" PeriodY: ");
+		Serial.print(periodY);
 		Serial.print(" Count: ");
 		Serial.println(periodCount);
 	}
 
-	// if periodX is in the accepted range
-	if ( inRange(periodX) ) {
+	// if periodX or periodY is in the accepted range
+	if ( inRange(periodX) || inRange(periodY) ) {
 		periodCount += 1;
 		// check for new ON signal aka rising edge
 		// so, if the lastPeriod was out of the accepted range,
@@ -42,12 +45,11 @@ void loop() {
 		if ( !inRange(lastPeriodX) ) {
 			//Serial.println("Started accumulating");
 			startTime = millis();
-			Serial.println(periodCount);
 		}
 
 		lastPeriodX = periodX;
 	}
-	// if periodX is outside the accepted range
+	// if periodX or periodY is outside the accepted range
 	else {
 		// check for new OFF signal aka falling edge
 		// so, if the lastPeriod was in the accepted range,
