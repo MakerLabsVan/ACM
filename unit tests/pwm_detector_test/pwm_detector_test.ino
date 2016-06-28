@@ -46,21 +46,20 @@ void loop() {
 			//Serial.println("Started accumulating");
 			startTime = millis();
 		}
-
-		lastPeriodX = periodX;
 	}
-	// if periodX or periodY is outside the accepted range
-	else {
+	// if periodX and periodY is outside the accepted range
+	if ( !inRange(periodX) && !inRange(periodY) ) {
 		// check for new OFF signal aka falling edge
 		// so, if the lastPeriod was in the accepted range,
 		// calculate elapsed time
-		if ( inRange(lastPeriodX) ) {
+		if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
 			periodCount = 0;
 			Serial.println("Done");
 		}
-
-		lastPeriodX = periodX;
 	}
+
+	lastPeriodX = periodX;
+	lastPeriodY = periodY;
 
 	delay(pollInterval);
 }
