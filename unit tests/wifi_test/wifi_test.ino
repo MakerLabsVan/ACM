@@ -6,13 +6,11 @@ void setup() {
     Serial.begin(9600);
     ESP.begin(9600);
     pinMode(4, OUTPUT);
-
-    Serial.write("Initializing...\n");
-
-    connectWiFi();
-    startConnection();
-    GET();
+    digitalWrite(8, LOW);
+    delay(500);
+    digitalWrite(8, HIGH);
 }
+
 void loop() {
 
     while (ESP.available()) {

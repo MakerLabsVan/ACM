@@ -10,7 +10,7 @@ const int debounce = 10;
 const unsigned long lowerBound = 1;
 const unsigned long upperBound = 8;
 const unsigned long pollInterval = 1000;
-const unsigned long sendInterval = 15000;
+const unsigned long sendInterval = 30000;
 
 unsigned long startTime, endTime = 0;
 unsigned int periodX, periodY;
@@ -30,12 +30,9 @@ void setup() {
 	digitalWrite(8, LOW);
 	delay(500);
 	digitalWrite(8, HIGH);
-	delay(1000);
+	delay(500);
 	connectWIFI();
 	delay(2000);
-	while(WIFI.available()) {
-		Serial.write(WIFI.read());
-	}
 }
 
 void loop() {
@@ -80,11 +77,12 @@ void loop() {
 	lastPeriodX = periodX;
 	lastPeriodY = periodY;
 
-	//if ( (millis() - lastSend) > sendInterval ) {
+	if ( (millis() - lastSend) > sendInterval ) {
+		Serial.println("Sending to ThingSpeak");
 		startConnection();
 		GET();
-		//lastSend = millis();
-	//}
+		lastSend = millis();
+	}
 
 	delay(pollInterval);
 }
