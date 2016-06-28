@@ -1,4 +1,8 @@
-#define debug true
+#include <SoftwareSerial.h>
+#include <ESP8266wifi.h>
+#include <stdlib.h>
+
+SoftwareSerial WIFI(2, 3);
 
 const int driverX = 4;
 const int driverY = 7;
@@ -6,17 +10,32 @@ const int debounce = 10;
 const unsigned long lowerBound = 1;
 const unsigned long upperBound = 8;
 const unsigned long pollInterval = 1000;
+const unsigned long sendInterval = 15000;
 
 unsigned long startTime, endTime = 0;
-unsigned long periodX, periodY;
-unsigned long lastPeriodX, lastPeriodY; 
-unsigned long periodCount = 0;
+unsigned int periodX, periodY;
+unsigned int lastPeriodX, lastPeriodY; 
+unsigned int periodCount = 0;
+
+unsigned long lastSend = millis();
+unsigned long channelNumber = 129116;
+String writeKey = "1KTO7V159Y4VTNWR";
 
 void setup() {
 	Serial.begin(57600);
-	Serial.println("Initializing...");
+	WIFI.begin(9600);
+	Serial.println("\n\nInitializing...");
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
+	digitalWrite(8, LOW);
+	delay(500);
+	digitalWrite(8, HIGH);
+	delay(1000);
+	connectWIFI();
+	delay(2000);
+	while(WIFI.available()) {
+		Serial.write(WIFI.read());
+	}
 }
 
 void loop() {
@@ -27,7 +46,7 @@ void loop() {
 	/*delay(debounce);
 	periodX = pulseIn(driverX, HIGH);
 	periodY = pulseIn(driverY, HIGH);*/
-	if (debug) {
+	if (true) {
 		Serial.print("PeriodX: ");
 		Serial.print(periodX);
 		Serial.print(" PeriodY: ");
@@ -60,6 +79,12 @@ void loop() {
 
 	lastPeriodX = periodX;
 	lastPeriodY = periodY;
+
+	//if ( (millis() - lastSend) > sendInterval ) {
+		startConnection();
+		GET();
+		//lastSend = millis();
+	//}
 
 	delay(pollInterval);
 }
