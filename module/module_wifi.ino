@@ -2,25 +2,21 @@
     All Wi-Fi related functions
 */
 void connectWIFI(void) {
-    WIFI.write("AT+CWQAP\r\n");
-    delay(50);
     WIFI.write("AT+CWMODE=1\r\n");
     delay(50);
     WIFI.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");
     while(!WIFI.find("WIFI GOT IP"));
-    Serial.write("Connected. ");
+    Serial.write("Connected.\n");
     while(!WIFI.find("OK"));
+    delay(100);
+    WIFI.write("AT+CIPMUX=1\r\n");
+    delay(250);
 }
 
 void startConnection(void) {
     Serial.write("Connecting...\n");
-    WIFI.write("AT+CIPMUX=1\r\n");
-    delay(50);
-    WIFI.write("AT+CIPSTART=0,\"TCP\",\"www.httpbin.org\",80\r\n");
-    while(!WIFI.find("CONNECT"));
-    while(!WIFI.find("OK"));
-    Serial.write("Connection established.\n\n");
-    delay(50);
+    WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
+    delay(250);
 }
 
 void closeConnection(void) {
@@ -31,10 +27,17 @@ void closeConnection(void) {
     Serial.write("Connection closed.\n\n");
 }
 
-void GET(void) {
-    WIFI.write("AT+CIPSEND=0,43\r\n");
-    //while(!WIFI.find("ERROR"));
-    //WIFI.write("AT+CIPSEND=0,43\r\n");
-    delay(50);
-    WIFI.write("GET /ip HTTP/1.1\r\nHost: www.httpbin.org\r\n\r\n");
+//http://api.thingspeak.com/update?key=BDCX5DQNZWVU51AU&field1=0&field2=0
+void GET(unsigned long time) {
+    String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
+    //getStr += writeKey;
+    getStr += "&field1=";
+    getStr += String(time);
+    getStr += "\r\n\r\n";
+
+    String cmd = "AT+CIPSEND=0,";
+    cmd += String(getStr.length());
+    WIFI.println(cmd);
+    delay(500);
+    WIFI.println(getStr);
 }

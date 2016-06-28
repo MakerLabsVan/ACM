@@ -11,7 +11,7 @@ void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
-	//connectWIFI();
+	connectWIFI();
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(signalPin, INPUT);
@@ -93,7 +93,7 @@ void loop() {
 	if (wifiReady) {
 		WIFI.listen();
 		startConnection();
-		GET();
+		GET(elapsedTime);
 		bool done = false;
 		unsigned long httpTime = millis();
 		while (!done) {
@@ -104,7 +104,6 @@ void loop() {
 				done = true;
 			}
 		}
-		closeConnection();
 		Serial.println();
 		RFID.listen();
 	}
