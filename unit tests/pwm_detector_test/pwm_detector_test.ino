@@ -10,15 +10,14 @@ const int debounce = 10;
 const unsigned long lowerBound = 1;
 const unsigned long upperBound = 8;
 const unsigned long pollInterval = 1000;
-const unsigned long sendInterval = 30000;
+const unsigned long sendInterval = 20000;
 
 unsigned long startTime, endTime = 0;
 unsigned int periodX, periodY;
 unsigned int lastPeriodX, lastPeriodY; 
-unsigned int periodCount = 0;
+unsigned int periodCount, sendCount = 0;
 
 unsigned long lastSend = millis();
-unsigned long channelNumber = 129116;
 String writeKey = "1KTO7V159Y4VTNWR";
 
 void setup() {
@@ -66,25 +65,29 @@ void loop() {
 	// if periodX and periodY is outside the accepted range
 	if ( !inRange(periodX) && !inRange(periodY) ) {
 		// check for new OFF signal aka falling edge
-		// so, if the lastPeriod was in the accepted range,
-		// calculate elapsed time
+		// so, if the lastPeriod was in the accepted range
 		if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
 			if (periodCount > 5) {
+				sendCount = periodCount;
+				Serial.println("Sending to ThingSpeak");
+				startConnection();
+				GET();
 				Serial.println("Done");
 			}
 			periodCount = 0;
 		}
 	}
 
+	// record the previous state
 	lastPeriodX = periodX;
 	lastPeriodY = periodY;
 
-	if ( (millis() - lastSend) > sendInterval ) {
+	/*if ( (millis() - lastSend) > sendInterval ) {
 		Serial.println("Sending to ThingSpeak");
 		startConnection();
 		GET();
 		lastSend = millis();
-	}
+	}*/
 
 	delay(pollInterval);
 }

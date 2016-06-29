@@ -37,6 +37,8 @@ void GET(void) {
     getStr += String(periodX);
     getStr += "&field2=";
     getStr += String(periodY);
+    getStr += "&field3=";
+    getStr += String(sendCount);
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";
