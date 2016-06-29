@@ -27,9 +27,9 @@ void closeConnection(void) {
     Serial.write("Connection closed.\n\n");
 }
 
-//http://api.thingspeak.com/update?key=BDCX5DQNZWVU51AU&field1=0&field2=0
+//http://api.thingspeak.com/update?key=BMPD2LXVXARHTDV5&field1=0&field2=0
 void GET(unsigned long time) {
-    String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
+    String getStr = "GET /update?key=BMPD2LXVXARHTDV5";
     //getStr += writeKey;
     getStr += "&field1=";
     getStr += String(time);

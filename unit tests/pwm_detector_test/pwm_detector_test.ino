@@ -69,8 +69,10 @@ void loop() {
 		// so, if the lastPeriod was in the accepted range,
 		// calculate elapsed time
 		if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
+			if (periodCount > 5) {
+				Serial.println("Done");
+			}
 			periodCount = 0;
-			Serial.println("Done");
 		}
 	}
 
