@@ -33,21 +33,14 @@ void GET(void) {
     String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
     //getStr += writeKey;
     getStr += "&field1=";
-    if (periodX < 100) {
-        getStr += String(periodX);
-    }
-    else {
-        getStr += "0";
-    }
+    getStr += String(periodX);
     getStr += "&field2=";
-    if (periodY < 1000) {
-        getStr += String(periodY);   
+    getStr += String(periodY);
+    if (sendCount > 0) {
+        getStr += "&field3=";
+        getStr += String(sendCount);
+        sendCount = 0;
     }
-    else {
-        getStr += "0";
-    }
-    getStr += "&field3=";
-    getStr += String(sendCount);
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";

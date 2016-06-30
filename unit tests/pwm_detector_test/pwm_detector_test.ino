@@ -11,12 +11,12 @@ const int minCount = 5;
 const unsigned long lowerBound = 1;
 const unsigned long upperBound = 8;
 const unsigned long pollInterval = 1000;
-const unsigned long sendInterval = 20000;
+const unsigned long sendInterval = 45000;
 
 unsigned long startTime, endTime = 0;
 unsigned int periodX, periodY;
 unsigned int lastPeriodX, lastPeriodY; 
-unsigned int periodCount, sendCount = 0;
+unsigned long periodCount, sendCount = 0;
 
 unsigned long lastSend = millis();
 String writeKey = "1KTO7V159Y4VTNWR";
@@ -43,7 +43,7 @@ void loop() {
 	/*delay(debounce);
 	periodX = pulseIn(driverX, HIGH);
 	periodY = pulseIn(driverY, HIGH);*/
-	if (true) {
+	if ( true ) {
 		Serial.print("PeriodX: ");
 		Serial.print(periodX);
 		Serial.print(" PeriodY: ");
@@ -54,26 +54,26 @@ void loop() {
 
 	// if periodX or periodY is in the accepted range
 	if ( inRange(periodX) || inRange(periodY) ) {
-		periodCount += 1;
+		if (startTime > 0) {
+			// calculate elapsed time
+			periodCount = (millis() - startTime)/1000;
+		}
 		// check for new ON signal aka rising edge
-		// so, if the lastPeriod was out of the accepted range,
+		// so, if the lastPeriodX or lastPeriodY was out of the accepted range,
 		// begin accumulating time
-		if ( !inRange(lastPeriodX) ) {
-			//Serial.println("Started accumulating");
+		if ( !inRange(lastPeriodX) || !inRange(lastPeriodY) ) {
 			startTime = millis();
 		}
 	}
 	// if periodX and periodY is outside the accepted range
 	if ( !inRange(periodX) && !inRange(periodY) ) {
+		// during operation, ignore double zeros
 		// check for new OFF signal aka falling edge
 		// so, if the lastPeriod was in the accepted range
-		if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
+		if ( inRange(lastPeriodX) || inRange(lastPeriodY) && (periodX != 0 && periodY != 0) ) {
 			if (periodCount > minCount) {
 				sendCount = periodCount;
-				Serial.println("Sending to ThingSpeak");
-				startConnection();
-				GET();
-				Serial.println("Done");
+				startTime = 0;
 			}
 			periodCount = 0;
 		}
@@ -83,12 +83,14 @@ void loop() {
 	lastPeriodX = periodX;
 	lastPeriodY = periodY;
 
-	/*if ( (millis() - lastSend) > sendInterval ) {
-		Serial.println("Sending to ThingSpeak");
-		startConnection();
-		GET();
+	if ( (millis() - lastSend) > sendInterval ) {
+		if (startTime > 0) {
+			Serial.println("Sending to ThingSpeak");
+			startConnection();
+			GET();
+		}
 		lastSend = millis();
-	}*/
+	}
 
 	delay(pollInterval);
 }
