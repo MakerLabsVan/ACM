@@ -29,14 +29,23 @@ void closeConnection(void) {
     Serial.write("Connection closed.\n\n");
 }
 
-//http://api.thingspeak.com/update?key=BDCX5DQNZWVU51AU&field1=0&field2=0
 void GET(void) {
     String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
     //getStr += writeKey;
     getStr += "&field1=";
-    getStr += String(periodX);
+    if (periodX < 100) {
+        getStr += String(periodX);
+    }
+    else {
+        getStr += "0";
+    }
     getStr += "&field2=";
-    getStr += String(periodY);
+    if (periodY < 1000) {
+        getStr += String(periodY);   
+    }
+    else {
+        getStr += "0";
+    }
     getStr += "&field3=";
     getStr += String(sendCount);
     getStr += "\r\n\r\n";

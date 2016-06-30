@@ -7,6 +7,7 @@ SoftwareSerial WIFI(2, 3);
 const int driverX = 4;
 const int driverY = 7;
 const int debounce = 10;
+const int minCount = 5;
 const unsigned long lowerBound = 1;
 const unsigned long upperBound = 8;
 const unsigned long pollInterval = 1000;
@@ -67,7 +68,7 @@ void loop() {
 		// check for new OFF signal aka falling edge
 		// so, if the lastPeriod was in the accepted range
 		if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
-			if (periodCount > 5) {
+			if (periodCount > minCount) {
 				sendCount = periodCount;
 				Serial.println("Sending to ThingSpeak");
 				startConnection();
