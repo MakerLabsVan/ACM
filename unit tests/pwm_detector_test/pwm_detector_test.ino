@@ -73,8 +73,8 @@ void loop() {
 		if ( inRange(lastPeriodX) || inRange(lastPeriodY) && (periodX != 0 && periodY != 0) ) {
 			if (periodCount > minCount) {
 				sendCount = periodCount;
-				startTime = 0;
 			}
+			startTime = 0;
 			periodCount = 0;
 		}
 	}
