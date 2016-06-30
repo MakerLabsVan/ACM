@@ -29,18 +29,12 @@ void closeConnection(void) {
     Serial.write("Connection closed.\n\n");
 }
 
-void GET(void) {
+void updateThingSpeak(unsigned long time) {
     String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
     //getStr += writeKey;
-    getStr += "&field1=";
-    getStr += String(periodX);
-    getStr += "&field2=";
-    getStr += String(periodY);
-    if (sendCount > 0) {
-        getStr += "&field3=";
-        getStr += String(sendCount);
-        sendCount = 0;
-    }
+    getStr += "&field3=";
+    getStr += String(time);
+    sendCount = 0;
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";
