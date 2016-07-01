@@ -153,69 +153,80 @@ unsigned long accumulator(void) {
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
 	unsigned long periodCount, sendCount = 0;
-	unsigned long lastSend = millis();
-	String writeKey = "1KTO7V159Y4VTNWR";
+	unsigned long lastPollTime = millis();
+	int pollCounter = 0;
 
 	while (1) {
 		// run every second
-		// read signal state and debounce check
-		periodX = pulseIn(driverX, HIGH);
-		periodY = pulseIn(driverY, HIGH);
-		if ( debug ) {
-			Serial.print("PeriodX: ");
-			Serial.print(periodX);
-			Serial.print(" PeriodY: ");
-			Serial.print(periodY);
-			Serial.print(" Start Time: ");
-			Serial.print(startTime);
-			Serial.print(" Elapsed Time: ");
-			Serial.println(periodCount);
-		}
-
-		// if periodX or periodY is in the accepted range
-		if ( inRange(periodX) || inRange(periodY) ) {
-			// approximate elapsed time
-			periodCount += 1;
-			// check for new ON signal aka rising edge
-			// so, if the lastPeriodX and lastPeriodY was out of the accepted range,
-			// begin accumulating time
-			if ( !inRange(lastPeriodX) && !inRange(lastPeriodY) ) {
-				startTime = millis();
-			}
-		}
-		// if periodX and periodY is outside the accepted range
-		if ( !inRange(periodX) && !inRange(periodY) ) {
-			// during operation, ignore double zeros
-			// check for new OFF signal aka falling edge
-			// so, if the lastPeriod was in the accepted range
-			if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
-				if (periodCount > minCount) {
-					// calculate elapsed time and push to ThingSpeak log
-					sendCount = (millis() - startTime)/1000;
-					Serial.print("Sending... Time: ");
-					Serial.println(sendCount);
-					startConnection();
-					updateThingSpeak(sendCount);
-					Serial.println("Done");
-					// don't return until false negatives are dealt with
-					// return sendCount;
+		int currentTime = millis();
+		if ((currentTime - lastPollTime) >= pollInterval) {
+			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+				// if card is missing, increment a counter
+				if (!getResponse(A)) {
+					pollCounter += 1;
+					// if the counter reaches a specified timeout, return
+					if (pollCounter == pollTimeout) {
+						soundFeedback(reject);
+						Serial.print(messages.cancel);
+						return endTime;
+					}
 				}
-				periodCount = 0;
+				else {
+					pollCounter = 0;
+				}
+
+			// read signal state and debounce check
+			periodX = pulseIn(driverX, HIGH);
+			periodY = pulseIn(driverY, HIGH);
+			if ( debug ) {
+				Serial.print("PeriodX: ");
+				Serial.print(periodX);
+				Serial.print(" PeriodY: ");
+				Serial.print(periodY);
+				Serial.print(" Start Time: ");
+				Serial.print(startTime);
+				Serial.print(" Elapsed Time: ");
+				Serial.println(periodCount);
 			}
+
+			// if periodX or periodY is in the accepted range
+			if ( inRange(periodX) || inRange(periodY) ) {
+				// approximate elapsed time
+				periodCount += 1;
+				// check for new ON signal aka rising edge
+				// so, if the lastPeriodX and lastPeriodY was out of the accepted range,
+				// begin accumulating time
+				if ( !inRange(lastPeriodX) && !inRange(lastPeriodY) ) {
+					startTime = millis();
+				}
+			}
+			// if periodX and periodY is outside the accepted range
+			if ( !inRange(periodX) && !inRange(periodY) ) {
+				// during operation, ignore double zeros
+				// check for new OFF signal aka falling edge
+				// so, if the lastPeriod was in the accepted range
+				if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
+					if (periodCount > minCount) {
+						// calculate elapsed time and push to ThingSpeak log
+						sendCount = (millis() - startTime)/1000;
+						Serial.print("Sending... Time: ");
+						Serial.println(sendCount);
+						startConnection();
+						updateThingSpeak(sendCount);
+						sendCount = 0;
+						Serial.println("Done");
+						// don't return until false negatives are dealt with
+						// return sendCount;
+					}
+					periodCount = 0;
+				}
+			}
+
+			// record the previous state
+			lastPeriodX = periodX;
+			lastPeriodY = periodY;
+			lastPollTime = millis();
 		}
-
-		// record the previous state
-		lastPeriodX = periodX;
-		lastPeriodY = periodY;
-
-		/*	if ( (millis() - lastSend) > sendInterval ) {
-				if (startTime > 0) {
-					Serial.println("Sending to ThingSpeak");
-					startConnection();
-					GET();
-			}
-			lastSend = millis();
-		}*/
 	}
 }
 

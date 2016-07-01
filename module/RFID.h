@@ -58,7 +58,7 @@
 
 // Pins
 const int driverX = 4;
-const int driverY = 7
+const int driverY = 7;
 const int speakerPin = 8;
 const int wifi_rst = 9;
 const int ledPin = 13;
@@ -73,7 +73,7 @@ const unsigned long lowerBound = 0;
 const unsigned long upperBound = 7;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
-const bool debug = false;
+const bool debug = true;
 
 const struct {
 	String initialize;
