@@ -33,12 +33,7 @@ void closeConnection(void) {
 void updateThingSpeak(unsigned long time) {
     String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
     getStr += "&field3=";
-<<<<<<< HEAD
     getStr += String(time);
-    sendCount = 0;
-=======
-    getStr += String(sendCount);
->>>>>>> 05a671b9d0600a2ab84fa940530e94542dba58f4
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";
