@@ -152,7 +152,7 @@ unsigned long accumulator(void) {
 	unsigned long startTime, endTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned long periodCount, sendCount = 0;
+	unsigned long periodCount = 0;
 	unsigned long lastPollTime = millis();
 	int pollCounter = 0;
 
@@ -218,8 +218,7 @@ unsigned long accumulator(void) {
 						Serial.print("Sending... Time: ");
 						Serial.println(sendCount);
 						startConnection();
-						updateThingSpeak(sendCount);
-						sendCount = 0;
+						updateThingSpeak();
 						Serial.println("Done");
 						// don't return until false negatives are dealt with
 						// return sendCount;

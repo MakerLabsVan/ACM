@@ -72,6 +72,7 @@ const unsigned long minCount = 6;
 const unsigned long lowerBound = 0;
 const unsigned long upperBound = 7;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned long sendCount = 0;
 
 const bool debug = true;
 
