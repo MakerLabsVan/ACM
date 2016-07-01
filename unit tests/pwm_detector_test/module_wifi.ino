@@ -30,11 +30,10 @@ void closeConnection(void) {
     Serial.write("Connection closed.\n\n");
 }
 
-void updateThingSpeak(void) {
+void updateThingSpeak(unsigned long time) {
     String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
-    //getStr += writeKey;
     getStr += "&field3=";
-    getStr += String(sendCount);
+    getStr += String(time);
     sendCount = 0;
     getStr += "\r\n\r\n";
 
