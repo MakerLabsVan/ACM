@@ -35,7 +35,6 @@ void updateThingSpeak(void) {
     //getStr += writeKey;
     getStr += "&field3=";
     getStr += String(sendCount);
-    sendCount = 0;
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";
