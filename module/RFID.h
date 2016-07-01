@@ -57,12 +57,11 @@
 #define wifiResponseTime 1999
 
 // Pins
-const int ledPin = 13;
 const int driverX = 4;
 const int driverY = 7
 const int speakerPin = 8;
 const int wifi_rst = 9;
-
+const int ledPin = 13;
 // Constants
 const int eightBits = 8;
 const int quota = 3600;

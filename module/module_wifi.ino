@@ -2,6 +2,9 @@
     All Wi-Fi related functions
 */
 void connectWIFI(void) {
+    /*WIFI.write("AT+CWQAP\r\n");
+    delay(50);*/
+    // reset
     WIFI.write("AT+CWMODE=1\r\n");
     delay(50);
     WIFI.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");
@@ -27,12 +30,12 @@ void closeConnection(void) {
     Serial.write("Connection closed.\n\n");
 }
 
-//http://api.thingspeak.com/update?key=BMPD2LXVXARHTDV5&field1=0&field2=0
-void GET(unsigned long time) {
-    String getStr = "GET /update?key=BMPD2LXVXARHTDV5";
+void updateThingSpeak(unsigned long time) {
+    String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
     //getStr += writeKey;
-    getStr += "&field1=";
+    getStr += "&field3=";
     getStr += String(time);
+    sendCount = 0;
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";
