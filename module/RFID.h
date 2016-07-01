@@ -53,15 +53,25 @@
 #define classOffset 8
 #define timeOffset 9
 
+#define resetTime 499
+#define wifiResponseTime 1999
+
+// Pins
 const int ledPin = 13;
-const int signalPin = 4;
+const int driverX = 4;
+const int driverY = 7
 const int speakerPin = 8;
+const int wifi_rst = 9;
+
+// Constants
 const int eightBits = 8;
 const int quota = 3600;
 const int pollTimeout = 5;
 const int pollInterval = 1000;
 const bool reject = true;
-const unsigned long closeInterval = 3000;
+const unsigned long minCount = 5;
+const unsigned long lowerBound = 0;
+const unsigned long upperBound = 7;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const struct {

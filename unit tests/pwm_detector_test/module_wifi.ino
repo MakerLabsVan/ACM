@@ -4,6 +4,7 @@
 void connectWIFI(void) {
     /*WIFI.write("AT+CWQAP\r\n");
     delay(50);*/
+    // reset
     WIFI.write("AT+CWMODE=1\r\n");
     delay(50);
     WIFI.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");

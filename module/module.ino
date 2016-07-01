@@ -8,20 +8,30 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 void setup() {
+	// Set up pins
+	pinMode(ledPin, OUTPUT);
+	pinMode(driverX, INPUT);
+	pinMode(driverY, INPUT);
+	pinMode(wifi_rst, OUTPUT);
+	pinMode(speakerPin, OUTPUT);
+	// Set up serial communication
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
+	// Reset Wi-Fi to initialize
+	digitalWrite(wifi_rst, LOW);
+	delay(resetTime);
+	digitalWrite(wifi_rst, HIGH);
+	delay(resetTime);
 	connectWIFI();
+	delay(wifiResponseTime);
+	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
-	pinMode(ledPin, OUTPUT);
-	pinMode(signalPin, INPUT);
-	pinMode(speakerPin, OUTPUT);
 	Serial.print(messages.done);
 }
 
 void loop() {
 	bool responseFlag = false;
-	bool wifiReady = false;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
@@ -62,7 +72,7 @@ void loop() {
 			Serial.print(messages.displayUsedTime);
 			Serial.println(existingTime);
 			Serial.print(messages.authorized);
-			// get ready to record time
+			// Get ready to record time
 			elapsedTime = accumulator();
 			Serial.print(messages.displayNewTime);
 			Serial.println(elapsedTime + existingTime);
@@ -82,31 +92,12 @@ void loop() {
 			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
-			wifiReady = true;
 		}
 	}
 	else {
 		Serial.println();
 	}
 
-	// Begin Wi-Fi functionality
-	if (wifiReady) {
-		WIFI.listen();
-		startConnection();
-		GET(elapsedTime);
-		bool done = false;
-		unsigned long httpTime = millis();
-		while (!done) {
-			while (WIFI.available()) {
-				Serial.write(WIFI.read());
-			}
-			if ((millis() - httpTime) > closeInterval) {
-				done = true;
-			}
-		}
-		Serial.println();
-		RFID.listen();
-	}
 	delay(scanInterval);
 }
 
