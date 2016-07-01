@@ -76,7 +76,7 @@ void loop() {
         		Serial.print("Sending... Time: ");
         		Serial.println(sendCount);
         		startConnection();
-        		updateThingSpeak(time);
+        		updateThingSpeak();
         		Serial.println("Done");
 			}
       	periodCount = 0;
