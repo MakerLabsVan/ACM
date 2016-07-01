@@ -18,7 +18,7 @@ void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
-	// Reset Wi-Fi to initialize
+	// Reset Wi-Fi to initialize and connect to Wi-Fi
 	digitalWrite(wifi_rst, LOW);
 	delay(resetTime);
 	digitalWrite(wifi_rst, HIGH);
@@ -161,10 +161,7 @@ unsigned long accumulator(void) {
 		// read signal state and debounce check
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
-		/*delay(debounce);
-		periodX = pulseIn(driverX, HIGH);
-		periodY = pulseIn(driverY, HIGH);*/
-		if ( false ) {
+		if ( debug ) {
 			Serial.print("PeriodX: ");
 			Serial.print(periodX);
 			Serial.print(" PeriodY: ");

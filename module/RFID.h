@@ -73,6 +73,8 @@ const unsigned long lowerBound = 0;
 const unsigned long upperBound = 7;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
+const bool debug = false;
+
 const struct {
 	String initialize;
 	String done;
