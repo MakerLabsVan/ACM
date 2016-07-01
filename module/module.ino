@@ -211,8 +211,8 @@ unsigned long accumulator(void) {
 						sendCount = (millis() - startTime)/1000;
 						Serial.print("Sending... Time: ");
 						Serial.println(sendCount);
-						startConnection();
-						updateThingSpeak(sendCount);
+						/*startConnection();
+						updateThingSpeak(sendCount);*/
 						sendCount = 0;
 						Serial.println("Done");
 						// don't return until false negatives are dealt with

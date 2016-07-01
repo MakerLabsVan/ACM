@@ -9,7 +9,7 @@ void connectWIFI(void) {
     delay(50);
     WIFI.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");
     while(!WIFI.find("WIFI GOT IP"));
-    Serial.write("Connected.\n");
+    Serial.write("Connected. ");
     while(!WIFI.find("OK"));
     delay(100);
     WIFI.write("AT+CIPMUX=1\r\n");
