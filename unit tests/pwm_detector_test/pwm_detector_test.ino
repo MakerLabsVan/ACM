@@ -27,9 +27,9 @@ void setup() {
 	Serial.println("\n\nInitializing...");
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
-	digitalWrite(8, LOW);
+	digitalWrite(9, LOW);
 	delay(500);
-	digitalWrite(8, HIGH);
+	digitalWrite(9, HIGH);
 	delay(500);
 	connectWIFI();
 	delay(2000);
