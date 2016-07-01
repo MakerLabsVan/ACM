@@ -34,7 +34,7 @@ void updateThingSpeak() {
     String getStr = "GET /update?key=BDCX5DQNZWVU51AU";
     //getStr += writeKey;
     getStr += "&field3=";
-    getStr += String(time);
+    getStr += String(sendCount);
     getStr += "\r\n\r\n";
 
     String cmd = "AT+CIPSEND=0,";
