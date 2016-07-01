@@ -17,7 +17,7 @@ void connectWIFI(void) {
 }
 
 void startConnection(void) {
-    Serial.write("Connecting...\n");
+    Serial.write("Connecting... ");
     WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
     delay(250);
 }

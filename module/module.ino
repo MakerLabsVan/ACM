@@ -156,10 +156,16 @@ unsigned long accumulator(void) {
 	unsigned long lastPollTime = millis();
 	int pollCounter = 0;
 
+  if (debug) {
+    Serial.print(startTime);
+    Serial.print(" ");
+    Serial.print(endTime);
+    Serial.print(" ");
+    Serial.println(periodCount);
+  }
+ 
 	while (1) {
 		// run every second
-		int currentTime = millis();
-		if ((currentTime - lastPollTime) >= pollInterval) {
 			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 				// if card is missing, increment a counter
 				if (!getResponse(A)) {
@@ -211,8 +217,8 @@ unsigned long accumulator(void) {
 						sendCount = (millis() - startTime)/1000;
 						Serial.print("Sending... Time: ");
 						Serial.println(sendCount);
-						/*startConnection();
-						updateThingSpeak(sendCount);*/
+						startConnection();
+						updateThingSpeak(sendCount);
 						sendCount = 0;
 						Serial.println("Done");
 						// don't return until false negatives are dealt with
@@ -225,8 +231,7 @@ unsigned long accumulator(void) {
 			// record the previous state
 			lastPeriodX = periodX;
 			lastPeriodY = periodY;
-			lastPollTime = millis();
-		}
+			delay(pollInterval);
 	}
 }
 
