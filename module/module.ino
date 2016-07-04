@@ -179,6 +179,9 @@ unsigned long accumulator(void) {
 					if (sendCount > minCount) {
 						Serial.println(sendCount);
 					}
+          else {
+            Serial.println(0);
+          }
 				}
 				return sendCount;
 			}
