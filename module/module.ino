@@ -24,7 +24,7 @@ void setup() {
 	digitalWrite(wifi_rst, HIGH);
 	delay(resetTime);
 	connectWIFI();
-	delay(wifiResponseTime);
+	delay(waitForIP);
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
 	Serial.print(messages.done);
@@ -153,7 +153,7 @@ unsigned long accumulator(void) {
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
 	unsigned long periodCount, sendCount = 0;
-	unsigned long lastPollTime = millis();
+	unsigned long lastPollTime, lastSend = millis();
 	int pollCounter = 0;
 
 	if (debug) {

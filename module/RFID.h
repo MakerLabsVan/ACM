@@ -54,7 +54,7 @@
 #define timeOffset 9
 
 #define resetTime 501
-#define waitforIP 2001
+#define waitForIP 2001
 
 // Pins
 const int driverX = 4;
