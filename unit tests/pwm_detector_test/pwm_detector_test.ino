@@ -1,17 +1,22 @@
 #include <SoftwareSerial.h>
-#include <ESP8266wifi.h>
-#include <stdlib.h>
+
+#define monitorBaud
+#define moduleBaud
+
+#define waitForWIFI 500
+#define waitForIP 2000
 
 SoftwareSerial WIFI(2, 3);
 
 const int driverX = 4;
 const int driverY = 7;
-const int debounce = 10;
+const int resetWIFI = 9;
+const bool debug = true;
 const unsigned long minCount = 5;
 const unsigned long lowerBound = 0;
 const unsigned long upperBound = 7;
 const unsigned long pollInterval = 1000;
-const unsigned long sendInterval = 45000;
+const unsigned long sendInterval = 20000;
 
 unsigned long startTime, endTime = 0;
 unsigned int periodX, periodY;
@@ -19,20 +24,19 @@ unsigned int lastPeriodX, lastPeriodY;
 unsigned long periodCount, sendCount = 0;
 
 unsigned long lastSend = millis();
-String writeKey = "1KTO7V159Y4VTNWR";
 
 void setup() {
-	Serial.begin(57600);
-	WIFI.begin(9600);
+	Serial.begin(monitorBaud);
+	WIFI.begin(moduleBaud);
 	Serial.println("\n\nInitializing...");
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
-	digitalWrite(9, LOW);
-	delay(500);
-	digitalWrite(9, HIGH);
-	delay(500);
+	digitalWrite(resetWIFI, LOW);
+	delay(waitForWIFI);
+	digitalWrite(resetWIFI, HIGH);
+	delay(waitForWIFI);
 	connectWIFI();
-	delay(2000);
+	delay(waitForIP);
 }
 
 void loop() {
@@ -43,7 +47,7 @@ void loop() {
 	/*delay(debounce);
 	periodX = pulseIn(driverX, HIGH);
 	periodY = pulseIn(driverY, HIGH);*/
-	if ( true ) {
+	if ( debug ) {
 		Serial.print("PeriodX: ");
 		Serial.print(periodX);
 		Serial.print(" PeriodY: ");
@@ -87,15 +91,6 @@ void loop() {
 	// record the previous state
 	lastPeriodX = periodX;
 	lastPeriodY = periodY;
-
-/*	if ( (millis() - lastSend) > sendInterval ) {
-		if (startTime > 0) {
-			Serial.println("Sending to ThingSpeak");
-			startConnection();
-			GET();
-		}
-		lastSend = millis();
-	}*/
 
 	delay(pollInterval);
 }
