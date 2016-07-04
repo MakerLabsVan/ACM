@@ -176,12 +176,12 @@ unsigned long accumulator(void) {
 				Serial.print(messages.cancel);
 				sendCount = (millis() - startTime)/1000;
 				if (sendCount > minCount) {
-          return sendCount;
+          			return sendCount;
 				}
-        else {
-				  return 0;
-        }
 			}
+        	else {
+				return 0;
+        	}
 		}
 		else {
 			pollCounter = 0;
@@ -225,7 +225,7 @@ unsigned long accumulator(void) {
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);
-					// Make sure logs are properly spaced out
+					// Make sure logs are properly spaced out according to ThingSpeak policy
 					if ( (millis() - lastSend) < sendInterval) {
 						delay(sendInterval);
 					}
