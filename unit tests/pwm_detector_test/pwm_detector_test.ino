@@ -11,6 +11,7 @@ SoftwareSerial WIFI(2, 3);
 const int driverX = 4;
 const int driverY = 7;
 const int resetWIFI = 9;
+const int debounce = 10;
 const bool debug = true;
 const unsigned long minCount = 5;
 const unsigned long lowerBound = 0;
