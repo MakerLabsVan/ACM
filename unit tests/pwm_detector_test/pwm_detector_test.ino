@@ -80,14 +80,26 @@ void loop() {
 				sendCount = (millis() - startTime)/1000;
         		Serial.print("Sending... Time: ");
         		Serial.println(sendCount);
+        		if ( (millis() - lastSend) < sendInterval) {
+        			delay(sendInterval);
+        		}
         		startConnection();
         		updateThingSpeak(sendCount);
+        		lastSend = millis();
         		sendCount = 0;
         		Serial.println("Done");
 			}
       	periodCount = 0;
 		}
 	}
+
+	if ( (millis() - lastSend) < sendInterval ) {
+		delay(sendInterval);
+	}
+
+	startConnection();
+	updateThingSpeak(0);
+	lastSend = millis();
 
 	// record the previous state
 	lastPeriodX = periodX;
@@ -104,3 +116,5 @@ bool inRange(unsigned long period) {
 		return false;
 	}
 }
+
+
