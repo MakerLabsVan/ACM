@@ -53,8 +53,8 @@
 #define classOffset 8
 #define timeOffset 9
 
-#define resetTime 499
-#define wifiResponseTime 1999
+#define resetTime 501
+#define waitforIP 2001
 
 // Pins
 const int driverX = 4;
@@ -67,12 +67,12 @@ const int eightBits = 8;
 const int quota = 3600;
 const int pollTimeout = 5;
 const int pollInterval = 1000;
-const bool reject = true;
+const int sendInterval = 20000;
 const unsigned long minCount = 6;
 const unsigned long lowerBound = 0;
 const unsigned long upperBound = 7;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-
+const bool reject = true;
 const bool debug = true;
 
 const struct {
