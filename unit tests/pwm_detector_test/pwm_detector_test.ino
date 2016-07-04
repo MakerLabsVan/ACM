@@ -14,9 +14,9 @@ const int resetWIFI = 9;
 const int debounce = 10;
 const bool debug = true;
 const unsigned long minCount = 5;
-const unsigned long lowerBound = 1;
+const unsigned long lowerBound = 0;
 const unsigned long upperBound = 7;
-const unsigned long pollInterval = 2000;
+const unsigned long pollInterval = 1000;
 const unsigned long sendInterval = 20000;
 
 unsigned long startTime, endTime = 0;
