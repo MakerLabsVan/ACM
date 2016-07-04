@@ -149,7 +149,7 @@ unsigned long getTime (unsigned char readData[]) {
 */
 unsigned long accumulator(void) {
 	unsigned char A[bufferSize];
-	unsigned long startTime, endTime = 0;
+	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
 	unsigned long periodCount, sendCount = 0;
@@ -159,7 +159,7 @@ unsigned long accumulator(void) {
 	if (debug) {
 		Serial.print(startTime);
 		Serial.print(" ");
-		Serial.print(endTime);
+		Serial.print(sendCount);
 		Serial.print(" ");
 		Serial.println(periodCount);
 	}
@@ -175,9 +175,9 @@ unsigned long accumulator(void) {
 				soundFeedback(reject);
 				Serial.print(messages.cancel);
 				while(1) {
-					Serial.println(endTime);
+					Serial.println(sendCount);
 				}
-				return endTime;
+				return sendCount;
 			}
 		}
 		else {
