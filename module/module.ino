@@ -174,6 +174,9 @@ unsigned long accumulator(void) {
 			if (pollCounter == pollTimeout) {
 				soundFeedback(reject);
 				Serial.print(messages.cancel);
+				while(1) {
+					Serial.println(endTime);
+				}
 				return endTime;
 			}
 		}
@@ -218,7 +221,10 @@ unsigned long accumulator(void) {
 					// calculate elapsed time and push to ThingSpeak log
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
-					Serial.println(sendCount);
+					while (1) {
+						Serial.println(sendCount);
+					}
+					//Serial.println(sendCount);
 					// Make sure logs are properly spaced out
 					if ( (millis() - lastSend) < sendInterval) {
 						delay(sendInterval);
