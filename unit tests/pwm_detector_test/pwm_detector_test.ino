@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 
-#define monitorBaud
-#define moduleBaud
+#define monitorBaud 57600
+#define moduleBaud 9600
 
 #define waitForWIFI 500
 #define waitForIP 2000
