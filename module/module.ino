@@ -176,7 +176,9 @@ unsigned long accumulator(void) {
 				Serial.print(messages.cancel);
 				sendCount = (millis() - startTime)/1000;
 				while(1) {
-					Serial.println(sendCount);
+					if (sendCount > minCount) {
+						Serial.println(sendCount);
+					}
 				}
 				return sendCount;
 			}
