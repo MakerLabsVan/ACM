@@ -93,13 +93,11 @@ void loop() {
 		}
 	}
 
-	if ( (millis() - lastSend) < sendInterval ) {
-		delay(sendInterval);
-	}
-
-	startConnection();
-	updateThingSpeak(0);
-	lastSend = millis();
+  if ( (millis() - lastSend) > sendInterval) {
+	  startConnection();
+	  updateThingSpeak(0);
+	  lastSend = millis();
+  }
 
 	// record the previous state
 	lastPeriodX = periodX;
