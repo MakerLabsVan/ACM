@@ -28,6 +28,7 @@ void setup() {
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
 	Serial.print(messages.done);
+  getStr += 0;
 }
 
 void loop() {
