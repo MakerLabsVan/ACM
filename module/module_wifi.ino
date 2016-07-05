@@ -14,6 +14,8 @@ void connectWIFI(void) {
 }
 
 void updateThingSpeak(unsigned char ID, unsigned int time) {
+    unsigned long startTime = millis();
+
     Serial.write("Connecting... ");
     delay(500);
     WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
@@ -33,7 +35,7 @@ void updateThingSpeak(unsigned char ID, unsigned int time) {
     delay(500);
     WIFI.println(getStr);
     
-    while (1) {
+    while ( (millis() - startTime) < 3000 ) {
       while (WIFI.available()) {
         Serial.write(WIFI.read());
       }
