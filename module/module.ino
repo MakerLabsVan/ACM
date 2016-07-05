@@ -199,7 +199,7 @@ unsigned long accumulator(void) {
 			Serial.print(periodY);
 			Serial.print(" Start Time: ");
 			Serial.print(startTime);
-			Serial.print(" Elapsed Time: ");
+			Serial.print(" Pulse Count: ");
 			Serial.println(periodCount);
 		}
 
@@ -234,7 +234,7 @@ unsigned long accumulator(void) {
 					startConnection();
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
-					//sendCount = 0;
+					delay(1000);
 					RFID.listen();
 					Serial.println("Done");
           			return sendCount;
