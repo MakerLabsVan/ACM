@@ -203,28 +203,29 @@ unsigned long accumulator(void) {
 			Serial.println(periodCount);
 		}
 
-		// if periodX or periodY is in the accepted range
-		if ( inRange(periodX) || inRange(periodY) ) {
+		// if periodX and periodY is a valid pair
+		if ( inRange(periodX, periodY) ) {
 			// approximate elapsed time
 			periodCount += 1;
 			// check for new ON signal aka rising edge
-			// so, if the lastPeriodX and lastPeriodY was out of the accepted range,
+			// so, if lastPeriodX and lastPeriodY was not a valid pair,
 			// begin accumulating time
-			if ( !inRange(lastPeriodX) && !inRange(lastPeriodY) ) {
+			if ( !inRange(lastPeriodX, lastPeriodY) ) {
 				startTime = millis();
 			}
 		}
-		// if periodX and periodY is outside the accepted range
-		if ( !inRange(periodX) && !inRange(periodY) ) {
+		// if periodX and periodY is not a valid pair
+		if ( !inRange(periodX, periodY) ) {
 			// during operation, ignore double zeros
 			// check for new OFF signal aka falling edge
-			// so, if the lastPeriod was in the accepted range
-			if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
+			// so, if lastPeriodX and lastPeriodY was a valid pair
+			if ( inRange(lastPeriodX, lastPeriodY) ) {
 				if (periodCount > minCount) {
 					// calculate elapsed time
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);
+					WIFI.listen();
 					// Make sure logs are properly spaced out according to ThingSpeak policy
 					if ( (millis() - lastSend) < sendInterval) {
 						delay(sendInterval);
@@ -234,6 +235,7 @@ unsigned long accumulator(void) {
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
 					sendCount = 0;
+					RFID.listen();
 					Serial.println("Done");
 				}
 				periodCount = 0;
@@ -247,11 +249,30 @@ unsigned long accumulator(void) {
 		delay(pollInterval);
 	}
 }
-
-bool inRange(unsigned long period) {
-	if ( (lowerBound <= period) && (period <= upperBound) ) {
+/*
+	Determines if the driver signals are valid. Based on exact pairs to avoid
+	false positives/negatives.
+*/
+bool inRange(unsigned long periodX, unsigned long periodY) {
+	unsigned long sum = periodX + periodY;
+	unsigned long maximumValue = middleBound + upperBound;
+	// both are 0
+	if ( sum == lowerBound ) {
 		return true;
 	}
+	// one is 0, one is 5
+	else if ( sum == middleBound ) {
+		return true;
+	}
+	// one is 0, one is 6
+	else if ( sum == upperBound ) {
+		return true;
+	}
+	// one is 5, one is 6
+	else if ( sum == maximumValue ) {
+		return true;
+	}
+	// all other values are invalid
 	else {
 		return false;
 	}
