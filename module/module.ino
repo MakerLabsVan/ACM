@@ -178,10 +178,10 @@ unsigned long accumulator(void) {
 				if (sendCount > minCount) {
           			return sendCount;
 				}
+				else {
+					return 0;
+				}
 			}
-        	else {
-				return 0;
-        	}
 		}
 		else {
 			pollCounter = 0;
