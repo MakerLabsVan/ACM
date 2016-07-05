@@ -19,7 +19,7 @@ const unsigned long upperBound = 7;
 const unsigned long pollInterval = 900;
 const unsigned long sendInterval = 20000;
 
-unsigned long startTime, endTime = 0;
+unsigned long startTime = 0;
 unsigned int periodX, periodY;
 unsigned int lastPeriodX, lastPeriodY; 
 unsigned long periodCount, sendCount = 0;
