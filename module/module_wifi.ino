@@ -13,14 +13,12 @@ void connectWIFI(void) {
     delay(250);
 }
 
-void startConnection(void) {
+void updateThingSpeak(unsigned char ID, unsigned int time) {
     Serial.write("Connecting... ");
-    delay(250);
+    delay(500);
     WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
     delay(1500);
-}
-
-void updateThingSpeak(unsigned char ID, unsigned int time) {
+    
     getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
     getStr += "&field1=";
     getStr += String(ID);
@@ -34,12 +32,11 @@ void updateThingSpeak(unsigned char ID, unsigned int time) {
     WIFI.println(cmd);
     delay(500);
     WIFI.println(getStr);
+    
     while (1) {
       while (WIFI.available()) {
         Serial.write(WIFI.read());
       }
-      while (Serial.available()) {
-        WIFI.write(Serial.read());
-      }
     }
+
 }

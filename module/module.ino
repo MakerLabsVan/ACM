@@ -102,7 +102,6 @@ void loop() {
 			if ( (millis() - lastSend) < sendInterval ) {
 				delay(sendInterval);
 			}
-			startConnection();
 			updateThingSpeak(1, elapsedTime);
 			lastSend = millis();
 			Serial.println("Done");
@@ -113,7 +112,6 @@ void loop() {
 	}
  
   RFID.listen();
-	//delay(scanInterval);
 }
 
 void soundFeedback(bool reject) {
