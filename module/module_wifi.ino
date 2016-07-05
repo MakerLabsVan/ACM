@@ -21,28 +21,17 @@ void startConnection(void) {
 }
 
 void updateThingSpeak(unsigned char ID, unsigned int time) {
-    getStr = "GET /update?key=CSV1YP0YIE2STS0Z&field1=ID&field2=TIME\r\n";
-    Serial.println(getStr);
-    getStr.replace("ID", String(ID));
-    getStr.replace("TIME", String(time));
+    getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
+    getStr += "&field1=";
+    getStr += String(ID);
+    getStr += "&field2=";
+    getStr += String(time);
+    getStr += "\r\n\r\n";
 
     cmd = "AT+CIPSEND=0,";
     cmd += String(getStr.length());
-
-    Serial.print(getStr);
-    Serial.print(" ");
-    Serial.println(cmd);
-    while (1) {
-        while (WIFI.available()) {
-            Serial.write(WIFI.read());
-        }
-        while (Serial.available()) {
-            WIFI.write(Serial.read());
-        }
-    }
-
+    
     WIFI.println(cmd);
     delay(500);
     WIFI.println(getStr);
-    
 }

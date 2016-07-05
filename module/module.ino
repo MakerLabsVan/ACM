@@ -93,6 +93,17 @@ void loop() {
 			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
+			Serial.print("Sending... Time: ");
+			Serial.println(elapsedTime);
+			// Make sure logs are properly spaced out according to ThingSpeak policy
+			if ( (millis() - lastSend) < sendInterval ) {
+				delay(sendInterval);
+			}
+			// Push to ThingSpeak
+			startConnection();
+			updateThingSpeak(1, elapsedTime);
+			lastSend = millis();
+			Serial.println("Done");
 		}
 	}
 	else {
@@ -155,7 +166,7 @@ unsigned long accumulator(void) {
 	unsigned long lastSend = millis();
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned int periodCount, sendCount = 0;
+	unsigned int periodCount = 0;
 	unsigned int pollCounter = 0;
 
 	if (debug) {
@@ -224,20 +235,7 @@ unsigned long accumulator(void) {
 			if ( inRange(lastPeriodX, lastPeriodY) ) {
 				if (periodCount > minCount) {
 					// calculate elapsed time
-        			WIFI.listen();
-					sendCount = (millis() - startTime)/1000;
-					Serial.print("Sending... Time: ");
-					Serial.println(sendCount);
-					// Make sure logs are properly spaced out according to ThingSpeak policy
-					if ( (millis() - lastSend) < (sendInterval - periodCount*1000) ) {
-						delay(sendInterval);
-					}
-					// Push to ThingSpeak
-					startConnection();
-					updateThingSpeak(1, sendCount);
-					lastSend = millis();
-					Serial.println("Done");
-          			return sendCount;
+					return (millis() - startTime)/1000;
 				}
 				periodCount = 0;
 			}
