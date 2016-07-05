@@ -24,17 +24,8 @@ void startConnection(void) {
     delay(500);
 }
 
-void closeConnection(void) {
-    Serial.write("Closing connection...\n");
-    WIFI.write("AT+CIPCLOSE=0\r\n");
-    while(!WIFI.find("CLOSED"));
-    while(!WIFI.find("OK"));
-    Serial.write("Connection closed.\n\n");
-}
-
 void updateThingSpeak(unsigned char ID, unsigned long time) {
     String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
-    //getStr += writeKey;
     getStr += "&field1=";
     getStr += String(ID);
     getStr += "&field2=";
@@ -43,12 +34,15 @@ void updateThingSpeak(unsigned char ID, unsigned long time) {
 
     String cmd = "AT+CIPSEND=0,";
     cmd += String(getStr.length());
-    WIFI.println(cmd);
-    while (1) {
-        while (WIFI.available()) {
-            Serial.write(WIFI.read());
-        }
-    }
+    WIFI.write(cmd);
     delay(500);
-    WIFI.println(getStr);
+    WIFI.write(getStr);
+}
+
+void closeConnection(void) {
+    Serial.write("Closing connection...\n");
+    WIFI.write("AT+CIPCLOSE=0\r\n");
+    while(!WIFI.find("CLOSED"));
+    while(!WIFI.find("OK"));
+    Serial.write("Connection closed.\n\n");
 }
