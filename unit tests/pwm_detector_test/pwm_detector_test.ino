@@ -89,7 +89,7 @@ void loop() {
         		sendCount = 0;
         		Serial.println("Done");
 			}
-      	periodCount = 0;
+      		periodCount = 0;
 		}
 	}
 

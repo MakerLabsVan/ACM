@@ -221,7 +221,7 @@ unsigned long accumulator(void) {
 			// so, if the lastPeriod was in the accepted range
 			if ( inRange(lastPeriodX) || inRange(lastPeriodY) ) {
 				if (periodCount > minCount) {
-					// calculate elapsed time and push to ThingSpeak log
+					// calculate elapsed time
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);
@@ -229,6 +229,7 @@ unsigned long accumulator(void) {
 					if ( (millis() - lastSend) < sendInterval) {
 						delay(sendInterval);
 					}
+					// Push to ThingSpeak
 					startConnection();
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
