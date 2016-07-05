@@ -153,7 +153,7 @@ unsigned long accumulator(void) {
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
 	unsigned long periodCount, sendCount = 0;
-	unsigned long lastPollTime, lastSend = millis();
+	unsigned long lastSend = millis();
 	int pollCounter = 0;
 
 	if (debug) {
