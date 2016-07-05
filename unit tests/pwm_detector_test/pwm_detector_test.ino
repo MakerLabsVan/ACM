@@ -84,7 +84,7 @@ void loop() {
         			delay(sendInterval);
         		}
         		startConnection();
-        		updateThingSpeak(0, sendCount);
+        		updateThingSpeak(1, sendCount);
         		lastSend = millis();
         		sendCount = 0;
         		Serial.println("Done");
