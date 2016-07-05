@@ -18,13 +18,10 @@ void connectWIFI(void) {
 
 void startConnection(void) {
     Serial.write("Connecting... ");
+    WIFI.listen();
+    delay(2000);
     WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
-    delay(250);
-    while (1) {
-        while (WIFI.available()) {
-            Serial.print(WIFI.read());
-        }
-    }
+    delay(500);
 }
 
 void closeConnection(void) {
@@ -47,12 +44,11 @@ void updateThingSpeak(unsigned char ID, unsigned long time) {
     String cmd = "AT+CIPSEND=0,";
     cmd += String(getStr.length());
     WIFI.println(cmd);
-    delay(500);
-    WIFI.println(getStr);
-
     while (1) {
         while (WIFI.available()) {
-            Serial.print(WIFI.read());
+            Serial.write(WIFI.read());
         }
     }
+    delay(500);
+    WIFI.println(getStr);
 }

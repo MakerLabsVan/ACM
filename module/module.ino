@@ -225,7 +225,6 @@ unsigned long accumulator(void) {
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);
-					WIFI.listen();
 					// Make sure logs are properly spaced out according to ThingSpeak policy
 					if ( (millis() - lastSend) < sendInterval) {
 						delay(sendInterval);
@@ -234,7 +233,6 @@ unsigned long accumulator(void) {
 					startConnection();
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
-					RFID.listen();
 					Serial.println("Done");
           			return sendCount;
 				}
