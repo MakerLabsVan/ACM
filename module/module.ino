@@ -234,7 +234,6 @@ unsigned long accumulator(void) {
 					startConnection();
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
-					delay(1000);
 					RFID.listen();
 					Serial.println("Done");
           			return sendCount;
