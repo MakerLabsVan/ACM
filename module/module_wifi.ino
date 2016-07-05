@@ -30,8 +30,16 @@ void updateThingSpeak(unsigned char ID, unsigned int time) {
 
     cmd = "AT+CIPSEND=0,";
     cmd += String(getStr.length());
-    
+
     WIFI.println(cmd);
     delay(500);
     WIFI.println(getStr);
+    while (1) {
+      while (WIFI.available()) {
+        Serial.write(WIFI.read());
+      }
+      while (Serial.available()) {
+        WIFI.write(Serial.read());
+      }
+    }
 }

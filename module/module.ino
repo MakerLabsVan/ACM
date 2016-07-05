@@ -35,6 +35,7 @@ void loop() {
 	bool responseFlag = false;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
+	unsigned long lastSend = millis();
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
@@ -92,14 +93,15 @@ void loop() {
 		else {
 			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
+      WIFI.listen();
 			delay(timeToRemoveCard);
+      // Push to ThingSpeak
 			Serial.print("Sending... Time: ");
 			Serial.println(elapsedTime);
 			// Make sure logs are properly spaced out according to ThingSpeak policy
 			if ( (millis() - lastSend) < sendInterval ) {
 				delay(sendInterval);
 			}
-			// Push to ThingSpeak
 			startConnection();
 			updateThingSpeak(1, elapsedTime);
 			lastSend = millis();
@@ -163,10 +165,9 @@ unsigned long getTime (unsigned char readData[]) {
 unsigned long accumulator(void) {
 	unsigned char A[16];
 	unsigned long startTime = 0;
-	unsigned long lastSend = millis();
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned int periodCount = 0;
+	unsigned int periodCount, sendCount = 0;
 	unsigned int pollCounter = 0;
 
 	if (debug) {
