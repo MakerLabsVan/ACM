@@ -91,14 +91,14 @@ void loop() {
 		else {
 			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
-			delay(timeToRemoveCard);
+			//delay(timeToRemoveCard);
 		}
 	}
 	else {
 		Serial.println();
 	}
 
-	delay(scanInterval);
+	//delay(scanInterval);
 }
 
 void soundFeedback(bool reject) {
@@ -234,9 +234,10 @@ unsigned long accumulator(void) {
 					startConnection();
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
-					sendCount = 0;
-					RFID.listen();
+					//sendCount = 0;
+					//RFID.listen();
 					Serial.println("Done");
+          return sendCount;
 				}
 				periodCount = 0;
 			}
