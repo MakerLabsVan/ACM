@@ -230,7 +230,7 @@ unsigned long accumulator(void) {
 						delay(sendInterval);
 					}
 					startConnection();
-					updateThingSpeak(sendCount);
+					updateThingSpeak(0, sendCount);
 					lastSend = millis();
 					sendCount = 0;
 					Serial.println("Done");

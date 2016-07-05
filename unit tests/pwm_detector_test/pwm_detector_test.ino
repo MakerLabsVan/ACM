@@ -84,7 +84,7 @@ void loop() {
         			delay(sendInterval);
         		}
         		startConnection();
-        		updateThingSpeak(sendCount);
+        		updateThingSpeak(0, sendCount);
         		lastSend = millis();
         		sendCount = 0;
         		Serial.println("Done");
@@ -93,11 +93,11 @@ void loop() {
 		}
 	}
 
-  if ( (millis() - lastSend) > sendInterval) {
+  /*if ( (millis() - lastSend) > sendInterval) {
 	  startConnection();
 	  updateThingSpeak(0);
 	  lastSend = millis();
-  }
+  }*/
 
 	// record the previous state
 	lastPeriodX = periodX;
