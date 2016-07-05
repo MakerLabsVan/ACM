@@ -91,7 +91,7 @@ void loop() {
 		else {
 			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
-			//delay(timeToRemoveCard);
+			delay(timeToRemoveCard);
 		}
 	}
 	else {
@@ -235,9 +235,9 @@ unsigned long accumulator(void) {
 					updateThingSpeak(1, sendCount);
 					lastSend = millis();
 					//sendCount = 0;
-					//RFID.listen();
+					RFID.listen();
 					Serial.println("Done");
-          return sendCount;
+          			return sendCount;
 				}
 				periodCount = 0;
 			}
@@ -251,37 +251,35 @@ unsigned long accumulator(void) {
 	}
 }
 /*
-	Determines if the driver signals are valid. Based on exact pairs to avoid
-	false positives/negatives.
+	Determines if the driver signals are valid
 */
 bool inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned long sum = periodX + periodY;
 	unsigned long maximumValue = middleBound + upperBound;
 	// both are 0
-	if ( sum == lowerBound ) {
+	if (sum == 0) {
 		return true;
 	}
-	// one is 0, one is 5
-	else if ( sum == middleBound ) {
+	// one is 5
+	else if (sum == middleBound) {
 		return true;
 	}
-	// one is 0, one is 6
-	else if ( sum == upperBound ) {
+	// one is 6
+	else if (sum == upperBound) {
 		return true;
 	}
-  // both are 5
-  else if ( sum == maximumValue - 1 ) {
-    return true;
-  }
+	// both are 5
+	else if (sum == maximumValue - 1) {
+		return true;
+	}
 	// one is 5, one is 6
-	else if ( sum == maximumValue ) {
+	else if (sum == maximumValue) {
 		return true;
 	}
- // both are 6
-  else if ( sum == maximumValue + 1 ) {
-    return true;
-  }
-	// all other values are invalid
+	// both are 6
+	else if (sum == maximumValue + 1) {
+		return true;
+	}
 	else {
 		return false;
 	}

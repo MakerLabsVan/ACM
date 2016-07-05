@@ -39,7 +39,7 @@
 #define waitforReadResponse 50
 #define waitforWriteResponse 250
 #define debounce 25
-#define timeToRemoveCard 3000
+#define timeToRemoveCard 500
 #define scanInterval 2000
 
 #define rejectNote 123

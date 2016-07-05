@@ -46,7 +46,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 	else if(command == CMD_WRITE) {
 		// prepare data to be written, time should be in format 0x00AABBCC
 		// timeByte is in format { 0xAA, 0xBB, 0xCC }
-		// in the first iteration, time gets shifted 3 bytes to get 0x000000AA
+		// in the first iteration, time gets shifted 2 bytes to get 0x000000AA
 		// then bitwise AND operation with 0xFF, then store in timeByte
 		int i = 0;
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
