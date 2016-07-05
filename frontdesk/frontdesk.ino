@@ -22,4 +22,6 @@ void loop() {
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
+	Serial.print(messages.scan);
+	
 }

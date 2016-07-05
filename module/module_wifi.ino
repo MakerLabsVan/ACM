@@ -36,6 +36,11 @@ void updateThingSpeak(unsigned char ID, unsigned long time) {
     cmd += String(getStr.length());
     cmd += "\r\n";
     WIFI.println(cmd);
+    while (1) {
+        while (WIFI.available()) {
+            Serial.write(WIFI.read());
+        }
+    }
     delay(500);
     WIFI.println(getStr);
 }

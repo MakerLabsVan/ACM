@@ -46,7 +46,7 @@ const struct {
 	String cardUpdated;
 
 } messages = {
-	"Initializing...\n",
+	"Initializing... ",
 	"Done.\n",
 	"Scanning...\n",
 	"Card detected.\n",
