@@ -268,11 +268,15 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 	else if ( sum == upperBound ) {
 		return true;
 	}
+  // both are 5
+  else if ( sum == maximumValue - 1 ) {
+    return true;
+  }
 	// one is 5, one is 6
 	else if ( sum == maximumValue ) {
 		return true;
 	}
- // both are 12
+ // both are 6
   else if ( sum == maximumValue + 1 ) {
     return true;
   }
