@@ -23,14 +23,14 @@ void startConnection(void) {
 }
 
 void updateThingSpeak(unsigned char ID, unsigned int time) {
-    String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
+    
     getStr += "&field1=";
     getStr += String(ID);
     getStr += "&field2=";
     getStr += String(time);
     getStr += "\r\n\r\n";
 
-    String cmd = "AT+CIPSEND=0,";
+    
     cmd += String(getStr.length());
 
     Serial.print(getStr);

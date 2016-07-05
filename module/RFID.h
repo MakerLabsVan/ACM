@@ -75,6 +75,9 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 const bool reject = true;
 const bool debug = true;
 
+String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
+String cmd = "AT+CIPSEND=0,";
+
 const struct {
 	String initialize;
 	String done;

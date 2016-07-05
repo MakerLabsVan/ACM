@@ -149,7 +149,7 @@ unsigned long getTime (unsigned char readData[]) {
 
 */
 unsigned long accumulator(void) {
-	unsigned char A[bufferSize];
+	unsigned char A[16];
 	unsigned long startTime = 0;
 	unsigned long lastSend = millis();
 	unsigned int periodX, periodY;
