@@ -272,6 +272,10 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 	else if ( sum == maximumValue ) {
 		return true;
 	}
+ // both are 12
+  else if ( sum == maximumValue + 1 ) {
+    return true;
+  }
 	// all other values are invalid
 	else {
 		return false;
