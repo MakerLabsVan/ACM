@@ -28,6 +28,7 @@ void setup() {
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
 	Serial.print(messages.done);
+  getStr += 12356789;
 }
 
 void loop() {
@@ -228,7 +229,7 @@ unsigned long accumulator(void) {
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);
 					// Make sure logs are properly spaced out according to ThingSpeak policy
-					if ( (millis() - lastSend) < sendInterval) {
+					if ( (millis() - lastSend) < (sendInterval - periodCount*1000) ) {
 						delay(sendInterval);
 					}
 					// Push to ThingSpeak
