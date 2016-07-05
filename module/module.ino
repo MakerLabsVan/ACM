@@ -151,11 +151,11 @@ unsigned long getTime (unsigned char readData[]) {
 unsigned long accumulator(void) {
 	unsigned char A[bufferSize];
 	unsigned long startTime = 0;
+	unsigned long lastSend = millis();
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned long periodCount, sendCount = 0;
-	unsigned long lastSend = millis();
-	int pollCounter = 0;
+	unsigned int periodCount, sendCount = 0;
+	unsigned int pollCounter = 0;
 
 	if (debug) {
 		Serial.print(startTime);
@@ -223,7 +223,7 @@ unsigned long accumulator(void) {
 			if ( inRange(lastPeriodX, lastPeriodY) ) {
 				if (periodCount > minCount) {
 					// calculate elapsed time
-         WIFI.listen();
+        			WIFI.listen();
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);
@@ -254,29 +254,13 @@ unsigned long accumulator(void) {
 */
 bool inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned long sum = periodX + periodY;
-	unsigned long maximumValue = middleBound + upperBound;
+	unsigned long maximumValue = 2 * upperBound;
 	// both are 0
 	if (sum == 0) {
 		return true;
 	}
-	// one is 5
-	else if (sum == middleBound) {
-		return true;
-	}
-	// one is 6
-	else if (sum == upperBound) {
-		return true;
-	}
-	// both are 5
-	else if (sum == maximumValue - 1) {
-		return true;
-	}
-	// one is 5, one is 6
-	else if (sum == maximumValue) {
-		return true;
-	}
-	// both are 6
-	else if (sum == maximumValue + 1) {
+	// both sum to less than 12
+	else if (sum <= maximumValue) {
 		return true;
 	}
 	else {
