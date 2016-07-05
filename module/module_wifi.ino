@@ -35,6 +35,8 @@ void updateThingSpeak(unsigned char ID, unsigned int time) {
 
     Serial.print(getStr);
     Serial.print(" ");
+    Serial.print(getStr.length());
+    Serial.print(" ");
     Serial.println(cmd);
     while (1) {
         while (WIFI.available()) {
