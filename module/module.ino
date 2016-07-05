@@ -232,6 +232,7 @@ unsigned long accumulator(void) {
 					startConnection();
 					updateThingSpeak(sendCount);
 					lastSend = millis();
+					sendCount = 0;
 					Serial.println("Done");
 				}
 				periodCount = 0;
