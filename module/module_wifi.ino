@@ -22,8 +22,8 @@ void startConnection(void) {
 
 void updateThingSpeak(unsigned char ID, unsigned int time) {
     getStr = "GET /update?key=CSV1YP0YIE2STS0Z&field1=ID&field2=TIME\r\n";
-    getStr = getStr.replace("ID", ID);
-    getStr = getStr.replace("TIME", time);
+    getStr.replace("ID", ID);
+    getStr.replace("TIME", time);
 
     cmd = "AT+CIPSEND=0,";
     cmd += String(getStr.length());
