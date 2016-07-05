@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-#define monitorBaud 57600
+#define monitorBaud 9600
 #define moduleBaud 9600
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
@@ -97,7 +97,8 @@ void loop() {
 	else {
 		Serial.println();
 	}
-
+ 
+  RFID.listen();
 	//delay(scanInterval);
 }
 
@@ -222,6 +223,7 @@ unsigned long accumulator(void) {
 			if ( inRange(lastPeriodX, lastPeriodY) ) {
 				if (periodCount > minCount) {
 					// calculate elapsed time
+         WIFI.listen();
 					sendCount = (millis() - startTime)/1000;
 					Serial.print("Sending... Time: ");
 					Serial.println(sendCount);

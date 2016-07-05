@@ -40,6 +40,11 @@ void updateThingSpeak(unsigned char ID, unsigned long time) {
 
     String cmd = "AT+CIPSEND=0,";
     cmd += String(getStr.length());
+    
+    Serial.print(cmd);
+    Serial.print(" ");
+    Serial.println(getStr);
+    
     WIFI.println(cmd);
     delay(500);
     WIFI.println(getStr);
