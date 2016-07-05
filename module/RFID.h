@@ -56,12 +56,12 @@
 #define resetTime 501
 #define waitForIP 2001
 
-// Pins
-const int driverX = 4;
-const int driverY = 7;
-const int speakerPin = 8;
-const int wifi_rst = 9;
-const int ledPin = 13;
+#define driverX 4
+#define driverY 7
+#define speakerPin 8
+#define wifi_rst 9
+#define ledPin 13
+
 // Constants
 const int eightBits = 8;
 const int quota = 3600;
@@ -75,7 +75,7 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 const bool reject = true;
 const bool debug = true;
 
-String getStr = "GET /update?key=CSV1YP0YIE2STS0Z&field1=";
+String getStr = "GET /update?key=CSV1YP0YIE2STS0Z&field1=ID&field2=TIME";
 String cmd = "AT+CIPSEND=0,";
 
 const struct {

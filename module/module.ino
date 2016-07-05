@@ -28,7 +28,6 @@ void setup() {
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
 	Serial.print(messages.done);
-  getStr += 12356789;
 }
 
 void loop() {
@@ -104,7 +103,7 @@ void loop() {
 }
 
 void soundFeedback(bool reject) {
-	if (reject) {
+	/*if (reject) {
 		tone(speakerPin, rejectNote, rejectDuration);
 		delay(rejectInterval);
 		tone(speakerPin, rejectNote, rejectDuration);
@@ -113,7 +112,7 @@ void soundFeedback(bool reject) {
 	}
 	else {
 		tone(speakerPin, acceptNote, acceptDuration);
-	}
+	}*/
 }
 
 /*
