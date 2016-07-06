@@ -55,6 +55,10 @@
 
 #define resetTime 501
 #define waitForIP 2001
+#define waitForFlush 1000
+#define waitForConnect 500
+#define waitForGET 2000
+#define waitForGETResponse 5000
 
 #define driverX 4
 #define driverY 7

@@ -15,9 +15,9 @@ void connectWIFI(void) {
 
 void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
     unsigned long startTime = millis();
-    delay(1000);
+    delay(waitForFlush);
     WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
-    delay(500);
+    delay(waitForConnect);
     
     String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
     getStr += "&field1=";
@@ -30,10 +30,10 @@ void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
     cmd += getStr.length();
     
     WIFI.println(cmd);
-    delay(2000);
+    delay(waitForGET);
     WIFI.println(getStr);
  
-    while ( (millis() - startTime) < 5000 ) {
+    while ( (millis() - startTime) < waitForGETResponse ) {
     //while (1) {
       while (WIFI.available()) {
         Serial.write(WIFI.read());
