@@ -38,5 +38,9 @@ void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
       while (WIFI.available()) {
         Serial.write(WIFI.read());
       }
+      if (!WIFI.find("+IPD")) {
+        Serial.println("Error sending");
+      }
     }
+    
 }
