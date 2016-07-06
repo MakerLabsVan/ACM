@@ -40,7 +40,7 @@
 #define waitforWriteResponse 250
 #define debounce 25
 #define timeToRemoveCard 500
-#define scanInterval 2000
+#define scanInterval 1500
 
 #define rejectNote 123
 #define rejectDuration 250
@@ -94,6 +94,7 @@ const struct {
 	String errorRead;
 	String errorCommand;
 	String cardUpdated;
+	String sendingLog;
 
 } messages = {
 	"Initializing...\n",
@@ -111,4 +112,5 @@ const struct {
 	"Unexpected result\n",
 	"Unexpected command\n",
 	"Card updated. You may now remove it.\n\n"
+	"Sending... Time: ";
 };
