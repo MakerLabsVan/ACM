@@ -18,6 +18,7 @@ void setup() {
 }
 
 void loop() {
+	int choice = 0;
 	unsigned char readData[bufferSize];
 	digitalWrite(ledPin, LOW);
 
@@ -28,6 +29,24 @@ void loop() {
 		delay(waitforSerialResponse);
 	}
 	
+	// RFID tag detected, prompt user
+	Serial.print("Choose from the following options\n1. Initialize\n");
+	while (1) {
+		if (Serial.available()) {
+			choice = Serial.read();
+			if (choice == 1) {
+				Serial.print("Enter a user ID: ");
+			}
+			else {
+				Serial.println("Invaild choice");
+			}
+		}
+	}
+
+
+	
+
+
 }
 
 /*
