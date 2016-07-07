@@ -110,7 +110,6 @@ void loop() {
 		// This else statement runs if there is no error in writing
 		else {
 			Serial.print(messages.cardUpdated);
-      		WIFI.listen();
 			delay(timeToRemoveCard);
 		}
 		// -----------------------------------------------------------------
@@ -119,6 +118,7 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		Serial.print(messages.sendingLog);
 		Serial.println(elapsedTime);
+		WIFI.listen();
 		// Make sure logs are properly spaced out according to ThingSpeak policy
 		if ( (millis() - lastSend) < sendInterval ) {
 			delay(sendInterval);
