@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-#define monitorBaud 9600
+#define monitorBaud 57600
 #define moduleBaud 9600
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
@@ -175,7 +175,7 @@ unsigned long accumulator(void) {
 				sendCount = (millis() - startTime)/1000;
 
 				// Any valid accumulated time will be returned
-				if (sendCount > minCount) {
+				if (pulseCount > minCount) {
           			return sendCount;
 				}
 				else {

@@ -16,7 +16,6 @@ void connectWIFI(void) {
 }
 
 void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
-    unsigned long startTime = millis();
     delay(waitForFlush);
     WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
     delay(waitForConnect);
@@ -35,15 +34,15 @@ void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
     WIFI.println(cmd);
     delay(waitForGET);
     WIFI.println(getStr);
- 
+
+    delay(waitForGETResponse);
+    /*
+    unsigned long startTime = millis();
     while ( (millis() - startTime) < waitForGETResponse ) {
     //while (1) {
       while (WIFI.available()) {
         Serial.write(WIFI.read());
       }
-      if (!WIFI.find("+IPD")) {
-        Serial.print(messages.errorThingSpeakSend);
-      }
-    }
+    }*/
     
 }
