@@ -93,6 +93,7 @@ const struct {
 	char * notAuthorized;
 	char * quotaMet;
 	char * displayUsedTime;
+	char * user;
 	char * authorized;
 	char * cancel;
 	char * accumulatedTime;
@@ -122,7 +123,8 @@ const struct {
 	"You are not authorized to use this machine.\n\n",
 	"You have reached your quota for this month.\n\n",
 	"Time used this month: ",
-	"User authenticated. Machine is ready to fire. Please do not remove your card.\n",
+	"User ",
+	" authenticated. Machine is ready to fire. Please do not remove your card.\n",
 	"Card not detected. Operation cancelled.\n",
 	"Elapsed time: ",
 	"Total time used this month: ",

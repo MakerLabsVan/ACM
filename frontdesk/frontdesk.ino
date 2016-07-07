@@ -18,34 +18,29 @@ void setup() {
 }
 
 void loop() {
-	int choice = 0;
+	unsigned char choice = 0;
 	unsigned char readData[bufferSize];
+	unsigned char user0 = 0x00;
+	unsigned char user1 = 0x2F;
+	bool responseFlag = false;
 	digitalWrite(ledPin, LOW);
 
 	// Scan for RFID tags
 	Serial.print(messages.scan);
-	while (!getResponse(readData)) {
+	while (!responseFlag) {
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		delay(waitforSerialResponse);
-	}
-	
-	// RFID tag detected, prompt user
-	Serial.print("Choose from the following options\n1. Initialize\n");
-	while (1) {
-		if (Serial.available()) {
-			choice = Serial.read();
-			if (choice == 1) {
-				Serial.print("Enter a user ID: ");
-			}
-			else {
-				Serial.println("Invaild choice");
-			}
-		}
+		responseFlag = getResponse(readData);
 	}
 
-
-	
-
+	// RFID tag detected
+	Serial.println("Writing user ID");
+	unsigned char userPayload[] = { user0, user1, 0xFF, 0xFF };
+	sendCommand(CMD_WRITE, blockID, userID, keyA, userPayload);
+	delay(waitforWriteResponse);
+	Serial.println("Initializing time");
+	unsigned char machinePayload[] = { classCheck, 0x00, 0x00, 0x00 };
+	sendCommand(CMD_WRITE, blockID, machineID, keyA, machinePayload);
 
 }
 
@@ -63,8 +58,10 @@ bool getResponse(unsigned char response[]) {
 
 	while (RFID.available()) {
 		response[i] = RFID.read();
+		Serial.print(response[i], HEX);
+		Serial.print(" ");
 		i++;
-	}
+	} Serial.println();
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK
 	if (response[statusOffset] == 0x00)
@@ -82,7 +79,7 @@ bool getResponse(unsigned char response[]) {
 		  Sector trailers (multiples of 4) should also not be written to.
 		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 */
-void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, const unsigned char keyA[], unsigned long time) {
+void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, const unsigned char keyA[], unsigned char payload[]) {
 	if (command == CMD_GET_SNR) {
 		unsigned char CMD[] = { 0x00, DADD, snrLength, CMD_GET_SNR, requestMode, noHalt, 0x00, 0x00 };
 		int size = sizeof(CMD)/sizeof(CMD[0]);
@@ -95,20 +92,9 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		sendToRFID(CMD, size);
 	}
 	else if(command == CMD_WRITE) {
-		// prepare data to be written, time should be in format 0x00AABBCC
-		// timeByte is in format { 0xAA, 0xBB, 0xCC }
-		// in the first iteration, time gets shifted 2 bytes to get 0x000000AA
-		// then bitwise AND operation with 0xFF, then store in timeByte
-		int i = 0;
-		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
-		unsigned char timeByte[numTimeBytes];
-		for(i = 0; i < numTimeBytes; i++) {
-			timeByte[i] = (time >> j) & MSB;
-			j -= eightBits;
-		}
 		unsigned char CMD[] = { 0x00, DADD, writeLength, CMD_WRITE, authTypeA, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
-						classCheck, timeByte[0], timeByte[1], timeByte[2], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						payload[0], payload[1], payload[2], payload[3], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						0x00, 0x00 };
 		int size = sizeof(CMD)/sizeof(CMD[0]);
 		sendToRFID(CMD, size);

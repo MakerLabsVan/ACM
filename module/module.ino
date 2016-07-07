@@ -88,6 +88,8 @@ void loop() {
 			soundFeedback(!reject);
 			Serial.print(messages.displayUsedTime);
 			Serial.println(existingTime);
+			Serial.print(messages.user);
+			Serial.print(userID);
 			Serial.print(messages.authorized);
 
 			// Get ready to record time
@@ -107,14 +109,14 @@ void loop() {
 		}
 		// This else statement runs if there is no error in writing
 		else {
-			// Turn LED off
-			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
       		WIFI.listen();
 			delay(timeToRemoveCard);
 		}
 		// -----------------------------------------------------------------
   		// Push to ThingSpeak
+  		// Turn LED off
+		digitalWrite(ledPin, LOW);
 		Serial.print(messages.sendingLog);
 		Serial.println(elapsedTime);
 		// Make sure logs are properly spaced out according to ThingSpeak policy

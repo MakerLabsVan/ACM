@@ -1,10 +1,11 @@
 #include "Arduino.h"
 
 // Pins that interface with RDM880
-#define RFID_RX	2
-#define RFID_TX 3
+#define RFID_RX	5
+#define RFID_TX 6
 
 #define bufferSize 64
+#define payloadSize 4
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
@@ -16,6 +17,10 @@
 #define CMD_READ 0x20
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
+#define blockID 0x01
+#define machineID 0x04
+#define userID 0x01
+#define classCheck 0xCC
 
 // Read constants
 #define authTypeA 0x01 // use KeyA
@@ -29,6 +34,12 @@
 // Write constants
 #define writeLength 0x1A
 
+#define statusOffset 3
+
+#define waitforSerialResponse 200
+#define waitforWriteResponse 250
+
+const int eightBits = 8;
 const int ledPin = 13;
 const int speakerPin = 8;
 const int quota = 3600;
