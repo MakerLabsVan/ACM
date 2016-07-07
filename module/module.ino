@@ -112,20 +112,20 @@ void loop() {
 			Serial.print(messages.cardUpdated);
       		WIFI.listen();
 			delay(timeToRemoveCard);
-			// -----------------------------------------------------------------
-      		// Push to ThingSpeak
-			Serial.print(messages.sendingLog);
-			Serial.println(elapsedTime);
-			// Make sure logs are properly spaced out according to ThingSpeak policy
-			if ( (millis() - lastSend) < sendInterval ) {
-				delay(sendInterval);
-			}
-			updateThingSpeak(userID, elapsedTime);
-			lastSend = millis();
-			// -----------------------------------------------------------------
-			// Finished, prepare for next loop by switching to RFID serial port
-			Serial.println(messages.done);
 		}
+		// -----------------------------------------------------------------
+  		// Push to ThingSpeak
+		Serial.print(messages.sendingLog);
+		Serial.println(elapsedTime);
+		// Make sure logs are properly spaced out according to ThingSpeak policy
+		if ( (millis() - lastSend) < sendInterval ) {
+			delay(sendInterval);
+		}
+		updateThingSpeak(userID, elapsedTime);
+		lastSend = millis();
+		// -----------------------------------------------------------------
+		// Finished, prepare for next loop by switching to RFID serial port
+		Serial.println(messages.done);
 	}
 	else {
 		Serial.println();
