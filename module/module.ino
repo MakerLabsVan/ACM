@@ -32,6 +32,7 @@ void setup() {
 
 void loop() {
 	bool responseFlag = false;
+	unsigned int userID = 0;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	unsigned long lastSend = millis();
@@ -47,6 +48,7 @@ void loop() {
 	}
 
 	// RFID tag detected, read block that contains time data (for this machine)
+	// LED will turn on
 	Serial.print(messages.detected);
 	digitalWrite(ledPin, HIGH);
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
@@ -58,21 +60,34 @@ void loop() {
 		soundFeedback(reject);
 		Serial.print(messages.readUnsuccessful);
 	}
+	// This else statement runs if a valid RFID tag is detected
+	// Get the existing time
 	else {
 		existingTime = getTime(readData);
+		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
 			soundFeedback(reject);
 			Serial.print(messages.notAuthorized);
 		}
+		// Check if the user has not reached the 60 min quota
 		else if (existingTime >= quota) {
 			soundFeedback(reject);
 			Serial.print(messages.quotaMet);
 		}
+		// User passed all checks and is able to use the machine
 		else {
+			// Get user ID
+			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
+			delay(waitforReadResponse);
+			responseFlag = getResponse(readData);
+			userID = getUser(readData);
+
+			// Sound and text feedback
 			soundFeedback(!reject);
 			Serial.print(messages.displayUsedTime);
 			Serial.println(existingTime);
 			Serial.print(messages.authorized);
+
 			// Get ready to record time
 			elapsedTime = accumulator();
 			Serial.print(messages.displayNewTime);
@@ -89,11 +104,14 @@ void loop() {
 		if (!responseFlag) {
 			Serial.print(messages.errorRead);
 		}
+		// This else statement runs if there is no error writing
 		else {
+			// Turn LED off
 			digitalWrite(ledPin, LOW);
 			Serial.print(messages.cardUpdated);
       		WIFI.listen();
 			delay(timeToRemoveCard);
+
       		// Push to ThingSpeak
 			Serial.print(messages.sendingLog);
 			Serial.println(elapsedTime);
@@ -101,8 +119,9 @@ void loop() {
 			if ( (millis() - lastSend) < sendInterval ) {
 				delay(sendInterval);
 			}
-			updateThingSpeak(1, elapsedTime);
+			updateThingSpeak(userID, elapsedTime);
 			lastSend = millis();
+
 			Serial.println(messages.done);
 		}
 	}
@@ -153,6 +172,16 @@ unsigned long getTime (unsigned char readData[]) {
 
 }
 
+unsigned int getUser (unsigned char readData[]) {
+	int i = 0;
+	unsigned int userID = 0;
+
+	for (i = 0; i < numUserBytes; i++) {
+		userID = (userID << eightBits) ^ readData[i + userOffset];
+	}
+
+	return userID;
+}
 
 /*
 	Function that waits for a control signal to go high and counts time 
@@ -166,7 +195,7 @@ unsigned long accumulator(void) {
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned int periodCount, sendCount = 0;
+	unsigned int pulseCount, sendCount = 0;
 	unsigned int pollCounter = 0;
 
 	if (debug) {
@@ -174,7 +203,7 @@ unsigned long accumulator(void) {
 		Serial.print(" ");
 		Serial.print(sendCount);
 		Serial.print(" ");
-		Serial.println(periodCount);
+		Serial.println(pulseCount);
 	}
  
 	while (1) {
@@ -188,12 +217,15 @@ unsigned long accumulator(void) {
 				soundFeedback(reject);
 				Serial.print(messages.cancel);
 				sendCount = (millis() - startTime)/1000;
+
+				// Elapsed time will be returned
 				if (sendCount > minCount) {
           			return sendCount;
 				}
 				else {
 					return 0;
 				}
+
 			}
 		}
 		else {
@@ -213,13 +245,13 @@ unsigned long accumulator(void) {
 			Serial.print(" Start Time: ");
 			Serial.print(startTime);
 			Serial.print(" Pulse Count: ");
-			Serial.println(periodCount);
+			Serial.println(pulseCount);
 		}
 
 		// if periodX and periodY is a valid pair
 		if ( inRange(periodX, periodY) ) {
-			// approximate elapsed time
-			periodCount += 1;
+			// tracking number of valid pulses
+			pulseCount += 1;
 			// check for new ON signal aka rising edge
 			// so, if lastPeriodX and lastPeriodY was not a valid pair,
 			// begin accumulating time
@@ -233,11 +265,11 @@ unsigned long accumulator(void) {
 			// check for new OFF signal aka falling edge
 			// so, if lastPeriodX and lastPeriodY was a valid pair
 			if ( inRange(lastPeriodX, lastPeriodY) ) {
-				if (periodCount > minCount) {
+				if (pulseCount > minCount) {
 					// calculate elapsed time
 					return (millis() - startTime)/1000;
 				}
-				periodCount = 0;
+				pulseCount = 0;
 			}
 		}
 

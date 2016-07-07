@@ -34,6 +34,7 @@
 #define classCheck 0xCC
 #define blockID 0x01
 #define machineID 0x04
+#define userData 0x01
 
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
@@ -50,8 +51,10 @@
 
 #define statusOffset 3
 #define numTimeBytes 3
+#define numUserBytes 2
 #define classOffset 8
 #define timeOffset 9
+#define userOffset 8
 
 #define resetTime 501
 #define waitForIP 2001
