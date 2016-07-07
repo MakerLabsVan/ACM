@@ -6,6 +6,7 @@
 #define WIFI_RX 2
 #define WIFI_TX 3
 #define bufferSize 64
+#define bufferSizeSNR 16
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
@@ -82,24 +83,23 @@ const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 const bool reject = true;
 const bool debug = true;
 
-
 const struct {
-	String initialize;
-	String done;
-	String scan;
-	String detected;
-	String readUnsuccessful;
-	String notAuthorized;
-	String quotaMet;
-	String displayUsedTime;
-	String authorized;
-	String cancel;
-	String accumulatedTime;
-	String displayNewTime;
-	String errorRead;
-	String errorCommand;
-	String cardUpdated;
-	String sendingLog;
+	char * initialize;
+	char * done;
+	char * scan;
+	char * detected;
+	char * readUnsuccessful;
+	char * notAuthorized;
+	char * quotaMet;
+	char * displayUsedTime;
+	char * authorized;
+	char * cancel;
+	char * accumulatedTime;
+	char * displayNewTime;
+	char * errorRead;
+	char * errorCommand;
+	char * cardUpdated;
+	char * sendingLog;
 
 } messages = {
 	"Initializing...\n",

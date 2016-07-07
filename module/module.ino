@@ -104,7 +104,7 @@ void loop() {
 		if (!responseFlag) {
 			Serial.print(messages.errorRead);
 		}
-		// This else statement runs if there is no error writing
+		// This else statement runs if there is no error in writing
 		else {
 			// Turn LED off
 			digitalWrite(ledPin, LOW);
@@ -133,56 +133,6 @@ void loop() {
 	delay(scanInterval);
 
 }
-
-void soundFeedback(bool reject) {
-	/*if (reject) {
-		tone(speakerPin, rejectNote, rejectDuration);
-		delay(rejectInterval);
-		tone(speakerPin, rejectNote, rejectDuration);
-		delay(rejectInterval);
-		tone(speakerPin, rejectNote, rejectDuration);
-	}
-	else {
-		tone(speakerPin, acceptNote, acceptDuration);
-	}*/
-}
-
-/*
-	Reads time data from card and stores it in one 4 byte chunk
-
-	Param: readData - array containing all bytes read from card
-
-	Function: Time is encoded as three 1 byte chunks 0xAA 0xBB 0xCC.
-			  existingTime is one 4 byte chunk 0x00000000
-			  This function XORs the most significant byte with each time byte,
-			  and left shifts it 1 byte size every iteration.
-			  First iteration: 0x000000AA, Second iteration: 0x0000AABB, etc.
-
-	Returns: existing time from card
-*/
-unsigned long getTime (unsigned char readData[]) {
-	int i = 0;
-	unsigned long existingTime = 0;
-
-	for (i = 0; i < numTimeBytes; i++) {
-		existingTime = (existingTime << eightBits) ^ readData[i + timeOffset];
-	}
-
-	return existingTime;
-
-}
-
-unsigned int getUser (unsigned char readData[]) {
-	int i = 0;
-	unsigned int userID = 0;
-
-	for (i = 0; i < numUserBytes; i++) {
-		userID = (userID << eightBits) ^ readData[i + userOffset];
-	}
-
-	return userID;
-}
-
 /*
 	Function that waits for a control signal to go high and counts time 
 	that control signal is high for.
@@ -191,7 +141,7 @@ unsigned int getUser (unsigned char readData[]) {
 
 */
 unsigned long accumulator(void) {
-	unsigned char A[bufferSize/4];
+	unsigned char A[bufferSizeSNR];
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
@@ -218,7 +168,7 @@ unsigned long accumulator(void) {
 				Serial.print(messages.cancel);
 				sendCount = (millis() - startTime)/1000;
 
-				// Elapsed time will be returned
+				// Any valid accumulated time will be returned
 				if (sendCount > minCount) {
           			return sendCount;
 				}
@@ -248,23 +198,23 @@ unsigned long accumulator(void) {
 			Serial.println(pulseCount);
 		}
 
-		// if periodX and periodY is a valid pair
+		// if periodX and periodY IS a valid pair
 		if ( inRange(periodX, periodY) ) {
 			// tracking number of valid pulses
 			pulseCount += 1;
 			// check for new ON signal aka rising edge
-			// so, if lastPeriodX and lastPeriodY was not a valid pair,
+			// so, if lastPeriodX and lastPeriodY WAS NOT a valid pair,
 			// begin accumulating time
 			if ( !inRange(lastPeriodX, lastPeriodY) ) {
 				startTime = millis();
 			}
 		}
-		// if periodX and periodY is not a valid pair
+		// if periodX and periodY IS NOT a valid pair
 		if ( !inRange(periodX, periodY) ) {
-			// during operation, ignore double zeros
 			// check for new OFF signal aka falling edge
-			// so, if lastPeriodX and lastPeriodY was a valid pair
+			// so, if lastPeriodX and lastPeriodY WAS a valid pair
 			if ( inRange(lastPeriodX, lastPeriodY) ) {
+				// check if the job was more than 5 seconds
 				if (pulseCount > minCount) {
 					// calculate elapsed time
 					return (millis() - startTime)/1000;
@@ -296,5 +246,18 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 	}
 	else {
 		return false;
+	}
+}
+
+void soundFeedback(bool reject) {
+	if (reject) {
+		tone(speakerPin, rejectNote, rejectDuration);
+		delay(rejectInterval);
+		tone(speakerPin, rejectNote, rejectDuration);
+		delay(rejectInterval);
+		tone(speakerPin, rejectNote, rejectDuration);
+	}
+	else {
+		tone(speakerPin, acceptNote, acceptDuration);
 	}
 }

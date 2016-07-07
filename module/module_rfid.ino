@@ -87,3 +87,37 @@ void sendToRFID(unsigned char CMD[], int size) {
 	// send command packet
 	RFID.write(CMD, size);
 }
+/*
+	Reads time data from card and stores it in one 4 byte chunk
+
+	Param: readData - array containing all bytes read from card
+
+	Function: Time is encoded as three 1 byte chunks 0xAA 0xBB 0xCC.
+			  existingTime is one 4 byte chunk 0x00000000
+			  This function XORs the most significant byte with each time byte,
+			  and left shifts it 1 byte size every iteration.
+			  First iteration: 0x000000AA, Second iteration: 0x0000AABB, etc.
+
+	Returns: existing time from card
+*/
+unsigned long getTime (unsigned char readData[]) {
+	int i = 0;
+	unsigned long existingTime = 0;
+
+	for (i = 0; i < numTimeBytes; i++) {
+		existingTime = (existingTime << eightBits) ^ readData[i + timeOffset];
+	}
+
+	return existingTime;
+}
+
+unsigned int getUser (unsigned char readData[]) {
+	int i = 0;
+	unsigned int userID = 0;
+
+	for (i = 0; i < numUserBytes; i++) {
+		userID = (userID << eightBits) ^ readData[i + userOffset];
+	}
+
+	return userID;
+}
