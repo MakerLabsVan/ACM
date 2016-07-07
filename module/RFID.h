@@ -40,6 +40,7 @@
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
 #define waitforWriteResponse 250
+#define waitforIPResponse 100
 #define debounce 25
 #define timeToRemoveCard 500
 #define scanInterval 1500
@@ -75,7 +76,7 @@ const int eightBits = 8;
 const int quota = 3600;
 const int pollTimeout = 5;
 const int pollInterval = 900;
-const int sendInterval = 20000;
+const int sendInterval = 15000;
 const int minCount = 6;
 const int lowerBound = 0;
 const int upperBound = 6;
@@ -100,6 +101,17 @@ const struct {
 	char * errorCommand;
 	char * cardUpdated;
 	char * sendingLog;
+	// WiFi messages
+	char * gotIP;
+	char * connectedIP;
+	char * OK;
+	char * dataBegin;
+	char * errorThingSpeakSend;
+	// AT commands
+	char * stationMode;
+	char * joinAP;
+	char * connectionMode;
+	char * initializeConnection;
 
 } messages = {
 	"Initializing...\n",
@@ -118,4 +130,15 @@ const struct {
 	"Unexpected command\n",
 	"Card updated. You may now remove it.\n\n"
 	"Sending... Time: "
+	// WiFi messages
+	"WIFI GOT IP",
+	"Connected. ",
+	"OK",
+	"+IPD"
+	"Error sending\n"
+	// AT commands
+	"AT+CWMODE=1\r\n",
+	"AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n",
+	"AT+CIPMUX=1\r\n",
+	"AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n",
 };

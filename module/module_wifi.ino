@@ -2,23 +2,26 @@
     All Wi-Fi related functions
 */
 void connectWIFI(void) {
-    WIFI.write("AT+CWMODE=1\r\n");
-    delay(50);
-    WIFI.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");
-    while(!WIFI.find("WIFI GOT IP"));
-    Serial.write("Connected. ");
-    while(!WIFI.find("OK"));
-    delay(100);
-    WIFI.write("AT+CIPMUX=1\r\n");
-    delay(250);
+    WIFI.write(messages.stationMode);
+    delay(waitforReadResponse);
+
+    WIFI.write(messages.joinAP);
+    while (!WIFI.find(messages.gotIP));
+    Serial.write(messages.connectedIP);
+    while (!WIFI.find(messages.OK));
+    delay(waitforIPResponse);
+
+    WIFI.write(messages.connectionMode);
+    delay(waitforWriteResponse);
 }
 
 void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
     unsigned long startTime = millis();
     delay(waitForFlush);
-    WIFI.write("AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n");
+    WIFI.write(messages.initializeConnection);
     delay(waitForConnect);
     
+    // Construct the GET request to ThingSpeak
     String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
     getStr += "&field1=";
     getStr += ID;
@@ -38,8 +41,8 @@ void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
       while (WIFI.available()) {
         Serial.write(WIFI.read());
       }
-      if (!WIFI.find("+IPD")) {
-        Serial.println("Error sending");
+      if (!WIFI.find(messages.dataBegin)) {
+        Serial.print(messages.errorThingSpeakSend);
       }
     }
     
