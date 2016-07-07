@@ -31,13 +31,14 @@ void setup() {
 }
 
 void loop() {
+	// some variables
 	bool responseFlag = false;
 	unsigned int userID = 0;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	unsigned long lastSend = millis();
 	digitalWrite(ledPin, LOW);
-
+	// ----------------------------------------------------------------------
 	// Scan for RFID tags
 	Serial.print(messages.scan);
 	while (!responseFlag) {
@@ -46,7 +47,7 @@ void loop() {
 		delay(waitforSerialResponse);
 		responseFlag = getResponse(readData);
 	}
-
+	// -----------------------------------------------------------------------
 	// RFID tag detected, read block that contains time data (for this machine)
 	// LED will turn on
 	Serial.print(messages.detected);
@@ -54,7 +55,7 @@ void loop() {
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
 	responseFlag = getResponse(readData);
-
+	// ------------------------------------------------------------------------
 	// Analyze response packet and data
 	if (!responseFlag) {
 		soundFeedback(reject);
@@ -75,6 +76,7 @@ void loop() {
 			Serial.print(messages.quotaMet);
 		}
 		// User passed all checks and is able to use the machine
+		// ---------------------------------------------------------------------
 		else {
 			// Get user ID
 			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
@@ -94,8 +96,7 @@ void loop() {
 			Serial.println(elapsedTime + existingTime);
 		}
 	}
-
-
+	// -------------------------------------------------------------------------
 	// Write time data to card
 	if (elapsedTime > 0) {
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, elapsedTime + existingTime);
@@ -111,7 +112,7 @@ void loop() {
 			Serial.print(messages.cardUpdated);
       		WIFI.listen();
 			delay(timeToRemoveCard);
-
+			// -----------------------------------------------------------------
       		// Push to ThingSpeak
 			Serial.print(messages.sendingLog);
 			Serial.println(elapsedTime);
@@ -121,7 +122,8 @@ void loop() {
 			}
 			updateThingSpeak(userID, elapsedTime);
 			lastSend = millis();
-
+			// -----------------------------------------------------------------
+			// Finished, prepare for next loop by switching to RFID serial port
 			Serial.println(messages.done);
 		}
 	}
@@ -134,8 +136,11 @@ void loop() {
 
 }
 /*
-	Function that waits for a control signal to go high and counts time 
-	that control signal is high for.
+	This function monitors the motor driver signals on the laser cutter.
+	The signals are PWMs of a specific frequency. This function measures the
+	half-period of any signal detected and accumulates time when valid signals
+	are detected. A polling subroutine continuously checks if an RFID tag is 
+	still present.
 	
 	Return: time accumulated
 
@@ -148,6 +153,7 @@ unsigned long accumulator(void) {
 	unsigned int pulseCount, sendCount = 0;
 	unsigned int pollCounter = 0;
 
+	// Only here temporarily
 	if (debug) {
 		Serial.print(startTime);
 		Serial.print(" ");
@@ -187,6 +193,7 @@ unsigned long accumulator(void) {
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
 
+		// Only here temporarily
 		if (debug) {
 			Serial.print("PeriodX: ");
 			Serial.print(periodX);
@@ -216,7 +223,7 @@ unsigned long accumulator(void) {
 			if ( inRange(lastPeriodX, lastPeriodY) ) {
 				// check if the job was more than 5 seconds
 				if (pulseCount > minCount) {
-					// calculate elapsed time
+					// calculate elapsed time in seconds
 					return (millis() - startTime)/1000;
 				}
 				pulseCount = 0;
@@ -231,7 +238,12 @@ unsigned long accumulator(void) {
 	}
 }
 /*
-	Determines if the driver signals are valid
+	Determines if the driver signals are valid. During a job,
+	the half-period of a pulse is either 0, 5 or 6 microseconds.
+	There are slight deviations at times, so summing the values together
+	and using the maximum possible sum as a check is a reliable way to
+	determine if a signal is valid.
+
 */
 bool inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned long sum = periodX + periodY;
@@ -240,7 +252,7 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 	if (sum == 0) {
 		return true;
 	}
-	// both sum to less than 12
+	// both sum to less than or equal to 12
 	else if (sum <= maximumValue) {
 		return true;
 	}
