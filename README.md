@@ -23,32 +23,32 @@ Arduino IDE
   
 Schematics
 ===========
-__RDM880 Pinout__
+__RDM880 Pinout__  
 Top View (2 header pin on left)  
 
 ANT+ ANT-		N/A N/A N/A N/A N/A  
 				VIN	GND	TX 	RX	RST  
 
 
-__ESP8266 Pinout__
-Top View
+__ESP8266 Pinout__  
+Top View  
 
-1	2	3	4
-5	6	7	8
+1	2	3	4  
+5	6	7	8  
 
 
 Wiring
 =======
-__Arduino -> RDM880__
-5V -> VIN
-GND -> GND
-D5 -> TX
-D6 -> RX
+__Arduino -> RDM880__  
+5V -> VIN  
+GND -> GND  
+D5 -> TX  
+D6 -> RX  
 
-__Arduino -> ESP8266__
-5V -> IN (LM1117)
-GND -> GND (LM1117)
-OUT (LM1117) -> VIN
-D2 -> TX
-D3 -> RX
-D9 -> CE
+__Arduino -> ESP8266__  
+5V -> IN (LM1117)  
+GND -> GND (LM1117)  
+OUT (LM1117) -> VIN  
+D2 -> TX  
+D3 -> RX  
+D9 -> CE  
