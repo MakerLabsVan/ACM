@@ -33,7 +33,7 @@ ANT+ ANT-       N/A N/A N/A N/A N/A
 __ESP8266 Pinout__  
 Top View  
 
-1	2	3	4  
+1	gi2	3	4  
 5	6	7	8  
 
 
