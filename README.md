@@ -6,28 +6,28 @@ This system is designed to authorize access to MakerLabs' laser cutter by an RFI
 
 Hardware Required
 ======
-Arduino Uno
-RDM880 (RFID reader)
-ESP8266 (WiFi module)
-LM1117 3.3 V linear regulator
-Wires
-	- USB Type-B connector
-LEDs
-7 - 12 V / 1 A power supply (DC barrel jack)
+Arduino Uno  
+RDM880 (RFID reader)  
+ESP8266 (WiFi module)  
+LM1117 3.3 V linear regulator  
+Wires  
+	- USB Type-B connector  
+LEDs  
+7 - 12 V / 1 A power supply (DC barrel jack)  
 
 
 Software Required
 ======
-Arduino IDE
-	- SoftwareSerial library
-
+Arduino IDE  
+	- SoftwareSerial library  
+  
 Schematics
 ===========
 __RDM880 Pinout__
-Top View (2 header pin on left)
+Top View (2 header pin on left)  
 
-ANT+ ANT-		N/A N/A N/A N/A N/A
-				VIN	GND	TX 	RX	RST
+ANT+ ANT-		N/A N/A N/A N/A N/A  
+				VIN	GND	TX 	RX	RST  
 
 
 __ESP8266 Pinout__
