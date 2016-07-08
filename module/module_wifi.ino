@@ -6,10 +6,8 @@ void connectWIFI(void) {
     digitalWrite(wifi_rst, LOW);
     delay(resetTime);
     digitalWrite(wifi_rst, HIGH);
-    delay(resetTime);
-    delay(waitforIPResponse);
-    delay(waitforIP);
-    
+    delay(waitForIP);
+
     WIFI.write("AT+CWMODE=1\r\n");
     delay(waitforReadResponse);
 
