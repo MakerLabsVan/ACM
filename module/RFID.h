@@ -59,7 +59,7 @@
 #define userOffset 8
 
 #define resetTime 501
-#define waitForIP 2001
+#define waitForIP 5000
 #define waitForFlush 1000
 #define waitForConnect 500
 #define waitForGET 2000
@@ -108,14 +108,8 @@ const struct {
 	char * OK;
 	char * dataBegin;
 	char * errorThingSpeakSend;
-	// AT commands
-	String stationMode;
-	String joinAP;
-	String connectionMode;
-	String initializeConnection;
-
 } messages = {
-	"Initializing...\n",
+	"Initializing... ",
 	"Done.\n",
 	"Scanning...\n",
 	"Card detected.\n",
@@ -138,9 +132,4 @@ const struct {
 	"OK",
 	"+IPD"
 	"Error sending\n"
-	// AT commands
-	"AT+CWMODE=1\r\n",
-	"AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n",
-	"AT+CIPMUX=1\r\n",
-	"AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80\r\n",
 };

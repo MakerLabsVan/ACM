@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-#define monitorBaud 57600
+#define monitorBaud 9600
 #define moduleBaud 9600
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
