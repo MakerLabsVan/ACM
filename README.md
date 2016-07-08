@@ -26,14 +26,15 @@ Schematics
 __RDM880 Pinout__  
 Top View (2 header pin on left)  
 
-ANT+ ANT-       N/A N/A N/A N/A N/A  
-                VIN	GND	TX 	RX	RST  
+| ANT+ | ANT- | | | | N/A | N/A | N/A | N/A | N/A |  
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | VIN	| GND |	TX | RX | RST |  
 
 
 __ESP8266 Pinout__  
 Top View  
 
-1	gi2	3	4  
+1	2	3	4  
 5	6	7	8  
 
 
