@@ -37,6 +37,7 @@
 #define statusOffset 3
 
 #define waitforSerialResponse 200
+#define waitforReadResponse 50
 #define waitforWriteResponse 250
 
 const int eightBits = 8;
@@ -47,14 +48,16 @@ const bool reject = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const struct {
-	String initialize;
-	String done;
-	String scan;
-	String detected;
-	String readUnsuccessful;
-	String errorRead;
-	String errorCommand;
-	String cardUpdated;
+	char * initialize;
+	char * done;
+	char * scan;
+	char * detected;
+	char * readUnsuccessful;
+	char * errorRead;
+	char * errorCommand;
+	char * cardUpdated;
+	char * writeID;
+	char * writeInitialize;
 
 } messages = {
 	"Initializing... ",
@@ -64,6 +67,8 @@ const struct {
 	"Read unsuccessful. Please try again.\n",
 	"Unexpected result\n",
 	"Unexpected command\n",
-	"Card updated. You may now remove it.\n\n"
+	"Card updated. You may now remove it.\n\n",
+	"Writing user ID\n",
+	"Initializing time\n",
 };
 

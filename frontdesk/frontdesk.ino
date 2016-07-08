@@ -21,7 +21,7 @@ void loop() {
 	unsigned char choice = 0;
 	unsigned char readData[bufferSize];
 	unsigned char user0 = 0x00;
-	unsigned char user1 = 0x2F;
+	unsigned char user1 = 0x07;
 	bool responseFlag = false;
 	digitalWrite(ledPin, LOW);
 
@@ -34,13 +34,14 @@ void loop() {
 	}
 
 	// RFID tag detected
-	Serial.println("Writing user ID");
+	Serial.println(messages.writeID);
 	unsigned char userPayload[] = { user0, user1, 0xFF, 0xFF };
 	sendCommand(CMD_WRITE, blockID, userID, keyA, userPayload);
 	delay(waitforWriteResponse);
-	Serial.println("Initializing time");
+	Serial.println(messages.writeInitialize);
 	unsigned char machinePayload[] = { classCheck, 0x00, 0x00, 0x00 };
 	sendCommand(CMD_WRITE, blockID, machineID, keyA, machinePayload);
+	delay(waitforWriteResponse);
 
 }
 
