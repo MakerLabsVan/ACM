@@ -109,10 +109,10 @@ const struct {
 	char * dataBegin;
 	char * errorThingSpeakSend;
 	// AT commands
-	char * stationMode;
-	char * joinAP;
-	char * connectionMode;
-	char * initializeConnection;
+	String stationMode;
+	String joinAP;
+	String connectionMode;
+	String initializeConnection;
 
 } messages = {
 	"Initializing...\n",

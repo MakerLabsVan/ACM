@@ -18,13 +18,7 @@ void setup() {
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
-	// Reset Wi-Fi to initialize and connect to Wi-Fi
-	digitalWrite(wifi_rst, LOW);
-	delay(resetTime);
-	digitalWrite(wifi_rst, HIGH);
-	delay(resetTime);
 	connectWIFI();
-	delay(waitForIP);
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
 	Serial.print(messages.done);
