@@ -14,11 +14,13 @@ void setup() {
 	pinMode(driverY, INPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
+
 	// Set up serial communication
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
 	WIFI.begin(moduleBaud);
 	connectWIFI();
+
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
 	Serial.print(messages.done);
@@ -55,7 +57,7 @@ void loop() {
 		soundFeedback(reject);
 		Serial.print(messages.readUnsuccessful);
 	}
-	// This else statement runs if a valid RFID tag is detected
+	// These statements run if a valid RFID tag is detected
 	// Get the existing time
 	else {
 		existingTime = getTime(readData);
@@ -101,7 +103,7 @@ void loop() {
 		if (!responseFlag) {
 			Serial.print(messages.errorRead);
 		}
-		// This else statement runs if there is no error in writing
+		// These statements runs if there is no error in writing
 		else {
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
@@ -142,6 +144,7 @@ void loop() {
 
 */
 unsigned long accumulator(void) {
+	// some variables used in this scope
 	unsigned char A[bufferSizeSNR];
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
@@ -149,7 +152,7 @@ unsigned long accumulator(void) {
 	unsigned int pulseCount, sendCount = 0;
 	unsigned int pollCounter = 0;
 
-	// Only here temporarily
+	// Only here temporarily for debugging
 	if (debug) {
 		Serial.print(startTime);
 		Serial.print(" ");
@@ -185,11 +188,12 @@ unsigned long accumulator(void) {
 		}
 		// End Polling Logic
 
-		// Watch driver signals
+		// Begin signal monitoring logic
+		// TO-DO: Implement array of last 5 data points instead of just 1
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
 
-		// Only here temporarily
+		// Only here temporarily for debugging
 		if (debug) {
 			Serial.print("PeriodX: ");
 			Serial.print(periodX);

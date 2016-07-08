@@ -121,3 +121,18 @@ unsigned int getUser (unsigned char readData[]) {
 
 	return userID;
 }
+/*
+	TO-DO: convert above 2 functions to 1 function that takes in a generic data type and
+	performs those operations
+*/
+/*
+void getData (unsigned char readData[], void * asdf, unsigned int numBytes, unsigned int offset) {
+	int i = 0;
+
+	for (i = 0; i < numBytes; i++) {
+		asdf = (asdf << eightBits) ^ readData[i + offset];
+	}
+
+}
+
+*/

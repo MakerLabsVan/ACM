@@ -21,11 +21,6 @@ void connectWIFI(void) {
     WIFI.println(connectionMode);
     delay(waitforReadResponse);
 
-    /*WIFI.write("AT+CWJAP=\"MakerLabs\",\"ecordova\"\r\n");
-    while (!WIFI.find("WIFI GOT IP"));
-    Serial.write(messages.connectedIP);
-    while (!WIFI.find("OK"));*/
-
     // Allow multiple connections
     WIFI.println(connectionType);
     delay(waitforWriteResponse);
