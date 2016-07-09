@@ -72,6 +72,7 @@
 #define ledPin 13
 #define eightBits 8
 
+const bool reject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 

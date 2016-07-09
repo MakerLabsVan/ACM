@@ -30,7 +30,6 @@ void loop() {
 	// some constants
 	const int quota = 3600;
 	const int sendInterval = 15000;
-	const bool reject = true;
 	// some variables
 	bool responseFlag = false;
 	unsigned int userID = 0;
@@ -71,10 +70,10 @@ void loop() {
 			Serial.print(messages.notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota
-		else if (existingTime >= quota) {
+		/*else if (existingTime >= quota) {
 			soundFeedback(reject);
 			Serial.print(messages.quotaMet);
-		}
+		}*/
 		// User passed all checks and is able to use the machine
 		// ---------------------------------------------------------------------
 		else {
