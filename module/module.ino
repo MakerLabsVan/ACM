@@ -27,6 +27,10 @@ void setup() {
 }
 
 void loop() {
+	// some constants
+	const int quota = 3600;
+	const int sendInterval = 15000;
+	const bool reject = true;
 	// some variables
 	bool responseFlag = false;
 	unsigned int userID = 0;
@@ -88,7 +92,7 @@ void loop() {
 			Serial.print(userID);
 			Serial.print(messages.authorized);
 
-			// Get ready to record time
+			// Get ready to accumulate time
 			elapsedTime = accumulator();
 			Serial.print(messages.displayNewTime);
 			Serial.println(elapsedTime + existingTime);
@@ -103,7 +107,6 @@ void loop() {
 		if (!responseFlag) {
 			Serial.print(messages.errorRead);
 		}
-		// These statements runs if there is no error in writing
 		else {
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
@@ -144,6 +147,10 @@ void loop() {
 
 */
 unsigned long accumulator(void) {
+	// some constants
+	const int pollTimeout = 5;
+	const int pollInterval = 900;
+	const int minCount = 6;
 	// some variables used in this scope
 	unsigned char A[bufferSizeSNR];
 	unsigned long startTime = 0;
@@ -162,7 +169,7 @@ unsigned long accumulator(void) {
 	}
  
 	while (1) {
-		// Polling logic
+		// Polling logic (approximately every second)
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		// if card is missing, increment a counter
 		if (!getResponse(A)) {
@@ -246,14 +253,11 @@ unsigned long accumulator(void) {
 
 */
 bool inRange(unsigned long periodX, unsigned long periodY) {
-	unsigned long sum = periodX + periodY;
-	unsigned long maximumValue = 2 * upperBound;
-	// both are 0
-	if (sum == 0) {
-		return true;
-	}
-	// both sum to less than or equal to 12
-	else if (sum <= maximumValue) {
+	const int upperBound = 6;
+	unsigned int sum = periodX + periodY;
+	unsigned int maximumValue = 2 * upperBound;
+
+	if (sum <= maximumValue) {
 		return true;
 	}
 	else {

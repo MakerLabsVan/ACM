@@ -70,19 +70,10 @@
 #define speakerPin 8
 #define wifi_rst 9
 #define ledPin 13
+#define eightBits 8
 
-// Constants
-const int eightBits = 8;
-const int quota = 3600;
-const int pollTimeout = 5;
-const int pollInterval = 900;
-const int sendInterval = 15000;
-const int minCount = 6;
-const int lowerBound = 0;
-const int upperBound = 6;
-const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-const bool reject = true;
 const bool debug = true;
+const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const struct {
 	char * initialize;
@@ -102,12 +93,6 @@ const struct {
 	char * errorCommand;
 	char * cardUpdated;
 	char * sendingLog;
-	// WiFi messages
-	char * gotIP;
-	char * connectedIP;
-	char * OK;
-	char * dataBegin;
-	char * errorThingSpeakSend;
 } messages = {
 	"Initializing... ",
 	"Done.\n",
@@ -126,10 +111,4 @@ const struct {
 	"Unexpected command\n",
 	"Card updated. You may now remove it.\n\n"
 	"Sending... Time: "
-	// WiFi messages
-	"WIFI GOT IP",
-	"Connected. ",
-	"OK",
-	"+IPD"
-	"Error sending\n"
 };

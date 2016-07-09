@@ -7,7 +7,7 @@ void connectWIFI(void) {
     String connectionMode = "AT+CWMODE=1";
     String connectionType = "AT+CIPMUX=1";
 
-    // Reset Wi-Fi to initialize and connect to Wi-Fi
+    // Reset Wi-Fi module to initialize and connect to Wi-Fi
     digitalWrite(wifi_rst, LOW);
     delay(resetTime);
     digitalWrite(wifi_rst, HIGH);
@@ -17,7 +17,7 @@ void connectWIFI(void) {
     WIFI.println(checkAP);
     delay(waitforReadResponse);
 
-    // Disable access point
+    // Disable access point mode
     WIFI.println(connectionMode);
     delay(waitforReadResponse);
 
