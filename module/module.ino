@@ -168,7 +168,7 @@ unsigned long accumulator(void) {
 		// Polling logic (approximately every second)
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		// if card is missing, increment a counter
-		if (!getResponse(serialNumberk)) {
+		if (!getResponse(serialNumber)) {
 			pollCounter += 1;
 			// if the counter reaches a specified timeout, return
 			if (pollCounter == pollTimeout) {
