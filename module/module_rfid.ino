@@ -57,6 +57,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 			timeByte[i] = (time >> j) & MSB;
 			j -= eightBits;
 		}
+		
 		unsigned char CMD[] = { 0x00, DADD, writeLength, CMD_WRITE, authTypeA, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
 						classCheck, timeByte[0], timeByte[1], timeByte[2], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -136,5 +137,4 @@ void getData (unsigned char readData[], void * asdf, unsigned int numBytes, unsi
 	}
 
 }
-
 */
