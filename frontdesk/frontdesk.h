@@ -1,5 +1,8 @@
 #include "Arduino.h"
 
+#define monitorBaud 57600
+#define moduleBaud 9600
+
 // Pins that interface with RDM880
 #define RFID_RX	5
 #define RFID_TX 6

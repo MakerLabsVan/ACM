@@ -16,10 +16,12 @@ bool getResponse(unsigned char response[]) {
 	}
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK
-	if (response[statusOffset] == 0x00)
+	if (response[statusOffset] == 0x00) {
 		return true;
-	else
+	}
+	else {
 		return false;
+	}
 }
 /*
 	Constructs the packet for the chosen command. 0x00 denotes a blank space.

@@ -1,5 +1,8 @@
 #include "Arduino.h"
 
+#define monitorBaud 9600
+#define moduleBaud 9600
+
 // Pins that interface with RDM880 and ESP8266
 #define RFID_RX 5
 #define RFID_TX 6
@@ -72,7 +75,7 @@
 #define ledPin 13
 #define eightBits 8
 
-const bool reject = true;
+const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 

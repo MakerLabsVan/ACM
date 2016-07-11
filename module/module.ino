@@ -1,8 +1,6 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-#define monitorBaud 9600
-#define moduleBaud 9600
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
@@ -57,7 +55,7 @@ void loop() {
 	// ------------------------------------------------------------------------
 	// Analyze response packet and data
 	if (!responseFlag) {
-		soundFeedback(reject);
+		soundFeedback(isReject);
 		Serial.print(messages.readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
@@ -66,12 +64,12 @@ void loop() {
 		existingTime = getTime(readData);
 		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
-			soundFeedback(reject);
+			soundFeedback(isReject);
 			Serial.print(messages.notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota
 		/*else if (existingTime >= quota) {
-			soundFeedback(reject);
+			soundFeedback(isReject);
 			Serial.print(messages.quotaMet);
 		}*/
 		// User passed all checks and is able to use the machine
@@ -84,7 +82,7 @@ void loop() {
 			userID = getUser(readData);
 
 			// Sound and text feedback
-			soundFeedback(!reject);
+			soundFeedback(!isReject);
 			Serial.print(messages.displayUsedTime);
 			Serial.println(existingTime);
 			Serial.print(messages.user);
@@ -151,7 +149,7 @@ unsigned long accumulator(void) {
 	const int pollInterval = 900;
 	const int minCount = 6;
 	// some variables used in this scope
-	unsigned char A[bufferSizeSNR];
+	unsigned char serialBuffer[bufferSizeSNR];
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
@@ -171,11 +169,11 @@ unsigned long accumulator(void) {
 		// Polling logic (approximately every second)
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		// if card is missing, increment a counter
-		if (!getResponse(A)) {
+		if (!getResponse(serialBuffer)) {
 			pollCounter += 1;
 			// if the counter reaches a specified timeout, return
 			if (pollCounter == pollTimeout) {
-				soundFeedback(reject);
+				soundFeedback(isReject);
 				Serial.print(messages.cancel);
 				sendCount = (millis() - startTime)/1000;
 
@@ -264,8 +262,8 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 	}
 }
 
-void soundFeedback(bool reject) {
-	if (reject) {
+void soundFeedback(bool isReject) {
+	if (isReject) {
 		tone(speakerPin, rejectNote, rejectDuration);
 		delay(rejectInterval);
 		tone(speakerPin, rejectNote, rejectDuration);

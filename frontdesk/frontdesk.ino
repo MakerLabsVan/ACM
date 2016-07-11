@@ -1,9 +1,6 @@
 #include <SoftwareSerial.h>
 #include "frontdesk.h"
 
-#define monitorBaud 57600
-#define moduleBaud 9600
-
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 void setup() {
@@ -65,10 +62,12 @@ bool getResponse(unsigned char response[]) {
 	} Serial.println();
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK
-	if (response[statusOffset] == 0x00)
+	if (response[statusOffset] == 0x00) {
 		return true;
-	else
+	}
+	else {
 		return false;
+	}
 }
 /*
 	Constructs the packet for the chosen command. 0x00 denotes a blank space.
