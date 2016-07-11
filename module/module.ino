@@ -1,7 +1,6 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
@@ -29,7 +28,7 @@ void loop() {
 	const int quota = 3600;
 	const int sendInterval = 15000;
 	// some variables
-	bool responseFlag = false;
+	bool isValidResponse = false;
 	unsigned int userID = 0;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
@@ -38,23 +37,23 @@ void loop() {
 	// ----------------------------------------------------------------------
 	// Scan for RFID tags
 	Serial.print(messages.scan);
-	while (!responseFlag) {
+	while (!isValidResponse) {
 		// no payload, so pass NULL
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		delay(waitforSerialResponse);
-		responseFlag = getResponse(readData);
+		isValidResponse = getResponse(readData);
 	}
-	// -----------------------------------------------------------------------
+	// ----------------------------------------------------------------------
 	// RFID tag detected, read block that contains time data (for this machine)
 	// LED will turn on
 	Serial.print(messages.detected);
 	digitalWrite(ledPin, HIGH);
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
-	responseFlag = getResponse(readData);
-	// ------------------------------------------------------------------------
+	isValidResponse = getResponse(readData);
+	// -----------------------------------------------------------------------
 	// Analyze response packet and data
-	if (!responseFlag) {
+	if (!isValidResponse) {
 		soundFeedback(isReject);
 		Serial.print(messages.readUnsuccessful);
 	}
@@ -78,7 +77,7 @@ void loop() {
 			// Get user ID
 			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
 			delay(waitforReadResponse);
-			responseFlag = getResponse(readData);
+			isValidResponse = getResponse(readData);
 			userID = getUser(readData);
 
 			// Sound and text feedback
@@ -100,8 +99,8 @@ void loop() {
 	if (elapsedTime > 0) {
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, elapsedTime + existingTime);
 		delay(waitforWriteResponse);
-		responseFlag = getResponse(readData);
-		if (!responseFlag) {
+		isValidResponse = getResponse(readData);
+		if (!isValidResponse) {
 			Serial.print(messages.errorRead);
 		}
 		else {
@@ -175,7 +174,7 @@ unsigned long accumulator(void) {
 			if (pollCounter == pollTimeout) {
 				soundFeedback(isReject);
 				Serial.print(messages.cancel);
-				sendCount = (millis() - startTime)/1000;
+				sendCount = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
 				if (pulseCount > minCount) {
@@ -228,7 +227,7 @@ unsigned long accumulator(void) {
 				// check if the job was more than 5 seconds
 				if (pulseCount > minCount) {
 					// calculate elapsed time in seconds
-					return (millis() - startTime)/1000;
+					return calculateTime(startTime);
 				}
 				pulseCount = 0;
 			}
@@ -273,4 +272,8 @@ void soundFeedback(bool isReject) {
 	else {
 		tone(speakerPin, acceptNote, acceptDuration);
 	}
+}
+
+unsigned int calculateTime(unsigned int startTime) {
+	return (millis() - startTime)/1000;
 }
