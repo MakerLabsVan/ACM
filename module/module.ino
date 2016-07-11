@@ -107,7 +107,7 @@ void loop() {
 			Serial.print(messages.cardUpdated);
 			delay(timeToRemoveCard);
 		}
-		// -----------------------------------------------------------------
+		// --------------------------------------------------------------------
   		// Push to ThingSpeak
   		// Turn LED off
 		digitalWrite(ledPin, LOW);
@@ -120,7 +120,7 @@ void loop() {
 		}
 		updateThingSpeak(userID, elapsedTime);
 		lastSend = millis();
-		// -----------------------------------------------------------------
+		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
 		Serial.println(messages.done);
 	}
@@ -148,7 +148,7 @@ unsigned long accumulator(void) {
 	const int pollInterval = 900;
 	const int minCount = 6;
 	// some variables used in this scope
-	unsigned char serialBuffer[bufferSizeSNR];
+	unsigned char serialNumber[bufferSizeSNR];
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
@@ -168,7 +168,7 @@ unsigned long accumulator(void) {
 		// Polling logic (approximately every second)
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 		// if card is missing, increment a counter
-		if (!getResponse(serialBuffer)) {
+		if (!getResponse(serialNumberk)) {
 			pollCounter += 1;
 			// if the counter reaches a specified timeout, return
 			if (pollCounter == pollTimeout) {
