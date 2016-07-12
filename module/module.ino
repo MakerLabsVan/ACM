@@ -149,15 +149,17 @@ unsigned long accumulator(void) {
 	const int minCount = 6;
 	// some variables used in this scope
 	unsigned char serialNumber[bufferSizeSNR];
-	unsigned long startTime = 0;
+	unsigned long startTime, elapsedTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned int pulseCount, sendCount = 0;
+	unsigned int pulseCount = 0;
 	unsigned int pollCounter = 0;
+	int i = 0;
+	bool signals[sampleSize];
 
 	// Only here temporarily for debugging
 	if (debug) {
-		Serial.print(startTime); Serial.print(" "); Serial.print(sendCount); Serial.print(" "); Serial.println(pulseCount);
+		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" "); Serial.println(pulseCount);
 	}
  
 	while (1) {
@@ -170,11 +172,11 @@ unsigned long accumulator(void) {
 			if (pollCounter == pollTimeout) {
 				soundFeedback(isReject);
 				Serial.print(messages.cancel);
-				sendCount = calculateTime(startTime);
+				elapsedTime = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
 				if (pulseCount > minCount) {
-          			return sendCount;
+          			return elapsedTime;
 				}
 				else {
 					return 0;
@@ -194,14 +196,10 @@ unsigned long accumulator(void) {
 
 		// Only here temporarily for debugging
 		if (debug) {
-			Serial.print("PeriodX: ");
-			Serial.print(periodX);
-			Serial.print(" PeriodY: ");
-			Serial.print(periodY);
-			Serial.print(" Start Time: ");
-			Serial.print(startTime);
-			Serial.print(" Pulse Count: ");
-			Serial.println(pulseCount);
+			Serial.print("PeriodX: "); Serial.print(periodX); 
+			Serial.print(" PeriodY: "); Serial.print(periodY);
+			Serial.print(" Start Time: "); Serial.print(startTime);
+			Serial.print(" Pulse Count: "); Serial.println(pulseCount);
 		}
 
 		// if periodX and periodY IS a valid pair
@@ -232,8 +230,43 @@ unsigned long accumulator(void) {
 		// record the previous state
 		lastPeriodX = periodX;
 		lastPeriodY = periodY;
-    
+		signals[i] = inRange(periodX, periodY);
+		i++
+
+		if (i == sampleSize) {
+			i = 0;
+		}
 		delay(pollInterval);
+	}
+}
+/*
+	Checks the previous signals and counts the number of
+	valid and invalid signals recorded.
+
+	Returns 1 if all valid
+			0 if all invalid
+			-1 otherwise
+*/
+int checkHistory(bool signals[]) {
+	int i = 0;
+	int numValid, numInvalid = 0;
+	for (i = 0; i < sampleSize; i++) {
+		if (signals[i] == true) {
+			numValid += 1;
+		}
+		if (signals[i] == false) {
+			numInvalid += 1;
+		}
+	}
+
+	if (numValid == sampleSize) {
+		return flag.detectedJobStart;
+	}
+	else if (numInvalid == sampleSize) {
+		return flag.detectedJobEnd;
+	}
+	else {
+		return flag.idle;
 	}
 }
 /*
@@ -270,6 +303,6 @@ void soundFeedback(bool isReject) {
 	}
 }
 
-unsigned int calculateTime(unsigned int startTime) {
+unsigned long calculateTime(unsigned long startTime) {
 	return (millis() - startTime)/1000;
 }

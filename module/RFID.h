@@ -39,6 +39,7 @@
 #define blockID 0x01
 #define machineID 0x04
 #define userData 0x01
+#define sampleSize 3
 
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
@@ -116,3 +117,13 @@ const struct {
 	"Card updated. You may now remove it.\n\n"
 	"Sending... Time: "
 };
+
+const struct {
+	int detectedJobStart;
+	int detectedJobEnd;
+	int idle;
+} flag = {
+	1,
+	0,
+	-1
+}
