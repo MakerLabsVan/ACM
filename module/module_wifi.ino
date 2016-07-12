@@ -26,7 +26,7 @@ void connectWIFI(void) {
     delay(waitforWriteResponse);
 }
 
-void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
+void updateThingSpeak(unsigned char ID, unsigned int newTime, unsigned int existingTime) {
     // AT commands used in this scope
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
     String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
@@ -41,7 +41,9 @@ void updateThingSpeak(unsigned char ID, unsigned int timeLog) {
     getStr += "&field1=";
     getStr += ID;
     getStr += "&field2=";
-    getStr += timeLog;
+    getStr += newTime;
+    getStr += "&field3=";
+    getStr += existingTime;
     getStr += "\r\n\r\n";
     cmd += getStr.length();
     

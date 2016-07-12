@@ -118,7 +118,7 @@ void loop() {
 		if ( (millis() - lastSend) < sendInterval ) {
 			delay(sendInterval);
 		}
-		updateThingSpeak(userID, elapsedTime);
+		updateThingSpeak(userID, elapsedTime, existingTime);
 		lastSend = millis();
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
@@ -291,6 +291,12 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 		return false;
 	}
 }
+/*
+	Calculate time elapsed in seconds.
+*/
+unsigned long calculateTime(unsigned long startTime) {
+	return (millis() - startTime)/1000;
+}
 
 void soundFeedback(bool isReject) {
 	if (isReject) {
@@ -305,6 +311,3 @@ void soundFeedback(bool isReject) {
 	}
 }
 
-unsigned long calculateTime(unsigned long startTime) {
-	return (millis() - startTime)/1000;
-}
