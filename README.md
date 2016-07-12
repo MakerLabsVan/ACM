@@ -33,9 +33,9 @@ Top View (2 header pin on left)
 __ESP8266 Pinout__  
 Top View  
 
-1 | 2 | 3 | 4 
+GND | GPIO2 | GPIO0 | TX 
 --- | --- | --- | ---
-5 | 6 | 7 | 8
+RX | CE | RST | VIN
 
 
 # Wiring
