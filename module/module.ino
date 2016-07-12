@@ -157,11 +157,7 @@ unsigned long accumulator(void) {
 
 	// Only here temporarily for debugging
 	if (debug) {
-		Serial.print(startTime);
-		Serial.print(" ");
-		Serial.print(sendCount);
-		Serial.print(" ");
-		Serial.println(pulseCount);
+		Serial.print(startTime); Serial.print(" "); Serial.print(sendCount); Serial.print(" "); Serial.println(pulseCount);
 	}
  
 	while (1) {
