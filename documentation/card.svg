@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.6203867"
-     inkscape:cx="115.38706"
+     inkscape:cx="42.69452"
      inkscape:cy="42.671192"
      inkscape:document-units="in"
      inkscape:current-layer="layer1"
@@ -67,5 +67,31 @@
        d="M 6.6074219 0.57617188 C 3.265796 0.57617188 0.57617188 3.2658023 0.57617188 6.6074219 L 0.57617188 101.39258 C 0.57617188 104.73428 3.265796 107.42383 6.6074219 107.42383 L 154.72852 107.42383 C 157.73584 107.99942 160.96133 107.11875 163.29883 104.78125 L 206.81055 61.271484 C 210.5618 57.520228 210.5618 51.479772 206.81055 47.728516 L 163.29883 4.2167969 C 162.04175 2.9597192 160.52658 2.1352683 158.92773 1.7207031 C 157.93504 1.0027832 156.71667 0.57617187 155.39258 0.57617188 L 6.6074219 0.57617188 z M 185.27148 45 A 9.0000005 9.0000005 0 0 1 194.27148 54 A 9.0000005 9.0000005 0 0 1 185.27148 63 A 9.0000005 9.0000005 0 0 1 176.27148 54 A 9.0000005 9.0000005 0 0 1 185.27148 45 z "
        transform="translate(-1.525879e-5,944.36212)"
        id="rect3336-1" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-96.950989"
+       y="975.57477"
+       id="text3362"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3364"
+         x="-96.950989"
+         y="975.57477">NAME</tspan><tspan
+         sodipodi:role="line"
+         x="-96.950989"
+         y="1000.5748"
+         id="tspan3366" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.88071489px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-88.585899"
+       y="986.53058"
+       id="text3368"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3370"
+         x="-88.585899"
+         y="986.53058">MakerLabs</tspan></text>
   </g>
 </svg>
