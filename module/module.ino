@@ -231,7 +231,7 @@ unsigned long accumulator(void) {
 		lastPeriodX = periodX;
 		lastPeriodY = periodY;
 		signals[i] = inRange(periodX, periodY);
-		i++
+		i++;
 
 		if (i == sampleSize) {
 			i = 0;
