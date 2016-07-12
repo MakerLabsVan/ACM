@@ -190,7 +190,6 @@ unsigned long accumulator(void) {
 		// End Polling Logic
 
 		// Begin signal monitoring logic
-		// TO-DO: Implement array of last 5 data points instead of just 1
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
 
