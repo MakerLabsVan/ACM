@@ -108,7 +108,8 @@ unsigned long getTime (unsigned char readData[]) {
 	unsigned long existingTime = 0;
 
 	for (i = 0; i < numTimeBytes; i++) {
-		existingTime = (existingTime << eightBits) ^ readData[i + timeOffset];
+		existingTime <<= eightBits;
+		existingTime ^= readData[i + timeOffset];
 	}
 
 	return existingTime;
@@ -119,7 +120,8 @@ unsigned int getUser (unsigned char readData[]) {
 	unsigned int userID = 0;
 
 	for (i = 0; i < numUserBytes; i++) {
-		userID = (userID << eightBits) ^ readData[i + userOffset];
+		userID <<= eightBits;
+		userID ^= readData[i + userOffset];
 	}
 
 	return userID;
