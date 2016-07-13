@@ -146,7 +146,7 @@ unsigned long accumulator(void) {
 	// some constants
 	const int pollTimeout = 5;
 	const int pollInterval = 900;
-	const int minCount = 6;
+	const int minCount = 5;
 	// some variables used in this scope
 	unsigned char serialNumber[bufferSizeSNR];
 	unsigned long startTime, elapsedTime = 0;
@@ -174,7 +174,7 @@ unsigned long accumulator(void) {
 				elapsedTime = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
-				if (startTime > 0) {
+				if (startTime > 0 && elapsedTime > minCount) {
           			return elapsedTime;
 				}
 				else {
@@ -236,7 +236,7 @@ unsigned long accumulator(void) {
 			// check if enough negative signals have been detected
 			if (checkHistory(signals) == flag.detectedJobEnd) {
 				elapsedTime = calculateTime(startTime);
-				if (startTime > 0) {
+				if (startTime > 0 && elapsedTime > minCount) {
 					return elapsedTime;
 				}
 				else {
