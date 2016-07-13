@@ -151,9 +151,8 @@ unsigned long accumulator(void) {
 	unsigned char serialNumber[bufferSizeSNR];
 	unsigned long startTime, elapsedTime = 0;
 	unsigned int periodX, periodY;
-	unsigned int lastPeriodX, lastPeriodY; 
-	unsigned int pulseCount = 0;
-	unsigned int pollCounter = 0;
+	//unsigned int lastPeriodX, lastPeriodY; 
+	unsigned int pulseCount, pollCounter = 0;
 	int i = 0;
 	bool signals[sampleSize];
 
@@ -281,8 +280,13 @@ int checkHistory(bool signals[]) {
 	}
 	//delay(1);
   	//Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(" ");
-	Serial.print(numValid); Serial.print(numInvalid); 
-	Serial.print(" "); 
+	if (debug) {
+		Serial.print(numValid); Serial.print(numInvalid); 
+		Serial.print(" ");
+	}
+	else {
+		delay(1);
+	}
 	
 	if (numValid == sampleSize) {
 		return flag.detectedJobStart;
