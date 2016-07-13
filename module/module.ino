@@ -155,7 +155,7 @@ unsigned long accumulator(void) {
 	unsigned int pulseCount = 0;
 	unsigned int pollCounter = 0;
 	int i = 0;
-	bool signals[] = {0,0,0};
+	bool signals[sampleSize];
 
 	// Only here temporarily for debugging
 	if (debug) {
@@ -278,7 +278,7 @@ int checkHistory(bool signals[]) {
 			numInvalid += 1;
 		}
 	}
-  //Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(" ");
+  	//Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(" ");
 	Serial.print(numValid); Serial.print(numInvalid); 
 	Serial.print(" ");
   	//delay(1);
