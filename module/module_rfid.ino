@@ -95,11 +95,13 @@ void sendToRFID(unsigned char CMD[], int size) {
 
 	Param: readData - array containing all bytes read from card
 
-	Function: Time is encoded as three 1 byte chunks 0xAA 0xBB 0xCC.
-			  existingTime is one 4 byte chunk 0x00000000
+	Function: Time is encoded as three 1 byte values 0xAA 0xBB 0xCC.
+			  existingTime is one 4 byte value 0x00000000
 			  This function XORs the most significant byte with each time byte,
 			  and left shifts it 1 byte size every iteration.
-			  First iteration: 0x000000AA, Second iteration: 0x0000AABB, etc.
+			  First iteration: 0x00 00 00 AA
+			  Second iteration: 0x00 00 AA BB
+			  Third iteration: 0x00 AA BB CC
 
 	Returns: existing time from card
 */
@@ -126,17 +128,3 @@ unsigned int getUser (unsigned char readData[]) {
 
 	return userID;
 }
-/*
-	TO-DO: convert above 2 functions to 1 function that takes in a generic data type and
-	performs those operations
-*/
-/*
-void getData (unsigned char readData[], void * asdf, unsigned int numBytes, unsigned int offset) {
-	int i = 0;
-
-	for (i = 0; i < numBytes; i++) {
-		asdf = (asdf << eightBits) ^ readData[i + offset];
-	}
-
-}
-*/

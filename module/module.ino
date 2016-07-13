@@ -58,8 +58,8 @@ void loop() {
 		Serial.print(messages.readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
-	// Get the existing time
 	else {
+		// Get the existing time
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
