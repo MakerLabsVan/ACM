@@ -205,26 +205,45 @@ unsigned long accumulator(void) {
 
 		// if periodX and periodY IS a valid pair
 		if ( inRange(periodX, periodY) ) {
-			// tracking number of valid pulses
-			pulseCount += 1;
 			// check for new ON signal aka rising edge
 			// so, if lastPeriodX and lastPeriodY WAS NOT a valid pair,
 			// begin accumulating time
-			if ( !inRange(lastPeriodX, lastPeriodY) ) {
+			/*if ( !inRange(lastPeriodX, lastPeriodY) ) {
 				startTime = millis();
+			}
+			// tracking number of valid pulses
+			pulseCount += 1;*/
+
+			if (checkHistory(signals) == flag.detectedJobStart) {
+				if (startTime == 0) {
+					startTime = millis();
+				}
 			}
 		}
 		// if periodX and periodY IS NOT a valid pair
 		if ( !inRange(periodX, periodY) ) {
 			// check for new OFF signal aka falling edge
 			// so, if lastPeriodX and lastPeriodY WAS a valid pair
-			if ( inRange(lastPeriodX, lastPeriodY) ) {
+			/*if ( inRange(lastPeriodX, lastPeriodY) ) {
 				// check if the job was more than 5 seconds
 				if (pulseCount > minCount) {
 					// calculate elapsed time in seconds
 					return calculateTime(startTime);
 				}
 				pulseCount = 0;
+			}*/
+
+			// check if enough negative signals have been detected
+			if (checkHistory(signals) == flag.detectedJobEnd) {
+				elapsedTime = calculateTime(startTime);
+				if (startTime > 0) {
+					return elapsedTime;
+				}
+				else {
+					startTime = 0;
+					elapsedTime = 0;
+					pulseCount = 0;
+				}
 			}
 		}
 
