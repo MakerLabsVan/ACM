@@ -280,7 +280,7 @@ int checkHistory(bool signals[]) {
 	}
   //Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(" ");
 	Serial.print(numValid); Serial.print(numInvalid); 
-	//Serial.print(" ");
+	Serial.print(" ");
   	//delay(1);
 	
 	if (numValid == sampleSize) {
