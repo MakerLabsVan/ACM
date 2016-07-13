@@ -304,7 +304,7 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned int sum = periodX + periodY;
 	unsigned int maximumValue = 2 * upperBound;
 
-	if (sum <= maximumValue) {
+	if ( 0 < sum && sum <= maximumValue) {
 		return true;
 	}
 	else {
