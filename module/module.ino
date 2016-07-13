@@ -302,7 +302,7 @@ int checkHistory(bool signals[]) {
 }
 /*
 	Determines if the driver signals are valid. During a job,
-	the half-period of a pulse is either 0, 5 or 6 microseconds.
+	the period of a pulse is either 0, 5 or 6 microseconds.
 	There are slight deviations at times, so summing the values together
 	and using the maximum possible sum as a check is a reliable way to
 	determine if a signal is valid.
