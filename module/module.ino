@@ -60,7 +60,7 @@ void loop() {
 	// These statements run if a valid RFID tag is detected
 	// Get the existing time
 	else {
-		existingTime = getTime(readData);
+		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
 			soundFeedback(isReject);
@@ -78,7 +78,7 @@ void loop() {
 			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
 			delay(waitforReadResponse);
 			isValidResponse = getResponse(readData);
-			userID = getUser(readData);
+			userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 
 			// Sound and text feedback
 			soundFeedback(!isReject);

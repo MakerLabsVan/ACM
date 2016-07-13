@@ -103,13 +103,13 @@ void sendToRFID(unsigned char CMD[], int size) {
 
 	Returns: existing time from card
 */
-unsigned long getTime (unsigned char readData[]) {
+unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned int offset) {
 	int i = 0;
 	unsigned long existingTime = 0;
 
-	for (i = 0; i < numTimeBytes; i++) {
+	for (i = 0; i < numBytes; i++) {
 		existingTime <<= eightBits;
-		existingTime ^= readData[i + timeOffset];
+		existingTime ^= readData[i + offset];
 	}
 
 	return existingTime;
