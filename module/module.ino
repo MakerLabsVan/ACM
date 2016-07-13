@@ -278,10 +278,10 @@ int checkHistory(bool signals[]) {
 			numInvalid += 1;
 		}
 	}
+	//delay(1);
   	//Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(" ");
 	Serial.print(numValid); Serial.print(numInvalid); 
-	Serial.print(" ");
-  	//delay(1);
+	Serial.print(" "); 
 	
 	if (numValid == sampleSize) {
 		return flag.detectedJobStart;
