@@ -175,7 +175,7 @@ unsigned long accumulator(void) {
 				elapsedTime = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
-				if (pulseCount > minCount) {
+				if (startTime > 0) {
           			return elapsedTime;
 				}
 				else {
@@ -218,6 +218,7 @@ unsigned long accumulator(void) {
 				if (startTime == 0) {
 					startTime = millis();
 				}
+				pulseCount += 1;
 			}
 		}
 		// if periodX and periodY IS NOT a valid pair
@@ -248,8 +249,8 @@ unsigned long accumulator(void) {
 		}
 
 		// record the previous state
-		lastPeriodX = periodX;
-		lastPeriodY = periodY;
+		//lastPeriodX = periodX;
+		//lastPeriodY = periodY;
 		signals[i] = inRange(periodX, periodY);
 		i++;
 
