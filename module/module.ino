@@ -135,7 +135,7 @@ void loop() {
 /*
 	This function monitors the motor driver signals on the laser cutter.
 	The signals are PWMs of a specific frequency. This function measures the
-	half-period of any signal detected and accumulates time when valid signals
+	period of any signal detected and accumulates time when valid signals
 	are detected. A polling subroutine continuously checks if an RFID tag is 
 	still present.
 	
@@ -146,7 +146,7 @@ unsigned long accumulator(void) {
 	// some constants
 	const int pollTimeout = 5;
 	const int pollInterval = 900;
-	const int minCount = 5;
+	const int freeTime = 5;
 	// some variables used in this scope
 	unsigned char serialNumber[bufferSizeSNR];
 	unsigned long startTime, elapsedTime = 0;
@@ -174,7 +174,7 @@ unsigned long accumulator(void) {
 				elapsedTime = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
-				if (startTime > 0 && elapsedTime > minCount) {
+				if (startTime > 0 && elapsedTime > freeTime) {
           			return elapsedTime;
 				}
 				else {
@@ -226,7 +226,7 @@ unsigned long accumulator(void) {
 			// so, if lastPeriodX and lastPeriodY WAS a valid pair
 			/*if ( inRange(lastPeriodX, lastPeriodY) ) {
 				// check if the job was more than 5 seconds
-				if (pulseCount > minCount) {
+				if (pulseCount > freeTime) {
 					// calculate elapsed time in seconds
 					return calculateTime(startTime);
 				}
@@ -236,7 +236,9 @@ unsigned long accumulator(void) {
 			// check if enough negative signals have been detected
 			if (checkHistory(signals) == flag.detectedJobEnd) {
 				elapsedTime = calculateTime(startTime);
-				if (startTime > 0 && elapsedTime > minCount) {
+
+				// check if a job was detected
+				if (startTime > 0 && elapsedTime > freeTime) {
 					return elapsedTime;
 				}
 				else {
