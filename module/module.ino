@@ -155,7 +155,7 @@ unsigned long accumulator(void) {
 	unsigned int pulseCount = 0;
 	unsigned int pollCounter = 0;
 	int i = 0;
-	bool signals[sampleSize];
+	bool signals[] = {0,0,0};
 
 	// Only here temporarily for debugging
 	if (debug) {
