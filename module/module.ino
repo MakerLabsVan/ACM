@@ -198,7 +198,7 @@ unsigned long accumulator(void) {
 			Serial.print("PeriodX: "); Serial.print(periodX); 
 			Serial.print(" PeriodY: "); Serial.print(periodY);
 			Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]);
-			Serial.print(" "); Serial.print(checkHistory(signals));
+			Serial.print(" "); Serial.print(numValid); Serial.print(numInvalid); Serial.print(" "); Serial.print(checkHistory(signals));
 			Serial.print(" Start Time: "); Serial.print(startTime);
 			Serial.print(" Pulse Count: "); Serial.println(pulseCount);
 		}
