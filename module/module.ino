@@ -217,10 +217,11 @@ unsigned long accumulator(void) {
 		// if periodX and periodY IS NOT a valid pair
 		if ( !inRange(periodX, periodY) ) {
 			// check if enough negative signals have been detected
+			// calculate elapsed time
 			if (checkHistory(signals) == flag.detectedJobEnd) {
 				elapsedTime = calculateTime(startTime);
 
-				// check if a job was detected and return the time
+				// if a job was detected, return
 				if (startTime > 0 && elapsedTime > freeTime) {
 					return elapsedTime;
 				}
@@ -263,12 +264,9 @@ int checkHistory(bool signals[]) {
 	}
 	
 	if (debug) {
-		Serial.print(numValid); Serial.print(numInvalid); 
-		Serial.print(" ");
+		Serial.print(numValid); Serial.print(numInvalid); Serial.print(" ");
 	}
-	else {
-		delay(debounce);
-	}
+	//delay(debounce);
 	
 	if (numValid == sampleSize) {
 		return flag.detectedJobStart;
@@ -286,7 +284,6 @@ int checkHistory(bool signals[]) {
 	There are slight deviations at times, so summing the values together
 	and using the maximum possible sum as a check is a reliable way to
 	determine if a signal is valid.
-
 */
 bool inRange(unsigned long periodX, unsigned long periodY) {
 	const int upperBound = 6;
@@ -300,14 +297,15 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 		return false;
 	}
 }
-
 /*
 	Calculate time elapsed in seconds.
 */
 unsigned long calculateTime(unsigned long startTime) {
 	return (millis() - startTime)/1000;
 }
-
+/*
+	This will play 3 rapid notes or 1 long note.
+*/
 void soundFeedback(bool isReject) {
 	if (isReject) {
 		tone(speakerPin, rejectNote, rejectDuration);
