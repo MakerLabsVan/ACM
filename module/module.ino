@@ -157,10 +157,9 @@ unsigned long accumulator(void) {
 	bool signals[sampleSize];
 
 	// Only here temporarily for debugging
-	/*if (debug) {
+	if (debug) {
 		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" "); Serial.println(pulseCount);
-	}*/
-	delay(debounce);
+	}
  
 	while (1) {
 		// Polling logic (approximately every second)
