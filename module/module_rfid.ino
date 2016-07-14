@@ -117,7 +117,7 @@ unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned
 	return existingTime;
 }
 
-unsigned int getUser (unsigned char readData[]) {
+/*unsigned int getUser (unsigned char readData[]) {
 	int i = 0;
 	unsigned int userID = 0;
 
@@ -127,4 +127,4 @@ unsigned int getUser (unsigned char readData[]) {
 	}
 
 	return userID;
-}
+}*/

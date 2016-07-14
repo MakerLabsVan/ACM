@@ -320,6 +320,7 @@ bool inRange(unsigned long periodX, unsigned long periodY) {
 		return false;
 	}
 }
+
 /*
 	Calculate time elapsed in seconds.
 */
