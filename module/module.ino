@@ -157,9 +157,10 @@ unsigned long accumulator(void) {
 	bool signals[sampleSize];
 
 	// Only here temporarily for debugging
-	if (debug) {
+	/*if (debug) {
 		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" "); Serial.println(pulseCount);
-	}
+	}*/
+	delay(debounce);
  
 	while (1) {
 		// Polling logic (approximately every second)
@@ -204,40 +205,23 @@ unsigned long accumulator(void) {
 
 		// if periodX and periodY IS a valid pair
 		if ( inRange(periodX, periodY) ) {
-			// check for new ON signal aka rising edge
-			// so, if lastPeriodX and lastPeriodY WAS NOT a valid pair,
-			// begin accumulating time
-			/*if ( !inRange(lastPeriodX, lastPeriodY) ) {
-				startTime = millis();
-			}
-			// tracking number of valid pulses
-			pulseCount += 1;*/
-
+			// a job is detected when we get 3 valid signals in a row
+			// begin stopwatch
 			if (checkHistory(signals) == flag.detectedJobStart) {
 				if (startTime == 0) {
 					startTime = millis();
 				}
+				// track number of valid pulses (after job start)
 				pulseCount += 1;
 			}
 		}
 		// if periodX and periodY IS NOT a valid pair
 		if ( !inRange(periodX, periodY) ) {
-			// check for new OFF signal aka falling edge
-			// so, if lastPeriodX and lastPeriodY WAS a valid pair
-			/*if ( inRange(lastPeriodX, lastPeriodY) ) {
-				// check if the job was more than 5 seconds
-				if (pulseCount > freeTime) {
-					// calculate elapsed time in seconds
-					return calculateTime(startTime);
-				}
-				pulseCount = 0;
-			}*/
-
 			// check if enough negative signals have been detected
 			if (checkHistory(signals) == flag.detectedJobEnd) {
 				elapsedTime = calculateTime(startTime);
 
-				// check if a job was detected
+				// check if a job was detected and return the time
 				if (startTime > 0 && elapsedTime > freeTime) {
 					return elapsedTime;
 				}
@@ -250,8 +234,6 @@ unsigned long accumulator(void) {
 		}
 
 		// record the previous state
-		//lastPeriodX = periodX;
-		//lastPeriodY = periodY;
 		signals[i] = inRange(periodX, periodY);
 		i++;
 
@@ -280,14 +262,13 @@ int checkHistory(bool signals[]) {
 			numInvalid += 1;
 		}
 	}
-	//delay(1);
-  	//Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(" ");
+	
 	if (debug) {
 		Serial.print(numValid); Serial.print(numInvalid); 
 		Serial.print(" ");
 	}
 	else {
-		delay(1);
+		delay(debounce);
 	}
 	
 	if (numValid == sampleSize) {

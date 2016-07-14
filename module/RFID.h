@@ -41,6 +41,7 @@
 #define userData 0x01
 #define sampleSize 3
 
+// Delays (RFID)
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
 #define waitforWriteResponse 250
@@ -49,12 +50,14 @@
 #define timeToRemoveCard 500
 #define scanInterval 1500
 
+// Speaker
 #define rejectNote 123
 #define rejectDuration 250
 #define rejectInterval 300
 #define acceptNote 440
 #define acceptDuration 500
 
+// Related to RFID Data
 #define statusOffset 3
 #define numTimeBytes 3
 #define numUserBytes 2
@@ -62,6 +65,7 @@
 #define timeOffset 9
 #define userOffset 8
 
+// Delays (WiFi)
 #define resetTime 501
 #define waitForIP 5000
 #define waitForFlush 1000
@@ -69,6 +73,7 @@
 #define waitForGET 2000
 #define waitForGETResponse 5000
 
+// Pins
 #define driverX 4
 #define driverY 7
 #define speakerPin 8
