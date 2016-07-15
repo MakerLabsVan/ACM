@@ -72,7 +72,7 @@ void loop() {
 			Serial.print(messages.quotaMet);
 		}*/
 		// User passed all checks and is able to use the machine
-		// ---------------------------------------------------------------------
+		// --------------------------------------------------------------------
 		else {
 			// Get user ID
 			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
