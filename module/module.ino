@@ -15,8 +15,8 @@ void setup() {
 	// Set up serial communication
 	Serial.begin(monitorBaud);
 	Serial.print(messages.initialize);
-	WIFI.begin(moduleBaud);
-	connectWIFI();
+	//WIFI.begin(moduleBaud);
+	//connectWIFI();
 
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
@@ -113,7 +113,8 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		Serial.print(messages.sendingLog);
 		Serial.println(elapsedTime);
-		WIFI.listen();
+		//WIFI.listen();
+		Ciao.begin();
 		// Make sure logs are properly spaced out according to ThingSpeak policy
 		if ( (millis() - lastSend) < sendInterval ) {
 			delay(sendInterval);
