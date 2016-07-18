@@ -1,15 +1,16 @@
 #include <SoftwareSerial.h>
+#include <Ciao.h>
 #include "RFID.h"
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
-SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
+//SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 void setup() {
 	// Set up pins
 	pinMode(ledPin, OUTPUT);
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
-	pinMode(wifi_rst, OUTPUT);
+	//pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
 
 	// Set up serial communication

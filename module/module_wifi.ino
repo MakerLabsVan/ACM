@@ -1,7 +1,7 @@
 /*
     All Wi-Fi related functions
 */
-void connectWIFI(void) {
+/*void connectWIFI(void) {
     // AT commands used in this scope
     String checkAP = "AT+CWJAP?";
     String connectionMode = "AT+CWMODE=1";
@@ -53,9 +53,10 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
 
     WIFI.println(getStr);
     delay(waitForGETResponse);    
-}
+}*/
 
 void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
+    String writeKey = "CSV1YP0YIE2STS0Z";
     // construct the request to ThingSpeak
     String getStr = "/update?api_key=";
     getStr += writeKey;
