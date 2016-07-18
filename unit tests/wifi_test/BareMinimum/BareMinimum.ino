@@ -10,10 +10,7 @@
 */
 
 void setup() {
-	pinMode(9, OUTPUT);
-  digitalWrite(9, LOW);
-  delay(500);
-  digitalWrite(9, HIGH);
+
 }
 
 void loop() {
