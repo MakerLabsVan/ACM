@@ -151,7 +151,6 @@ unsigned long accumulator(void) {
 	unsigned char serialNumber[bufferSizeSNR];
 	unsigned long startTime, elapsedTime = 0;
 	unsigned int periodX, periodY;
-	//unsigned int lastPeriodX, lastPeriodY; 
 	unsigned int pulseCount, pollCounter = 0;
 	int i = 0;
 	bool signals[sampleSize];
