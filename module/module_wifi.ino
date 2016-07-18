@@ -67,7 +67,7 @@ void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long ex
     getStr += "&field3=";
     getStr += existingTime;
 
-    CiaoData data = Ciao.write(connectorType, server, getStr);
+    CiaoData data = Ciao.write("rest", "api.thingspeak.com", getStr);
     /*if (!data.isEmpty()){
       Ciao.println( "State: " + String (data.get(1)) );
       Ciao.println( "Response: " + String (data.get(2)) );

@@ -1,3 +1,4 @@
+#include <avr/pgmspace.h>
 #include "Arduino.h"
 
 #define monitorBaud 9600
@@ -81,10 +82,6 @@
 #define ledPin 13
 #define eightBits 8
 
-// For integrated WiFi Arduino
-#define connectorType "rest"
-#define server "api.thingspeak.com"
-
 const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
@@ -136,3 +133,23 @@ const struct {
 	0,
 	-1
 };
+
+/*const char message[] PROGMEM = {
+	"Initializing... ",
+	"Done.\n",
+	"Scanning...\n",
+	"Card detected.\n",
+	"Read unsuccessful. Please try again.\n",
+	"You are not authorized to use this machine.\n\n",
+	"You have reached your quota for this month.\n\n",
+	"Time used this month: ",
+	"User ",
+	" authenticated. Machine is ready to fire. Please do not remove your card.\n",
+	"Card not detected. Operation cancelled.\n",
+	"Elapsed time: ",
+	"Total time used this month: ",
+	"Unexpected result\n",
+	"Unexpected command\n",
+	"Card updated. You may now remove it.\n\n"
+	"Sending... Time: "
+}*/
