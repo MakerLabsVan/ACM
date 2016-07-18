@@ -7,7 +7,7 @@ In the new channel you need to add two fields. The first one refers to the humid
 After that, replace the "XXXXXXXXX" value of APIKEY_THINGSPEAK with "Write API key" value reported in the API Keys section of the channel. 
  
 */
-#include <Wire.h>
+//#include <Wire.h>
 #include <Ciao.h>
  
 #define CONNECTOR     "rest" 
@@ -15,7 +15,7 @@ After that, replace the "XXXXXXXXX" value of APIKEY_THINGSPEAK with "Write API k
  
 #define APIKEY_THINGSPEAK  "HWX6PI5X7NE99VPA" //Insert your API Key 
  
-short hum = 69;
+short hum = 90;
  
 void setup() {
  
