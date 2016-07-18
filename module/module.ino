@@ -119,7 +119,8 @@ void loop() {
 		if ( (millis() - lastSend) < sendInterval ) {
 			delay(sendInterval);
 		}
-		updateThingSpeak(userID, elapsedTime, existingTime);
+		//updateThingSpeak(userID, elapsedTime, existingTime);
+		updateThingSpeak2(userID, elapsedTime, existingTime);
 		lastSend = millis();
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
