@@ -29,6 +29,7 @@ void connectWIFI(void) {
 void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
     // AT commands used in this scope
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
+    String writeKey = "CSV1YP0YIE2STS0Z";
     String getStr = "GET /update?key=";
     String cmd = "AT+CIPSEND=0,";
 

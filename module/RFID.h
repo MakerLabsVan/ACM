@@ -81,12 +81,6 @@
 #define ledPin 13
 #define eightBits 8
 
-// For integrated WiFi Arduino
-#define connectorType "rest"
-#define server "api.thingspeak.com"
-
-String writeKey = "CSV1YP0YIE2STS0Z";
-
 const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
