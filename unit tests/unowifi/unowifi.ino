@@ -6,14 +6,17 @@
 #define APIKEY_THINGSPEAK  "4TEG18U9EAH12FJE" 
  
 void setup() {
-  pinMode(4, INPUT);
-  pinMode(7, INPUT);
-  Ciao.begin(); // CIAO INIT
+    pinMode(4, INPUT);
+    pinMode(7, INPUT);
+    Serial.begin(115200);
+    Ciao.begin(); // CIAO INIT
 }
  
 void loop() {
     unsigned int driverX = pulseIn(4, HIGH);
     unsigned int driverY = pulseIn(7, HIGH);
+    Serial.print("periodX: "); Serial.print(driverX);
+    Serial.print(" periodY: "); Serial.println(driverY);
 
     String uri = "/update?api_key=";
     uri += APIKEY_THINGSPEAK;
