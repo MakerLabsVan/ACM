@@ -138,3 +138,21 @@ const struct {
 	0,
 	-1
 };
+
+const char initialize[] = "Initializing... ";
+const char done[] = "Done.\n";
+const char scan[] = "Scanning...\n";
+const char detected[] = "Card detected.\n";
+const char readUnsuccessful[] = "Read unsuccessful. Please try again.\n";
+const char notAuthorized[] = "You are not authorized to use this machien.\n\n";
+const char quotaMet[] = "You have reached your quota for this month.\n\n";
+const char displayUsedTime[] = "Time used this month: ";
+const char user[] = "User ";
+const char authorized[] = " authenticated. Machine is ready to fire. Please do not remove your card.\n";
+const char cancel[] = "Card not detected. Operation cancelled.\n";
+const char accumulatedTime[] = "Elapsed time: ";
+const char displayNewTime[] = "Total time used this month: ";
+const char errorRead[] = "Unexpected result\n";
+const char errorCommand[] = "Unexpected command\n";
+const char cardUpdated[] = "Card updated. You may now remove it.\n\n";
+const char sendingLog[] = "Sending Time: ";
