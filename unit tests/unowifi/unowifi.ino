@@ -37,5 +37,5 @@ void loop() {
       Ciao.println("Write Error");
     }    
  
-  delay(30000); // Thinkspeak policy
+  delay(15000); // Thinkspeak policy
 }
