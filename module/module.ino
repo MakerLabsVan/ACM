@@ -14,8 +14,7 @@ void setup() {
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[initialize]) ));
-	Serial.print(stringBuffer);
+	getStringFromMem(initialize);
 	WIFI.begin(moduleBaud);
 	connectWIFI();
 
@@ -333,3 +332,8 @@ void soundFeedback(bool isReject) {
 	}
 }
 
+void getStringFromMem(int index) {
+	char stringBuffer[stringSize];
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index]) ));
+	Serial.print(stringBuffer);
+}
