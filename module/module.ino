@@ -11,6 +11,7 @@ void setup() {
 	pinMode(driverY, INPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
+  pinMode(A5, OUTPUT);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
@@ -35,6 +36,7 @@ void loop() {
 	unsigned char readData[bufferSize];
 	unsigned long lastSend = millis();
 	digitalWrite(ledPin, LOW);
+  digitalWrite(A5, LOW);
 	// ----------------------------------------------------------------------
 	// Scan for RFID tags
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[scan]) ));
@@ -97,6 +99,7 @@ void loop() {
 			Serial.print(stringBuffer);
 
 			// Get ready to accumulate time
+      digitalWrite(A5, HIGH);
 			elapsedTime = accumulator();
 			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[displayNewTime]) ));
 			Serial.print(stringBuffer);
