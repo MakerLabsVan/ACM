@@ -35,7 +35,7 @@ void loop() {
     periodX = pulseIn(4, HIGH);
     periodY = pulseIn(7, HIGH);
 
-    Serial.print(periodX); Serial.print(" "); Serial.println(periodY); 
+    Serial.print(periodX); Serial.print(" "); Serial.print(periodY); Serial.print(" "); 
     Serial.print(analogRead(A0)); Serial.print(" "); Serial.println(analogRead(A5));
     
     if ( (millis() - lastSend) < sendInterval) {
