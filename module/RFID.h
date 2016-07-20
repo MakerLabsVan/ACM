@@ -1,3 +1,4 @@
+#include <avr/pgmspace.h>
 #include "Arduino.h"
 
 #define monitorBaud 9600
@@ -81,11 +82,36 @@
 #define ledPin 13
 #define eightBits 8
 
+<<<<<<< HEAD
+=======
+// String related
+#define stringSize 80
+#define initialize 0
+#define done 1
+#define scan 2
+#define detected 3
+#define readUnsuccessful 4
+#define notAuthorized 5
+#define quotaMet 6
+#define displayUsedTime 7
+#define user 8
+#define authorized 9
+#define cancel 10
+#define accumulatedTime 11
+#define displayNewTime 12
+#define errorRead 13
+#define errorCommand 14
+#define cardUpdated 15
+#define sendingLog 16
+
+char stringBuffer[stringSize];
+
+>>>>>>> version-3.1.1
 const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
-const struct {
+/*const struct {
 	char * initialize;
 	char * done;
 	char * scan;
@@ -121,7 +147,7 @@ const struct {
 	"Unexpected command\n",
 	"Card updated. You may now remove it.\n\n"
 	"Sending... Time: "
-};
+};*/
 
 const struct {
 	int detectedJobStart;
@@ -131,4 +157,45 @@ const struct {
 	1,
 	0,
 	-1
+<<<<<<< HEAD
+=======
+};
+
+const char string0[] PROGMEM = "Initializing... ";
+const char string1[] PROGMEM = "Done.\n";
+const char string2[] PROGMEM = "Scanning...\n";
+const char string3[] PROGMEM = "Card detected.\n";
+const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
+const char string5[] PROGMEM = "You are not authorized to use this machien.\n\n";
+const char string6[] PROGMEM = "You have reached your quota for this month.\n\n";
+const char string7[] PROGMEM = "Time used this month: ";
+const char string8[] PROGMEM = "User ";
+const char string9[] PROGMEM = " authenticated. Machine is ready to fire. Please do not remove your card.\n";
+const char string10[] PROGMEM = "Card not detected. Operation cancelled.\n";
+const char string11[] PROGMEM = "Elapsed time: ";
+const char string12[] PROGMEM = "Total time used this month: ";
+const char string13[] PROGMEM = "Unexpected result\n";
+const char string14[] PROGMEM = "Unexpected command\n";
+const char string15[] PROGMEM = "Card updated. You may now remove it.\n\n";
+const char string16[] PROGMEM = "Sending Time: ";
+
+const char * const message[] PROGMEM = {
+	string0,
+	string1,
+	string2,
+	string3,
+	string4,
+	string5,
+	string6,
+	string7,
+	string8,
+	string9,
+	string10,
+	string11,
+	string12,
+	string13,
+	string14,
+	string15,
+	string16
+>>>>>>> version-3.1.1
 };

@@ -14,13 +14,15 @@ void setup() {
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
-	Serial.print(messages.initialize);
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[initialize]) ));
+	Serial.print(stringBuffer);
 	WIFI.begin(moduleBaud);
 	connectWIFI();
 
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
-	Serial.print(messages.done);
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[done]) ));
+	Serial.print(stringBuffer);
 }
 
 void loop() {
@@ -36,7 +38,8 @@ void loop() {
 	digitalWrite(ledPin, LOW);
 	// ----------------------------------------------------------------------
 	// Scan for RFID tags
-	Serial.print(messages.scan);
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[scan]) ));
+	Serial.print(stringBuffer);
 	while (!isValidResponse) {
 		// no payload, so pass NULL
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
@@ -46,7 +49,8 @@ void loop() {
 	// ----------------------------------------------------------------------
 	// RFID tag detected, read block that contains time data (for this machine)
 	// LED will turn on
-	Serial.print(messages.detected);
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[detected]) ));
+	Serial.print(stringBuffer);
 	digitalWrite(ledPin, HIGH);
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
@@ -55,7 +59,8 @@ void loop() {
 	// Analyze response packet and data
 	if (!isValidResponse) {
 		soundFeedback(isReject);
-		Serial.print(messages.readUnsuccessful);
+		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[readUnsuccessful]) ));
+		Serial.print(stringBuffer);
 	}
 	// These statements run if a valid RFID tag is detected
 	else {
@@ -64,7 +69,8 @@ void loop() {
 		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
 			soundFeedback(isReject);
-			Serial.print(messages.notAuthorized);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[notAuthorized]) ));
+			Serial.print(stringBuffer);
 		}
 		// Check if the user has not reached the 60 min quota
 		/*else if (existingTime >= quota) {
@@ -82,15 +88,19 @@ void loop() {
 
 			// Sound and text feedback
 			soundFeedback(!isReject);
-			Serial.print(messages.displayUsedTime);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[displayUsedTime]) ));
+			Serial.print(stringBuffer);
 			Serial.println(existingTime);
-			Serial.print(messages.user);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[user]) ));
+			Serial.print(stringBuffer);
 			Serial.print(userID);
-			Serial.print(messages.authorized);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[authorized]) ));
+			Serial.print(stringBuffer);
 
 			// Get ready to accumulate time
 			elapsedTime = accumulator();
-			Serial.print(messages.displayNewTime);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[displayNewTime]) ));
+			Serial.print(stringBuffer);
 			Serial.println(elapsedTime + existingTime);
 		}
 	}
@@ -101,17 +111,20 @@ void loop() {
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
 		if (!isValidResponse) {
-			Serial.print(messages.errorRead);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[errorRead]) ));
+			Serial.print(stringBuffer);
 		}
 		else {
-			Serial.print(messages.cardUpdated);
+			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[cardUpdated]) ));
+			Serial.print(stringBuffer);
 			delay(timeToRemoveCard);
 		}
 		// --------------------------------------------------------------------
   		// Push to ThingSpeak
   		// Turn LED off
 		digitalWrite(ledPin, LOW);
-		Serial.print(messages.sendingLog);
+		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[sendingLog]) ));
+		Serial.print(stringBuffer);
 		Serial.println(elapsedTime);
 		WIFI.listen();
 		// Make sure logs are properly spaced out according to ThingSpeak policy
@@ -122,7 +135,8 @@ void loop() {
 		lastSend = millis();
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
-		Serial.println(messages.done);
+		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[done]) ));
+		Serial.print(stringBuffer);
 	}
 	else {
 		Serial.println();
@@ -169,7 +183,8 @@ unsigned long accumulator(void) {
 			// if the counter reaches a specified timeout, return
 			if (pollCounter == pollTimeout) {
 				soundFeedback(isReject);
-				Serial.print(messages.cancel);
+				strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[cancel]) ));
+				Serial.print(stringBuffer);
 				elapsedTime = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
