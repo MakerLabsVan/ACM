@@ -15,31 +15,33 @@ After that, replace the "XXXXXXXXX" value of APIKEY_THINGSPEAK with "Write API k
  
 #define APIKEY_THINGSPEAK  "HWX6PI5X7NE99VPA" //Insert your API Key 
  
-short hum = 90;
+unsigned int periodX;
+unsigned int periodY;
+unsigned long lastSend = millis();
+
  
 void setup() {
- 
-  Ciao.begin(); // CIAO INIT
+    pinMode(4, INPUT);
+    pinMode(7, INPUT);
+    Ciao.begin(); // CIAO INIT
 }
  
 void loop() {
-      
-    String uri = "/update?api_key=";
-    uri += APIKEY_THINGSPEAK;
-    uri += "&field1=";
-    uri += String(hum);
- 
-    Ciao.println("Send data on ThingSpeak Channel"); 
-      
-    CiaoData data = Ciao.write(CONNECTOR, SERVER_ADDR, uri);
- 
-    if (!data.isEmpty()){
-      Ciao.println( "State: " + String (data.get(1)) );
-      Ciao.println( "Response: " + String (data.get(2)) );
-    }
-    else{ 
-      Ciao.println("Write Error");
-    }    
- 
-  delay(30000); // Thinkspeak policy
+
+    periodX = pulseIn(4, HIGH);
+    periodY = pulseIn(7, HIGH);
+
+    Serial.print(periodX); Serial.print(" "); Serial.println(periodY); 
+    
+    if ( (millis() - lastSend) < sendInterval) {
+        String uri = "/update?api_key=";
+        uri += APIKEY_THINGSPEAK;
+        uri += "&field1=";
+        uri += String(periodX);
+        uri += "&field2=";
+        uri += String(periodY);
+        CiaoData data = Ciao.write(CONNECTOR, SERVER_ADDR, uri);
+    }   
+
+    delay(1000);
 }
