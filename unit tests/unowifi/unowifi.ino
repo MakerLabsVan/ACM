@@ -12,6 +12,7 @@ After that, replace the "XXXXXXXXX" value of APIKEY_THINGSPEAK with "Write API k
  
 #define CONNECTOR     "rest" 
 #define SERVER_ADDR   "api.thingspeak.com"
+#define sendInterval 15000
  
 #define APIKEY_THINGSPEAK  "HWX6PI5X7NE99VPA" //Insert your API Key 
  
@@ -23,6 +24,7 @@ unsigned long lastSend = millis();
 void setup() {
     pinMode(4, INPUT);
     pinMode(7, INPUT);
+    Serial.begin(115200);
     Ciao.begin(); // CIAO INIT
 }
  
