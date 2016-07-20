@@ -10,7 +10,6 @@
 #define WIFI_RX 2
 #define WIFI_TX 3
 #define bufferSize 64
-#define bufferSizeSNR 16
 
 // Start and End bytes for command/response packets
 #define STX 0xAA

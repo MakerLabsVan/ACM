@@ -93,7 +93,7 @@ void loop() {
 			// Ready to accumulate time, turn LED on, unlock laser cutter
 			digitalWrite(ledPin, HIGH);
       		digitalWrite(interlock, HIGH);
-			elapsedTime = accumulator();
+			elapsedTime = accumulator(readData, elapsedTime);
 
 			// Job done
 			getStringFromMem(displayNewTime);
@@ -147,14 +147,13 @@ void loop() {
 	Return: time accumulated
 
 */
-unsigned long accumulator(void) {
+unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some constants
 	const int pollTimeout = 5;
 	const int pollInterval = 900;
 	const int freeTime = 5;
 	// some variables used in this scope
-	unsigned char serialNumber[bufferSizeSNR];
-	unsigned long startTime, elapsedTime = 0;
+	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int pulseCount, pollCounter = 0;
 	int i = 0;
