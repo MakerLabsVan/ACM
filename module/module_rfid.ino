@@ -66,8 +66,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		sendToRFID(CMD, size);
 	}
 	else {
-		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[errorCommand]) ));
-		Serial.print(stringBuffer);
+		getStringFromMem(errorCommand);
 	}
 }
 /*

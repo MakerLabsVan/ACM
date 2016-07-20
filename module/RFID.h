@@ -75,6 +75,7 @@
 #define waitForGETResponse 5000
 
 // Pins
+#define interlock A5
 #define driverX 4
 #define driverY 7
 #define speakerPin 8
@@ -102,49 +103,9 @@
 #define cardUpdated 15
 #define sendingLog 16
 
-char stringBuffer[stringSize];
-
 const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-
-/*const struct {
-	char * initialize;
-	char * done;
-	char * scan;
-	char * detected;
-	char * readUnsuccessful;
-	char * notAuthorized;
-	char * quotaMet;
-	char * displayUsedTime;
-	char * user;
-	char * authorized;
-	char * cancel;
-	char * accumulatedTime;
-	char * displayNewTime;
-	char * errorRead;
-	char * errorCommand;
-	char * cardUpdated;
-	char * sendingLog;
-} messages = {
-	"Initializing... ",
-	"Done.\n",
-	"Scanning...\n",
-	"Card detected.\n",
-	"Read unsuccessful. Please try again.\n",
-	"You are not authorized to use this machine.\n\n",
-	"You have reached your quota for this month.\n\n",
-	"Time used this month: ",
-	"User ",
-	" authenticated. Machine is ready to fire. Please do not remove your card.\n",
-	"Card not detected. Operation cancelled.\n",
-	"Elapsed time: ",
-	"Total time used this month: ",
-	"Unexpected result\n",
-	"Unexpected command\n",
-	"Card updated. You may now remove it.\n\n"
-	"Sending... Time: "
-};*/
 
 const struct {
 	int detectedJobStart;

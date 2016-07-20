@@ -11,7 +11,7 @@ void setup() {
 	pinMode(driverY, INPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
-  pinMode(A5, OUTPUT);
+  	pinMode(interlock, OUTPUT);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
@@ -21,8 +21,7 @@ void setup() {
 
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[done]) ));
-	Serial.print(stringBuffer);
+	getStringFromMem(done);
 }
 
 void loop() {
@@ -35,12 +34,13 @@ void loop() {
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	unsigned long lastSend = millis();
+	// ----------------------------------------------------------------------
+	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
-  digitalWrite(A5, LOW);
+  	digitalWrite(interlock, LOW);
 	// ----------------------------------------------------------------------
 	// Scan for RFID tags
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[scan]) ));
-	Serial.print(stringBuffer);
+	getStringFromMem(scan);
 	while (!isValidResponse) {
 		// no payload, so pass NULL
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
@@ -49,10 +49,7 @@ void loop() {
 	}
 	// ----------------------------------------------------------------------
 	// RFID tag detected, read block that contains time data (for this machine)
-	// LED will turn on
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[detected]) ));
-	Serial.print(stringBuffer);
-	digitalWrite(ledPin, HIGH);
+	getStringFromMem(detected);
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
@@ -60,8 +57,7 @@ void loop() {
 	// Analyze response packet and data
 	if (!isValidResponse) {
 		soundFeedback(isReject);
-		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[readUnsuccessful]) ));
-		Serial.print(stringBuffer);
+		getStringFromMem(readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
 	else {
@@ -70,8 +66,7 @@ void loop() {
 		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
 			soundFeedback(isReject);
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[notAuthorized]) ));
-			Serial.print(stringBuffer);
+			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota
 		/*else if (existingTime >= quota) {
@@ -89,20 +84,19 @@ void loop() {
 
 			// Sound and text feedback
 			soundFeedback(!isReject);
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[displayUsedTime]) ));
-			Serial.print(stringBuffer);
+			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[user]) ));
-			Serial.print(stringBuffer);
+			getStringFromMem(user);
 			Serial.print(userID);
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[authorized]) ));
-			Serial.print(stringBuffer);
+			getStringFromMem(authorized);
 
-			// Get ready to accumulate time
-      digitalWrite(A5, HIGH);
+			// Ready to accumulate time, turn LED on, unlock laser cutter
+			digitalWrite(ledPin, HIGH);
+      		digitalWrite(interlock, HIGH);
 			elapsedTime = accumulator();
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[displayNewTime]) ));
-			Serial.print(stringBuffer);
+
+			// Job done
+			getStringFromMem(displayNewTime);
 			Serial.println(elapsedTime + existingTime);
 		}
 	}
@@ -113,20 +107,16 @@ void loop() {
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
 		if (!isValidResponse) {
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[errorRead]) ));
-			Serial.print(stringBuffer);
+			getStringFromMem(errorRead);
 		}
 		else {
-			strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[cardUpdated]) ));
-			Serial.print(stringBuffer);
+			getStringFromMem(cardUpdated);
 			delay(timeToRemoveCard);
 		}
 		// --------------------------------------------------------------------
   		// Push to ThingSpeak
-  		// Turn LED off
 		digitalWrite(ledPin, LOW);
-		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[sendingLog]) ));
-		Serial.print(stringBuffer);
+		getStringFromMem(sendingLog);
 		Serial.println(elapsedTime);
 		WIFI.listen();
 		// Make sure logs are properly spaced out according to ThingSpeak policy
@@ -137,8 +127,7 @@ void loop() {
 		lastSend = millis();
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
-		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[done]) ));
-		Serial.print(stringBuffer);
+		getStringFromMem(done);
 	}
 	else {
 		Serial.println();
@@ -185,8 +174,7 @@ unsigned long accumulator(void) {
 			// if the counter reaches a specified timeout, return
 			if (pollCounter == pollTimeout) {
 				soundFeedback(isReject);
-				strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[cancel]) ));
-				Serial.print(stringBuffer);
+				getStringFromMem(cancel);
 				elapsedTime = calculateTime(startTime);
 
 				// Any valid accumulated time will be returned
