@@ -24,6 +24,8 @@ unsigned long lastSend = millis();
 void setup() {
     pinMode(4, INPUT);
     pinMode(7, INPUT);
+    pinMode(A0, INPUT);
+    pinMode(A5, INPUT);
     Serial.begin(115200);
     Ciao.begin(); // CIAO INIT
 }
@@ -34,6 +36,7 @@ void loop() {
     periodY = pulseIn(7, HIGH);
 
     Serial.print(periodX); Serial.print(" "); Serial.println(periodY); 
+    Serial.print(analogRead(A0)); Serial.print(" "); Serial.println(analogRead(A5));
     
     if ( (millis() - lastSend) < sendInterval) {
         String uri = "/update?api_key=";
@@ -45,5 +48,5 @@ void loop() {
         CiaoData data = Ciao.write(CONNECTOR, SERVER_ADDR, uri);
     }   
 
-    delay(1000);
+    delay(900);
 }
