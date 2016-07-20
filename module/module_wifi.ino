@@ -30,7 +30,6 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
     // AT commands used in this scope
     String writeKey = "CSV1YP0YIE2STS0Z";
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
-    String writeKey = "CSV1YP0YIE2STS0Z";
     String getStr = "GET /update?key=";
     String cmd = "AT+CIPSEND=0,";
 
