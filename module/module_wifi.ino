@@ -1,7 +1,7 @@
 /*
     All Wi-Fi related functions
 */
-/*void connectWIFI(void) {
+void connectWIFI(void) {
     // AT commands used in this scope
     String checkAP = "AT+CWJAP?";
     String connectionMode = "AT+CWMODE=1";
@@ -28,6 +28,7 @@
 
 void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
     // AT commands used in this scope
+    String writeKey = "CSV1YP0YIE2STS0Z";
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
     String getStr = "GET /update?key=";
     String cmd = "AT+CIPSEND=0,";
@@ -53,9 +54,9 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
 
     WIFI.println(getStr);
     delay(waitForGETResponse);    
-}*/
+}
 
-void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
+/*void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
     String writeKey = "CSV1YP0YIE2STS0Z";
     // construct the request to ThingSpeak
     String getStr = "/update?api_key=";
@@ -68,11 +69,11 @@ void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long ex
     getStr += existingTime;
 
     CiaoData data = Ciao.write("rest", "api.thingspeak.com", getStr);
-    /*if (!data.isEmpty()){
+    if (!data.isEmpty()){
       Ciao.println( "State: " + String (data.get(1)) );
       Ciao.println( "Response: " + String (data.get(2)) );
     }
     else{ 
       Ciao.println("Write Error");
-    }*/
-}
+    }
+}*/

@@ -1,24 +1,23 @@
 #include <SoftwareSerial.h>
-#include <Ciao.h>
 #include "RFID.h"
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
-//SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
+SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 void setup() {
 	// Set up pins
 	pinMode(ledPin, OUTPUT);
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
-	//pinMode(wifi_rst, OUTPUT);
+	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[initialize]) ));
 	Serial.print(stringBuffer);
-	//WIFI.begin(moduleBaud);
-	//connectWIFI();
+	WIFI.begin(moduleBaud);
+	connectWIFI();
 
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
@@ -127,14 +126,12 @@ void loop() {
 		strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[sendingLog]) ));
 		Serial.print(stringBuffer);
 		Serial.println(elapsedTime);
-		//WIFI.listen();
-		Ciao.begin();
+		WIFI.listen();
 		// Make sure logs are properly spaced out according to ThingSpeak policy
 		if ( (millis() - lastSend) < sendInterval ) {
 			delay(sendInterval);
 		}
-		//updateThingSpeak(userID, elapsedTime, existingTime);
-		updateThingSpeak2(userID, elapsedTime, existingTime);
+		updateThingSpeak(userID, elapsedTime, existingTime);
 		lastSend = millis();
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
