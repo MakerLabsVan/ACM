@@ -82,8 +82,6 @@
 #define ledPin 13
 #define eightBits 8
 
-<<<<<<< HEAD
-=======
 // String related
 #define stringSize 80
 #define initialize 0
@@ -106,7 +104,6 @@
 
 char stringBuffer[stringSize];
 
->>>>>>> version-3.1.1
 const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
@@ -157,8 +154,6 @@ const struct {
 	1,
 	0,
 	-1
-<<<<<<< HEAD
-=======
 };
 
 const char string0[] PROGMEM = "Initializing... ";
@@ -197,5 +192,4 @@ const char * const message[] PROGMEM = {
 	string14,
 	string15,
 	string16
->>>>>>> version-3.1.1
 };
