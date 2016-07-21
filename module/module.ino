@@ -1,8 +1,13 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+#ifdef UnoWiFi
+	#include <Ciao.h>
+#else
+	SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
+#endif
+
 SoftwareSerial RFID(RFID_RX, RFID_TX);
-SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 void setup() {
 	// Set up pins
@@ -56,7 +61,7 @@ void loop() {
 	// -----------------------------------------------------------------------
 	// Analyze response packet and data
 	if (!isValidResponse) {
-		soundFeedback(isReject);
+		//soundFeedback(isReject);
 		getStringFromMem(readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
@@ -65,12 +70,12 @@ void loop() {
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class
 		if (readData[classOffset] != classCheck) {
-			soundFeedback(isReject);
+			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota
 		/*else if (existingTime >= quota) {
-			soundFeedback(isReject);
+			//soundFeedback(isReject);
 			Serial.print(messages.quotaMet);
 		}*/
 		// User passed all checks and is able to use the machine
@@ -83,7 +88,7 @@ void loop() {
 			userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 
 			// Sound and text feedback
-			soundFeedback(!isReject);
+			//soundFeedback(!isReject);
 			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
 			getStringFromMem(user);
@@ -172,7 +177,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			pollCounter += 1;
 			// if the counter reaches a specified timeout, return
 			if (pollCounter == pollTimeout) {
-				soundFeedback(isReject);
+				//soundFeedback(isReject);
 				getStringFromMem(cancel);
 				elapsedTime = calculateTime(startTime);
 

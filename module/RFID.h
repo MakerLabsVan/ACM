@@ -1,5 +1,6 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
+//#define UnoWiFi
 
 #define monitorBaud 9600
 #define moduleBaud 9600
@@ -9,7 +10,7 @@
 #define RFID_TX 6
 #define WIFI_RX 2
 #define WIFI_TX 3
-#define bufferSize 64
+#define bufferSize 26
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
