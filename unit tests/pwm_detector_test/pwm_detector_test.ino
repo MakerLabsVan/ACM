@@ -1,5 +1,3 @@
-#include <SoftwareSerial.h>
-
 #define monitorBaud 57600
 
 const int driverX = 4;
