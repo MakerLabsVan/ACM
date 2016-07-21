@@ -309,7 +309,7 @@ unsigned long calculateTime(unsigned long startTime) {
 /*
 	This will play 3 rapid notes or 1 long note.
 */
-void soundFeedback(bool isReject) {
+/*void soundFeedback(bool isReject) {
 	if (isReject) {
 		tone(speakerPin, rejectNote, rejectDuration);
 		delay(rejectInterval);
@@ -320,7 +320,7 @@ void soundFeedback(bool isReject) {
 	else {
 		tone(speakerPin, acceptNote, acceptDuration);
 	}
-}
+}*/
 
 void getStringFromMem(int index) {
 	char stringBuffer[stringSize];

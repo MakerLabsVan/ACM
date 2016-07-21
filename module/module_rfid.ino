@@ -116,15 +116,3 @@ unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned
 
 	return existingTime;
 }
-
-/*unsigned int getUser (unsigned char readData[]) {
-	int i = 0;
-	unsigned int userID = 0;
-
-	for (i = 0; i < numUserBytes; i++) {
-		userID <<= eightBits;
-		userID ^= readData[i + userOffset];
-	}
-
-	return userID;
-}*/

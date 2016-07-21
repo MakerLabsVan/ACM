@@ -102,7 +102,7 @@
 #define cardUpdated 15
 #define sendingLog 16
 
-const bool isReject = true;
+//const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
