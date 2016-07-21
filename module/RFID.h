@@ -1,6 +1,6 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
-#define UnoWiFi
+//#define UnoWiFi
 
 #define monitorBaud 9600
 #define moduleBaud 9600
