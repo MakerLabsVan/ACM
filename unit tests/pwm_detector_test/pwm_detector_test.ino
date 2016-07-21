@@ -11,7 +11,7 @@ unsigned int lastPeriodX, lastPeriodY;
 
 void setup() {
 	Serial.begin(monitorBaud);
-	Serial.println("\n\nInitializing...");
+	Serial.println("Initializing...");
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
 }
