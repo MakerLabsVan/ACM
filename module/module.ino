@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+// For Arduino with integrated WiFi
 #ifdef UnoWiFi
 	#include <Ciao.h>
 #else
