@@ -2,7 +2,7 @@
 
 const int driverX = 4;
 const int driverY = 7;
-const unsigned long pollInterval = 900;
+const unsigned long pollInterval = 1100;
 
 unsigned int periodX, periodY;
 unsigned int lastPeriodX, lastPeriodY;
