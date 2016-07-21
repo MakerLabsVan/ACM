@@ -15,15 +15,20 @@ void setup() {
 	pinMode(ledPin, OUTPUT);
 	pinMode(driverX, INPUT);
 	pinMode(driverY, INPUT);
-	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
   	pinMode(interlock, OUTPUT);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
 	getStringFromMem(initialize);
-	WIFI.begin(moduleBaud);
-	connectWIFI();
+
+	#ifdef UnoWiFi
+		Ciao.begin();
+	#else
+		pinMode(wifi_rst, OUTPUT);
+		WIFI.begin(moduleBaud);
+		connectWIFI();
+	#endif
 
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
@@ -31,15 +36,11 @@ void setup() {
 }
 
 void loop() {
-	// some constants
-	const int quota = 3600;
-	const int sendInterval = 15000;
 	// some variables
 	bool isValidResponse = false;
 	unsigned int userID = 0;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
-	unsigned long lastSend = millis();
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
@@ -124,13 +125,12 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		getStringFromMem(sendingLog);
 		Serial.println(elapsedTime);
-		WIFI.listen();
-		// Make sure logs are properly spaced out according to ThingSpeak policy
-		if ( (millis() - lastSend) < sendInterval ) {
-			delay(sendInterval);
-		}
-		updateThingSpeak(userID, elapsedTime, existingTime);
-		lastSend = millis();
+		#ifdef UnoWiFi
+			updateThingSpeak2(userID, elapsedTime, existingTime);
+		#else
+			WIFI.listen();
+			updateThingSpeak(userID, elapsedTime, existingTime);
+		#endif
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
 		getStringFromMem(done);

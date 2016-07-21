@@ -1,6 +1,35 @@
 /*
     All Wi-Fi related functions
 */
+#ifdef UnoWiFi
+void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
+    // Make sure logs are properly spaced out according to ThingSpeak policy
+    if ( (millis() - lastSend) < sendInterval ) {
+        delay(sendInterval);
+    }
+    lastSend = millis();
+
+    String writeKey = "CSV1YP0YIE2STS0Z";
+    // construct the request to ThingSpeak
+    String getStr = "/update?api_key=";
+    getStr += writeKey;
+    getStr += "&field1=";
+    getStr += ID;
+    getStr += "&field2=";
+    getStr += newTime;
+    getStr += "&field3=";
+    getStr += existingTime;
+
+    CiaoData data = Ciao.write("rest", "api.thingspeak.com", getStr);
+    if (!data.isEmpty()){
+      Ciao.println( "State: " + String (data.get(1)) );
+      Ciao.println( "Response: " + String (data.get(2)) );
+    }
+    else{ 
+      Ciao.println("Write Error");
+    }
+}
+#else
 void connectWIFI(void) {
     // AT commands used in this scope
     String checkAP = "AT+CWJAP?";
@@ -27,6 +56,11 @@ void connectWIFI(void) {
 }
 
 void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
+    // Make sure logs are properly spaced out according to ThingSpeak policy
+    if ( (millis() - lastSend) < sendInterval ) {
+        delay(sendInterval);
+    }
+    lastSend = millis();
     // AT commands used in this scope
     String writeKey = "CSV1YP0YIE2STS0Z";
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
@@ -55,25 +89,4 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
     WIFI.println(getStr);
     delay(waitForGETResponse);    
 }
-
-/*void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
-    String writeKey = "CSV1YP0YIE2STS0Z";
-    // construct the request to ThingSpeak
-    String getStr = "/update?api_key=";
-    getStr += writeKey;
-    getStr += "&field1=";
-    getStr += ID;
-    getStr += "&field2=";
-    getStr += newTime;
-    getStr += "&field3=";
-    getStr += existingTime;
-
-    CiaoData data = Ciao.write("rest", "api.thingspeak.com", getStr);
-    if (!data.isEmpty()){
-      Ciao.println( "State: " + String (data.get(1)) );
-      Ciao.println( "Response: " + String (data.get(2)) );
-    }
-    else{ 
-      Ciao.println("Write Error");
-    }
-}*/
+#endif

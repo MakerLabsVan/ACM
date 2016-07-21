@@ -1,6 +1,6 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
-//#define UnoWiFi
+#define UnoWiFi
 
 #define monitorBaud 9600
 #define moduleBaud 9600
@@ -41,6 +41,7 @@
 #define machineID 0x04
 #define userData 0x01
 #define sampleSize 3
+#define quota 3600
 
 // Delays (RFID)
 #define waitforSerialResponse 200
@@ -50,6 +51,7 @@
 #define debounce 25
 #define timeToRemoveCard 500
 #define scanInterval 1500
+#define sendInterval 15000
 
 // Speaker
 #define rejectNote 123
@@ -106,6 +108,7 @@
 //const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned long lastSend = millis();
 
 const struct {
 	int detectedJobStart;
