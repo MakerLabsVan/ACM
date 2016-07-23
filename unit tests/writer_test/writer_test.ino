@@ -12,7 +12,6 @@
 #define CMD_GET_SNR 0x25
 
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
-char txrxbuffer[bufferSize];
 
 const int ledPin = 13;
 

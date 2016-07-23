@@ -9,10 +9,8 @@ void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long ex
     }
     lastSend = millis();
 
-    String writeKey = "CSV1YP0YIE2STS0Z";
     // construct the request to ThingSpeak
-    String getStr = "/update?api_key=";
-    getStr += writeKey;
+    String getStr = "/update?api_key=CSV1YP0YIE2STS0Z";
     getStr += "&field1=";
     getStr += ID;
     getStr += "&field2=";
@@ -62,9 +60,8 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
     }
     lastSend = millis();
     // AT commands used in this scope
-    String writeKey = "CSV1YP0YIE2STS0Z";
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
-    String getStr = "GET /update?key=";
+    String getStr = "GET /update?key=CSV1YP0YIE2STS0Z";
     String cmd = "AT+CIPSEND=0,";
 
     // Wait for WIFI port to be ready
@@ -73,7 +70,6 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
     delay(waitForConnect);
     
     // Construct the request to ThingSpeak
-    getStr += writeKey;
     getStr += "&field1=";
     getStr += ID;
     getStr += "&field2=";
