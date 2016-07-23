@@ -11,6 +11,8 @@
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
+#define laserData 0x04
+
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 
 const int ledPin = 13;
@@ -33,11 +35,11 @@ void loop() {
 	if(responseFlag == true) {
 		digitalWrite(ledPin, HIGH);
 		// initialize card
-		MF_WRITE(0x01, 0x04);
+		MF_WRITE(0x01, laserData);
 		delay(500);
 	}
 
-	MF_READ(0x01, 0x04);
+	MF_READ(0x01, laserData);
 	delay(200);
 }
 
