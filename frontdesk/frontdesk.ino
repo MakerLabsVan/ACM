@@ -18,7 +18,7 @@ void loop() {
 	unsigned char choice = 0;
 	unsigned char readData[bufferSize];
 	unsigned char user0 = 0x00;
-	unsigned char user1 = 0x02;
+	unsigned char user1 = 0x05;
 	bool responseFlag = false;
 	digitalWrite(ledPin, LOW);
 
