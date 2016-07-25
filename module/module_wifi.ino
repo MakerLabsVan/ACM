@@ -2,7 +2,7 @@
     All Wi-Fi related functions
 */
 #ifdef UnoWiFi
-void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
+unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime, unsigned long lastSend) {
     // Make sure logs are properly spaced out according to ThingSpeak policy
     if ( (millis() - lastSend) < sendInterval ) {
         delay(sendInterval);
@@ -26,6 +26,8 @@ void updateThingSpeak2(unsigned char ID, unsigned long newTime, unsigned long ex
     else{ 
       Ciao.println("Write Error");
     }
+
+    return lastSend;
 }
 #else
 void connectWIFI(void) {
@@ -53,7 +55,7 @@ void connectWIFI(void) {
     delay(waitforWriteResponse);
 }
 
-void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime) {
+unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime, unsigned long lastSend) {
     // Make sure logs are properly spaced out according to ThingSpeak policy
     if ( (millis() - lastSend) < sendInterval ) {
         delay(sendInterval);
@@ -83,6 +85,7 @@ void updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long exi
     delay(waitForGET);
 
     WIFI.println(getStr);
-    delay(waitForGETResponse);    
+    delay(waitForGETResponse); 
+    return lastSend;   
 }
 #endif

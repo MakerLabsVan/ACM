@@ -40,6 +40,7 @@ void loop() {
 	bool isValidResponse = false;
 	unsigned int userID = 0;
 	unsigned long existingTime, elapsedTime = 0;
+	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
@@ -125,12 +126,8 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		getStringFromMem(sendingLog);
 		Serial.println(elapsedTime);
-		#ifdef UnoWiFi
-			updateThingSpeak2(userID, elapsedTime, existingTime);
-		#else
-			WIFI.listen();
-			updateThingSpeak(userID, elapsedTime, existingTime);
-		#endif
+		WIFI.listen();
+		lastSend = updateThingSpeak(userID, elapsedTime, existingTime, lastSend);
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
 		getStringFromMem(done);
@@ -332,4 +329,30 @@ void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index]) ));
 	Serial.print(stringBuffer);
+}
+/*
+	Reads time data from card and stores it in one 4 byte chunk
+
+	Param: readData - array containing all bytes read from card
+
+	Function: Time is encoded as three 1 byte values 0xAA 0xBB 0xCC.
+			  existingTime is one 4 byte value 0x00000000
+			  This function XORs the most significant byte with each time byte,
+			  and left shifts it 1 byte size every iteration.
+			  First iteration: 0x00 00 00 AA
+			  Second iteration: 0x00 00 AA BB
+			  Third iteration: 0x00 AA BB CC
+
+	Returns: existing time from card
+*/
+unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned int offset) {
+	int i = 0;
+	unsigned long existingTime = 0;
+
+	for (i = 0; i < numBytes; i++) {
+		existingTime <<= eightBits;
+		existingTime ^= readData[i + offset];
+	}
+
+	return existingTime;
 }

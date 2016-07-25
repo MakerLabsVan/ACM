@@ -108,7 +108,6 @@
 //const bool isReject = true;
 const bool debug = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-unsigned long lastSend = millis();
 
 const struct {
 	int detectedJobStart;
