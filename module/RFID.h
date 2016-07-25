@@ -12,6 +12,11 @@
 #define WIFI_TX 3
 #define bufferSize 26
 
+#define pollTimeout 5
+#define pollInterval 900
+#define freeTime 5
+#define upperBound 6
+
 // Start and End bytes for command/response packets
 #define STX 0xAA
 #define ETX 0xBB

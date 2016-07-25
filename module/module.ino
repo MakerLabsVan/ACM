@@ -151,15 +151,10 @@ void loop() {
 
 */
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
-	// some constants
-	const int pollTimeout = 5;
-	const int pollInterval = 900;
-	const int freeTime = 5;
 	// some variables used in this scope
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
-	unsigned int pulseCount, pollCounter = 0;
-	int i = 0;
+	unsigned int i, pulseCount, pollCounter = 0;
 	bool signals[sampleSize];
 
 	// Only here temporarily for debugging
@@ -170,7 +165,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	while (1) {
 		// Polling logic (approximately every second)
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
-		// if card is missing, increment a counter and blink LED
+		// if card is missing, increment a counter and blink LED?? too slow
 		if (!getResponse(serialNumber)) {
 			digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 			pollCounter += 1;
@@ -294,7 +289,6 @@ int checkHistory(bool signals[]) {
 	determine if a signal is valid.
 */
 bool inRange(unsigned long periodX, unsigned long periodY) {
-	const int upperBound = 6;
 	unsigned int sum = periodX + periodY;
 	unsigned int maximumValue = 2 * upperBound;
 
