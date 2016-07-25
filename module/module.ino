@@ -155,7 +155,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int i, pulseCount, pollCounter = 0;
-	bool signals[sampleSize];
+	int signals[sampleSize];
 
 	// Only here temporarily for debugging
 	if (debug) {
@@ -288,15 +288,15 @@ int checkHistory(bool signals[]) {
 	and using the maximum possible sum as a check is a reliable way to
 	determine if a signal is valid.
 */
-bool inRange(unsigned long periodX, unsigned long periodY) {
+int inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned int sum = periodX + periodY;
 	unsigned int maximumValue = 2 * upperBound;
 
 	if (0 < sum && sum <= maximumValue) {
-		return true;
+		return 1;
 	}
 	else {
-		return false;
+		return 0;
 	}
 }
 /*
