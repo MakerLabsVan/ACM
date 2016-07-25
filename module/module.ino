@@ -254,14 +254,14 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			0 if all invalid
 			-1 otherwise
 */
-int checkHistory(bool signals[]) {
+int checkHistory(int signals[]) {
 	int i = 0;
 	int numValid, numInvalid = 0;
 	for (i = 0; i < sampleSize; i++) {
-		if (signals[i] == true) {
+		if (signals[i] == 1) {
 			numValid += 1;
 		}
-		if (signals[i] == false) {
+		if (signals[i] == 0) {
 			numInvalid += 1;
 		}
 	}
