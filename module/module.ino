@@ -4,11 +4,11 @@
 // For Arduino with integrated WiFi
 #ifdef UnoWiFi
 	#include <Ciao.h>
+	SoftwareSerial RFID(WIFI_RX, WIFI_TX);
 #else
 	SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
+	SoftwareSerial RFID(RFID_RX, RFID_TX);
 #endif
-
-SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 void setup() {
 	// Set up pins
