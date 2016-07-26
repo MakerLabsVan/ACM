@@ -90,6 +90,7 @@
 #define eightBits 8
 
 // String related
+#define stringSize 80
 #define initialize 0
 #define done 1
 #define scan 2

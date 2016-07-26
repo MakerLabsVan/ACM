@@ -313,11 +313,15 @@ unsigned long calculateTime(unsigned long startTime) {
 }*/
 
 void getStringFromMem(int index) {
-	char * stringInMem = (char*)pgm_read_word( &(message[index]) );
+	/*char * stringInMem = (char*)pgm_read_word( &(message[index]) );
 	int length = strlen_P(stringInMem);
 	char stringBuffer[length];
-	
+
 	strcpy_P(stringBuffer, stringInMem);
+	Serial.print(stringBuffer);*/
+
+	char stringBuffer[stringSize];
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
 	Serial.print(stringBuffer);
 }
 /*
