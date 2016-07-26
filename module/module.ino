@@ -1,14 +1,8 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-// For Arduino with integrated WiFi
-#ifdef UnoWiFi
-	#include <Ciao.h>
-	SoftwareSerial RFID(WIFI_RX, WIFI_TX);
-#else
-	SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
-	SoftwareSerial RFID(RFID_RX, RFID_TX);
-#endif
+SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
+SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 void setup() {
 	// Set up pins
@@ -17,18 +11,14 @@ void setup() {
 	pinMode(driverY, INPUT);
 	pinMode(speakerPin, OUTPUT);
   	pinMode(interlock, OUTPUT);
+  	pinMode(wifi_rst, OUTPUT);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
 	getStringFromMem(initialize);
 
-	#ifdef UnoWiFi
-		Ciao.begin();
-	#else
-		pinMode(wifi_rst, OUTPUT);
-		WIFI.begin(moduleBaud);
-		connectWIFI();
-	#endif
+	WIFI.begin(moduleBaud);
+	connectWIFI();
 
 	// Now listening to RFID serial port
 	RFID.begin(moduleBaud);
@@ -156,7 +146,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	unsigned int periodX, periodY;
 	unsigned int pulseCount, pollCounter = 0;
 	int signals[] = { 0, 0, 0 };
-  int i = 0;
+  	int i = 0;
 
 	// Only here temporarily for debugging
 	if (debug) {
@@ -323,8 +313,11 @@ unsigned long calculateTime(unsigned long startTime) {
 }*/
 
 void getStringFromMem(int index) {
-	char stringBuffer[stringSize];
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index]) ));
+	char * stringInMem = (char*)pgm_read_word( &(message[index]) );
+	int length = strlen_P(stringInMem);
+	char stringBuffer[length];
+	
+	strcpy_P(stringBuffer, stringInMem);
 	Serial.print(stringBuffer);
 }
 /*

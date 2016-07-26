@@ -1,6 +1,5 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
-//#define UnoWiFi
 
 #define monitorBaud 9600
 #define moduleBaud 9600
@@ -91,7 +90,6 @@
 #define eightBits 8
 
 // String related
-#define stringSize 80
 #define initialize 0
 #define done 1
 #define scan 2
@@ -129,7 +127,7 @@ const char string1[] PROGMEM = "Done.\n";
 const char string2[] PROGMEM = "Scanning...\n";
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
-const char string5[] PROGMEM = "You are not authorized to use this machien.\n\n";
+const char string5[] PROGMEM = "You are not authorized to use this machine.\n\n";
 const char string6[] PROGMEM = "You have reached your quota for this month.\n\n";
 const char string7[] PROGMEM = "Time used this month: ";
 const char string8[] PROGMEM = "User ";

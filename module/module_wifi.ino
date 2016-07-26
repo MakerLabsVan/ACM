@@ -1,35 +1,6 @@
 /*
     All Wi-Fi related functions
 */
-#ifdef UnoWiFi
-unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime, unsigned long lastSend) {
-    // Make sure logs are properly spaced out according to ThingSpeak policy
-    if ( (millis() - lastSend) < sendInterval ) {
-        delay(sendInterval);
-    }
-    lastSend = millis();
-
-    // construct the request to ThingSpeak
-    String getStr = "/update?api_key=CSV1YP0YIE2STS0Z";
-    getStr += "&field1=";
-    getStr += ID;
-    getStr += "&field2=";
-    getStr += newTime;
-    getStr += "&field3=";
-    getStr += existingTime;
-
-    CiaoData data = Ciao.write("rest", "api.thingspeak.com", getStr);
-    if (!data.isEmpty()){
-      Ciao.println( "State: " + String (data.get(1)) );
-      Ciao.println( "Response: " + String (data.get(2)) );
-    }
-    else{ 
-      Ciao.println("Write Error");
-    }
-
-    return lastSend;
-}
-#else
 void connectWIFI(void) {
     // AT commands used in this scope
     String checkAP = "AT+CWJAP?";
@@ -86,7 +57,7 @@ unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned
     delay(waitForGET);
 
     WIFI.println(getStr);
-    delay(waitForGETResponse); 
+    delay(waitForGETResponse);
+
     return lastSend;   
 }
-#endif
