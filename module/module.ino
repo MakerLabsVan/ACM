@@ -154,8 +154,9 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	// some variables used in this scope
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
-	unsigned int i, pulseCount, pollCounter = 0;
+	unsigned int pulseCount, pollCounter = 0;
 	int signals[] = { 0, 0, 0 };
+  int i = 0;
 
 	// Only here temporarily for debugging
 	if (debug) {
@@ -195,6 +196,8 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
 
+    signals[i] = inRange(periodX, periodY);
+
 		// Only here temporarily for debugging
 		if (debug) {
 			Serial.print("PeriodX: "); Serial.print(periodX); 
@@ -206,7 +209,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		}
 
 		// if periodX and periodY IS a valid pair
-		if ( inRange(periodX, periodY) ) {
+		if ( signals[i] == 1 ) {
 			// a job is detected when we get 3 valid signals in a row
 			// begin stopwatch
 			if (checkHistory(signals) == flag.detectedJobStart) {
@@ -218,7 +221,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			}
 		}
 		// if periodX and periodY IS NOT a valid pair
-		if ( !inRange(periodX, periodY) ) {
+		if ( signals[i] == 0 ) {
 			// check if enough negative signals have been detected
 			// calculate elapsed time
 			if (checkHistory(signals) == flag.detectedJobEnd) {
@@ -236,13 +239,12 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			}
 		}
 
-		// record the previous state
-		signals[i] = inRange(periodX, periodY);
-		i++;
-
-		if (i == sampleSize) {
+		if (i == sampleSize - 1) {
 			i = 0;
 		}
+    else {
+      i += 1;
+    }
 		delay(pollInterval);
 	}
 }
@@ -292,11 +294,9 @@ int inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned int sum = periodX + periodY;
 
 	if (0 < sum && sum <= maximumValue) {
-		delay(debounce);
 		return 1;
 	}
 	else {
-		delay(debounce);
 		return 0;
 	}
 }
