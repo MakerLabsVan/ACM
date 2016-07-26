@@ -290,7 +290,6 @@ int checkHistory(int signals[]) {
 */
 int inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned int sum = periodX + periodY;
-	unsigned int maximumValue = 2 * upperBound;
 
 	if (0 < sum && sum <= maximumValue) {
 		return 1;
