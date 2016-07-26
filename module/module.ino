@@ -196,7 +196,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
 
-    signals[i] = inRange(periodX, periodY);
+    	signals[i] = inRange(periodX, periodY);
 
 		// Only here temporarily for debugging
 		if (debug) {
@@ -242,9 +242,9 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		if (i == sampleSize - 1) {
 			i = 0;
 		}
-    else {
-      i += 1;
-    }
+    	else {
+      		i += 1;
+    	}
 		delay(pollInterval);
 	}
 }
