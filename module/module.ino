@@ -292,9 +292,11 @@ int inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned int sum = periodX + periodY;
 
 	if (0 < sum && sum <= maximumValue) {
+		delay(debounce);
 		return 1;
 	}
 	else {
+		delay(debounce);
 		return 0;
 	}
 }
