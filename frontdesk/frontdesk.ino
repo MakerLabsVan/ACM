@@ -3,14 +3,60 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
+int buttonPin = 8;
+bool isValidResponse = false;
+unsigned char readData[bufferSize];
+unsigned long existingTime, checkoutTime = 0;
+
 void setup() {
 	Serial.begin(monitorBaud);
 	RFID.begin(moduleBaud);
+	pinMode(ledPin, OUTPUT);
+	pinMode(buttonPin, INPUT);
 
+	Serial.println("Initializing");
 }
 
 void loop() {
 
+	while (!isValidResponse) {
+		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+		delay(waitforSerialResponse);
+		isValidResponse = getResponse(readData);
+		digitalWrite(ledPin, LOW);
+	}
+
+	int buttonState = digitalRead(buttonPin);
+	delay(50);
+	buttonState = digitalRead(buttonPin);
+
+	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
+	delay(waitforReadResponse);
+	isValidResponse = getResponse(readData);
+	existingTime = getTime(readData, numTimeBytes, timeOffset);
+
+	if (existingTime == 0) {
+		digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH) );
+		delay(100);
+	}
+	else {
+		Serial.println(existingTime);
+		digitalWrite(ledPin, HIGH);
+	}
+
+	if (buttonState) {
+		digitalWrite(ledPin, LOW);
+		delay(200);
+		while (1) {
+			digitalWrite(ledPin, HIGH);
+			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0);
+			delay(waitforWriteResponse);
+			isValidResponse = getResponse(readData);
+
+			buttonState = digitalRead(buttonPin);
+			if (!buttonState) break;
+		}
+	}
 }
 /*
 	Reads time data from card and stores it in one 4 byte chunk

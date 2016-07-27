@@ -66,7 +66,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		sendToRFID(CMD, size);
 	}
 	else {
-		getStringFromMem(errorCommand);
+		//getStringFromMem(errorCommand);
 	}
 }
 /*
