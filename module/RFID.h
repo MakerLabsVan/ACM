@@ -44,7 +44,7 @@
 #define blockID 0x01
 #define machineID 0x04
 #define userData 0x01
-#define sampleSize 3
+#define sampleSize 5
 #define quota 3600
 
 // Delays (RFID)

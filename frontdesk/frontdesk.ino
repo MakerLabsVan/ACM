@@ -6,15 +6,16 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 int buttonPin = 8;
 bool isValidResponse = false;
 unsigned char readData[bufferSize];
-unsigned long existingTime, checkoutTime = 0;
+unsigned long existingTime, newTime = 0;
 
 void setup() {
 	Serial.begin(monitorBaud);
+	getStringFromMem(initialize);
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
 	pinMode(buttonPin, INPUT);
 
-	Serial.println("Initializing");
+	getStringFromMem(done);
 }
 
 void loop() {
@@ -27,26 +28,31 @@ void loop() {
 	}
 
 	int buttonState = digitalRead(buttonPin);
-	delay(50);
+	delay(waitforReadResponse);
 	buttonState = digitalRead(buttonPin);
 
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
-	existingTime = getTime(readData, numTimeBytes, timeOffset);
+	newTime = getTime(readData, numTimeBytes, timeOffset);
 
-	if (existingTime == 0) {
+	if (newTime == 0) {
 		digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH) );
-		delay(100);
+		delay(waitforIPResponse);
 	}
 	else {
-		Serial.println(existingTime);
+		if (newTime != existingTime) {
+			getStringFromMem(accumulatedTime);
+			Serial.print(newTime);
+			Serial.println("\n");
+			existingTime = newTime;
+		}
 		digitalWrite(ledPin, HIGH);
 	}
 
 	if (buttonState) {
 		digitalWrite(ledPin, LOW);
-		delay(200);
+		delay(waitforSerialResponse);
 		while (1) {
 			digitalWrite(ledPin, HIGH);
 			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0);
@@ -54,7 +60,9 @@ void loop() {
 			isValidResponse = getResponse(readData);
 
 			buttonState = digitalRead(buttonPin);
-			if (!buttonState) break;
+			if (!buttonState) { 
+				break;
+			}
 		}
 	}
 }
@@ -83,4 +91,17 @@ unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned
 	}
 
 	return existingTime;
+}
+
+void getStringFromMem(int index) {
+	/*char * stringInMem = (char*)pgm_read_word( &(message[index]) );
+	int length = strlen_P(stringInMem);
+	char stringBuffer[length];
+
+	strcpy_P(stringBuffer, stringInMem);
+	Serial.print(stringBuffer);*/
+
+	char stringBuffer[stringSize];
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
+	Serial.print(stringBuffer);
 }

@@ -145,7 +145,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int pulseCount, pollCounter = 0;
-	int signals[] = { 0, 0, 0 };
+	int signals[] = { 0, 0, 0, 0, 0 };
   	int i = 0;
 
 	// Only here temporarily for debugging
@@ -235,6 +235,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
     	else {
       		i += 1;
     	}
+    	
 		delay(pollInterval);
 	}
 }
