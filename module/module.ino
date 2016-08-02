@@ -149,7 +149,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
   	int i = 0;
 
 	// Only here temporarily for debugging
-	if (debug) {
+	if (1) {
 		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" "); Serial.println(pulseCount);
 	}
  
@@ -189,7 +189,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
     	signals[i] = inRange(periodX, periodY);
 
 		// Only here temporarily for debugging
-		if (debug) {
+		if (1) {
 			Serial.print("PeriodX: "); Serial.print(periodX); 
 			Serial.print(" PeriodY: "); Serial.print(periodY);
 			Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]);
@@ -235,7 +235,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
     	else {
       		i += 1;
     	}
-    	
+
 		delay(pollInterval);
 	}
 }
@@ -259,7 +259,7 @@ int checkHistory(int signals[]) {
 		}
 	}
 	
-	if (debug) {
+	if (1) {
 		Serial.print(numValid); Serial.print(numInvalid); Serial.print(" ");
 	}
 	//delay(debounce);
