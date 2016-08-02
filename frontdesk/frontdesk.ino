@@ -43,7 +43,9 @@ void loop() {
 	else {
 		if (newTime != existingTime) {
 			getStringFromMem(accumulatedTime);
-			Serial.print(newTime);
+			Serial.print(newTime/60);
+			Serial.print(":");
+			Serial.print(newTime%60);
 			Serial.println("\n");
 			existingTime = newTime;
 		}
