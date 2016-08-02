@@ -235,7 +235,8 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
     	else {
       		i += 1;
     	}
-
+    	
+    	digitalWrite(interlock, HIGH);
 		delay(pollInterval);
 	}
 }
