@@ -281,7 +281,7 @@ int checkHistory(int signals[]) {
 	There are slight deviations at times, so summing the values together
 	and using the maximum possible sum as a check is a reliable way to
 	determine if a signal is valid.
-*/
+
 int inRange(unsigned long periodX, unsigned long periodY) {
 	unsigned int sum = periodX + periodY;
 
@@ -292,12 +292,14 @@ int inRange(unsigned long periodX, unsigned long periodY) {
 		return 0;
 	}
 }
+*/
 /*
 	Calculate time elapsed in seconds.
-*/
+
 unsigned long calculateTime(unsigned long startTime) {
 	return (millis() - startTime)/1000;
 }
+*/
 /*
 	This will play 3 rapid notes or 1 long note.
 */
