@@ -41,7 +41,7 @@ void loop() {
 		delay(waitforIPResponse);
 	}
 	else {
-		if (newTime != existingTime) {
+		if ((newTime != existingTime) && (newTime < quota)) {
 			getStringFromMem(accumulatedTime);
 			Serial.print(newTime/60);
 			Serial.print(":");
