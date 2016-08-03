@@ -1,6 +1,9 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+#define isRange(x, y) (x + y) < maximumValue ? 1 : 0
+#define calcTime(x) (millis() - x)/1000
+
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
@@ -200,7 +203,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 
 		// if periodX and periodY IS a valid pair
 		if ( signals[i] == 1 ) {
-			// a job is detected when we get 3 valid signals in a row
+			// a job is detected when we get 5 valid signals in a row
 			// begin stopwatch
 			if (checkHistory(signals) == flag.detectedJobStart) {
 				if (startTime == 0) {
@@ -235,7 +238,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
     	else {
       		i += 1;
     	}
-    	
+
     	digitalWrite(interlock, HIGH);
 		delay(pollInterval);
 	}
