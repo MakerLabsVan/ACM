@@ -1,9 +1,6 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-#define isRange(x, y) (x + y) < maximumValue ? 1 : 0
-#define calcTime(x) (millis() - x)/1000
-
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
@@ -167,7 +164,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			if (pollCounter == pollTimeout) {
 				//soundFeedback(isReject);
 				getStringFromMem(cancel);
-				elapsedTime = calculateTime(startTime);
+				elapsedTime = calcTime(startTime);
 
 				// Any valid accumulated time will be returned
 				if (startTime > 0 && elapsedTime > freeTime) {
@@ -189,7 +186,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		periodX = pulseIn(driverX, HIGH);
 		periodY = pulseIn(driverY, HIGH);
 
-    	signals[i] = inRange(periodX, periodY);
+    	signals[i] = isRange(periodX + periodY);
 
 		// Only here temporarily for debugging
 		if (1) {
@@ -218,7 +215,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			// check if enough negative signals have been detected
 			// calculate elapsed time
 			if (checkHistory(signals) == flag.detectedJobEnd) {
-				elapsedTime = calculateTime(startTime);
+				elapsedTime = calcTime(startTime);
 
 				// if a job was detected, return
 				if (startTime > 0 && elapsedTime > freeTime) {

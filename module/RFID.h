@@ -1,7 +1,7 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
 
-#define monitorBaud 9600
+#define monitorBaud 57600
 #define moduleBaud 9600
 
 // Pins that interface with RDM880 and ESP8266
@@ -108,6 +108,9 @@
 #define errorCommand 14
 #define cardUpdated 15
 #define sendingLog 16
+
+#define isRange(x) (0 < x && x < maximumValue) ? 1 : 0
+#define calcTime(x) (millis() - x)/1000
 
 //const bool isReject = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
