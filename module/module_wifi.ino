@@ -57,7 +57,7 @@ unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned
     delay(waitForGET);
 
     WIFI.println(getStr);
-    delay(waitForGETResponse);
+    //delay(waitForGETResponse);
 
     return lastSend;   
 }

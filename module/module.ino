@@ -29,7 +29,7 @@ void loop() {
 	// some variables
 	bool isValidResponse = false;
 	unsigned int userID = 0;
-	unsigned long existingTime, elapsedTime = 0;
+	unsigned long existingTime, elapsedTime, totalTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
@@ -92,16 +92,19 @@ void loop() {
 			digitalWrite(ledPin, HIGH);
       		digitalWrite(interlock, HIGH);
 			elapsedTime = accumulator(readData, elapsedTime);
+			totalTime = elapsedTime + existingTime;
 
 			// Job done
 			getStringFromMem(displayNewTime);
-			Serial.println(elapsedTime + existingTime);
+			Serial.print(totalTime/60);
+			Serial.print(":");
+			Serial.print(totalTime%60);
 		}
 	}
 	// -------------------------------------------------------------------------
 	// Write time data to card
 	if (elapsedTime > 0) {
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, elapsedTime + existingTime);
+		sendCommand(CMD_WRITE, blockID, machineID, keyA, totalTime);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
 		if (!isValidResponse) {
