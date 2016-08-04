@@ -98,7 +98,7 @@ void loop() {
 			getStringFromMem(displayNewTime);
 			Serial.print(totalTime/60);
 			Serial.print(":");
-			Serial.print(totalTime%60);
+			Serial.println(totalTime%60);
 		}
 	}
 	// -------------------------------------------------------------------------
