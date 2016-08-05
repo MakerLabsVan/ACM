@@ -2,7 +2,7 @@
 #include "Arduino.h"
 //#define UnoWiFi
 
-#define monitorBaud 9600
+#define monitorBaud 57600
 #define moduleBaud 9600
 
 // Pins that interface with RDM880 and ESP8266
