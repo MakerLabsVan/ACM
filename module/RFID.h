@@ -12,7 +12,7 @@
 #define bufferSize 26
 
 #define pollTimeout 5
-#define pollInterval 900
+#define pollInterval 500
 #define freeTime 5
 #define maximumValue 12
 
