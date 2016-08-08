@@ -163,7 +163,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 			// if card is missing, increment a counter and blink LED?? too slow
 			if (!getResponse(serialNumber)) {
-				digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
+				//digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 				pollCounter += 1;
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
@@ -252,6 +252,10 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	    	digitalWrite(interlock, HIGH);
 			//delay(pollInterval);
 			lastPollTime = millis();
+		}
+
+		if (pollCounter > 0) {
+			digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 		}
 	}
 }
