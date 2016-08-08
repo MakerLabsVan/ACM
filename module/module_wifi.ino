@@ -29,9 +29,9 @@ void connectWIFI(void) {
 // 4TEG18U9EAH12FJE
 unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime, unsigned long lastSend) {
     // Make sure logs are properly spaced out according to ThingSpeak policy
-    if ( (millis() - lastSend) < sendInterval ) {
+    /*if ( (millis() - lastSend) < sendInterval ) {
         delay(sendInterval);
-    }
+    }*/
     lastSend = millis();
     // AT commands used in this scope
     String beginConnection = "AT+CIPSTART=0,\"TCP\",\"184.106.153.149\",80";
