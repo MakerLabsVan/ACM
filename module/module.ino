@@ -159,7 +159,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	}
  
 	while (1) {
-		if ( (millis() - lastPollTime) > pollInterval ) {
+		if ( timeSince(lastPollTime) > pollInterval ) {
 			// Polling logic (approximately every second)
 			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 			// if card is missing, increment a counter and blink LED?? too slow
@@ -196,16 +196,16 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 
 			// Only here temporarily for debugging
 			if (1) {
-				Serial.print("PeriodX: "); Serial.print(periodX); 
-				Serial.print(" PeriodY: "); Serial.print(periodY);
-				Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
-				Serial.print(" "); Serial.print(numValid); Serial.print(" "); Serial.print(numInvalid);
-				Serial.print(" Start Time: "); Serial.print(startTime);
+				Serial.print(F("PeriodX: ")); Serial.print(periodX); 
+				Serial.print(F(" PeriodY: ")); Serial.print(periodY);
+				Serial.print(F(" ")); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
+				Serial.print(F(" ")); Serial.print(numValid); Serial.print(F(" ")); Serial.print(numInvalid);
+				Serial.print(F(" Start Time: ")); Serial.print(startTime);
 				if (startTime > 0) {
-					Serial.print(" Elapsed Time: "); Serial.println(calcTime(startTime));
+					Serial.print(F(" Elapsed Time: ")); Serial.println(calcTime(startTime));
 				}
 				else {
-					Serial.println(" Elapsed Time: 0");
+					Serial.println(F(" Elapsed Time: 0"));
 				}
 			}
 
