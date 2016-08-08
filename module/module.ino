@@ -154,7 +154,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 
 	// Only here temporarily for debugging
 	if (1) {
-		Serial.print(startTime); Serial.print(" "); Serial.println(elapsedTime);
+		Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
 	}
  
 	while (1) {
@@ -250,7 +250,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	    	}
 
 	    	digitalWrite(interlock, HIGH);
-			//delay(pollInterval);
 			lastPollTime = millis();
 		}
 
