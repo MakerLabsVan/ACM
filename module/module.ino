@@ -146,6 +146,7 @@ void loop() {
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some variables used in this scope
 	unsigned long startTime = 0;
+	unsigned long lastPollTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
@@ -158,127 +159,95 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	}
  
 	while (1) {
-		// Polling logic (approximately every second)
-		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
-		// if card is missing, increment a counter and blink LED?? too slow
-		if (!getResponse(serialNumber)) {
-			digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
-			pollCounter += 1;
-			// if the counter reaches a specified timeout, return
-			if (pollCounter == pollTimeout) {
-				//soundFeedback(isReject);
-				getStringFromMem(cancel);
-				elapsedTime = calcTime(startTime);
+		if ( (millis() - lastPollTime) > pollInterval ) {
+			// Polling logic (approximately every second)
+			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+			// if card is missing, increment a counter and blink LED?? too slow
+			if (!getResponse(serialNumber)) {
+				digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
+				pollCounter += 1;
+				// if the counter reaches a specified timeout, return
+				if (pollCounter == pollTimeout) {
+					//soundFeedback(isReject);
+					getStringFromMem(cancel);
+					elapsedTime = calcTime(startTime);
 
-				// Any valid accumulated time will be returned
-				if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
-          			return elapsedTime;
-				}
-				else {
-					return 0;
-				}
+					// Any valid accumulated time will be returned
+					if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
+	          			return elapsedTime;
+					}
+					else {
+						return 0;
+					}
 
-			}
-		}
-		else {
-			digitalWrite(ledPin, HIGH);
-			pollCounter = 0;
-		}
-		// End Polling Logic
-
-		// Begin signal monitoring logic
-		periodX = pulseIn(driverX, HIGH);
-		periodY = pulseIn(driverY, HIGH);
-
-    	signals[i] = isRange(periodX + periodY);
-
-		// Only here temporarily for debugging
-		if (1) {
-			Serial.print("PeriodX: "); Serial.print(periodX); 
-			Serial.print(" PeriodY: "); Serial.print(periodY);
-			Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
-			Serial.print(" "); Serial.print(numValid); Serial.print(" "); Serial.print(numInvalid);
-			Serial.print(" Start Time: "); Serial.println(startTime);
-		}
-
-		// if periodX and periodY IS a valid pair
-		if ( signals[i] == 1 ) {
-			numValid += 1;
-			numInvalid = 0;
-			// a job is detected when we get enough valid signals in a row
-			// begin stopwatch
-			if (numValid == sampleSize) {
-				if (startTime == 0) {
-					startTime = millis();
 				}
 			}
-		}
-		// if periodX and periodY IS NOT a valid pair
-		if ( signals[i] == 0 ) {
-			numValid = 0;
-			numInvalid += 1;
-			// check if enough negative signals have been detected
-			// calculate elapsed time
-			if (numInvalid == sampleSize) {
-				elapsedTime = calcTime(startTime);
+			else {
+				digitalWrite(ledPin, HIGH);
+				pollCounter = 0;
+			}
+			// End Polling Logic
 
-				// if a job was detected, return
-				if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
-					return elapsedTime;
-				}
-				else {
-					startTime = 0;
-					elapsedTime = 0;
-					numValid = 0;
-					numInvalid = 0;
+			// Begin signal monitoring logic
+			periodX = pulseIn(driverX, HIGH);
+			periodY = pulseIn(driverY, HIGH);
+
+	    	signals[i] = isRange(periodX + periodY);
+
+			// Only here temporarily for debugging
+			if (1) {
+				Serial.print("PeriodX: "); Serial.print(periodX); 
+				Serial.print(" PeriodY: "); Serial.print(periodY);
+				Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
+				Serial.print(" "); Serial.print(numValid); Serial.print(" "); Serial.print(numInvalid);
+				Serial.print(" Start Time: "); Serial.println(startTime);
+			}
+
+			// if periodX and periodY IS a valid pair
+			if ( signals[i] == 1 ) {
+				numValid += 1;
+				numInvalid = 0;
+				// a job is detected when we get enough valid signals in a row
+				// begin stopwatch
+				if (numValid == sampleSize) {
+					if (startTime == 0) {
+						startTime = millis();
+					}
 				}
 			}
-		}
+			// if periodX and periodY IS NOT a valid pair
+			if ( signals[i] == 0 ) {
+				numValid = 0;
+				numInvalid += 1;
+				// check if enough negative signals have been detected
+				// calculate elapsed time
+				if (numInvalid == sampleSize) {
+					elapsedTime = calcTime(startTime);
 
-		if (i == sampleSize - 1) {
-			i = 0;
-		}
-    	else {
-      		i += 1;
-    	}
+					// if a job was detected, return
+					if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
+						return elapsedTime;
+					}
+					else {
+						startTime = 0;
+						elapsedTime = 0;
+						numValid = 0;
+						numInvalid = 0;
+					}
+				}
+			}
 
-    	digitalWrite(interlock, HIGH);
-		delay(pollInterval);
-	}
-}
-/*
-	Checks the previous signals and counts the number of
-	valid and invalid signals recorded.
+			if (i == sampleSize - 1) {
+				i = 0;
+			}
+	    	else {
+	      		i += 1;
+	    	}
 
-	Returns 1 if all valid
-			0 if all invalid
-			-1 otherwise
-*/
-int checkHistory(int signals[]) {
-	int i = 0;
-	int numValid, numInvalid = 0;
-	for (i = 0; i < sampleSize; i++) {
-		if (signals[i] == 1) {
-			numValid += 1;
+	    	digitalWrite(interlock, HIGH);
+			//delay(pollInterval);
+			lastPollTime = millis();
 		}
-		if (signals[i] == 0) {
-			numInvalid += 1;
-		}
-	}
-	
-	if (1) {
-		Serial.print(numValid); Serial.print(numInvalid); Serial.print(" ");
-	}
-	//delay(debounce);
-	
-	if (numValid == sampleSize) {
-		return flag.detectedJobStart;
-	}
-	else if (numInvalid == sampleSize) {
-		return flag.detectedJobEnd;
-	}
-	else {
-		return flag.idle;
 	}
 }
 /*void soundFeedback(bool isReject) {
