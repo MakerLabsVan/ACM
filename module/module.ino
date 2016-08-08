@@ -200,7 +200,13 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				Serial.print(" PeriodY: "); Serial.print(periodY);
 				Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
 				Serial.print(" "); Serial.print(numValid); Serial.print(" "); Serial.print(numInvalid);
-				Serial.print(" Start Time: "); Serial.println(startTime);
+				Serial.print(" Start Time: "); Serial.print(startTime);
+				if (startTime > 0) {
+					Serial.print(" Elapsed Time: "); Serial.println(calcTime(startTime));
+				}
+				else {
+					Serial.println(" Elapsed Time: 0");
+				}
 			}
 
 			// if periodX and periodY IS a valid pair
