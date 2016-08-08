@@ -150,8 +150,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	unsigned int periodX, periodY;
 	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
-  	int i = 0;
-  	int numValid, numInvalid = 0;
+  	int i, numValid, numInvalid = 0;
 
 	// Only here temporarily for debugging
 	if (1) {

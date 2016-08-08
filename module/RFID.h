@@ -116,16 +116,6 @@
 //const bool isReject = true;
 const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
-const struct {
-	int detectedJobStart;
-	int detectedJobEnd;
-	int idle;
-} flag = {
-	1,
-	0,
-	-1
-};
-
 const char string0[] PROGMEM = "Initializing... ";
 const char string1[] PROGMEM = "Done.\n";
 const char string2[] PROGMEM = "Scanning...\n";
