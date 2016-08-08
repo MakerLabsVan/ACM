@@ -29,7 +29,7 @@ void connectWIFI(void) {
 // 4TEG18U9EAH12FJE
 unsigned long updateThingSpeak(unsigned char ID, unsigned long newTime, unsigned long existingTime, unsigned long lastSend) {
     // Make sure logs are properly spaced out according to ThingSpeak policy
-    if ( timeSince(lastSend) < sendInterval ) {
+    if ( (millis() - lastSend) < sendInterval ) {
         delay(sendInterval);
     }
     lastSend = millis();
