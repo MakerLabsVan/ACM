@@ -16,6 +16,7 @@ void setup() {
 	pinMode(buttonPin, INPUT);
 
 	getStringFromMem(done);
+	Serial.println();
 }
 
 void loop() {
@@ -44,9 +45,9 @@ void loop() {
 		if ((newTime != existingTime) && (newTime < 5*quota)) {
 			getStringFromMem(accumulatedTime);
 			Serial.print(newTime/60);
-			Serial.print(":");
+			Serial.print(" minutes ");
 			Serial.print(newTime%60);
-			Serial.println("\n");
+			Serial.println(" seconds");
 			existingTime = newTime;
 		}
 		digitalWrite(ledPin, HIGH);
