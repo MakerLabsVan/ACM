@@ -1,7 +1,7 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
 
-#define monitorBaud 57600
+#define monitorBaud 115200
 #define moduleBaud 9600
 
 // Pins that interface with RDM880 and ESP8266
