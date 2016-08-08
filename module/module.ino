@@ -147,13 +147,14 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	// some variables used in this scope
 	unsigned long startTime = 0;
 	unsigned int periodX, periodY;
-	unsigned int pulseCount, pollCounter = 0;
+	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
   	int i = 0;
+  	int numValid, numInvalid = 0;
 
 	// Only here temporarily for debugging
 	if (1) {
-		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" "); Serial.println(pulseCount);
+		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" ");
 	}
  
 	while (1) {
@@ -196,9 +197,8 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			Serial.print("PeriodX: "); Serial.print(periodX); 
 			Serial.print(" PeriodY: "); Serial.print(periodY);
 			Serial.print(" "); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
-			Serial.print(" "); Serial.print(checkHistory(signals));
-			Serial.print(" Start Time: "); Serial.print(startTime);
-			Serial.print(" Pulse Count: "); Serial.println(pulseCount);
+			Serial.print(" "); Serial.print(numValid); Serial.print(" "); Serial.print(numInvalid);
+			Serial.print(" Start Time: "); Serial.println(startTime);
 		}
 
 		// if periodX and periodY IS a valid pair
@@ -209,8 +209,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				if (startTime == 0) {
 					startTime = millis();
 				}
-				// track number of valid pulses (after job start)
-				pulseCount += 1;
 			}
 		}
 		// if periodX and periodY IS NOT a valid pair
@@ -227,7 +225,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				else {
 					startTime = 0;
 					elapsedTime = 0;
-					pulseCount = 0;
 				}
 			}
 		}
@@ -278,34 +275,6 @@ int checkHistory(int signals[]) {
 		return flag.idle;
 	}
 }
-/*
-	Determines if the driver signals are valid. During a job,
-	the period of a pulse is either 0, 5 or 6 microseconds.
-	There are slight deviations at times, so summing the values together
-	and using the maximum possible sum as a check is a reliable way to
-	determine if a signal is valid.
-
-int inRange(unsigned long periodX, unsigned long periodY) {
-	unsigned int sum = periodX + periodY;
-
-	if (0 < sum && sum <= maximumValue) {
-		return 1;
-	}
-	else {
-		return 0;
-	}
-}
-*/
-/*
-	Calculate time elapsed in seconds.
-
-unsigned long calculateTime(unsigned long startTime) {
-	return (millis() - startTime)/1000;
-}
-*/
-/*
-	This will play 3 rapid notes or 1 long note.
-*/
 /*void soundFeedback(bool isReject) {
 	if (isReject) {
 		tone(speakerPin, rejectNote, rejectDuration);
