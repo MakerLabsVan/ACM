@@ -109,7 +109,7 @@
 #define cardUpdated 15
 #define sendingLog 16
 
-#define isRange(x) (0 < x && x < maximumValue) ? 1 : 0
+#define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
 
 //const bool isReject = true;
