@@ -229,6 +229,8 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				else {
 					startTime = 0;
 					elapsedTime = 0;
+					numValid = 0;
+					numInvalid = 0;
 				}
 			}
 		}
