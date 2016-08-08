@@ -154,7 +154,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 
 	// Only here temporarily for debugging
 	if (1) {
-		Serial.print(startTime); Serial.print(" "); Serial.print(elapsedTime); Serial.print(" ");
+		Serial.print(startTime); Serial.print(" "); Serial.println(elapsedTime);
 	}
  
 	while (1) {
@@ -171,7 +171,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				elapsedTime = calcTime(startTime);
 
 				// Any valid accumulated time will be returned
-				if (startTime > 0 && elapsedTime > freeTime) {
+				if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
           			return elapsedTime;
 				}
 				else {
@@ -203,9 +203,11 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 
 		// if periodX and periodY IS a valid pair
 		if ( signals[i] == 1 ) {
-			// a job is detected when we get 5 valid signals in a row
+			numValid += 1;
+			numInvalid = 0;
+			// a job is detected when we get enough valid signals in a row
 			// begin stopwatch
-			if (checkHistory(signals) == flag.detectedJobStart) {
+			if (numValid == sampleSize) {
 				if (startTime == 0) {
 					startTime = millis();
 				}
@@ -213,13 +215,15 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		}
 		// if periodX and periodY IS NOT a valid pair
 		if ( signals[i] == 0 ) {
+			numValid = 0;
+			numInvalid += 1;
 			// check if enough negative signals have been detected
 			// calculate elapsed time
-			if (checkHistory(signals) == flag.detectedJobEnd) {
+			if (numInvalid == sampleSize) {
 				elapsedTime = calcTime(startTime);
 
 				// if a job was detected, return
-				if (startTime > 0 && elapsedTime > freeTime) {
+				if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
 					return elapsedTime;
 				}
 				else {
