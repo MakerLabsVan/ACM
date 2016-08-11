@@ -11,14 +11,14 @@
 #define CMD_WRITE 0x21
 #define CMD_GET_SNR 0x25
 
-#define laserData 0x04
+#define laserData 0x01
 
 SoftwareSerial RDM880(RDM880_RX, RDM880_TX);
 
 const int ledPin = 13;
 
 void setup() {
-	Serial.begin(57600);
+	Serial.begin(9600);
 	RDM880.begin(9600);
 	pinMode(ledPin, OUTPUT);
 }
@@ -26,21 +26,21 @@ void setup() {
 void loop() {
 	bool responseFlag = false;
 
-	MF_SNR(0x00);
-	delay(200);
-	digitalWrite(ledPin, LOW);
-
-	responseFlag = detectCard(false);
-
-	if(responseFlag == true) {
-		digitalWrite(ledPin, HIGH);
-		// initialize card
-		MF_WRITE(0x01, 0x04);
-		delay(500);
+	while (!responseFlag) {
+		MF_SNR(0x00);
+		delay(200);
+		digitalWrite(ledPin, LOW);
+		responseFlag = detectCard(false);
 	}
 
-	MF_READ(0x01, 0x04);
-	delay(200);
+	digitalWrite(ledPin, HIGH);
+	// initialize card
+	/*MF_WRITE(0x01, laserData);
+	delay(500);
+
+
+	MF_READ(0x01, laserData);
+	delay(200);*/
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
@@ -83,12 +83,12 @@ void MF_WRITE(unsigned char numBlocks, unsigned char startSector) {
 	int i = 0;
 	unsigned char A[] = { 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startSector,
 						0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-						0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+						0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 						0x00 };
 	unsigned char BCC = checksum(A, sizeof(A)/sizeof(A[0]));
 	unsigned char CMD[] = { STX, 0x00, 0x1A, CMD_WRITE, 0x01, numBlocks, startSector,
 							0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-							0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+							0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 							0x00, BCC, ETX };
 	unsigned char response[bufferSize];
 
