@@ -35,12 +35,12 @@ void loop() {
 
 	digitalWrite(ledPin, HIGH);
 	// initialize card
-	/*MF_WRITE(0x01, laserData);
+	MF_WRITE(0x01, laserData);
 	delay(500);
 
 
 	MF_READ(0x01, laserData);
-	delay(200);*/
+	delay(200);
 }
 
 unsigned char checksum(unsigned char A[], int numElements) {
