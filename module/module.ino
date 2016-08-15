@@ -250,10 +250,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	    	digitalWrite(interlock, HIGH);
 			lastPollTime = millis();
 		}
-
-		if ( (pollCounter > 0) && (timeSince(lastBlink) > 500) ) {
-			digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
-		}
 	}
 }
 /*void soundFeedback(bool isReject) {
