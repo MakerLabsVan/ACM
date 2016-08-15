@@ -97,13 +97,13 @@ void loop() {
 			// Job done
 			getStringFromMem(displayNewTime);
 			Serial.print(totalTime/60);
-			Serial.print(":");
+			Serial.print(F(":"));
 			Serial.println(totalTime%60);
 		}
 	}
 	// -------------------------------------------------------------------------
 	// Write time data to card
-	if (elapsedTime > 0) {
+	if ( (0 < elapsedTime) && (elapsedTime < 5*quota) ) {
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, totalTime);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
@@ -158,7 +158,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	}
  
 	while (1) {
-		if ( timeSince(lastPollTime) > pollInterval ) {
+		if (timeSince(lastPollTime) > pollInterval) {
 			// Polling logic (approximately every second)
 			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 			// if card is missing, increment a counter and blink LED?? too slow
@@ -172,13 +172,12 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// Any valid accumulated time will be returned
-					if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
+					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota) ) {
 	          			return elapsedTime;
 					}
 					else {
 						return 0;
 					}
-
 				}
 			}
 			else {
@@ -190,7 +189,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			// Begin signal monitoring logic
 			periodX = pulseIn(driverX, HIGH);
 			periodY = pulseIn(driverY, HIGH);
-
 	    	signals[i] = isRange(periodX + periodY);
 
 			// Only here temporarily for debugging
@@ -209,7 +207,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			}
 
 			// if periodX and periodY IS a valid pair
-			if ( signals[i] == 1 ) {
+			if (signals[i] == 1) {
 				numValid += 1;
 				numInvalid = 0;
 				// a job is detected when we get enough valid signals in a row
@@ -221,7 +219,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				}
 			}
 			// if periodX and periodY IS NOT a valid pair
-			if ( signals[i] == 0 ) {
+			if (signals[i] == 0) {
 				numValid = 0;
 				numInvalid += 1;
 				// check if enough negative signals have been detected
@@ -230,7 +228,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// if a job was detected, return
-					if ((startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)) {
+					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)  ) {
 						return elapsedTime;
 					}
 					else {
