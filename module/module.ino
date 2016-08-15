@@ -146,7 +146,7 @@ void loop() {
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some variables used in this scope
 	unsigned long startTime = 0;
-	unsigned long lastPollTime = 0;
+	unsigned long lastPollTime, lastBlink = 0;
 	unsigned int periodX, periodY;
 	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
@@ -163,7 +163,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 			// if card is missing, increment a counter and blink LED?? too slow
 			if (!getResponse(serialNumber)) {
-				digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
+				//digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 				pollCounter += 1;
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
@@ -249,6 +249,10 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 
 	    	digitalWrite(interlock, HIGH);
 			lastPollTime = millis();
+		}
+
+		if ( (pollCounter > 0) && (timeSince(lastBlink) > 500) ) {
+			digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 		}
 	}
 }
