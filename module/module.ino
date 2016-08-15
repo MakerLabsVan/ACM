@@ -158,8 +158,10 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	}
  
 	while (1) {
+		// Run approximately every second
 		if (timeSince(lastPollTime) > pollInterval) {
-			// Polling logic (approximately every second)
+
+			// Polling logic
 			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
 			// if card is missing, increment a counter and blink LED?? too slow
 			if (!getResponse(serialNumber)) {
@@ -226,7 +228,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				// calculate elapsed time
 				if (numInvalid == sampleSize) {
 					elapsedTime = calcTime(startTime);
-
 					// if a job was detected, return
 					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)  ) {
 						return elapsedTime;
