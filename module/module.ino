@@ -67,7 +67,8 @@ void loop() {
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota
-		/*else if (existingTime >= quota) {
+		/*else if ( (existingTime >= quota) && (readData[staffOffset] != staffMember) 
+		) {
 			//soundFeedback(isReject);
 			Serial.print(messages.quotaMet);
 		}*/
@@ -103,7 +104,7 @@ void loop() {
 	}
 	// -------------------------------------------------------------------------
 	// Write time data to card
-	if ( (0 < elapsedTime) && (elapsedTime < 5*quota) ) {
+	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, totalTime);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
@@ -141,7 +142,6 @@ void loop() {
 	still present.
 	
 	Return: time accumulated
-
 */
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some variables used in this scope
@@ -153,7 +153,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
   	int i, numValid, numInvalid = 0;
 
 	// Only here temporarily for debugging
-	if (1) {
+	if (debug) {
 		Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
 	}
  
@@ -174,7 +174,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// Any valid accumulated time will be returned
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota) ) {
+					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime) ) {
 	          			return elapsedTime;
 					}
 					else {
@@ -194,7 +194,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	    	signals[i] = isRange(periodX + periodY);
 
 			// Only here temporarily for debugging
-			if (1) {
+			if (debug) {
 				Serial.print(F("PeriodX: ")); Serial.print(periodX); 
 				Serial.print(F(" PeriodY: ")); Serial.print(periodY);
 				Serial.print(F(" ")); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
@@ -212,24 +212,27 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			if (signals[i] == 1) {
 				numValid += 1;
 				numInvalid = 0;
+
 				// a job is detected when we get enough valid signals in a row
-				// begin stopwatch
 				if (numValid == sampleSize) {
+					// begin stopwatch
 					if (startTime == 0) {
 						startTime = millis();
 					}
 				}
 			}
+
 			// if periodX and periodY IS NOT a valid pair
 			if (signals[i] == 0) {
 				numValid = 0;
 				numInvalid += 1;
+				
 				// check if enough negative signals have been detected
-				// calculate elapsed time
 				if (numInvalid == sampleSize) {
 					elapsedTime = calcTime(startTime);
+
 					// if a job was detected, return
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < 5*quota)  ) {
+					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime)  ) {
 						return elapsedTime;
 					}
 					else {

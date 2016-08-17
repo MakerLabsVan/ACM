@@ -3,6 +3,7 @@
 
 #define monitorBaud 57600
 #define moduleBaud 9600
+#define debug 1
 
 // Pins that interface with RDM880 and ESP8266
 #define RFID_RX 5
@@ -15,6 +16,7 @@
 #define pollInterval 500
 #define freeTime 5
 #define maximumValue 12
+#define maxTime 18000
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
