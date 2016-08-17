@@ -1,9 +1,9 @@
 #include <avr/pgmspace.h>
 #include "Arduino.h"
-//#define UnoWiFi
 
 #define monitorBaud 57600
 #define moduleBaud 9600
+#define debug 1
 
 // Pins that interface with RDM880 and ESP8266
 #define RFID_RX 5
@@ -13,9 +13,10 @@
 #define bufferSize 26
 
 #define pollTimeout 5
-#define pollInterval 900
+#define pollInterval 500
 #define freeTime 5
-#define upperBound 6
+#define maximumValue 12
+#define maxTime 18000
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
@@ -45,7 +46,7 @@
 #define blockID 0x01
 #define machineID 0x04
 #define userData 0x01
-#define sampleSize 3
+#define sampleSize 5
 #define quota 3600
 
 // Delays (RFID)
@@ -110,32 +111,25 @@
 #define cardUpdated 15
 #define sendingLog 16
 
-//const bool isReject = true;
-const bool debug = true;
-const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+#define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
+#define calcTime(x) (millis() - x)/1000
+#define timeSince(x) (millis() - x)
 
-const struct {
-	int detectedJobStart;
-	int detectedJobEnd;
-	int idle;
-} flag = {
-	1,
-	0,
-	-1
-};
+//const bool isReject = true;
+const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const char string0[] PROGMEM = "Initializing... ";
 const char string1[] PROGMEM = "Done.\n";
 const char string2[] PROGMEM = "Scanning...\n";
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
-const char string5[] PROGMEM = "You are not authorized to use this machien.\n\n";
+const char string5[] PROGMEM = "You are not authorized to use this machine.\n\n";
 const char string6[] PROGMEM = "You have reached your quota for this month.\n\n";
 const char string7[] PROGMEM = "Time used this month: ";
 const char string8[] PROGMEM = "User ";
 const char string9[] PROGMEM = " authenticated. Machine is ready to fire. Please do not remove your card.\n";
 const char string10[] PROGMEM = "Card not detected. Operation cancelled.\n";
-const char string11[] PROGMEM = "Elapsed time: ";
+const char string11[] PROGMEM = "Elapsed time  ";
 const char string12[] PROGMEM = "Total time used this month: ";
 const char string13[] PROGMEM = "Unexpected result\n";
 const char string14[] PROGMEM = "Unexpected command\n";

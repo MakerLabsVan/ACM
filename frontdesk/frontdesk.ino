@@ -42,7 +42,7 @@ void loop() {
 		delay(waitforIPResponse);
 	}
 	else {
-		if ((newTime != existingTime) && (newTime < 5*quota)) {
+		if ((newTime != existingTime) && (newTime < maxTime)) {
 			getStringFromMem(accumulatedTime);
 			Serial.print(newTime/60);
 			Serial.print(" minutes ");
