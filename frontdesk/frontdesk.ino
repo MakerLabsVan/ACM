@@ -42,7 +42,7 @@ void loop() {
 		delay(waitforIPResponse);
 	}
 	else {
-		if ((newTime != existingTime) ) {
+		if ( (newTime != existingTime) && newTime < maxTime ) {
 			getStringFromMem(accumulatedTime);
 			Serial.print(newTime/60);
 			Serial.print(F(" minutes "));
@@ -52,6 +52,7 @@ void loop() {
 			// Reset timer on card and disable authorization
 			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 			delay(waitforWriteResponse);
+			Serial.println("Card reset");
 		}
 		digitalWrite(ledPin, HIGH);
 	}
@@ -65,7 +66,7 @@ void loop() {
 			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 			delay(waitforWriteResponse);
 			isValidResponse = getResponse(readData);
-
+			Serial.println(F("Card is active"));
 			buttonState = digitalRead(buttonPin);
 			if (!buttonState) { 
 				break;
