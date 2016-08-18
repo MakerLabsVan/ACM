@@ -32,6 +32,7 @@ void loop() {
 	unsigned long existingTime, elapsedTime, totalTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
+	unsigned char isStaff = 0x01;
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
@@ -46,7 +47,14 @@ void loop() {
 		isValidResponse = getResponse(readData);
 	}
 	// ----------------------------------------------------------------------
-	// RFID tag detected, read block that contains time data (for this machine)
+	// RFID tag detected, get user ID
+	sendCommand(CMD_READ, blockID, userData, keyA, NULL);
+	delay(waitforReadResponse);
+	isValidResponse = getResponse(readData);
+	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
+	isStaff = readData[staffOffset];
+	// ----------------------------------------------------------------------
+	// Read block that contains time data (for this machine)
 	getStringFromMem(detected);
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
 	delay(waitforReadResponse);
@@ -66,27 +74,26 @@ void loop() {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
-		// Check if the user has not reached the 60 min quota
-		/*else if ( (existingTime >= quota) && (readData[staffOffset] != staffMember) 
-		) {
+		// Check if the user has not reached the 60 min quota, skip if staff member
+		else if ( (existingTime >= quota) && (isStaff == 0x00) ) {
 			//soundFeedback(isReject);
 			Serial.print(messages.quotaMet);
-		}*/
+		}
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
 		else {
-			// Get user ID
+			/*// Get user ID
 			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
 			delay(waitforReadResponse);
 			isValidResponse = getResponse(readData);
-			userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
+			userID = (unsigned int)getTime(readData, numUserBytes, userOffset);*/
 
 			// Sound and text feedback
 			//soundFeedback(!isReject);
 			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
 			getStringFromMem(user);
-			Serial.print(userID);
+			Serial.print(userID); Serial.print(" "); Serial.print(isStaff, HEX);
 			getStringFromMem(authorized);
 
 			// Ready to accumulate time, turn LED on, unlock laser cutter
