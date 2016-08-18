@@ -77,7 +77,7 @@ void loop() {
 		// Check if the user has not reached the 60 min quota, skip if staff member
 		else if ( (existingTime >= quota) && (isStaff == 0x00) ) {
 			//soundFeedback(isReject);
-			Serial.print(messages.quotaMet);
+			getStringFromMem(quotaMet);
 		}
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
