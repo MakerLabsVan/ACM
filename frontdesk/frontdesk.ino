@@ -52,7 +52,7 @@ void loop() {
 			// Reset timer on card and disable authorization
 			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 			delay(waitforWriteResponse);
-			Serial.println("Card reset");
+			Serial.println(F("Card reset"));
 		}
 		digitalWrite(ledPin, HIGH);
 	}
