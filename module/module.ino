@@ -75,10 +75,10 @@ void loop() {
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota, skip if staff member
-		/*else if ( (existingTime >= quota) && (isStaff == false) ) {
+		else if ( (existingTime >= quota) && (isStaff == false) ) {
 			//soundFeedback(isReject);
 			getStringFromMem(quotaMet);
-		}*/
+		}
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
 		else {
