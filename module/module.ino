@@ -27,12 +27,12 @@ void setup() {
 
 void loop() {
 	// some variables
+	bool isStaff = false;
 	bool isValidResponse = false;
 	unsigned int userID = 0;
 	unsigned long existingTime, elapsedTime, totalTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
-	unsigned char isStaff = 0x00;
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
@@ -52,7 +52,7 @@ void loop() {
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
-	isStaff = readData[staffOffset];
+	isStaff = (bool)readData[staffOffset];
 	// ----------------------------------------------------------------------
 	// Read block that contains time data (for this machine)
 	getStringFromMem(detected);
@@ -75,25 +75,19 @@ void loop() {
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has not reached the 60 min quota, skip if staff member
-		else if ( (existingTime >= quota) && (isStaff == 0x00) ) {
+		else if ( (existingTime >= quota) && (isStaff == false) ) {
 			//soundFeedback(isReject);
 			getStringFromMem(quotaMet);
 		}
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
 		else {
-			/*// Get user ID
-			sendCommand(CMD_READ, blockID, userData, keyA, NULL);
-			delay(waitforReadResponse);
-			isValidResponse = getResponse(readData);
-			userID = (unsigned int)getTime(readData, numUserBytes, userOffset);*/
-
 			// Sound and text feedback
 			//soundFeedback(!isReject);
 			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
 			getStringFromMem(user);
-			Serial.print(userID); Serial.print(" "); Serial.print(isStaff, HEX);
+			Serial.print(userID); Serial.print(" "); if (isStaff == true) Serial.print("Staff")
 			getStringFromMem(authorized);
 
 			// Ready to accumulate time, turn LED on, unlock laser cutter
