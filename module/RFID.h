@@ -73,7 +73,7 @@
 #define classOffset 8
 #define timeOffset 9
 #define userOffset 8
-#define staffOffset 9
+#define staffOffset 10
 
 // Delays (WiFi)
 #define resetTime 501

@@ -32,7 +32,7 @@ void loop() {
 	unsigned long existingTime, elapsedTime, totalTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
-	unsigned char isStaff = 0x01;
+	unsigned char isStaff = 0x00;
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
