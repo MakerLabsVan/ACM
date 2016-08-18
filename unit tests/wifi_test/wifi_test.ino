@@ -6,9 +6,10 @@ void setup() {
     Serial.begin(9600);
     ESP.begin(9600);
     pinMode(4, OUTPUT);
-    digitalWrite(8, LOW);
+    digitalWrite(9, LOW);
     delay(500);
-    digitalWrite(8, HIGH);
+    digitalWrite(9, HIGH);
+    Serial.println("Hi");
 }
 
 void loop() {
