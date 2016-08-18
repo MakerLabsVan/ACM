@@ -88,6 +88,9 @@ void loop() {
 			Serial.println(existingTime);
 			getStringFromMem(user);
 			Serial.print(userID);
+			if (isStaff == true) {
+				Serial.print(F(" Staff"));
+			}
 			getStringFromMem(authorized);
 
 			// Ready to accumulate time, turn LED on, unlock laser cutter
