@@ -22,7 +22,7 @@ void setup() {
 void loop() {
 
 	while (!isValidResponse) {
-		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL, 0);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
@@ -32,7 +32,7 @@ void loop() {
 	delay(waitforReadResponse);
 	buttonState = digitalRead(buttonPin);
 
-	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
+	sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	newTime = getTime(readData, numTimeBytes, timeOffset);
@@ -42,23 +42,25 @@ void loop() {
 		delay(waitforIPResponse);
 	}
 	else {
-		if ((newTime != existingTime) && (newTime < maxTime)) {
+		if ((newTime != existingTime) ) {
 			getStringFromMem(accumulatedTime);
 			Serial.print(newTime/60);
-			Serial.print(" minutes ");
+			Serial.print(F(" minutes "));
 			Serial.print(newTime%60);
-			Serial.println(" seconds");
+			Serial.println(F(" seconds"));
 			existingTime = newTime;
+			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
+			delay(waitforWriteResponse);
 		}
 		digitalWrite(ledPin, HIGH);
 	}
 
 	if (buttonState) {
 		digitalWrite(ledPin, LOW);
-		delay(waitforSerialResponse);
+		delay(waitForFlush);
 		while (1) {
 			digitalWrite(ledPin, HIGH);
-			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0);
+			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 			delay(waitforWriteResponse);
 			isValidResponse = getResponse(readData);
 
