@@ -49,12 +49,14 @@ void loop() {
 			Serial.print(newTime%60);
 			Serial.println(F(" seconds"));
 			existingTime = newTime;
+			// Reset timer on card and disable authorization
 			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 			delay(waitforWriteResponse);
 		}
 		digitalWrite(ledPin, HIGH);
 	}
 
+	// Reset timer on card and enable authorization if button has been pressed
 	if (buttonState) {
 		digitalWrite(ledPin, LOW);
 		delay(waitForFlush);
