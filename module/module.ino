@@ -29,8 +29,8 @@ void loop() {
 	// some variables
 	bool isStaff = false;
 	bool isValidResponse = false;
-	unsigned int userID = 0;
-	unsigned long existingTime, elapsedTime, totalTime = 0;
+	unsigned int userID, totalTime = 0;
+	unsigned long existingTime, elapsedTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
@@ -236,7 +236,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// if a job was detected, return
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime)  ) {
+					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime) ) {
 						return elapsedTime;
 					}
 					else {

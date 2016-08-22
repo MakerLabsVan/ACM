@@ -42,7 +42,7 @@ void loop() {
 		delay(waitforIPResponse);
 	}
 	else {
-		if ( (newTime != existingTime) && newTime < maxTime ) {
+		if ( (newTime != existingTime) && (newTime < maxTime) ) {
 			getStringFromMem(accumulatedTime);
 			Serial.print(newTime/60);
 			Serial.print(F(" minutes "));
@@ -58,7 +58,7 @@ void loop() {
 	}
 
 	// Reset timer on card and enable authorization if button has been pressed
-	if (buttonState) {
+	if (buttonState == HIGH) {
 		digitalWrite(ledPin, LOW);
 		delay(waitForFlush);
 		while (1) {
@@ -68,7 +68,7 @@ void loop() {
 			isValidResponse = getResponse(readData);
 			Serial.println(F("Card is active"));
 			buttonState = digitalRead(buttonPin);
-			if (!buttonState) { 
+			if (buttonState == LOW) { 
 				break;
 			}
 		}
