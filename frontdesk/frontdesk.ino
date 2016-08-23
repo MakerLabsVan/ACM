@@ -28,9 +28,9 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 	}
 
-	int buttonState = digitalRead(buttonPin);
+	/*int buttonState = digitalRead(buttonPin);
 	delay(waitforReadResponse);
-	buttonState = digitalRead(buttonPin);
+	buttonState = digitalRead(buttonPin);*/
 
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 	delay(waitforReadResponse);
@@ -38,7 +38,7 @@ void loop() {
 	newTime = getTime(readData, numTimeBytes, timeOffset);
 
 	if (newTime == 0) {
-		digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH) );
+		digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 		delay(waitforIPResponse);
 	}
 	else {
@@ -49,8 +49,8 @@ void loop() {
 			Serial.print(newTime%60);
 			Serial.println(F(" seconds"));
 			existingTime = newTime;
-			// Reset timer on card and disable authorization
-			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
+			// Reset timer on card
+			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 			delay(waitforWriteResponse);
 			Serial.println(F("Card reset"));
 		}
@@ -58,7 +58,7 @@ void loop() {
 	}
 
 	// Reset timer on card and enable authorization if button has been pressed
-	if (buttonState == HIGH) {
+	/*if (buttonState == HIGH) {
 		digitalWrite(ledPin, LOW);
 		delay(waitForFlush);
 		while (1) {
@@ -72,7 +72,7 @@ void loop() {
 				break;
 			}
 		}
-	}
+	}*/
 }
 /*
 	Reads time data from card and stores it in one 4 byte chunk
