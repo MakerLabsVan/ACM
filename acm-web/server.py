@@ -1,10 +1,11 @@
 import commands
 import constant
+from arduino import Arduino
 from flask import Flask
 from flask import request, render_template
 
 app = Flask(__name__, static_url_path='/static')
-arduino = commands.beginSerial()
+arduino = Arduino()
 
 @app.route("/")
 def index():
@@ -12,12 +13,12 @@ def index():
 
 @app.route("/on")
 def on():
-	commands.sendCommand(constant.LED_ON)
+	arduino.sendCommand(constant.LED_ON)
 	return render_template("index.html")
 
 @app.route("/off")
 def off():
-	commands.sendCommand(constant.LED_OFF)
+	arduino.sendCommand(constant.LED_OFF)
 	return render_template("index.html")
 
 if __name__ == "__main__":
