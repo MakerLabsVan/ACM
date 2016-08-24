@@ -16,13 +16,17 @@ def beginSerial():
 			print("COM%d not able to connect. Trying next COM port" % i)
 			i = i + 1
 
-	#print("Successfully connected to COM%d" % i)
-	print("Successfully connected to COM4")
+	print("Successfully connected to COM%d" % i)
 	return arduino
 
 def sendCommand(id):
 	command = str(id).encode()
 	arduino.write(command)
-	# numBytesAvailable = arduino.inWaiting()
-	print(arduino.read(2))
+	numBytesAvailable = arduino.inWaiting()
+	print(numBytesAvailable)
+
+	# if numBytesAvailable == 0:
+	# 	print(arduino.read(numBytesAvailable))
+
+	print(arduino.read(numBytesAvailable))
 

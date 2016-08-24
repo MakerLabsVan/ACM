@@ -4,22 +4,17 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 bool isValidResponse = false;
+volatile char characterRead = NULL;
 unsigned char readData[bufferSize];
 unsigned long existingTime, newTime = 0;
 
 void setup() {
 	Serial.begin(monitorBaud);
-	getStringFromMem(initialize);
 	RFID.begin(moduleBaud);
 	pinMode(ledPin, OUTPUT);
-	pinMode(buttonPin, INPUT);
-
-	getStringFromMem(done);
-	Serial.println();
 }
 
 void loop() {
-
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL, 0);
 		delay(waitforSerialResponse);
@@ -27,7 +22,33 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 	}
 
-	sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
+	digitalWrite(ledPin, HIGH);
+
+	if (characterRead == '1') {
+		characterRead = NULL;
+
+		sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
+		delay(waitforReadResponse);
+		isValidResponse = getResponse(readData);
+		newTime = getTime(readData, numTimeBytes, timeOffset);
+		Serial.write(newTime);
+
+		delay(100);			
+	}
+
+	if (characterRead == '2') {
+		characterRead = NULL;
+
+		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
+		delay(waitforWriteResponse);
+		Serial.write("Card Reset");
+
+		delay(100);
+	}
+
+	isValidResponse = false;
+
+	/*sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	newTime = getTime(readData, numTimeBytes, timeOffset);
@@ -50,6 +71,14 @@ void loop() {
 			Serial.println(F("Card reset"));
 		}
 		digitalWrite(ledPin, HIGH);
+	}*/
+
+}
+
+void serialEvent() {
+	while (Serial.available()) {
+		characterRead = Serial.read();
+		Serial.write("OK ");
 	}
 }
 /*
