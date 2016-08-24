@@ -1,12 +1,16 @@
 import serial
+import constant
+
+arduino = ''
 
 def beginSerial():
 	i = 0
+	global arduino
+
 	while True:
 		try:
-			#com = 'COM' + str(i)
-			com = 'COM4'
-			arduino = serial.Serial(com, 57600)
+			COM = 'COM' + str(i)
+			arduino = serial.Serial(COM, constant.BAUD_RATE)
 			break
 		except:
 			print("COM%d not able to connect. Trying next COM port" % i)
@@ -16,6 +20,9 @@ def beginSerial():
 	print("Successfully connected to COM4")
 	return arduino
 
-def sendCommand(arduino, id):
-	command = str(id)
-	arduino.write(command.encode())
+def sendCommand(id):
+	command = str(id).encode()
+	arduino.write(command)
+	# numBytesAvailable = arduino.inWaiting()
+	print(arduino.read(2))
+

@@ -3,8 +3,7 @@
 	There will be a Python script on the PC side sending data.
 */
 
-int i = 0;
-char characterRead;
+volatile char characterRead;
 
 void setup() {
 	Serial.begin(57600);
@@ -13,17 +12,17 @@ void setup() {
 }
 
 void loop() {
+	if (characterRead == '1') {
+		digitalWrite(13, HIGH);
+	}
+	if (characterRead == '2') {
+		digitalWrite(13, LOW);
+	}
 }
 
 void serialEvent() {
 	while (Serial.available()) {
 		characterRead = Serial.read();
-		Serial.write(characterRead);
-		if (characterRead == '1') {
-			digitalWrite(13, HIGH);
-		}
-		if (characterRead == '2') {
-			digitalWrite(13, LOW);
-		}
+		Serial.write("OK");
 	}
 }

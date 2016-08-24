@@ -3,7 +3,6 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
-int buttonPin = 8;
 bool isValidResponse = false;
 unsigned char readData[bufferSize];
 unsigned long existingTime, newTime = 0;
@@ -27,10 +26,6 @@ void loop() {
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
 	}
-
-	/*int buttonState = digitalRead(buttonPin);
-	delay(waitforReadResponse);
-	buttonState = digitalRead(buttonPin);*/
 
 	sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 	delay(waitforReadResponse);
@@ -56,23 +51,6 @@ void loop() {
 		}
 		digitalWrite(ledPin, HIGH);
 	}
-
-	// Reset timer on card and enable authorization if button has been pressed
-	/*if (buttonState == HIGH) {
-		digitalWrite(ledPin, LOW);
-		delay(waitForFlush);
-		while (1) {
-			digitalWrite(ledPin, HIGH);
-			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
-			delay(waitforWriteResponse);
-			isValidResponse = getResponse(readData);
-			Serial.println(F("Card is active"));
-			buttonState = digitalRead(buttonPin);
-			if (buttonState == LOW) { 
-				break;
-			}
-		}
-	}*/
 }
 /*
 	Reads time data from card and stores it in one 4 byte chunk

@@ -1,4 +1,5 @@
 import commands
+import constant
 from flask import Flask
 from flask import request, render_template
 
@@ -11,12 +12,12 @@ def index():
 
 @app.route("/on")
 def on():
-	commands.sendCommand(arduino, 1)
+	commands.sendCommand(constant.LED_ON)
 	return render_template("index.html")
 
 @app.route("/off")
 def off():
-	commands.sendCommand(arduino, 2)
+	commands.sendCommand(constant.LED_OFF)
 	return render_template("index.html")
 
 if __name__ == "__main__":
