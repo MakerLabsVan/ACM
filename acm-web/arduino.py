@@ -1,6 +1,6 @@
 import serial
 import constant
-from time import sleep
+from binascii import hexlify, unhexlify
 
 class Arduino:
 	def __init__(self):
@@ -16,24 +16,34 @@ class Arduino:
 
 		print("Successfully connected to COM%d" % i)
 
-	def sendCommand(self, id):
-		command = str(id).encode()
-		self.serial.write(command)
+	def resetCard(self):
+		self.serial.write(constant.LED_OFF.encode())
 
-		numBytesAvailable = self.serial.inWaiting()
-		# if numBytesAvailable == 0:
-		# 	self.serial.flushInput()
-		# else:
-		#print(self.serial.read(numBytesAvailable))
-
+		rxbuffer = []
 		while True:
-			ch = self.serial.read()
-			print(ch)
-			if (ch == constant.endChar.encode()):
+			byte = self.serial.read()
+			if byte == constant.END_CHAR.encode():
 				break
+			else:
+				rxbuffer.append(byte)
 
-		# 		while True:
-		# 			numBytesAvailable = self.serial.inWaiting()
-		# 			print(self.serial.read(numBytesAvailable))
-		# 			if (self.serial.read() == 0xBB):
-		# 				break
+		print(rxbuffer)
+
+	def getTime(self):
+		self.serial.write(constant.LED_ON.encode())
+
+		k = 0
+		num = 0
+		rxbuffer = []
+		while True:
+			byte = list(self.serial.read())
+			if byte[0] == 44:
+				break
+			else:
+				rxbuffer.append(byte[0])
+
+		print(rxbuffer)
+		for j in range(len(rxbuffer)):
+			num = num + rxbuffer[j] * (2 ** k)
+			k = k + 8
+		print(num)

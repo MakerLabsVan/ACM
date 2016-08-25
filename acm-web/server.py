@@ -11,12 +11,12 @@ def index():
 
 @app.route("/on")
 def on():
-	arduino.sendCommand(constant.LED_ON)
+	arduino.getTime()
 	return render_template("index.html")
 
 @app.route("/off")
 def off():
-	arduino.sendCommand(constant.LED_OFF)
+	arduino.resetCard()
 	return render_template("index.html")
 
 if __name__ == "__main__":

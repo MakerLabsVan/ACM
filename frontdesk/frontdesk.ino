@@ -4,9 +4,13 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 bool isValidResponse = false;
-volatile char characterRead = NULL;
 unsigned char readData[bufferSize];
 unsigned long existingTime, newTime = 0;
+
+volatile char characterRead = NULL;
+const char LED_ON = '1';
+const char LED_OFF = '2';
+const char END_CHAR = ',';
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -24,24 +28,28 @@ void loop() {
 
 	digitalWrite(ledPin, HIGH);
 
-	if (characterRead == '1') {
+	if (characterRead == LED_ON) {
 		characterRead = NULL;
 
 		sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 		delay(waitforReadResponse);
 		isValidResponse = getResponse(readData);
-		newTime = getTime(readData, numTimeBytes, timeOffset);
-		Serial.write(newTime);
-		Serial.write('X');
+		//newTime = getTime(readData, numTimeBytes, timeOffset);
+		newTime = 0x12345678;
+		while (newTime != 0) {
+			Serial.write(newTime);
+			newTime >>= eightBits;
+		}
+		Serial.write(END_CHAR);
 	}
 
-	if (characterRead == '2') {
+	if (characterRead == LED_OFF) {
 		characterRead = NULL;
 
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 		delay(waitforWriteResponse);
-		Serial.write("Card Reset");
-		Serial.write('X');
+		Serial.write("Y");
+		Serial.write(END_CHAR);
 	}
 
 	isValidResponse = false;
@@ -76,7 +84,6 @@ void loop() {
 void serialEvent() {
 	while (Serial.available()) {
 		characterRead = Serial.read();
-		Serial.write("OK ");
 	}
 }
 /*
