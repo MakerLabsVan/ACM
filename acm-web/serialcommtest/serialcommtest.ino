@@ -6,7 +6,7 @@
 volatile char characterRead;
 
 void setup() {
-	Serial.begin(57600);
+	Serial.begin(9600);
 	pinMode(13, OUTPUT);
 	digitalWrite(13, LOW);
 }

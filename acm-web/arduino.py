@@ -8,7 +8,7 @@ class Arduino:
 		while True:
 			try:
 				COM = 'COM' + str(i)
-				self.serial = serial.Serial(COM, constant.BAUD_RATE)
+				self.serial = serial.Serial(COM)
 				break
 			except:
 				print("COM%d not able to connect. Trying next COM port" % i)
@@ -21,5 +21,7 @@ class Arduino:
 		self.serial.write(command)
 
 		numBytesAvailable = self.serial.inWaiting()
+		if numBytesAvailable == 0:
+			print(self.serial.read(numBytesAvailable))
+
 		print(self.serial.read(numBytesAvailable))
-		self.serial.reset_input_buffer()
