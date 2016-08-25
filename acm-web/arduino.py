@@ -19,8 +19,7 @@ class Arduino:
 	def sendCommand(self, id):
 		command = str(id).encode()
 		self.serial.write(command)
-		sleep(0.5)
-		
+
 		numBytesAvailable = self.serial.inWaiting()
 		print(self.serial.read(numBytesAvailable))
 		self.serial.reset_input_buffer()
