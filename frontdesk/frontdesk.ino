@@ -32,8 +32,6 @@ void loop() {
 		isValidResponse = getResponse(readData);
 		newTime = getTime(readData, numTimeBytes, timeOffset);
 		Serial.write(newTime);
-
-		delay(100);			
 	}
 
 	if (characterRead == '2') {
@@ -42,8 +40,6 @@ void loop() {
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 		delay(waitforWriteResponse);
 		Serial.write("Card Reset");
-
-		delay(100);
 	}
 
 	isValidResponse = false;

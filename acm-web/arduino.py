@@ -1,5 +1,6 @@
 import serial
 import constant
+from time import sleep
 
 class Arduino:
 	def __init__(self):
@@ -18,11 +19,8 @@ class Arduino:
 	def sendCommand(self, id):
 		command = str(id).encode()
 		self.serial.write(command)
+		sleep(0.5)
+		
 		numBytesAvailable = self.serial.inWaiting()
-		print(numBytesAvailable)
-
-		# if numBytesAvailable == 0:
-		# 	print(self.serial.read(numBytesAvailable))
-
 		print(self.serial.read(numBytesAvailable))
-
+		self.serial.reset_input_buffer()
