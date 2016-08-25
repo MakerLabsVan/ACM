@@ -21,7 +21,19 @@ class Arduino:
 		self.serial.write(command)
 
 		numBytesAvailable = self.serial.inWaiting()
-		if numBytesAvailable == 0:
-			print(self.serial.read(numBytesAvailable))
+		# if numBytesAvailable == 0:
+		# 	self.serial.flushInput()
+		# else:
+		#print(self.serial.read(numBytesAvailable))
 
-		print(self.serial.read(numBytesAvailable))
+		while True:
+			ch = self.serial.read()
+			print(ch)
+			if (ch == constant.endChar.encode()):
+				break
+
+		# 		while True:
+		# 			numBytesAvailable = self.serial.inWaiting()
+		# 			print(self.serial.read(numBytesAvailable))
+		# 			if (self.serial.read() == 0xBB):
+		# 				break
