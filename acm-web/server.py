@@ -9,13 +9,13 @@ arduino = Arduino()
 def index():
     return render_template("index.html")
 
-@app.route("/on")
-def on():
+@app.route("/getTime")
+def getTime():
 	return arduino.getTime()
 	
-@app.route("/off")
-def off():
-	return arduino.resetCard()
+@app.route("/resetTime")
+def resetTime():
+	return arduino.resetTime()
 
 if __name__ == "__main__":
     app.run()

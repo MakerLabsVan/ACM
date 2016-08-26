@@ -8,7 +8,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 
 	$scope.getTime = function() {
-		$http.get("../on").success(function(res) {
+		$http.get("../getTime").success(function(res) {
 			console.log(res[0]);
 			$scope.raw_time = res[0];
 			$scope.minutes = parseInt(res[0] / 60);
@@ -17,8 +17,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		})
 	}
 
-	$scope.resetCard = function() {
-		$http.get("../off").success(function(res) {
+	$scope.resetTime = function() {
+		$http.get("../resetTime").success(function(res) {
 			console.log(res[0]);
 			$scope.status = "Not successful";
 
