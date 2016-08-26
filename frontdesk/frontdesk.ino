@@ -10,7 +10,7 @@ unsigned long existingTime, newTime = 0;
 volatile char characterRead = NULL;
 const char LED_ON = '1';
 const char LED_OFF = '2';
-const char END_CHAR = ',';
+const unsigned char END_CHAR = 0x00;
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -34,8 +34,7 @@ void loop() {
 		sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 		delay(waitforReadResponse);
 		isValidResponse = getResponse(readData);
-		//newTime = getTime(readData, numTimeBytes, timeOffset);
-		newTime = 0x12345678;
+		newTime = getTime(readData, numTimeBytes, timeOffset);
 		while (newTime != 0) {
 			Serial.write(newTime);
 			newTime >>= eightBits;

@@ -22,7 +22,7 @@ class Arduino:
 		rxbuffer = []
 		while True:
 			byte = self.serial.read()
-			if byte == constant.END_CHAR.encode():
+			if byte == b'\x00':
 				break
 			else:
 				rxbuffer.append(byte)
@@ -37,13 +37,14 @@ class Arduino:
 		rxbuffer = []
 		while True:
 			byte = list(self.serial.read())
-			if byte[0] == 44:
+			if byte[0] == 0:
 				break
 			else:
 				rxbuffer.append(byte[0])
 
-		print(rxbuffer)
 		for j in range(len(rxbuffer)):
 			num = num + rxbuffer[j] * (2 ** k)
 			k = k + 8
+
+		print(rxbuffer)
 		print(num)
