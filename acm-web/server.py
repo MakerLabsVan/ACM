@@ -15,8 +15,7 @@ def on():
 	
 @app.route("/off")
 def off():
-	arduino.resetCard()
-	return render_template("index.html")
+	return arduino.resetCard()
 
 if __name__ == "__main__":
     app.run()

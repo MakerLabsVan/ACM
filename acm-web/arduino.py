@@ -1,6 +1,5 @@
 import serial
 import constant
-from binascii import hexlify, unhexlify
 
 class Arduino:
 	def __init__(self):
@@ -11,7 +10,6 @@ class Arduino:
 				self.serial = serial.Serial(COM)
 				break
 			except:
-				print("COM%d not able to connect. Trying next COM port" % i)
 				i = i + 1
 
 		print("Successfully connected to COM%d" % i)
@@ -21,13 +19,14 @@ class Arduino:
 
 		rxbuffer = []
 		while True:
-			byte = self.serial.read()
-			if byte == b'\x00':
+			byte = list(self.serial.read())
+			if byte[0] == 0:
 				break
 			else:
-				rxbuffer.append(byte)
+				rxbuffer.append(byte[0])
 
 		print(rxbuffer)
+		return str(rxbuffer[0])
 
 	def getTime(self):
 		self.serial.write(constant.LED_ON.encode())
@@ -44,7 +43,7 @@ class Arduino:
 
 		for j in range(len(rxbuffer)):
 			num = num + rxbuffer[j] * (2 ** k)
-			k = k + 8
+			k = k + EIGHT_BITS
 
 		print(rxbuffer)
 		print(num)

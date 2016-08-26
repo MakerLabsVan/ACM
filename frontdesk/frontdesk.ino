@@ -47,7 +47,7 @@ void loop() {
 
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 		delay(waitforWriteResponse);
-		Serial.write("Y");
+		Serial.write(1);
 		Serial.write(END_CHAR);
 	}
 
