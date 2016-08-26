@@ -11,9 +11,8 @@ def index():
 
 @app.route("/on")
 def on():
-	arduino.getTime()
-	return render_template("index.html")
-
+	return arduino.getTime()
+	
 @app.route("/off")
 def off():
 	arduino.resetCard()

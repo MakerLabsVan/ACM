@@ -21,19 +21,26 @@
 
 
   <body>
-    <div class="jumbotron">
-      <h1>MakerLabs ACM Dashboard!</h1>
-      <p>under construction...</p>
-    </div>
+    <div ng-app="ACM-Dash">
+      <div ng-controller="ACM-Controller">
+      <div class="jumbotron">
+        <h1>MakerLabs ACM Dashboard!</h1>
+        <p>under construction...</p>
+      </div>
 
-    <div class="btn-group" role="group" aria-label="...">
-      <a href="/on"><button type="button" class="btn btn-default">Get Time</button></a>
-      <a href="/off"><button type="button" class="btn btn-default">Reset</button></a>
-    </div>
+      <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" ng-click="getTime()">Get Time</button>
+        <a href="/off"><button type="button" class="btn btn-default">Reset</button></a>
+      </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../static/js/bootstrap.min.js"></script>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="../static/js/bootstrap.min.js"></script>
+      <script src="../static/js/angular.min.js"></script>
+      <script src="../static/js/app.js"></script>
+
+      </div>
+    </div>
   </body>
 </html>

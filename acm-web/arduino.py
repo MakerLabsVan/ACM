@@ -48,3 +48,4 @@ class Arduino:
 
 		print(rxbuffer)
 		print(num)
+		return str(num)
