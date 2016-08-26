@@ -24,6 +24,7 @@ void loop() {
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
+
 	}
 
 	digitalWrite(ledPin, HIGH);
@@ -52,31 +53,6 @@ void loop() {
 	}
 
 	isValidResponse = false;
-
-	/*sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
-	delay(waitforReadResponse);
-	isValidResponse = getResponse(readData);
-	newTime = getTime(readData, numTimeBytes, timeOffset);
-
-	if (newTime == 0) {
-		digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
-		delay(waitforIPResponse);
-	}
-	else {
-		if ( (newTime != existingTime) && (newTime < maxTime) ) {
-			getStringFromMem(accumulatedTime);
-			Serial.print(newTime/60);
-			Serial.print(F(" minutes "));
-			Serial.print(newTime%60);
-			Serial.println(F(" seconds"));
-			existingTime = newTime;
-			// Reset timer on card
-			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
-			delay(waitforWriteResponse);
-			Serial.println(F("Card reset"));
-		}
-		digitalWrite(ledPin, HIGH);
-	}*/
 
 }
 

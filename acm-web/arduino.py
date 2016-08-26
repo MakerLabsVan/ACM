@@ -1,18 +1,23 @@
 import serial
 import constant
+import platform
 
 class Arduino:
 	def __init__(self):
 		i = 0
 		while True:
 			try:
-				COM = 'COM' + str(i)
+				if platform.system() == "Windows":
+					COM = 'COM' + str(i)
+				else:
+					COM = '/dev/tty.usbmodem' + str(i)
+
 				self.serial = serial.Serial(COM)
 				break
 			except:
 				i += 1
 
-		print("Successfully connected to COM%d" % i)
+		print("Successfully connected to %s" % COM)
 
 	def resetTime(self):
 		self.serial.write(constant.COMMAND_RESET_TIME.encode())
@@ -31,9 +36,7 @@ class Arduino:
 
 	def getTime(self):
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
-
-		k = 0
-		num = 0
+		
 		rxbuffer = []
 		while True:
 			byte = list(self.serial.read())
@@ -44,9 +47,11 @@ class Arduino:
 
 		print(rxbuffer)
 
-		for j in range(len(rxbuffer)):
-			num = num + rxbuffer[j] * (2 ** k)
-			k += EIGHT_BITS
+		j = 0
+		num = 0
+		for i in range(len(rxbuffer)):
+			num = num + rxbuffer[i] * (2 ** j)
+			j += constant.EIGHT_BITS
 
 		print(num)
 		return str(num)
