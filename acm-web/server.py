@@ -7,7 +7,7 @@ arduino = Arduino()
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("dashboard.html")
 
 @app.route("/getTime")
 def getTime():

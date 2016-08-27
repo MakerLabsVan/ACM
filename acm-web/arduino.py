@@ -5,9 +5,10 @@ import platform
 class Arduino:
 	def __init__(self):
 		i = 0
+		host = platform.system()
 		while True:
 			try:
-				if platform.system() == "Windows":
+				if host == "Windows":
 					COM = 'COM' + str(i)
 				else:
 					COM = '/dev/tty.usbmodem' + str(i)
@@ -37,15 +38,17 @@ class Arduino:
 	def getTime(self):
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
 		
-		rxbuffer = []
-		while True:
-			byte = list(self.serial.read())
-			if byte[0] == 0:
-				break
-			else:
-				rxbuffer.append(byte[0])
+		# rxbuffer = []
+		# while True:
+		# 	byte = list(self.serial.read())
+		# 	if byte[0] == 0:
+		# 		break
+		# 	else:
+		# 		rxbuffer.append(byte[0])
 
-		print(rxbuffer)
+		# print(rxbuffer)
+
+		rxbuffer = listen(self.serial)
 
 		j = 0
 		num = 0
@@ -57,7 +60,8 @@ class Arduino:
 		return str(num)
 
 
-def listen(arduino, rxbuffer):
+def listen(arduino):
+	rxbuffer = []
 	while True:
 		byte = list(arduino.read())
 		if byte[0] == 0:
@@ -66,4 +70,5 @@ def listen(arduino, rxbuffer):
 			rxbuffer.append(byte[0])
 
 	print(rxbuffer)
+	return rxbuffer
 
