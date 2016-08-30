@@ -19,6 +19,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.resetTime = function() {
 		$http.get("../resetTime").success(function(res) {
+			console.log(res);
 			$scope.status = "Not successful";
 
 			if (res[0] == 1) {
