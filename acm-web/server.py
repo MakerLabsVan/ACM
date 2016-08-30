@@ -11,19 +11,11 @@ def index():
 
 @app.route("/getTime")
 def getTime():
-	data = arduino.getTime()
-	if data == constant.ERROR_TIMEOUT:
-		return 0
-	else:
-		return data
+	return arduino.getTime()
 	
 @app.route("/resetTime")
 def resetTime():
-	data = arduino.resetTime()
-	if data == constant.ERROR_TIMEOUT:
-		return 0
-	else:
-		return data
+	return arduino.resetTime()
 
 if __name__ == "__main__":
     app.run()

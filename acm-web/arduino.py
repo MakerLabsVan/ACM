@@ -23,13 +23,17 @@ class Arduino:
 
 	def resetTime(self):
 		self.serial.write(constant.COMMAND_RESET_TIME.encode())
-		rxbuffer = listen(self.serial, time.time())
+		rxbuffer = listen(self.serial)
+		if rxbuffer == constant.ERROR:
+			return constant.ERROR
 
 		return str(rxbuffer[0])
 
 	def getTime(self):
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
-		rxbuffer = listen(self.serial, time.time())
+		rxbuffer = listen(self.serial)
+		if rxbuffer == constant.ERROR:
+			return constant.ERROR
 
 		j = 0
 		num = 0
@@ -41,17 +45,18 @@ class Arduino:
 		return str(num)
 
 
-def listen(arduino, startTime):
+def listen(arduino):
 	rxbuffer = []
 	while True:
-		byte = list(arduino.read())
+		if arduino.inWaiting() > 0:
+			byte = list(arduino.read())
+		else:
+			return constant.ERROR
+
 		if byte[0] == 0:
 			break
 		else:
 			rxbuffer.append(byte[0])
-
-		if (time.time() - startTime) > constant.TIMEOUT:
-			return constant.ERROR_TIMEOUT
 
 	print(rxbuffer)
 	return rxbuffer
