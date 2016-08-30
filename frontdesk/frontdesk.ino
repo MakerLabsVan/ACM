@@ -8,8 +8,8 @@ unsigned char readData[bufferSize];
 unsigned long existingTime, newTime = 0;
 
 volatile char characterRead = NULL;
-const char LED_ON = '1';
-const char LED_OFF = '2';
+const char COMMAND_GET_TIME = '1';
+const char COMMAND_RESET_TIME = '2';
 const unsigned char END_CHAR = 0x00;
 
 void setup() {
@@ -24,12 +24,11 @@ void loop() {
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
-
 	}
 
 	digitalWrite(ledPin, HIGH);
 
-	if (characterRead == LED_ON) {
+	if (characterRead == COMMAND_GET_TIME) {
 		characterRead = NULL;
 
 		sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
@@ -43,7 +42,7 @@ void loop() {
 		Serial.write(END_CHAR);
 	}
 
-	if (characterRead == LED_OFF) {
+	if (characterRead == COMMAND_RESET_TIME) {
 		characterRead = NULL;
 
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);

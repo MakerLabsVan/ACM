@@ -1,6 +1,7 @@
 import serial
 import constant
 import platform
+import time
 
 class Arduino:
 	def __init__(self):
@@ -22,33 +23,13 @@ class Arduino:
 
 	def resetTime(self):
 		self.serial.write(constant.COMMAND_RESET_TIME.encode())
-
-		rxbuffer = []
-		while True:
-			byte = list(self.serial.read())
-			if byte[0] == 0:
-				break
-			else:
-				rxbuffer.append(byte[0])
-
-		print(rxbuffer)
+		rxbuffer = listen(self.serial, time.time())
 
 		return str(rxbuffer[0])
 
 	def getTime(self):
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
-		
-		# rxbuffer = []
-		# while True:
-		# 	byte = list(self.serial.read())
-		# 	if byte[0] == 0:
-		# 		break
-		# 	else:
-		# 		rxbuffer.append(byte[0])
-
-		# print(rxbuffer)
-
-		rxbuffer = listen(self.serial)
+		rxbuffer = listen(self.serial, time.time())
 
 		j = 0
 		num = 0
@@ -60,7 +41,7 @@ class Arduino:
 		return str(num)
 
 
-def listen(arduino):
+def listen(arduino, startTime):
 	rxbuffer = []
 	while True:
 		byte = list(arduino.read())
@@ -69,6 +50,8 @@ def listen(arduino):
 		else:
 			rxbuffer.append(byte[0])
 
+		if (time.time() - startTime) > constant.TIMEOUT:
+			return constant.ERROR_TIMEOUT
+
 	print(rxbuffer)
 	return rxbuffer
-
