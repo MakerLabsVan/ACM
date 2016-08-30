@@ -1,7 +1,6 @@
 import serial
 import constant
 import platform
-import signal
 
 class Arduino:
 	def __init__(self):
