@@ -28,50 +28,78 @@
     <div ng-app="ACM-Dash">
       <div ng-controller="ACM-Controller"> 
 
+      
+
+        <!-- TITLE BAR -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container-fluid">
             <a class="navbar-brand">MakerLabs: Access Control Management</a>
           </div>
         </nav>
 
+        <!-- SIDE NAV BAR -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul id="sidebar" class="nav nav-sidebar">
-            <li class="active"><a href="#home">Dashboard</a></li>
-            <li><a href="#getTime">Get Time</a></li>
-            <li><a href="#resetCard">Reset Card</a></li>
+            <li class="active"><a data-toggle="tab" href="#home">Dashboard</a></li>
+            <li class=""><a data-toggle="tab" href="#guest-card" ng-click="getTime()">Guest Card</a></li>
+            <li class=""><a data-toggle="tab" href="#registration">Registration</a></li>
           </ul>
         </div>
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          
-          <section id="home">
-          <div class="views">
-            <h1 class="page-header">Dashboard</h1>
-            <div class="view-content">
-              <center>
-                <img src="../assets/img/banner.png" alt="MakerLabs Banner">
-                <p>Welcome to the MakerLabs ACM web interface!</p>
-              </center>
+        <!-- VIEW -->
+        <div id="view" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+          <!-- TABS -->
+          <div class="tab-content">
+
+            <!-- HOME SCREEN -->
+            <div id="home" class="tab-pane active">
+              <div class="well well-lg">
+                <h1 id="page-header">Dashboard</h1>
+
+                <div id="home-content">
+                  <center>
+                    <img src="../assets/img/banner.png" alt="MakerLabs Banner">
+                    <p>Welcome to the MakerLabs ACM web interface!</p>
+                    <p>To get started, scan a card and select a function.</p>
+                  </center>
+                </div>
+
+              </div>
             </div>
-            
-          </div>
-          </section>
 
-          <section id="getTime">
-          <div class="views">
-            <h1 class="page-header">Get Time View</h1>
-            <p class="some-text">Wow</p>
-          </div>
-          </section>
+            <!-- GUEST CARD SCREEN -->
+            <div id="guest-card" class="tab-pane">
+              <div class="well well-lg">
+                <h1 id="page-header">Guest Card</h1>
 
-          <section id="resetCard">
-          <div class="views">
-            <h1 class="page-header">Reset Card View</h1>
-            <p class="some-text">Ayyy</p>
+                <div id="guest-card-content">
+                  <center>
+                    <p>Time: <span ng-bind="minutes"></span> minutes
+                    <span ng-bind="seconds"></span> seconds</p>
+                    <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
+                  </center>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- REGISTRATION -->
+            <div id="registration" class="tab-pane">
+              <div class="well well-lg">
+                <h1 id="page-header">Registration</h1>
+                <center>
+                  <p>wtf</p>
+                </center>
+              </div>
+            </div>
+
           </div>
-          </section>
 
         </div>
+
+
+
 
         <!-- Bootstrap -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -1,10 +1,17 @@
-$(function(){
+$(function() {
 
     $('#sidebar li').click(function(e) {
 
-      $clickedElement = $(this);
+    	// Highlight clicked item
+    	$clickedElement = $(this);
+    	$clickedElement.parent().find('li').removeClass('active');
+    	$clickedElement.addClass('active');
 
-      $clickedElement.parent().find('li').removeClass('active');
-      $clickedElement.addClass('active');
+    	// Switch to tab pane
+    	var href = $clickedElement.children().attr('href');
+    	$(href).parent().find('div').removeClass('active');
+    	$(href).addClass('active');
+
     });
-})
+
+});

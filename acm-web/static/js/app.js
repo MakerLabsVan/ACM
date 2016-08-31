@@ -30,4 +30,9 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		})
 	}
 
+	$scope.viewportHeight = function() {
+		$scope.vheight = $(window).height();
+		console.log($scope.vheight);
+	}
+
 }]);
