@@ -1,4 +1,5 @@
 body {
+	overflow: hidden;
 	padding-top: 50px;
 }
 
@@ -25,6 +26,7 @@ body {
   margin-bottom: 20px;
   margin-left: -20px;
 }
+
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
@@ -42,10 +44,12 @@ body {
 }
 
 .page-header {
-	margin-top: 20px;
+	/*padding-top: 20px;*/
 }
 
 .views {
+	margin-top: 50px;
+	padding-top: 20px;
 	height: 980px;
 	width: auto;
 }
