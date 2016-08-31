@@ -3,10 +3,12 @@ body {
 	padding-top: 50px;
 }
 
+/* Top Nav Bar */
 .navbar-fixed-top {
 	border: 0;
 }
 
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: 51px;
@@ -39,12 +41,14 @@ body {
   background-color: #428bca;
 }
 
+
+/* Main content */
 .main {
 	padding-left: 20px;
 }
 
 .page-header {
-	/*padding-top: 20px;*/
+	text-align: right;
 }
 
 .views {
@@ -52,4 +56,9 @@ body {
 	padding-top: 20px;
 	height: 980px;
 	width: auto;
+}
+
+.view-content {
+	margin: 0 auto;
+	vertical-align: middle;
 }
