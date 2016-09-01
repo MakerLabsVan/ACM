@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../assets/favicon.png">
+    <link rel="icon" href="../static/img/favicon.png">
 
     <title>MakerLabs ACM</title>
 
@@ -15,7 +15,7 @@
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../public/dashboardv2.css" rel="stylesheet">
+    <link href="../static/css/custom/dashboardv2.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -36,19 +36,20 @@
             <a class="navbar-brand">MakerLabs: Access Control Management</a>
           </div>
         </nav>
+        <!-- END TITLE BAR -->
 
         <!-- SIDE NAV BAR -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul id="sidebar" class="nav nav-sidebar">
             <li class="active"><a data-toggle="tab" href="#home">Dashboard</a></li>
-            <li class=""><a data-toggle="tab" href="#guest-card" ng-click="drawDonut()">Guest Card</a></li>
+            <li class=""><a data-toggle="tab" href="#guest-card">Guest Card</a></li>
             <li class=""><a data-toggle="tab" href="#registration">Registration</a></li>
           </ul>
         </div>
+        <!-- END SIDE NAV BAR -->
 
         <!-- VIEW -->
         <div id="view" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
           <!-- TABS -->
           <div class="tab-content">
 
@@ -59,7 +60,7 @@
 
                 <div id="content">
                   <center>
-                    <img src="../assets/img/banner.png" alt="MakerLabs Banner" height="150" width="600">
+                    <img src="../static/img/banner.png" alt="MakerLabs Banner" height="150" width="600">
                     <p>Welcome to the ACM web interface!</p>
                     <p>To get started, scan a card and select a function.</p>
                   </center>
@@ -67,6 +68,7 @@
 
               </div>
             </div>
+            <!-- END HOME SCREEN -->
 
             <!-- GUEST CARD SCREEN -->
             <div id="guest-card" class="tab-pane">
@@ -76,8 +78,6 @@
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="content">
                   <center>
-                    <!-- <p>Time: <span ng-bind="minutes"></span> minutes
-                    <span ng-bind="seconds"></span> seconds</p> -->
                     <p><span ng-bind="hours"></span> Hours <span ng-bind="minutes"></span> Minutes <span ng-bind="seconds"></span> Seconds</p>
                   </center>
 
@@ -85,12 +85,16 @@
                   <div id="time-display"></div>
 
                   <br></br>
-                  <center><button type="button" class="btn btn-danger" ng-click="resetTime()">Reset</button></center>
+                  <center>
+                    <button type="button" class="btn btn-success" ng-click="getTime()">Update</button>
+                    <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
+                  </center>
 
                 </div>
 
               </div>
             </div>
+            <!-- END GUEST CARD SCREEN -->
 
             <!-- REGISTRATION -->
             <div id="registration" class="tab-pane">
@@ -106,10 +110,12 @@
 
               </div>
             </div>
+            <!-- END REGISTRATION -->
 
           </div>
-
+          <!-- END TABS -->
         </div>
+        <!-- END VIEW -->
 
 
 
@@ -117,19 +123,19 @@
         <!-- Bootstrap -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-        <script src="../static/js/bootstrap.min.js"></script>
+        <script src="../static/js/vendor/bootstrap.min.js"></script>
 
         <!-- jQuery -->
-        <script src="../static/js/jquery-3.1.0.js"></script>
-        <script src="../public/views.js"></script>
+        <script src="../static/js/vendor/jquery-3.1.0.js"></script>
+        <script src="../static/js/views.js"></script>
 
         <!-- AngularJS -->
-        <script src="../static/js/angular.min.js"></script>
-        <script src="../public/app.js"></script>
+        <script src="../static/js/vendor/angular.min.js"></script>
+        <script src="../static/js/app.js"></script>
 
         <!-- d3 -->
-        <script src="../static/js/d3.js"></script>
-        <script src="../public/visualizations.js"></script>
+        <script src="../static/js/vendor/d3.js"></script>
+        <script src="../static/js/visualizations.js"></script>
 
       </div>
     </div>

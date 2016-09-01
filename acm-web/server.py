@@ -2,12 +2,12 @@ import constant
 from arduino import Arduino
 from flask import Flask, render_template
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
 arduino = Arduino()
 
 @app.route("/")
 def index():
-    return render_template("dashboard.html")
+    return render_template("dashboardv2.html")
 
 @app.route("/getTime")
 def getTime():

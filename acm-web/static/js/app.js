@@ -2,6 +2,8 @@ var app = angular.module('ACM-Dash',[]);
 
 app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
+
+	// initialize some dummy data for testing
 	$scope.raw_time = 123456;
 	$scope.hours = parseInt($scope.raw_time / 3600);
 	$scope.minutes = parseInt($scope.raw_time % 3600 / 60);
@@ -12,7 +14,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		$http.get("../getTime").success(function(res) {
 			console.log(res);
 			$scope.raw_time = res;
-			$scope.minutes = parseInt(res / 60);
+			$scope.hours = parseInt(res / 3600)
+			$scope.minutes = parseInt(res % 3600 / 60);
 			$scope.seconds = res % 60
 
 		})
