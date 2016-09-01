@@ -31,7 +31,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		})
 	}
 
-	$scope.drawDonut = function() {
+	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");
 		var pi = Math.PI;
 
@@ -92,6 +92,6 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				x = j * containerWidth;
 		};
 
-	};
+	};*/
 
 }]);
