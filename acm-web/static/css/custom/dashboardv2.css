@@ -63,9 +63,13 @@ body {
 	text-align: right;
 }
 
-#content {
+#home-content, #guest-content {
   font-size: 18pt;
   margin: 0 auto;
   height: 100vh;
   width: 100vh;
+}
+
+#registration-content {
+  font-size: 13pt;
 }

@@ -58,7 +58,7 @@
               <div class="well well-lg">
                 <h1 id="page-header">Dashboard</h1>
 
-                <div id="content">
+                <div id="home-content">
                   <center>
                     <img src="../static/img/banner.png" alt="MakerLabs Banner" height="150" width="600">
                     <p>Welcome to the ACM web interface!</p>
@@ -76,7 +76,7 @@
                 <h1 id="page-header">Guest Card</h1>
 
                 <br></br><br></br><br></br><br></br><br></br><br></br>
-                <div id="content">
+                <div id="guest-content">
                   <center>
                     <p><span ng-bind="hours"></span> Hours <span ng-bind="minutes"></span> Minutes <span ng-bind="seconds"></span> Seconds</p>
                   </center>
@@ -100,12 +100,14 @@
             <div id="registration" class="tab-pane">
               <div class="well well-lg">
                 <h1 id="page-header">Registration</h1>
-                <center>
-                  <p>wtf</p>
-                </center>
-
-                <div id="content">
-
+                
+                <br></br><br></br><br></br>
+                <div id="registration-content">
+                  <center><form ng-submit="registerCard()">
+                    <input type="text" size="30" placeholder="Enter User ID" ng-model="id">
+                    <input class="btn btn-default" type="submit" value="submit"><br>
+                    You submitted <span ng-bind="entered"></span>
+                  </form></center>
                 </div>
 
               </div>

@@ -1,6 +1,6 @@
 import constant
 from arduino import Arduino
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 arduino = Arduino()
@@ -16,6 +16,10 @@ def getTime():
 @app.route("/resetTime")
 def resetTime():
 	return arduino.resetTime()
+
+@app.route("/registerCard", methods=['POST'])
+def registerCard():
+	return request.get_json()
 
 if __name__ == "__main__":
     app.run()

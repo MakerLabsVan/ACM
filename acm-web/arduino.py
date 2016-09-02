@@ -39,6 +39,12 @@ class Arduino:
 		print(num)
 		return str(num)
 
+	def registerCard(self, id):
+		self.serial.write(constant.COMMAND_REGISTER.encode())
+		rxbuffer = listen(self.serial)
+
+
+
 
 def listen(arduino):
 	rxbuffer = []

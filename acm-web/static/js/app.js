@@ -12,18 +12,18 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.getTime = function() {
 		$http.get("../getTime").success(function(res) {
-			console.log(res);
+			console.log("Time: " + res);
+
 			$scope.raw_time = res;
-			$scope.hours = parseInt(res / 3600)
-			$scope.minutes = parseInt(res % 3600 / 60);
-			$scope.seconds = res % 60
+			$scope.hours = parseInt($scope.raw_time / 3600);
+			$scope.minutes = parseInt($scope.raw_time % 3600 / 60);
+			$scope.seconds = $scope.raw_time % 60;
 
 		})
 	}
 
 	$scope.resetTime = function() {
 		$http.get("../resetTime").success(function(res) {
-			console.log(res);
 			$scope.status = "Not successful";
 
 			if (res[0] == 1) {
@@ -32,6 +32,24 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 			}
 
 		})
+	}
+
+	$scope.id = '';
+	$scope.registerCard = function() {
+		if ($scope.id) {
+
+			$http({
+				url: "../registerCard",
+				method: "POST",
+				headers: { 'Content-Type': 'application/json' },
+				data: JSON.stringify($scope.id)})
+				.success(function(data) {
+					$scope.entered = parseInt(data);
+					console.log("ID sent: " + $scope.entered)
+				});
+
+			$scope.id = '';
+		}
 	}
 
 	/*$scope.drawDonut = function() {

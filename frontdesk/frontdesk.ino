@@ -1,6 +1,8 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+#define success 1
+
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 bool isValidResponse = false;
@@ -10,6 +12,7 @@ unsigned long existingTime, newTime = 0;
 volatile char characterRead = NULL;
 const char COMMAND_GET_TIME = '1';
 const char COMMAND_RESET_TIME = '2';
+const char COMMAND_REGISTER = '3';
 const unsigned char END_CHAR = 0x00;
 
 void setup() {
@@ -35,6 +38,7 @@ void loop() {
 		delay(waitforReadResponse);
 		isValidResponse = getResponse(readData);
 		newTime = getTime(readData, numTimeBytes, timeOffset);
+
 		while (newTime != 0) {
 			Serial.write(newTime);
 			newTime >>= eightBits;
@@ -47,12 +51,16 @@ void loop() {
 
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
 		delay(waitforWriteResponse);
-		Serial.write(1);
+		Serial.write(success);
 		Serial.write(END_CHAR);
 	}
 
-	isValidResponse = false;
+	if (characterRead == COMMAND_REGISTER) {
+		characterRead = NULL;
+		
+	}
 
+	isValidResponse = false;
 }
 
 void serialEvent() {
