@@ -55,10 +55,24 @@ void loop() {
 		Serial.write(END_CHAR);
 	}
 
-	if (characterRead == COMMAND_REGISTER) {
+	/*if (characterRead == COMMAND_REGISTER) {
 		characterRead = NULL;
-		
-	}
+		Serial.write(success);
+		Serial.write(END_CHAR);
+		unsigned char id;
+		int i = 0;
+
+		while (1) {
+			if (Serial.available()) {
+				id = Serial.parseInt();
+				break;
+			}
+		}
+
+		Serial.write(id);
+		Serial.write(END_CHAR);
+
+	}*/
 
 	isValidResponse = false;
 }
@@ -96,13 +110,6 @@ unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned
 }
 
 void getStringFromMem(int index) {
-	/*char * stringInMem = (char*)pgm_read_word( &(message[index]) );
-	int length = strlen_P(stringInMem);
-	char stringBuffer[length];
-
-	strcpy_P(stringBuffer, stringInMem);
-	Serial.print(stringBuffer);*/
-
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
 	Serial.print(stringBuffer);

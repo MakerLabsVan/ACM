@@ -19,7 +19,8 @@ def resetTime():
 
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
-	return request.get_json()
+	id = request.get_json()
+	return arduino.registerCard(id)
 
 if __name__ == "__main__":
     app.run()

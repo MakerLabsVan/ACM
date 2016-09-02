@@ -4,20 +4,21 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
 
 	// initialize some dummy data for testing
-	$scope.raw_time = 123456;
-	$scope.hours = parseInt($scope.raw_time / 3600);
-	$scope.minutes = parseInt($scope.raw_time % 3600 / 60);
-	$scope.seconds = $scope.raw_time % 60;
+	$scope.time = new convertTime(123456);
+
+	function convertTime(raw_time) {
+		this.raw_time = raw_time;
+		this.hours = function() { return parseInt(this.raw_time / 3600) };
+		this.minutes = function() { return parseInt(this.raw_time % 3600 / 60) };
+		this.seconds = function() { return this.raw_time % 60 };
+		this.set = function(newTime) { this.raw_time = newTime };
+	}
 
 
 	$scope.getTime = function() {
 		$http.get("../getTime").success(function(res) {
-			console.log("Time: " + res);
-
-			$scope.raw_time = res;
-			$scope.hours = parseInt($scope.raw_time / 3600);
-			$scope.minutes = parseInt($scope.raw_time % 3600 / 60);
-			$scope.seconds = $scope.raw_time % 60;
+			console.log("Raw Time: " + res);
+			$scope.time.set(res);
 
 		})
 	}
@@ -34,7 +35,6 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		})
 	}
 
-	$scope.id = '';
 	$scope.registerCard = function() {
 		if ($scope.id) {
 
