@@ -55,7 +55,7 @@ void loop() {
 		Serial.write(END_CHAR);
 	}
 
-	/*if (characterRead == COMMAND_REGISTER) {
+	if (characterRead == COMMAND_REGISTER) {
 		characterRead = NULL;
 		Serial.write(success);
 		Serial.write(END_CHAR);
@@ -72,7 +72,7 @@ void loop() {
 		Serial.write(id);
 		Serial.write(END_CHAR);
 
-	}*/
+	}
 
 	isValidResponse = false;
 }
