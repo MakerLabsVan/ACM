@@ -16,6 +16,7 @@ const char COMMAND_REGISTER = '3';
 const unsigned char END_CHAR = 0x00;
 
 long id = 0;
+unsigned long startTime = 0;
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -62,7 +63,9 @@ void loop() {
 		Serial.write(success);
 		Serial.write(END_CHAR);
 
-		while (1) {
+		startTime = millis();
+
+		while ( (millis() - startTime) < 3000 ) {
 			if (Serial.available()) {
 				id = Serial.parseInt();
 				break;
@@ -71,11 +74,10 @@ void loop() {
 
 		sendCommand(CMD_WRITE, blockID, userData, keyA, 0, 1);
 		delay(waitforWriteResponse);
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
-		delay(waitforWriteResponse);
 
 		if (id != 0) {
 			Serial.write(id);
+			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 			id = 0;
 		}
 

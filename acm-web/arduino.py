@@ -46,9 +46,8 @@ class Arduino:
 		self.serial.write(constant.COMMAND_REGISTER.encode())
 		rxbuffer = listen(self.serial)
 
-		print("ID sent: " + id)
-
 		if (rxbuffer[0] == 1):
+			print("ID sent: " + id)
 			self.serial.write(id.encode())
 			rxbuffer = listen(self.serial)
 
