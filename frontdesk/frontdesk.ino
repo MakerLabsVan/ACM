@@ -71,11 +71,10 @@ void loop() {
 
 		sendCommand(CMD_WRITE, blockID, userData, keyA, 0, 1);
 		delay(waitforWriteResponse);
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
-		delay(waitforWriteResponse);
 
 		if (id != 0) {
 			Serial.write(id);
+			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 			id = 0;
 		}
 
