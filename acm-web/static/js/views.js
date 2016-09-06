@@ -2,7 +2,7 @@ $(function() {
 
     $('#sidebar li').click(function(e) {
 
-    	// Highlight clicked item
+    	// Highlight selected tab
     	$clickedElement = $(this);
     	$clickedElement.parent().find('li').removeClass('active');
     	$clickedElement.addClass('active');
