@@ -15,6 +15,8 @@ const char COMMAND_RESET_TIME = '2';
 const char COMMAND_REGISTER = '3';
 const unsigned char END_CHAR = 0x00;
 
+long id = 0;
+
 void setup() {
 	Serial.begin(moduleBaud);
 	RFID.begin(moduleBaud);
@@ -49,7 +51,7 @@ void loop() {
 	if (characterRead == COMMAND_RESET_TIME) {
 		characterRead = NULL;
 
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 1);
+		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 		delay(waitforWriteResponse);
 		Serial.write(success);
 		Serial.write(END_CHAR);
@@ -59,8 +61,6 @@ void loop() {
 		characterRead = NULL;
 		Serial.write(success);
 		Serial.write(END_CHAR);
-		unsigned char id;
-		int i = 0;
 
 		while (1) {
 			if (Serial.available()) {
@@ -68,6 +68,9 @@ void loop() {
 				break;
 			}
 		}
+
+		sendCommand(CMD_WRITE, blockID, userData, keyA, 0, 1);
+		delay(waitforWriteResponse);
 
 		Serial.write(id);
 		Serial.write(END_CHAR);
