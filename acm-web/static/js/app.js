@@ -6,15 +6,15 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	// initialize some dummy data for testing
 	$scope.time = new laserTime(123456);
 
-	function laserTime(raw_time) {
-		this.raw_time = raw_time;
-		this.set = function(newTime) { this.raw_time = newTime };
+	function laserTime(rawTime) {
+		this.rawTime = rawTime;
+		this.set = function(newTime) { this.rawTime = newTime };
 
-		this.hours = function() { return parseInt(this.raw_time / 3600) };
-		this.minutes = function() { return parseInt(this.raw_time % 3600 / 60) };
-		this.seconds = function() { return this.raw_time % 60 };
+		this.hours = function() { return parseInt(this.rawTime / 3600) };
+		this.minutes = function() { return parseInt(this.rawTime % 3600 / 60) };
+		this.seconds = function() { return this.rawTime % 60 };
 
-		this.charge = function() { return "hi" };
+		this.charge = function() { return (1.50 * parseFloat(this.rawTime / 60)).toFixed(2) };
 	}
 
 
@@ -40,7 +40,6 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.registerCard = function() {
 		if ($scope.id) {
-
 			$http({
 				url: "../registerCard",
 				method: "POST",
