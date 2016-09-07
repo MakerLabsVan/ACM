@@ -79,11 +79,9 @@
                 <div id="guest-content">
                   <center>
                     <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
+                    Drop-in charge: $<span ng-bind="time.charge()"></span>
                   </center>
-
-
-                  <div id="time-display"></div>
-
+                  
                   <br></br>
                   <center>
                     <button type="button" class="btn btn-success" ng-click="getTime()">Get Time</button>
@@ -101,7 +99,7 @@
               <div class="well well-lg">
                 <h1 id="page-header">Registration</h1>
                 
-                <br></br><br></br><br></br>
+                <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="registration-content">
                   <center><form ng-submit="registerCard()">
                     <input type="text" size="30" placeholder="Enter User ID" ng-model="id">
