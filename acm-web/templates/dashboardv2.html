@@ -48,7 +48,7 @@
         </div>
         <!-- END SIDE NAV BAR -->
 
-        <!-- VIEW -->
+        <!-- MAIN VIEW -->
         <div id="view" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <!-- TABS -->
           <div class="tab-content">
@@ -78,8 +78,8 @@
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="guest-content">
                   <center>
-                    <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
-                    Drop-in charge: $<span ng-bind="time.charge()"></span>
+                    <p>{{ time.hours() }} Hours {{ time.minutes() }} Minutes {{ time.seconds() }} Seconds</p>
+                    Drop-in charge: {{ time.charge() | currency }}
                   </center>
                   
                   <br></br>
@@ -115,7 +115,7 @@
           </div>
           <!-- END TABS -->
         </div>
-        <!-- END VIEW -->
+        <!-- END MAIN VIEW -->
 
 
 
