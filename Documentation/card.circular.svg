@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="126.73356"
-     inkscape:cy="3151.6333"
+     inkscape:zoom="3.959798"
+     inkscape:cx="85.10006"
+     inkscape:cy="3177.6318"
      inkscape:document-units="in"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -46,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -57,9 +57,9 @@
      transform="translate(0,2187.6379)">
     <path
        style="fill:#0000ff;fill-rule:evenodd;stroke:none;stroke-width:1.12606657px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 94.410156,-2162.6816 c -29.572078,0.8136 -55.466269,28.0056 -54.423828,57.6718 -0.339721,29.4488 25.564908,56.2532 55.098102,56.6077 28.86123,1.574 56.49206,-22.0976 58.92534,-51.0041 3.85574,-29.7884 -19.80481,-60.0896 -49.88537,-62.8387 -3.22163,-0.3645 -6.472561,-0.5223 -9.714244,-0.4367 z"
-       id="circle3338"
-       inkscape:connector-curvature="0" />
+       d="M 97.818359 9.9648438 C 96.197712 9.9536562 94.573966 9.9982156 92.953125 10.041016 C 63.381047 10.854616 38.943887 52.962706 39.986328 82.628906 C 39.646607 112.07771 65.55079 138.88183 95.083984 139.23633 C 123.94521 140.81033 151.57649 116.88502 154.00977 87.978516 C 157.86551 58.190116 132.49599 10.448309 102.66797 10.224609 C 101.05715 10.042359 99.439006 9.9760313 97.818359 9.9648438 z M 97.175781 17.865234 A 5.177032 5.177032 0 0 1 102.35352 23.042969 A 5.177032 5.177032 0 0 1 97.175781 28.220703 A 5.177032 5.177032 0 0 1 92 23.042969 A 5.177032 5.177032 0 0 1 97.175781 17.865234 z "
+       transform="translate(0,-2187.6379)"
+       id="circle3338" />
     <circle
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.12606657px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="path3336"
