@@ -7,13 +7,15 @@ class Arduino:
 		i = 0
 		host = platform.system()
 		print("Attemping to connect... Host is: " + host)
+
+		if (host == "Windows"):
+			PATH = 'COM'
+		else:
+			PATH = '/dev/tty.usbmodem'
+
 		while True:
 			try:
-				if (host == "Windows"):
-					COM = 'COM' + str(i)
-				else:
-					COM = '/dev/tty.usbmodem' + str(i)
-
+				COM = PATH + str(i)
 				self.serial = serial.Serial(COM)
 				break
 			except:
