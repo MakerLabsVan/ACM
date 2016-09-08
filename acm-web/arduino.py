@@ -9,10 +9,8 @@ class Arduino:
 		print("Attemping to connect... Host is: " + host)
 		while True:
 			try:
-				if (host == "Windows") or (host == "Linux"):
+				if (host == "Windows"):
 					COM = 'COM' + str(i)
-				elif host == "Linux":
-					COM = '/dev/tty' + str(i)
 				else:
 					COM = '/dev/tty.usbmodem' + str(i)
 
