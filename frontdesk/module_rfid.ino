@@ -67,7 +67,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		if (idCheck == 1) {
 			CMD[13] = (id >> eightBits) & MSB;
 			CMD[14] = id & MSB;
-			CMD[15] = 0x00;
+			CMD[15] = 0x01;
 			CMD[16] = 0xFF;
 		}
 

@@ -14,7 +14,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		this.minutes = function() { return parseInt(this.rawTime % 3600 / 60) };
 		this.seconds = function() { return this.rawTime % 60 };
 
-		this.charge = function() { return 1.50 * parseFloat(this.rawTime / 60) };
+		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
 	}
 
 

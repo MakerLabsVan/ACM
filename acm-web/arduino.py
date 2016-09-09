@@ -44,13 +44,10 @@ class Arduino:
 
 	def registerCard(self, id):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
-		rxbuffer = listen(self.serial)
-
+		self.serial.write(id.encode())
+		
 		print("ID sent: " + id)
-
-		if (rxbuffer[0] == 1):
-			self.serial.write(id.encode())
-			rxbuffer = listen(self.serial)
+		rxbuffer = listen(self.serial)
 
 		return str(rxbuffer[0])
 

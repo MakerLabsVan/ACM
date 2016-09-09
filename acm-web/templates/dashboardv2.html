@@ -78,8 +78,8 @@
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="guest-content">
                   <center>
-                    <p>{{ time.hours() }} Hours {{ time.minutes() }} Minutes {{ time.seconds() }} Seconds</p>
-                    <p>Drop-in charge: {{ time.charge() | currency }}</p>
+                    <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
+                    <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
                   </center>
                   
                   <br></br>
