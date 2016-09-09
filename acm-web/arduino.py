@@ -7,15 +7,15 @@ class Arduino:
 		i = 0
 		host = platform.system()
 		print("Attemping to connect... Host is: " + host)
+
+		if (host == "Windows"):
+			PATH = 'COM'
+		else:
+			PATH = '/dev/tty.usbmodem'
+
 		while True:
 			try:
-				if (host == "Windows") or (host == "Linux"):
-					COM = 'COM' + str(i)
-				elif host == "Linux":
-					COM = '/dev/tty' + str(i)
-				else:
-					COM = '/dev/tty.usbmodem' + str(i)
-
+				COM = PATH + str(i)
 				self.serial = serial.Serial(COM)
 				break
 			except:
@@ -44,12 +44,19 @@ class Arduino:
 
 	def registerCard(self, id):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
+<<<<<<< HEAD
 		rxbuffer = listen(self.serial)
 
 		if (rxbuffer[0] == 1):
 			print("ID sent: " + id)
 			self.serial.write(id.encode())
 			rxbuffer = listen(self.serial)
+=======
+		self.serial.write(id.encode())
+		
+		print("ID sent: " + id)
+		rxbuffer = listen(self.serial)
+>>>>>>> frontdesk-web-interface
 
 		return str(rxbuffer[0])
 

@@ -9,7 +9,7 @@ bool isValidResponse = false;
 unsigned char readData[bufferSize];
 unsigned long existingTime, newTime = 0;
 
-volatile char characterRead = NULL;
+volatile char characterRead[bufferSize];
 const char COMMAND_GET_TIME = '1';
 const char COMMAND_RESET_TIME = '2';
 const char COMMAND_REGISTER = '3';
@@ -34,8 +34,8 @@ void loop() {
 
 	digitalWrite(ledPin, HIGH);
 
-	if (characterRead == COMMAND_GET_TIME) {
-		characterRead = NULL;
+	if (characterRead[0] == COMMAND_GET_TIME) {
+		characterRead[0] = 0;
 
 		sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
 		delay(waitforReadResponse);
@@ -49,8 +49,8 @@ void loop() {
 		Serial.write(END_CHAR);
 	}
 
-	if (characterRead == COMMAND_RESET_TIME) {
-		characterRead = NULL;
+	if (characterRead[0] == COMMAND_RESET_TIME) {
+		characterRead[0] = 0;
 
 		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
 		delay(waitforWriteResponse);
@@ -58,6 +58,7 @@ void loop() {
 		Serial.write(END_CHAR);
 	}
 
+<<<<<<< HEAD
 	if (characterRead == COMMAND_REGISTER) {
 		characterRead = NULL;
 		Serial.write(success);
@@ -71,6 +72,11 @@ void loop() {
 				break;
 			}
 		}
+=======
+	if (characterRead[0] == COMMAND_REGISTER) {
+		characterRead[0] = 0;
+		id = (long)characterRead[1];
+>>>>>>> frontdesk-web-interface
 
 		sendCommand(CMD_WRITE, blockID, userData, keyA, 0, 1);
 		delay(waitforWriteResponse);
@@ -89,8 +95,15 @@ void loop() {
 }
 
 void serialEvent() {
+	int i = 0;
 	while (Serial.available()) {
-		characterRead = Serial.read();
+		if (i > 0) {
+			characterRead[i] = Serial.parseInt();
+		}
+		else {
+			characterRead[i] = Serial.read();
+		}
+		i++;
 	}
 }
 /*

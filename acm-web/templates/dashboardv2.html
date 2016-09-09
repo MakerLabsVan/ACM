@@ -48,7 +48,7 @@
         </div>
         <!-- END SIDE NAV BAR -->
 
-        <!-- VIEW -->
+        <!-- MAIN VIEW -->
         <div id="view" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <!-- TABS -->
           <div class="tab-content">
@@ -79,14 +79,12 @@
                 <div id="guest-content">
                   <center>
                     <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
+                    <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
                   </center>
-
-
-                  <div id="time-display"></div>
-
+                  
                   <br></br>
                   <center>
-                    <button type="button" class="btn btn-success" ng-click="getTime()">Update</button>
+                    <button type="button" class="btn btn-success" ng-click="getTime()">Get Time</button>
                     <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
                   </center>
 
@@ -101,7 +99,7 @@
               <div class="well well-lg">
                 <h1 id="page-header">Registration</h1>
                 
-                <br></br><br></br><br></br>
+                <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="registration-content">
                   <center><form ng-submit="registerCard()">
                     <input type="text" size="30" placeholder="Enter User ID" ng-model="id">
@@ -117,7 +115,7 @@
           </div>
           <!-- END TABS -->
         </div>
-        <!-- END VIEW -->
+        <!-- END MAIN VIEW -->
 
 
 
