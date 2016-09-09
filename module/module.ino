@@ -100,6 +100,7 @@ void loop() {
 			totalTime = elapsedTime + existingTime;
 
 			// Job done
+			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
 			Serial.print(totalTime/60);
 			Serial.print(F(":"));
