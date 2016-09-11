@@ -102,9 +102,7 @@ void loop() {
 			// Job done
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
-			Serial.print(totalTime/60);
-			Serial.print(F(":"));
-			Serial.println(totalTime%60);
+			Serial.println(totalTime);
 		}
 	}
 	// -------------------------------------------------------------------------
@@ -199,19 +197,19 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	    	signals[i] = isRange(periodX + periodY);
 
 			// Only here temporarily for debugging
-			if (debug) {
-				Serial.print(F("PeriodX: ")); Serial.print(periodX); 
-				Serial.print(F(" PeriodY: ")); Serial.print(periodY);
-				Serial.print(F(" ")); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
-				Serial.print(F(" ")); Serial.print(numValid); Serial.print(F(" ")); Serial.print(numInvalid);
-				Serial.print(F(" Start Time: ")); Serial.print(startTime);
-				if (startTime > 0) {
-					Serial.print(F(" Elapsed Time: ")); Serial.println(calcTime(startTime));
-				}
-				else {
-					Serial.println(F(" Elapsed Time: 0"));
-				}
-			}
+			// if (debug) {
+			// 	Serial.print(F("PeriodX: ")); Serial.print(periodX); 
+			// 	Serial.print(F(" PeriodY: ")); Serial.print(periodY);
+			// 	Serial.print(F(" ")); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
+			// 	Serial.print(F(" ")); Serial.print(numValid); Serial.print(F(" ")); Serial.print(numInvalid);
+			// 	Serial.print(F(" Start Time: ")); Serial.print(startTime);
+			// 	if (startTime > 0) {
+			// 		Serial.print(F(" Elapsed Time: ")); Serial.println(calcTime(startTime));
+			// 	}
+			// 	else {
+			// 		Serial.println(F(" Elapsed Time: 0"));
+			// 	}
+			// }
 
 			// if periodX and periodY IS a valid pair
 			if (signals[i] == 1) {
