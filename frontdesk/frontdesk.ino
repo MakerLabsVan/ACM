@@ -15,7 +15,7 @@ const char COMMAND_RESET_TIME = '2';
 const char COMMAND_REGISTER = '3';
 const unsigned char END_CHAR = 0x00;
 
-long id = 0;
+int id = 0;
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -59,7 +59,7 @@ void loop() {
 
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
-		id = (long)characterRead[1];
+		id = (int)characterRead[1];
 
 		sendCommand(CMD_WRITE, blockID, userData, keyA, 0, 1);
 		delay(waitforWriteResponse);
