@@ -39,6 +39,7 @@ void loop() {
 			Serial.write(newTime);
 			newTime >>= eightBits;
 		}
+		
 		Serial.write(END_CHAR);
 	}
 
