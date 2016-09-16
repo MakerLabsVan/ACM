@@ -80,3 +80,56 @@ void sendToRFID(unsigned char CMD[], int size) {
 	// send command packet
 	RFID.write(CMD, size);
 }
+/*
+	prepare data to be written, time should be in format 0x00AABBCC
+	timeByte is in format { 0xAA, 0xBB, 0xCC }
+	in the first iteration, time gets shifted 2 bytes to get 0x000000AA
+	then bitwise AND operation with 0xFF, then store in timeByte
+*/
+void preparePayload(char command, unsigned long time, int id) {
+
+	if ( (command == COMMAND_RESET_TIME) || (command == COMMAND_MODIFY_TIME) ) {
+		payload[0] = classCheck;
+		int i = 0;
+		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
+
+		for(i = 0; i < numTimeBytes; i++) {
+			payload[i+1] = (time >> j) & MSB;
+			j -= eightBits;
+		}
+	}
+	else if (command == COMMAND_REGISTER) {
+		payload[0] = (id >> eightBits) & MSB;
+		payload[1] = id & MSB;
+		payload[2] = 0x00;
+		payload[3] = 0x00;
+	}
+	
+
+}
+/*
+	Reads time data from card and stores it in one 4 byte chunk
+
+	Param: readData - array containing all bytes read from card
+
+	Function: Time is encoded as three 1 byte values 0xAA 0xBB 0xCC.
+			  existingTime is one 4 byte value 0x00 00 00 00
+			  This function XORs the most significant byte with each time byte,
+			  and left shifts it 1 byte size every iteration.
+			  First iteration: 0x00 00 00 AA
+			  Second iteration: 0x00 00 AA BB
+			  Third iteration: 0x00 AA BB CC
+
+	Returns: existing time from card
+*/
+unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned int offset) {
+	int i = 0;
+	unsigned long existingTime = 0;
+
+	for (i = 0; i < numBytes; i++) {
+		existingTime <<= eightBits;
+		existingTime ^= readData[i + offset];
+	}
+
+	return existingTime;
+}

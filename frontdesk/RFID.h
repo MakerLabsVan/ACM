@@ -73,6 +73,7 @@
 #define classOffset 8
 #define timeOffset 9
 #define userOffset 8
+#define staffOffset 10
 
 // Delays (WiFi)
 #define resetTime 501
@@ -116,7 +117,13 @@
 #define timeSince(x) (millis() - x)
 
 //const bool isReject = true;
-const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+//const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00 };
+
+const char COMMAND_GET_TIME = '1';
+const char COMMAND_RESET_TIME = '2';
+const char COMMAND_REGISTER = '3';
+const unsigned char END_CHAR = 0x00;
 
 const char string0[] PROGMEM = "Initializing... ";
 const char string1[] PROGMEM = "Done.\n";

@@ -41,7 +41,6 @@ void loop() {
 	// Scan for RFID tags
 	getStringFromMem(scan);
 	while (!isValidResponse) {
-		// no payload, so pass NULL
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
@@ -108,7 +107,7 @@ void loop() {
 	// -------------------------------------------------------------------------
 	// Write time data to card
 	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
-		preparePayload(totalTime);
+		preparePayload(COMMAND_MODIFY_TIME, totalTime, NULL);
 		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
@@ -274,58 +273,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 }*/
 
 void getStringFromMem(int index) {
-	/*char * stringInMem = (char*)pgm_read_word( &(message[index]) );
-	int length = strlen_P(stringInMem);
-	char stringBuffer[length];
-
-	strcpy_P(stringBuffer, stringInMem);
-	Serial.print(stringBuffer);*/
-
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
 	Serial.print(stringBuffer);
-}
-/*
-	Reads time data from card and stores it in one 4 byte chunk
-
-	Param: readData - array containing all bytes read from card
-
-	Function: Time is encoded as three 1 byte values 0xAA 0xBB 0xCC.
-			  existingTime is one 4 byte value 0x00000000
-			  This function XORs the most significant byte with each time byte,
-			  and left shifts it 1 byte size every iteration.
-			  First iteration: 0x00 00 00 AA
-			  Second iteration: 0x00 00 AA BB
-			  Third iteration: 0x00 AA BB CC
-
-	Returns: existing time from card
-*/
-unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned int offset) {
-	int i = 0;
-	unsigned long existingTime = 0;
-
-	for (i = 0; i < numBytes; i++) {
-		existingTime <<= eightBits;
-		existingTime ^= readData[i + offset];
-	}
-
-	return existingTime;
-}
-/*
-	prepare data to be written, time should be in format 0x00AABBCC
-	timeByte is in format { 0xAA, 0xBB, 0xCC }
-	in the first iteration, time gets shifted 2 bytes to get 0x000000AA
-	then bitwise AND operation with 0xFF, then store in timeByte
-*/
-void preparePayload(unsigned long time) {
-	payload[0] = classCheck;
-
-	int i = 0;
-	int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
-
-	for(i = 0; i < numTimeBytes; i++) {
-		payload[i+1] = (time >> j) & MSB;
-		j -= eightBits;
-	}
-
 }
