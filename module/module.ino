@@ -42,13 +42,13 @@ void loop() {
 	getStringFromMem(scan);
 	while (!isValidResponse) {
 		// no payload, so pass NULL
-		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 	}
 	// ----------------------------------------------------------------------
 	// RFID tag detected, get user ID
-	sendCommand(CMD_READ, blockID, userData, keyA, NULL);
+	sendCommand(CMD_READ, blockID, userData);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
@@ -56,7 +56,7 @@ void loop() {
 	// ----------------------------------------------------------------------
 	// Read block that contains time data (for this machine)
 	getStringFromMem(detected);
-	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
+	sendCommand(CMD_READ, blockID, machineID);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	// -----------------------------------------------------------------------
@@ -108,9 +108,11 @@ void loop() {
 	// -------------------------------------------------------------------------
 	// Write time data to card
 	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, totalTime);
+		preparePayload(totalTime);
+		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
+
 		if (!isValidResponse) {
 			getStringFromMem(errorRead);
 		}
@@ -165,7 +167,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		if (timeSince(lastPollTime) > pollInterval) {
 
 			// Polling logic
-			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+			sendCommand(CMD_GET_SNR, blockID, machineID);
 			// if card is missing, increment a counter
 			if (!getResponse(serialNumber)) {
 				pollCounter += 1;
@@ -308,4 +310,22 @@ unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned
 	}
 
 	return existingTime;
+}
+/*
+	prepare data to be written, time should be in format 0x00AABBCC
+	timeByte is in format { 0xAA, 0xBB, 0xCC }
+	in the first iteration, time gets shifted 2 bytes to get 0x000000AA
+	then bitwise AND operation with 0xFF, then store in timeByte
+*/
+void preparePayload(unsigned long time) {
+	payload[0] = classCheck;
+
+	int i = 0;
+	int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
+
+	for(i = 0; i < numTimeBytes; i++) {
+		payload[i+1] = (time >> j) & MSB;
+		j -= eightBits;
+	}
+
 }
