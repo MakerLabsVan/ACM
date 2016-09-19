@@ -123,7 +123,7 @@ void loop() {
   		// Push to ThingSpeak
 		digitalWrite(ledPin, LOW);
 		getStringFromMem(sendingLog);
-		Serial.println(elapsedTime);
+		Serial.print(elapsedTime); Serial.print(" ");
 		WIFI.listen();
 		lastSend = updateThingSpeak(userID, elapsedTime, existingTime, lastSend);
 		// --------------------------------------------------------------------
