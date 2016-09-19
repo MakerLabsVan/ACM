@@ -8,8 +8,7 @@ unsigned char readData[bufferSize];
 unsigned long existingTime, newTime = 0;
 
 volatile char characterRead[bufferSize];
-
-int id = 0;
+volatile int id = 0;
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -56,7 +55,6 @@ void loop() {
 
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
-		id = (int)characterRead[1];
 
 		preparePayload(COMMAND_REGISTER, NULL, id);
 		sendCommand(CMD_WRITE, blockID, userData);
@@ -79,7 +77,7 @@ void serialEvent() {
 	int i = 0;
 	while (Serial.available()) {
 		if (i > 0) {
-			characterRead[i] = Serial.parseInt();
+			id = Serial.parseInt();
 		}
 		else {
 			characterRead[i] = Serial.read();

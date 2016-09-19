@@ -36,7 +36,7 @@ class Arduino:
 		j = 0
 		num = 0
 		for i in range(len(rxbuffer)):
-			num = num + rxbuffer[i] * (2 ** j)
+			num += rxbuffer[i] * (2 ** j)
 			j += constant.EIGHT_BITS
 
 		print(num)
