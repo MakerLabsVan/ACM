@@ -77,7 +77,9 @@ void serialEvent() {
 	int i = 0;
 	while (Serial.available()) {
 		if (i > 0) {
-			id = Serial.parseInt();
+			if (characterRead[0] == COMMAND_REGISTER) {
+				id = Serial.parseInt();
+			}
 		}
 		else {
 			characterRead[i] = Serial.read();
