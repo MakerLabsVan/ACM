@@ -33,23 +33,16 @@ class Arduino:
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
 		rxbuffer = listen(self.serial)
 
-		j = 0
-		num = 0
-		for i in range(len(rxbuffer)):
-			num = num + rxbuffer[i] * (2 ** j)
-			j += constant.EIGHT_BITS
-
-		print(num)
-		return str(num)
+		return bytesToNum(rxbuffer)
 
 	def registerCard(self, id):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
 		self.serial.write(id.encode())
 		
-		print("ID sent: " + id)
+		print("ID received: " + id)
 		rxbuffer = listen(self.serial)
 
-		return str(rxbuffer[0])
+		return bytesToNum(rxbuffer)
 
 
 
@@ -65,3 +58,13 @@ def listen(arduino):
 
 	print(rxbuffer)
 	return rxbuffer
+
+def bytesToNum(rxbuffer):
+	j = 0
+	num = 0
+	for i in range(len(rxbuffer)):
+		num += rxbuffer[i] * (2 ** j)
+		j += constant.EIGHT_BITS
+	
+	print(num)
+	return str(num)

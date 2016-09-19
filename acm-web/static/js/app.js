@@ -47,7 +47,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				data: JSON.stringify($scope.id)})
 				.success(function(data) {
 					$scope.entered = parseInt(data);
-					console.log("ID sent: " + $scope.entered)
+					console.log("ID sent back: " + $scope.entered)
 				});
 
 			$scope.id = '';
