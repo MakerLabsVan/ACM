@@ -61,9 +61,11 @@ void loop() {
 		delay(waitforWriteResponse);
 
 		if (id != 0) {
-			Serial.write(id);
 			sendCommand(CMD_WRITE, blockID, machineID);
-			id = 0;
+			while (id != 0 ) {
+				Serial.write(id);
+				id >>= eightBits;
+			}
 		}
 
 		Serial.write(END_CHAR);
