@@ -33,7 +33,7 @@ class Arduino:
 	def getTime(self):
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
 		rxbuffer = listen(self.serial)
-
+		
 		return bytesToNum(rxbuffer)
 
 	def registerCard(self, id):
@@ -55,7 +55,7 @@ def listen(arduino):
 			break
 		else:
 			rxbuffer.append(byte[0])
-
+	
 	print(rxbuffer)
 	return rxbuffer
 
