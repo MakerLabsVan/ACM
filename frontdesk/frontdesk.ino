@@ -3,9 +3,7 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
-bool isValidResponse = false;
-unsigned char readData[bufferSize];
-unsigned long existingTime, newTime = 0;
+unsigned long newTime = 0;
 
 volatile char characterRead[bufferSize];
 volatile int id = 0;
@@ -17,6 +15,9 @@ void setup() {
 }
 
 void loop() {
+	bool isValidResponse = false;
+	unsigned char readData[bufferSize];
+
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
@@ -71,8 +72,6 @@ void loop() {
 		Serial.write(END_CHAR);
 
 	}
-
-	isValidResponse = false;
 }
 
 void serialEvent() {
