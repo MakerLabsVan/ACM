@@ -1,11 +1,12 @@
 import serial
 import constant
-import platform
+from platform import system
+from time import clock
 
 class Arduino:
 	def __init__(self):
 		i = 0
-		host = platform.system()
+		host = system()
 		print("Attemping to connect... Host is: " + host)
 
 		if (host == "Windows"):
