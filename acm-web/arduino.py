@@ -38,19 +38,9 @@ class Arduino:
 
 	def registerCard(self, id):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
-<<<<<<< HEAD
-		rxbuffer = listen(self.serial)
-
-		if (rxbuffer[0] == 1):
-			print("ID sent: " + id)
-			self.serial.write(id.encode())
-			rxbuffer = listen(self.serial)
-=======
 		self.serial.write(id.encode())
 		
 		print("ID received: " + id)
-		rxbuffer = listen(self.serial)
->>>>>>> frontdesk-web-interface
 
 		return bytesToNum(rxbuffer)
 
