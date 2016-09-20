@@ -117,10 +117,17 @@
 #define timeSince(x) (millis() - x)
 
 //const bool isReject = true;
-const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+//const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00 };
+
+const char COMMAND_GET_TIME = '1';
+const char COMMAND_RESET_TIME = '2';
+const char COMMAND_REGISTER = '3';
+const char COMMAND_MODIFY_TIME = '4';
+const unsigned char END_CHAR = 0x00;
 
 const char string0[] PROGMEM = "Initializing... ";
-const char string1[] PROGMEM = "Done.\n";
+const char string1[] PROGMEM = "Done.\n\n";
 const char string2[] PROGMEM = "Scanning...\n";
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
@@ -134,7 +141,7 @@ const char string11[] PROGMEM = "Elapsed time  ";
 const char string12[] PROGMEM = "Total time used this month: ";
 const char string13[] PROGMEM = "Unexpected result\n";
 const char string14[] PROGMEM = "Unexpected command\n";
-const char string15[] PROGMEM = "Card updated. You may now remove it.\n\n";
+const char string15[] PROGMEM = "Card updated. You may now remove it.\n";
 const char string16[] PROGMEM = "Sending Time: ";
 
 const char * const message[] PROGMEM = {

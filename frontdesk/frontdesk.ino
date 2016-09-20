@@ -1,15 +1,12 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
-#define success 1
-
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
-bool isValidResponse = false;
-unsigned char readData[bufferSize];
-unsigned long existingTime, newTime = 0;
+unsigned long newTime = 0;
 
 volatile char characterRead[bufferSize];
+<<<<<<< HEAD
 const char COMMAND_GET_TIME = '1';
 const char COMMAND_RESET_TIME = '2';
 const char COMMAND_REGISTER = '3';
@@ -17,6 +14,9 @@ const unsigned char END_CHAR = 0x00;
 
 long id = 0;
 unsigned long startTime = 0;
+=======
+volatile int id = 0;
+>>>>>>> frontdesk-web-interface
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -25,8 +25,11 @@ void setup() {
 }
 
 void loop() {
+	bool isValidResponse = false;
+	unsigned char readData[bufferSize];
+
 	while (!isValidResponse) {
-		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL, 0);
+		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
@@ -37,7 +40,7 @@ void loop() {
 	if (characterRead[0] == COMMAND_GET_TIME) {
 		characterRead[0] = 0;
 
-		sendCommand(CMD_READ, blockID, machineID, keyA, NULL, 0);
+		sendCommand(CMD_READ, blockID, machineID);
 		delay(waitforReadResponse);
 		isValidResponse = getResponse(readData);
 		newTime = getTime(readData, numTimeBytes, timeOffset);
@@ -46,15 +49,18 @@ void loop() {
 			Serial.write(newTime);
 			newTime >>= eightBits;
 		}
+		
 		Serial.write(END_CHAR);
 	}
 
 	if (characterRead[0] == COMMAND_RESET_TIME) {
 		characterRead[0] = 0;
 
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
+		preparePayload(COMMAND_RESET_TIME, 0, NULL);
+		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
-		Serial.write(success);
+
+		Serial.write(done);
 		Serial.write(END_CHAR);
 	}
 
@@ -75,62 +81,42 @@ void loop() {
 =======
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
+<<<<<<< HEAD
 		id = (long)characterRead[1];
 >>>>>>> frontdesk-web-interface
+=======
+>>>>>>> frontdesk-web-interface
 
-		sendCommand(CMD_WRITE, blockID, userData, keyA, 0, 1);
+		preparePayload(COMMAND_REGISTER, NULL, id);
+		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
 		if (id != 0) {
-			Serial.write(id);
-			sendCommand(CMD_WRITE, blockID, machineID, keyA, 0, 0);
-			id = 0;
+			sendCommand(CMD_WRITE, blockID, machineID);
+			while (id != 0 ) {
+				Serial.write(id);
+				id >>= eightBits;
+			}
 		}
 
 		Serial.write(END_CHAR);
 
 	}
-
-	isValidResponse = false;
 }
 
 void serialEvent() {
 	int i = 0;
 	while (Serial.available()) {
 		if (i > 0) {
-			characterRead[i] = Serial.parseInt();
+			if (characterRead[0] == COMMAND_REGISTER) {
+				id = Serial.parseInt();
+			}
 		}
 		else {
 			characterRead[i] = Serial.read();
 		}
 		i++;
 	}
-}
-/*
-	Reads time data from card and stores it in one 4 byte chunk
-
-	Param: readData - array containing all bytes read from card
-
-	Function: Time is encoded as three 1 byte values 0xAA 0xBB 0xCC.
-			  existingTime is one 4 byte value 0x00 00 00 00
-			  This function XORs the most significant byte with each time byte,
-			  and left shifts it 1 byte size every iteration.
-			  First iteration: 0x00 00 00 AA
-			  Second iteration: 0x00 00 AA BB
-			  Third iteration: 0x00 AA BB CC
-
-	Returns: existing time from card
-*/
-unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned int offset) {
-	int i = 0;
-	unsigned long existingTime = 0;
-
-	for (i = 0; i < numBytes; i++) {
-		existingTime <<= eightBits;
-		existingTime ^= readData[i + offset];
-	}
-
-	return existingTime;
 }
 
 void getStringFromMem(int index) {

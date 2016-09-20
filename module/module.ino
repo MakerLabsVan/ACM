@@ -41,14 +41,13 @@ void loop() {
 	// Scan for RFID tags
 	getStringFromMem(scan);
 	while (!isValidResponse) {
-		// no payload, so pass NULL
-		sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
+		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 	}
 	// ----------------------------------------------------------------------
 	// RFID tag detected, get user ID
-	sendCommand(CMD_READ, blockID, userData, keyA, NULL);
+	sendCommand(CMD_READ, blockID, userData);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
@@ -56,7 +55,7 @@ void loop() {
 	// ----------------------------------------------------------------------
 	// Read block that contains time data (for this machine)
 	getStringFromMem(detected);
-	sendCommand(CMD_READ, blockID, machineID, keyA, NULL);
+	sendCommand(CMD_READ, blockID, machineID);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	// -----------------------------------------------------------------------
@@ -74,7 +73,7 @@ void loop() {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
-		// Check if the user has not reached the 60 min quota, skip if staff member
+		// Check if the user has reached the 60 min quota, skip if staff member
 		else if ( (existingTime >= quota) && (isStaff == false) ) {
 			//soundFeedback(isReject);
 			getStringFromMem(quotaMet);
@@ -102,17 +101,17 @@ void loop() {
 			// Job done
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
-			Serial.print(totalTime/60);
-			Serial.print(F(":"));
-			Serial.println(totalTime%60);
+			Serial.println(totalTime);
 		}
 	}
 	// -------------------------------------------------------------------------
 	// Write time data to card
 	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
-		sendCommand(CMD_WRITE, blockID, machineID, keyA, totalTime);
+		preparePayload(COMMAND_MODIFY_TIME, totalTime, NULL);
+		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
+
 		if (!isValidResponse) {
 			getStringFromMem(errorRead);
 		}
@@ -167,10 +166,9 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		if (timeSince(lastPollTime) > pollInterval) {
 
 			// Polling logic
-			sendCommand(CMD_GET_SNR, blockID, machineID, keyA, NULL);
-			// if card is missing, increment a counter and blink LED?? too slow
+			sendCommand(CMD_GET_SNR, blockID, machineID);
+			// if card is missing, increment a counter
 			if (!getResponse(serialNumber)) {
-				//digitalWrite(ledPin, (digitalRead(ledPin) == HIGH ? LOW : HIGH));
 				pollCounter += 1;
 				// if the counter reaches a specified timeout, return
 				if (pollCounter == pollTimeout) {
@@ -199,19 +197,19 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	    	signals[i] = isRange(periodX + periodY);
 
 			// Only here temporarily for debugging
-			if (debug) {
-				Serial.print(F("PeriodX: ")); Serial.print(periodX); 
-				Serial.print(F(" PeriodY: ")); Serial.print(periodY);
-				Serial.print(F(" ")); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
-				Serial.print(F(" ")); Serial.print(numValid); Serial.print(F(" ")); Serial.print(numInvalid);
-				Serial.print(F(" Start Time: ")); Serial.print(startTime);
-				if (startTime > 0) {
-					Serial.print(F(" Elapsed Time: ")); Serial.println(calcTime(startTime));
-				}
-				else {
-					Serial.println(F(" Elapsed Time: 0"));
-				}
-			}
+			// if (debug) {
+			// 	Serial.print(F("PeriodX: ")); Serial.print(periodX); 
+			// 	Serial.print(F(" PeriodY: ")); Serial.print(periodY);
+			// 	Serial.print(F(" ")); Serial.print(signals[0]); Serial.print(signals[1]); Serial.print(signals[2]); Serial.print(signals[3]); Serial.print(signals[4]);
+			// 	Serial.print(F(" ")); Serial.print(numValid); Serial.print(F(" ")); Serial.print(numInvalid);
+			// 	Serial.print(F(" Start Time: ")); Serial.print(startTime);
+			// 	if (startTime > 0) {
+			// 		Serial.print(F(" Elapsed Time: ")); Serial.println(calcTime(startTime));
+			// 	}
+			// 	else {
+			// 		Serial.println(F(" Elapsed Time: 0"));
+			// 	}
+			// }
 
 			// if periodX and periodY IS a valid pair
 			if (signals[i] == 1) {
@@ -275,40 +273,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 }*/
 
 void getStringFromMem(int index) {
-	/*char * stringInMem = (char*)pgm_read_word( &(message[index]) );
-	int length = strlen_P(stringInMem);
-	char stringBuffer[length];
-
-	strcpy_P(stringBuffer, stringInMem);
-	Serial.print(stringBuffer);*/
-
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
 	Serial.print(stringBuffer);
-}
-/*
-	Reads time data from card and stores it in one 4 byte chunk
-
-	Param: readData - array containing all bytes read from card
-
-	Function: Time is encoded as three 1 byte values 0xAA 0xBB 0xCC.
-			  existingTime is one 4 byte value 0x00000000
-			  This function XORs the most significant byte with each time byte,
-			  and left shifts it 1 byte size every iteration.
-			  First iteration: 0x00 00 00 AA
-			  Second iteration: 0x00 00 AA BB
-			  Third iteration: 0x00 AA BB CC
-
-	Returns: existing time from card
-*/
-unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned int offset) {
-	int i = 0;
-	unsigned long existingTime = 0;
-
-	for (i = 0; i < numBytes; i++) {
-		existingTime <<= eightBits;
-		existingTime ^= readData[i + offset];
-	}
-
-	return existingTime;
 }

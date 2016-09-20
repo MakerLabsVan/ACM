@@ -1,11 +1,12 @@
 import serial
 import constant
-import platform
+from platform import system
+from time import clock
 
 class Arduino:
 	def __init__(self):
 		i = 0
-		host = platform.system()
+		host = system()
 		print("Attemping to connect... Host is: " + host)
 
 		if (host == "Windows"):
@@ -33,14 +34,7 @@ class Arduino:
 		self.serial.write(constant.COMMAND_GET_TIME.encode())
 		rxbuffer = listen(self.serial)
 
-		j = 0
-		num = 0
-		for i in range(len(rxbuffer)):
-			num = num + rxbuffer[i] * (2 ** j)
-			j += constant.EIGHT_BITS
-
-		print(num)
-		return str(num)
+		return bytesToNum(rxbuffer)
 
 	def registerCard(self, id):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
@@ -54,14 +48,13 @@ class Arduino:
 =======
 		self.serial.write(id.encode())
 		
-		print("ID sent: " + id)
+		print("ID received: " + id)
 		rxbuffer = listen(self.serial)
 >>>>>>> frontdesk-web-interface
 
-		return str(rxbuffer[0])
+		return bytesToNum(rxbuffer)
 
-
-
+# waits for serial data until the end character is reached
 def listen(arduino):
 	rxbuffer = []
 	while True:
@@ -74,3 +67,16 @@ def listen(arduino):
 
 	print(rxbuffer)
 	return rxbuffer
+
+# converts an array of bytes to a single number
+# serial data from Arduino is sent by the lower 8 bits first
+# so the number "reads" from left to right in the buffer
+def bytesToNum(rxbuffer):
+	j = 0
+	num = 0
+	for i in range(len(rxbuffer)):
+		num += rxbuffer[i] * (2 ** j)
+		j += constant.EIGHT_BITS
+	
+	print(num)
+	return str(num)
