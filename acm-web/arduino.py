@@ -41,6 +41,7 @@ class Arduino:
 		self.serial.write(id.encode())
 		
 		print("ID received: " + id)
+		rxbuffer = listen(self.serial)
 
 		return bytesToNum(rxbuffer)
 
