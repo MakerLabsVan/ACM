@@ -44,8 +44,7 @@ class Arduino:
 
 		return bytesToNum(rxbuffer)
 
-
-
+# waits for serial data until the end character is reached
 def listen(arduino):
 	rxbuffer = []
 	while True:
@@ -59,6 +58,9 @@ def listen(arduino):
 	print(rxbuffer)
 	return rxbuffer
 
+# converts an array of bytes to a single number
+# serial data from Arduino is sent by the lower 8 bits first
+# so the number "reads" from left to right in the buffer
 def bytesToNum(rxbuffer):
 	j = 0
 	num = 0
