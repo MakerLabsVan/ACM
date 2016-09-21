@@ -48,6 +48,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.registerCard = function() {
 		if ($scope.id) {
+			var input = $scope.id;
+
 			$http({
 				url: "../registerCard",
 				method: "POST",
@@ -55,13 +57,13 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				data: JSON.stringify($scope.id)})
 				.success(function(data) {
 
-					if (parseInt(data) != $scope.id) {
-						$scope.entered = "Error";
+					if (data != input) {
+						$scope.entered = "ERROR";
 						console.log("Error");
 					}
 					else {
-						$scope.entered = parseInt(data);
-						console.log("ID sent back: " + $scope.entered);					
+						$scope.entered = "You submitted " + data;
+						console.log("ID sent back: " + parseInt(data));					
 					}
 
 				});
