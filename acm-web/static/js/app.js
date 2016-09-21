@@ -62,7 +62,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 						console.log("Error");
 					}
 					else {
-						$scope.entered = "You submitted " + data;
+						$scope.entered = "User " + data + " registered.";
 						console.log("ID sent back: " + parseInt(data));					
 					}
 
