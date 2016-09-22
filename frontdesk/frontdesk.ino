@@ -3,7 +3,9 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
+bool isValidResponse = false;
 unsigned long newTime = 0;
+unsigned char readData[bufferSize];
 
 volatile char characterRead[bufferSize];
 <<<<<<< HEAD
@@ -25,14 +27,21 @@ void setup() {
 }
 
 void loop() {
-	bool isValidResponse = false;
-	unsigned char readData[bufferSize];
+	isValidResponse = false;	
 
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
+
+		if (Serial.available() && !isValidResponse) {
+			while (Serial.available()) {
+				Serial.read();
+			}
+			Serial.write(0x02);
+			Serial.write(END_CHAR);
+		}
 	}
 
 	digitalWrite(ledPin, HIGH);
@@ -102,6 +111,7 @@ void loop() {
 		Serial.write(END_CHAR);
 
 	}
+
 }
 
 void serialEvent() {

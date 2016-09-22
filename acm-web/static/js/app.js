@@ -20,8 +20,15 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.getTime = function() {
 		$http.get("../getTime").success(function(res) {
-			console.log("Raw Time: " + res);
-			$scope.time.set(res);
+			if (res == 2) {
+				console.log("Error");
+				$scope.time.set('err');
+			}
+			else {
+				console.log("Raw Time: " + res);
+				$scope.time.set(res);
+			}
+			
 
 		})
 	}
@@ -32,22 +39,33 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 			if (res[0] == 1) {
 				$scope.status = "Success";
-				console.log($scope.status);
 			}
+
+			console.log($scope.status);
 
 		})
 	}
 
 	$scope.registerCard = function() {
 		if ($scope.id) {
+			var input = $scope.id;
+
 			$http({
 				url: "../registerCard",
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.id)})
 				.success(function(data) {
-					$scope.entered = parseInt(data);
-					console.log("ID sent back: " + $scope.entered)
+
+					if (data != input) {
+						$scope.entered = "ERROR";
+						console.log("Error");
+					}
+					else {
+						$scope.entered = "User " + data + " registered.";
+						console.log("ID sent back: " + parseInt(data));					
+					}
+
 				});
 
 			$scope.id = '';

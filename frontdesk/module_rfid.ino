@@ -94,7 +94,7 @@ void preparePayload(char command, unsigned long time, int id) {
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
 
 		for(i = 0; i < numTimeBytes; i++) {
-			payload[i+1] = (time >> j) & MSB;
+			payload[i + 1] = (time >> j) & MSB;
 			j -= eightBits;
 		}
 	}
