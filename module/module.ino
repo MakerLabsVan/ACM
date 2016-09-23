@@ -33,6 +33,7 @@ void loop() {
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
+	unsigned char authorization = 0x00;
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
@@ -52,6 +53,7 @@ void loop() {
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (bool)readData[staffOffset];
+	authorization = readData[classOffset];
 	// ----------------------------------------------------------------------
 	// Read block that contains time data (for this machine)
 	getStringFromMem(detected);
@@ -69,7 +71,7 @@ void loop() {
 		// Get the existing time
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class
-		if (readData[classOffset] != classCheck) {
+		if (authorization != classCheck) {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}

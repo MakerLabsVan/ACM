@@ -41,10 +41,10 @@
 // Write constants
 #define writeLength 0x1A
 
-// Can be unique for each machine
 #define classCheck 0xCC
+#define machineID 0x04 // unique for each machine
+#define classOffset 11 // unique for each machine
 #define blockID 0x01
-#define machineID 0x04
 #define userData 0x01
 #define sampleSize 5
 #define quota 3600
@@ -70,7 +70,6 @@
 #define statusOffset 3
 #define numTimeBytes 3
 #define numUserBytes 2
-#define classOffset 8
 #define timeOffset 9
 #define userOffset 8
 #define staffOffset 10

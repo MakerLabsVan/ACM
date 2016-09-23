@@ -89,10 +89,10 @@ void sendToRFID(unsigned char CMD[], int size) {
 void preparePayload(char command, unsigned long time, int id) {
 
 	if ( (command == COMMAND_RESET_TIME) || (command == COMMAND_MODIFY_TIME) ) {
-		payload[0] = classCheck;
 		int i = 0;
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
 
+		payload[0] = 0x00;
 		for(i = 0; i < numTimeBytes; i++) {
 			payload[i+1] = (time >> j) & MSB;
 			j -= eightBits;
