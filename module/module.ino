@@ -152,7 +152,7 @@ void loop() {
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some variables used in this scope
 	unsigned long startTime = 0;
-	unsigned long lastPollTime, lastBlink = 0;
+	unsigned long lastPollTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
