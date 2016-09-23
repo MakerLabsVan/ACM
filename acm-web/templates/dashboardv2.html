@@ -100,11 +100,20 @@
                 
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="registration-content">
-                  <center><form ng-submit="registerCard()">
-                    <input type="text" size="30" placeholder="Enter User ID" ng-model="id">
-                    <input class="btn btn-default" type="submit" value="submit"><br>
+                  <center>
+
+                    <form novalidate class="simple-form">
+                      User ID: <input type="text" ng-model="user.id"><br><br>
+                      Name: <input type="email" ng-model="user.name"><br><br>
+                      Type: <input type="radio" ng-model="user.type" value="0">Member
+                            <input type="radio" ng-model="user.type" value="1">Staff<br>
+                      Laser Access: <input type="radio" ng-model="user.laser" value="1">Yes
+                                    <input type="radio" ng-model="user.laser" value="0">No<br>
+                      <input type="submit" ng-click="registerCard()" value="Submit">
+                    </form>
+
                     <span ng-bind="entered"></span>
-                  </form></center>
+                  </center>
                 </div>
 
               </div>

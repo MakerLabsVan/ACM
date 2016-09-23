@@ -2,6 +2,7 @@ var app = angular.module('ACM-Dash',[]);
 
 app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
+	$scope.user = {};
 
 	// initialize some dummy data for testing
 	$scope.time = new laserTime(123456);
@@ -47,6 +48,12 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.registerCard = function() {
+
+		console.log($scope.user.id);
+		console.log($scope.user.name);
+		console.log($scope.user.type);
+		console.log($scope.user.laser);
+
 		if ($scope.id) {
 			var input = $scope.id;
 
@@ -56,9 +63,6 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.id)})
 				.success(function(data) {
-
-					console.log(data);
-					console.log(input);
 
 					if (data != input) {
 						$scope.entered = "ERROR";
