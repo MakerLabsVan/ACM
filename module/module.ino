@@ -1,6 +1,8 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+#define MODULE
+
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 

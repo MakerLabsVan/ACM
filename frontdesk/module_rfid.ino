@@ -89,22 +89,23 @@ void sendToRFID(unsigned char CMD[], int size) {
 void preparePayload(char command, unsigned long time, int id) {
 
 	if ( (command == COMMAND_RESET_TIME) || (command == COMMAND_MODIFY_TIME) ) {
-		payload[0] = classCheck;
 		int i = 0;
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
 
+		payload[0] = 0x00;
 		for(i = 0; i < numTimeBytes; i++) {
-			payload[i + 1] = (time >> j) & MSB;
+			payload[i+1] = (time >> j) & MSB;
 			j -= eightBits;
 		}
 	}
+	#ifdef FRONTDESK
 	else if (command == COMMAND_REGISTER) {
 		payload[0] = (id >> eightBits) & MSB;
 		payload[1] = id & MSB;
-		payload[2] = 0x00;
-		payload[3] = 0x00;
+		payload[2] = characterRead[1];
+		payload[3] = characterRead[2];
 	}
-	
+	#endif
 
 }
 /*
