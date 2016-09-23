@@ -98,13 +98,14 @@ void preparePayload(char command, unsigned long time, int id) {
 			j -= eightBits;
 		}
 	}
+	#ifdef FRONTDESK
 	else if (command == COMMAND_REGISTER) {
 		payload[0] = (id >> eightBits) & MSB;
 		payload[1] = id & MSB;
-		payload[2] = 0x00;
-		payload[3] = 0x00;
+		payload[2] = characterRead[1];
+		payload[3] = characterRead[2];
 	}
-	
+	#endif
 
 }
 /*
