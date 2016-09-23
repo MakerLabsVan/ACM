@@ -97,21 +97,34 @@
             <div id="registration" class="tab-pane">
               <div class="well well-lg">
                 <h1 id="page-header">Registration</h1>
-                
-                <br></br><br></br><br></br><br></br><br></br><br></br>
+
                 <div id="registration-content">
 
-                  <form novalidate class="simple-form">
-                    User ID: <input type="text" ng-model="user.id"><br><br>
-                    Name: <input type="text" ng-model="user.name"><br><br>
-                    Type: <input type="radio" ng-model="user.type" value="0">Member
-                          <input type="radio" ng-model="user.type" value="1">Staff<br>
-                    Laser Access: <input type="radio" ng-model="user.laser" value="1">Yes
-                                  <input type="radio" ng-model="user.laser" value="0">No<br>
-                    <input type="submit" ng-click="registerCard()" value="Submit">
-                  </form>
+                  <div id="registration-form">
+                    <form novalidate class="simple-form">
+                      <label for="userID">User ID</label>
+                      <input id="userID" type="text" ng-model="user.id">
+                      
+                      <label for="name">Name</label>
+                      <input id="name" type="text" ng-model="user.name">
 
-                  <span ng-bind="entered"></span>
+                      <label for="type">Type of User</label>
+                      <select id="type" ng-model="user.type">
+                        <option value="0">Member</option>
+                        <option value="1">Staff</option>
+                      </select>
+
+                      <label for="laser">Laser Access</label>
+                      <select id="laser" ng-model="user.laser">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                      </select>
+
+                      <input type="submit" ng-click="registerCard()" value="Register">
+                    </form>
+
+                    <center><span ng-bind="entered"></span></center>
+                  </div>
                   
                 </div>
 
