@@ -35,13 +35,15 @@ class Arduino:
 		
 		return bytesToNum(rxbuffer)
 
-	def registerCard(self, id):
+	def registerCard(self, data):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
-		self.serial.write('1'.encode())
-		self.serial.write('1'.encode())
-		self.serial.write(id.encode())
+		self.serial.write(data["type"].encode())
+		self.serial.write(data["laser"].encode())
+		self.serial.write(data["id"].encode())
 		
-		print("ID submitted: " + id)
+		print("ID submitted: " + data["id"])
+		print("isStaff: " + data["type"])
+		print("classCheck: " + data["type"])
 		rxbuffer = listen(self.serial)
 
 		return bytesToNum(rxbuffer)

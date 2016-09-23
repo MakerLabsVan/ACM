@@ -54,14 +54,15 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		console.log($scope.user.type);
 		console.log($scope.user.laser);
 
-		if ($scope.id) {
+		if ($scope.user.id) {
 			var input = $scope.id;
 
 			$http({
 				url: "../registerCard",
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
-				data: JSON.stringify($scope.id)})
+				//data: JSON.stringify($scope.id)})
+				data: JSON.stringify($scope.user)})
 				.success(function(data) {
 
 					if (data != input) {
@@ -75,7 +76,10 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 				});
 
-			$scope.id = '';
+			$scope.user.id = '';
+			$scope.user.name = '';
+			$scope.user.type = '';
+			$scope.user.laser = '';
 		}
 	}
 
