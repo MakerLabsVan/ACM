@@ -52,7 +52,7 @@
 // Delays (RFID)
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
-#define waitforWriteResponse 250
+#define waitforWriteResponse 300
 #define waitforIPResponse 100
 #define debounce 25
 #define timeToRemoveCard 500
@@ -127,7 +127,7 @@ const char COMMAND_MODIFY_TIME = '4';
 const unsigned char END_CHAR = 0x00;
 
 const char string0[] PROGMEM = "Initializing... ";
-const char string1[] PROGMEM = "Done.\n";
+const char string1[] PROGMEM = "Done.\n\n";
 const char string2[] PROGMEM = "Scanning...\n";
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
@@ -141,7 +141,7 @@ const char string11[] PROGMEM = "Elapsed time  ";
 const char string12[] PROGMEM = "Total time used this month: ";
 const char string13[] PROGMEM = "Unexpected result\n";
 const char string14[] PROGMEM = "Unexpected command\n";
-const char string15[] PROGMEM = "Card updated. You may now remove it.\n\n";
+const char string15[] PROGMEM = "Card updated. You may now remove it.\n";
 const char string16[] PROGMEM = "Sending Time: ";
 
 const char * const message[] PROGMEM = {
