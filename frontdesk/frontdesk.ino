@@ -101,6 +101,6 @@ void serialEvent() {
 
 void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index]) ));
 	Serial.print(stringBuffer);
 }

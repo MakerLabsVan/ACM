@@ -70,8 +70,8 @@ void loop() {
 	else {
 		// Get the existing time
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
-		// Check if the user has taken the class
-		if (authorization != classCheck) {
+		// Check if the user has taken the class, skip if staff member
+		if ( (authorization != classCheck) && (isStaff == false) ) {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
