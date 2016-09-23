@@ -55,7 +55,7 @@ void loop() {
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (bool)readData[staffOffset];
-	authorization = readData[classOffset];
+	authorization = (bool)readData[classOffset];
 	// ----------------------------------------------------------------------
 	// Read block that contains time data (for this machine)
 	getStringFromMem(detected);
@@ -73,12 +73,12 @@ void loop() {
 		// Get the existing time
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class, skip if staff member
-		if ( (authorization != classCheck) && (isStaff == false) ) {
+		if ( !authorization && !isStaff ) {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has reached the 60 min quota, skip if staff member
-		else if ( (existingTime >= quota) && (isStaff == false) ) {
+		else if ( (existingTime >= quota) && !isStaff ) {
 			//soundFeedback(isReject);
 			getStringFromMem(quotaMet);
 		}
@@ -91,7 +91,7 @@ void loop() {
 			Serial.println(existingTime);
 			getStringFromMem(user);
 			Serial.print(userID);
-			if (isStaff == true) {
+			if (isStaff) {
 				getStringFromMem(staff);
 			}
 			getStringFromMem(authorized);

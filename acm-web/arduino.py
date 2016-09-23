@@ -37,9 +37,11 @@ class Arduino:
 
 	def registerCard(self, id):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
+		self.serial.write('1'.encode())
+		self.serial.write('1'.encode())
 		self.serial.write(id.encode())
 		
-		print("ID received: " + id)
+		print("ID submitted: " + id)
 		rxbuffer = listen(self.serial)
 
 		return bytesToNum(rxbuffer)

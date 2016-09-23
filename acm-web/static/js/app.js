@@ -57,13 +57,16 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				data: JSON.stringify($scope.id)})
 				.success(function(data) {
 
+					console.log(data);
+					console.log(input);
+
 					if (data != input) {
 						$scope.entered = "ERROR";
 						console.log("Error");
 					}
 					else {
 						$scope.entered = "User " + data + " registered.";
-						console.log("ID sent back: " + parseInt(data));					
+						console.log("ID registered: " + parseInt(data));					
 					}
 
 				});
