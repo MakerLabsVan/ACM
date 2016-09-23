@@ -52,7 +52,7 @@
 // Delays (RFID)
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
-#define waitforWriteResponse 250
+#define waitforWriteResponse 300
 #define waitforIPResponse 100
 #define debounce 25
 #define timeToRemoveCard 500
@@ -127,7 +127,7 @@ const unsigned char END_CHAR = 0x00;
 
 const char string0[] PROGMEM = "Initializing... ";
 const char string1[] PROGMEM = "Done.\n\n";
-const char string2[] PROGMEM = "Scanning...\n";
+const char string2[] PROGMEM = "Scanning... ";
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
 const char string5[] PROGMEM = "You are not authorized to use this machine.\n\n";
