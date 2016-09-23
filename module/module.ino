@@ -30,12 +30,12 @@ void setup() {
 void loop() {
 	// some variables
 	bool isStaff = false;
+  bool authorization = false;
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
-	unsigned char authorization = 0x00;
 	// ----------------------------------------------------------------------
 	// Turn LED off and lock laser cutter
 	digitalWrite(ledPin, LOW);
