@@ -43,7 +43,7 @@ class Arduino:
 		
 		print("ID submitted: " + data["id"])
 		print("isStaff: " + data["type"])
-		print("classCheck: " + data["type"])
+		print("classCheck: " + data["laser"])
 		rxbuffer = listen(self.serial)
 
 		return bytesToNum(rxbuffer)
