@@ -110,6 +110,7 @@
 #define errorCommand 14
 #define cardUpdated 15
 #define sendingLog 16
+#define staff 17
 
 #define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
@@ -142,6 +143,7 @@ const char string13[] PROGMEM = "Unexpected result\n";
 const char string14[] PROGMEM = "Unexpected command\n";
 const char string15[] PROGMEM = "Card updated. You may now remove it.\n";
 const char string16[] PROGMEM = "Sending Time: ";
+const char string17[] PROGMEM = " Staff";
 
 const char * const message[] PROGMEM = {
 	string0,
@@ -160,5 +162,6 @@ const char * const message[] PROGMEM = {
 	string13,
 	string14,
 	string15,
-	string16
+	string16,
+	string17
 };

@@ -90,7 +90,7 @@ void loop() {
 			getStringFromMem(user);
 			Serial.print(userID);
 			if (isStaff == true) {
-				Serial.print(F(" Staff"));
+				getStringFromMem(staff);
 			}
 			getStringFromMem(authorized);
 
