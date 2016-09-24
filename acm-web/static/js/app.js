@@ -55,13 +55,12 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		console.log($scope.user.laser);
 
 		if ($scope.user.id) {
-			var input = $scope.id;
+			var input = $scope.user.id;
 
 			$http({
 				url: "../registerCard",
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
-				//data: JSON.stringify($scope.id)})
 				data: JSON.stringify($scope.user)})
 				.success(function(data) {
 
