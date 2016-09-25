@@ -1,11 +1,11 @@
 import constant
-import database
+from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
 arduino = Arduino()
-db = database.authorize()
+database = Database()
 
 @app.route("/")
 def index():
@@ -26,6 +26,7 @@ def registerCard():
 
 @app.route("/dbtest")
 def dbtest():
+	database.getUsers()
 	return "yay"
 
 if __name__ == "__main__":
