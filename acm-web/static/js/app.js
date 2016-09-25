@@ -2,7 +2,6 @@ var app = angular.module('ACM-Dash',[]);
 
 app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
-	$scope.user = {};
 
 	// initialize some dummy data for testing
 	$scope.time = new laserTime(123456);
@@ -47,6 +46,11 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		})
 	}
 
+	$scope.user = {
+		type: "0",
+		laser: "0"
+	};
+
 	$scope.registerCard = function() {
 
 		console.log($scope.user.id);
@@ -75,10 +79,10 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 				});
 
-			$scope.user.id = '';
-			$scope.user.name = '';
-			$scope.user.type = '';
-			$scope.user.laser = '';
+			$scope.user.id = "";
+			$scope.user.name = "";
+			$scope.user.type = "0";
+			$scope.user.laser = "0";
 		}
 	}
 
