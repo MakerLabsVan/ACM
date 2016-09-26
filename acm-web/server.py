@@ -30,5 +30,10 @@ def registerCard():
 		return str(1)
 		#return arduino.registerCard(data)
 
+@app.route("/dbtest")
+def dbtest():
+	database.getUsers()
+	return "yay"
+
 if __name__ == "__main__":
     app.run()
