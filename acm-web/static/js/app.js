@@ -3,7 +3,6 @@ var app = angular.module('ACM-Dash',[]);
 app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
 
-	// initialize some dummy data for testing
 	$scope.time = new laserTime(123456);
 
 	function laserTime(rawTime) {
@@ -47,6 +46,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.user = {
+		id: "",
+		name: "",
 		type: "0",
 		laser: "0"
 	};
@@ -67,9 +68,11 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.user)})
 				.success(function(data) {
-
-					if (data != input) {
-						$scope.entered = "ERROR";
+					if (data == "ID already exists") {
+						$scope.entered = data;
+					}
+					else if (data != input) {
+						$scope.entered = "Error";
 						console.log("Error");
 					}
 					else {

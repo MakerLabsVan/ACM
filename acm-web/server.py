@@ -22,12 +22,13 @@ def resetTime():
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
 	data = request.get_json()
-	return arduino.registerCard(data)
+	status = database.insertUser(data)
 
-@app.route("/dbtest")
-def dbtest():
-	database.getUsers()
-	return "yay"
+	if status == "1":
+		return "ID already exists."
+	else:
+		return str(1)
+		#return arduino.registerCard(data)
 
 if __name__ == "__main__":
     app.run()
