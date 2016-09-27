@@ -48,8 +48,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.user = {
 		id: "",
 		name: "",
-		type: "0",
-		laser: "0"
+		type: "Member",
+		laser: "No"
 	};
 
 	$scope.registerCard = function() {
@@ -68,8 +68,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.user)})
 				.success(function(data) {
-					if (data == "ID already exists") {
-						$scope.entered = data;
+					if (data == "0") {
+						$scope.entered = "This ID is in use.";
 					}
 					else if (data != input) {
 						$scope.entered = "Error";
@@ -84,8 +84,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 			$scope.user.id = "";
 			$scope.user.name = "";
-			$scope.user.type = "0";
-			$scope.user.laser = "0";
+			$scope.user.type = "Member";
+			$scope.user.laser = "No";
 		}
 	}
 

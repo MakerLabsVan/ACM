@@ -1,4 +1,5 @@
 import gspread
+import constant
 from oauth2client.service_account import ServiceAccountCredentials
 
 class Database:
@@ -26,32 +27,34 @@ class Database:
         print("\nDone\n")
     
     def insertUser(self, data):
-        status = "0"
         print("Inserting " + data["name"])
 
         id_list = self.sheet.col_values(1)
 
+        # Check if ID has already been registered
         for i in range(len(id_list)):
-            if id_list[i] == '':
-                break
-            elif id_list[i] == data["id"]:
+            if id_list[i] == data["id"]:
                 print("ID exists. Exiting...")
-                return "1"
-
+                return constant.NOT_COMPLETED
+            elif id_list[i] == '':
+                new_row = i + 1
+                break
+        
+        # Put data in sheet
         # WTF json/list is randomized every time... can't rely on a list as of right now :(
-        self.sheet.update_cell(i, 1, data["id"])
-        self.sheet.update_cell(i, 2, data["name"])
-        self.sheet.update_cell(i, 3, data["type"])
-        self.sheet.update_cell(i, 4, data["laser"])
+        self.sheet.update_cell(new_row, 1, data["id"])
+        self.sheet.update_cell(new_row, 2, data["name"])
+        self.sheet.update_cell(new_row, 3, data["type"])
+        self.sheet.update_cell(new_row, 4, data["laser"])
 
-        return "0"
+        return constant.COMPLETED
     
     def deleteUser(self, data):
         # Determine if deleting by User ID or by Name
-        if data["id"] != "":
+        if data["id"] != '':
             col = 1
             key = "id"
-        elif data["name"] != "":
+        elif data["name"] != '':
             col = 2
             key = "name"
         else:
@@ -62,13 +65,15 @@ class Database:
 
         # Look for value, return if not found
         for i in range(len(data_list)):
-            if data_list == data[key]
+            if data_list[i] == data[key]:
                 break
-            elif data_list == '':
+            elif data_list[i] == '':
                 print("User not found.")
-                return "1"
+                return constant.NOT_COMPLETED
         
         # If found, replace row with blanks
         for j in range(len(data)):
-            self.sheet.update_cell(i, j, "")
+            self.sheet.update_cell(i+1, j+1, "")
+        
+        return constant.COMPLETED
                 

@@ -24,15 +24,14 @@ def registerCard():
 	data = request.get_json()
 	status = database.insertUser(data)
 
-	if status == "1":
-		return "ID already exists."
+	if status == constant.NOT_COMPLETED:
+		return status
 	else:
 		return str(1)
 		#return arduino.registerCard(data)
 
 @app.route("/dbtest")
 def dbtest():
-	database.getUsers()
 	return "yay"
 
 if __name__ == "__main__":
