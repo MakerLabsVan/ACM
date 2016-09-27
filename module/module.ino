@@ -91,11 +91,7 @@ void loop() {
 			Serial.println(existingTime);
 			getStringFromMem(user);
 			Serial.print(userID);
-<<<<<<< HEAD
-			if (isStaff == true) {
-=======
 			if (isStaff) {
->>>>>>> frontdesk-web-interface
 				getStringFromMem(staff);
 			}
 			getStringFromMem(authorized);

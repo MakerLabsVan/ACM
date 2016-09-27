@@ -10,17 +10,12 @@ unsigned long newTime = 0;
 unsigned char readData[bufferSize];
 
 volatile char characterRead[bufferSize];
-<<<<<<< HEAD
 const char COMMAND_GET_TIME = '1';
 const char COMMAND_RESET_TIME = '2';
 const char COMMAND_REGISTER = '3';
 const unsigned char END_CHAR = 0x00;
 
-long id = 0;
-unsigned long startTime = 0;
-=======
 volatile int id = 0;
->>>>>>> frontdesk-web-interface
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -75,28 +70,11 @@ void loop() {
 		Serial.write(END_CHAR);
 	}
 
-<<<<<<< HEAD
-	if (characterRead == COMMAND_REGISTER) {
-		characterRead = NULL;
-		Serial.write(success);
-		Serial.write(END_CHAR);
-
-		startTime = millis();
-
-		while ( (millis() - startTime) < 3000 ) {
-			if (Serial.available()) {
-				id = Serial.parseInt();
-				break;
-			}
-		}
-=======
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
-<<<<<<< HEAD
+
 		id = (long)characterRead[1];
->>>>>>> frontdesk-web-interface
-=======
->>>>>>> frontdesk-web-interface
+
 
 		preparePayload(COMMAND_REGISTER, NULL, id);
 		sendCommand(CMD_WRITE, blockID, userData);
