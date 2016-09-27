@@ -46,16 +46,16 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.user = {
-		uid: "1",
-		memberName: "2",
-		memberType: "3",
-		laserA: "4",
-		laserB: "5",
-		shopbot: "6",
-		wood: "7",
-		metal: "8",
-		textile: "9",
-		threeD: "10"
+		uid: "",
+		memberName: "",
+		memberType: "1",
+		laserA: "0",
+		laserB: "0",
+		shopbot: "0",
+		wood: "0",
+		metal: "0",
+		textile: "0",
+		threeD: "0"
 	};
 
 	$scope.registerCard = function() {

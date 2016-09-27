@@ -22,7 +22,7 @@ def resetTime():
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
 	data = request.get_json()
-	status = database.insertUser(data)
+	database.insertUser(data)
 	
 	return str(1)
 	#return arduino.registerCard(data)
