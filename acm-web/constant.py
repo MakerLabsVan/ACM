@@ -2,7 +2,6 @@ COMMAND_GET_TIME = '1'
 COMMAND_RESET_TIME = '2'
 COMMAND_REGISTER = '3'
 EIGHT_BITS = 8
-ERROR = 'ERROR'
 
 # These refer to list indices, not actual columns in the spreadsheet
 CELL_PKEY = 'A1'
@@ -17,4 +16,5 @@ COL_USES_WOOD = 10
 COL_USES_METAL = 11
 COL_USES_TEXTILE = 12
 COL_USES_THREE_D = 13
-COL_END = ':N'
+COL_START_DATA = 'A'
+COL_END_DATA = ':N'

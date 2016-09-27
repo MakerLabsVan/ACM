@@ -62,7 +62,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 		console.log(JSON.stringify($scope.user));
 
-		if ($scope.user.id) {
+		if ($scope.user.uid && $scope.user.memberName) {
 			var input = $scope.user.id;
 
 			$http({
@@ -73,7 +73,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				.success(function(data) {
 					if (data != input) {
 						$scope.entered = "Error";
-						console.log("Error");
+						console.log($scope.entered);
 					}
 					else {
 						$scope.entered = "User " + data + " registered.";

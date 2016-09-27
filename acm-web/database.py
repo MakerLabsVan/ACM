@@ -20,7 +20,7 @@ class Database:
         # Create new row and get that row as a list of cell objects
         self.sheet.add_rows(1)
         endRow = self.sheet.row_count
-        cellList = self.sheet.range('A' + str(endRow) + constant.COL_END + str(endRow))
+        cellList = self.sheet.range(constant.COL_START_DATA + str(endRow) + constant.COL_END_DATA + str(endRow))
 
         # Update cell values
         cellList[constant.COL_PKEY].value = self.pKey
