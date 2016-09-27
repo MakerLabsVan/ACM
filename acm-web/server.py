@@ -23,12 +23,9 @@ def resetTime():
 def registerCard():
 	data = request.get_json()
 	status = database.insertUser(data)
-
-	if status == constant.NOT_COMPLETED:
-		return status
-	else:
-		return str(1)
-		#return arduino.registerCard(data)
+	
+	return str(1)
+	#return arduino.registerCard(data)
 
 @app.route("/dbtest")
 def dbtest():

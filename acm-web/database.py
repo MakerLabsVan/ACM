@@ -12,6 +12,7 @@ class Database:
         spreadsheet = gc.open("MakerLabs ACM")
         print("Opened database")
         self.sheet = spreadsheet.worksheet("Users")
+        self.pKey = int(self.sheet.acell('A1').value)
 
     def getUsers(self):
         print("Getting all users...\n")
@@ -27,53 +28,24 @@ class Database:
         print("\nDone\n")
     
     def insertUser(self, data):
-        print("Inserting " + data["name"])
+        print("Inserting " + data["memberName"])
 
-        id_list = self.sheet.col_values(1)
+        self.sheet.add_rows(1)
+        endRow = self.sheet.row_count
+        cellList = self.sheet.range('A' + str(endRow) + ":M" + str(endRow))
 
-        # Check if ID has already been registered
-        for i in range(len(id_list)):
-            if id_list[i] == data["id"]:
-                print("ID exists. Exiting...")
-                return constant.NOT_COMPLETED
-            elif id_list[i] == '':
-                new_row = i + 1
-                break
-        
-        # Put data in sheet
-        # WTF json/list is randomized every time... can't rely on a list as of right now :(
-        self.sheet.update_cell(new_row, 1, data["id"])
-        self.sheet.update_cell(new_row, 2, data["name"])
-        self.sheet.update_cell(new_row, 3, data["type"])
-        self.sheet.update_cell(new_row, 4, data["laser"])
+        cellList[constant.COL_PKEY].value = self.pKey
+        cellList[constant.COL_UID].value = data["id"]
+        cellList[constant.COL_MEMBER_NAME].value = data["memberName"]
+        cellList[constant.COL_MEMBER_TYPE].value = data["memberType"]
+        cellList[constant.COL_USES_LASER_A].value = data["laserA"]
+        cellList[constant.COL_USES_LASER_B].value = data["laserB"]
+        cellList[constant.COL_USES_SHOPBOT].value = data["shopbot"]
+        cellList[constant.COL_USES_WOOD].value = data["wood"]
+        cellList[constant.COL_USES_METAL].value = data["metal"]
+        cellList[constant.COL_USES_TEXTILE].value = data["textile"]
+        cellList[constant.COL_USES_THREE_D].value = data["threeD"]
 
-        return constant.COMPLETED
-    
-    def deleteUser(self, data):
-        # Determine if deleting by User ID or by Name
-        if data["id"] != '':
-            col = 1
-            key = "id"
-        elif data["name"] != '':
-            col = 2
-            key = "name"
-        else:
-            return "Invalid choice"
-        
-        # Pick correct column in sheet
-        data_list = self.sheet.col_values(col)
-
-        # Look for value, return if not found
-        for i in range(len(data_list)):
-            if data_list[i] == data[key]:
-                break
-            elif data_list[i] == '':
-                print("User not found.")
-                return constant.NOT_COMPLETED
-        
-        # If found, replace row with blanks
-        for j in range(len(data)):
-            self.sheet.update_cell(i+1, j+1, "")
-        
-        return constant.COMPLETED
-                
+        self.pKey += 1
+        self.sheet.update_cells(cellList)
+        self.sheet.update_acell(constant.CELL_PKEY, self.pKey)

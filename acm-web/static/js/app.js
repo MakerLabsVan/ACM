@@ -46,18 +46,21 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.user = {
-		id: "",
-		name: "",
-		type: "Member",
-		laser: "No"
+		uid: "1",
+		memberName: "2",
+		memberType: "3",
+		laserA: "4",
+		laserB: "5",
+		shopbot: "6",
+		wood: "7",
+		metal: "8",
+		textile: "9",
+		threeD: "10"
 	};
 
 	$scope.registerCard = function() {
 
-		console.log($scope.user.id);
-		console.log($scope.user.name);
-		console.log($scope.user.type);
-		console.log($scope.user.laser);
+		console.log(JSON.stringify($scope.user));
 
 		if ($scope.user.id) {
 			var input = $scope.user.id;
@@ -68,10 +71,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.user)})
 				.success(function(data) {
-					if (data == "0") {
-						$scope.entered = "This ID is in use.";
-					}
-					else if (data != input) {
+					if (data != input) {
 						$scope.entered = "Error";
 						console.log("Error");
 					}
@@ -82,10 +82,10 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 				});
 
-			$scope.user.id = "";
-			$scope.user.name = "";
-			$scope.user.type = "Member";
-			$scope.user.laser = "No";
+			$scope.user.uid = "";
+			$scope.user.memberName = "";
+			$scope.user.memberType = "1";
+			$scope.user.laserA = "0";
 		}
 	}
 

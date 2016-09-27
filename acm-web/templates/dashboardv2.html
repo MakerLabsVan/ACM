@@ -110,14 +110,14 @@
 
                       <label for="type">Type of User</label>
                       <select id="type" ng-model="user.type">
-                        <option value="Member">Member</option>
-                        <option value="Staff">Staff</option>
+                        <option value="1">Member</option>
+                        <option value="0">Staff</option>
                       </select>
 
                       <label for="laser">Laser Access</label>
-                      <select id="laser" ng-model="user.laser">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                      <select id="laser" ng-model="user.laserA">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
                       </select>
 
                       <input type="submit" ng-click="registerCard()" value="Register">
