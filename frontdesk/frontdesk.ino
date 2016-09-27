@@ -10,11 +10,6 @@ unsigned long newTime = 0;
 unsigned char readData[bufferSize];
 
 volatile char characterRead[bufferSize];
-const char COMMAND_GET_TIME = '1';
-const char COMMAND_RESET_TIME = '2';
-const char COMMAND_REGISTER = '3';
-const unsigned char END_CHAR = 0x00;
-
 volatile int id = 0;
 
 void setup() {
