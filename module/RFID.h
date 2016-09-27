@@ -52,7 +52,7 @@
 // Delays (RFID)
 #define waitforSerialResponse 200
 #define waitforReadResponse 50
-#define waitforWriteResponse 350
+#define waitforWriteResponse 250
 #define waitforIPResponse 100
 #define debounce 25
 #define timeToRemoveCard 500
