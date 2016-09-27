@@ -1,6 +1,8 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+#define FRONTDESK
+
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 bool isValidResponse = false;
@@ -117,7 +119,7 @@ void loop() {
 void serialEvent() {
 	int i = 0;
 	while (Serial.available()) {
-		if (i > 0) {
+		if (i > 2) {
 			if (characterRead[0] == COMMAND_REGISTER) {
 				id = Serial.parseInt();
 			}
@@ -131,6 +133,6 @@ void serialEvent() {
 
 void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
-	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
+	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index]) ));
 	Serial.print(stringBuffer);
 }

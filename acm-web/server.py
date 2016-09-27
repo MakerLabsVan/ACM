@@ -1,9 +1,11 @@
 import constant
+from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
 arduino = Arduino()
+database = Database()
 
 @app.route("/")
 def index():
@@ -19,8 +21,15 @@ def resetTime():
 
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
-	id = request.get_json()
-	return arduino.registerCard(id)
+	data = request.get_json()
+	database.insertUser(data)
+	
+	return str(1)
+	#return arduino.registerCard(data)
+
+@app.route("/dbtest")
+def dbtest():
+	return "yay"
 
 if __name__ == "__main__":
     app.run()

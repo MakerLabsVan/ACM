@@ -3,7 +3,6 @@ var app = angular.module('ACM-Dash',[]);
 app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
 
-	// initialize some dummy data for testing
 	$scope.time = new laserTime(123456);
 
 	function laserTime(rawTime) {
@@ -46,29 +45,47 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		})
 	}
 
+	$scope.user = {
+		uid: "",
+		memberName: "",
+		memberType: "1",
+		laserA: "0",
+		laserB: "0",
+		shopbot: "0",
+		wood: "0",
+		metal: "0",
+		textile: "0",
+		threeD: "0"
+	};
+
 	$scope.registerCard = function() {
-		if ($scope.id) {
-			var input = $scope.id;
+
+		console.log(JSON.stringify($scope.user));
+
+		if ($scope.user.uid && $scope.user.memberName) {
+			var input = $scope.user.id;
 
 			$http({
 				url: "../registerCard",
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
-				data: JSON.stringify($scope.id)})
+				data: JSON.stringify($scope.user)})
 				.success(function(data) {
-
 					if (data != input) {
-						$scope.entered = "ERROR";
-						console.log("Error");
+						$scope.entered = "Error";
+						console.log($scope.entered);
 					}
 					else {
 						$scope.entered = "User " + data + " registered.";
-						console.log("ID sent back: " + parseInt(data));					
+						console.log("ID registered: " + parseInt(data));					
 					}
 
 				});
 
-			$scope.id = '';
+			$scope.user.uid = "";
+			$scope.user.memberName = "";
+			$scope.user.memberType = "1";
+			$scope.user.laserA = "0";
 		}
 	}
 

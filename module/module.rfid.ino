@@ -10,9 +10,14 @@
 bool getResponse(unsigned char response[]) {
 	int i = 0;
 
-	while (RFID.available()) {
-		response[i] = RFID.read();
-		i++;
+	while(1) {
+		if (RFID.available()) {
+			response[i] = RFID.read();
+			if (response[i] == 0xBB) { 
+				break;
+			}
+			i++;
+		}
 	}
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK
@@ -33,7 +38,7 @@ bool getResponse(unsigned char response[]) {
 		  Sector trailers (multiples of 4) should also not be written to.
 		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 */
-void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress) {
+void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 	if (command == CMD_GET_SNR) {
@@ -48,15 +53,25 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		sendToRFID(CMD, size);
 	}
 	else if(command == CMD_WRITE) {
+		// prepare data to be written, time should be in format 0x00AABBCC
+		// timeByte is in format { 0xAA, 0xBB, 0xCC }
+		// in the first iteration, time gets shifted 2 bytes to get 0x000000AA
+		// then bitwise AND operation with 0xFF, then store in timeByte
+		int i = 0;
+		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
+		unsigned char timeByte[numTimeBytes];
+
+		for(i = 0; i < numTimeBytes; i++) {
+			timeByte[i] = (time >> j) & MSB;
+			j -= eightBits;
+		}
+
 		unsigned char CMD[] = { 0x00, DADD, writeLength, CMD_WRITE, authTypeA, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
-						payload[0], payload[1], payload[2], payload[3], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						0x00, timeByte[0], timeByte[1], timeByte[2], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						0x00, 0x00 };
 		int size = sizeof(CMD)/sizeof(CMD[0]);
 		sendToRFID(CMD, size);
-	}
-	else {
-		//getStringFromMem(errorCommand);
 	}
 }
 /*
@@ -79,33 +94,6 @@ void sendToRFID(unsigned char CMD[], int size) {
 
 	// send command packet
 	RFID.write(CMD, size);
-}
-/*
-	prepare data to be written, time should be in format 0x00AABBCC
-	timeByte is in format { 0xAA, 0xBB, 0xCC }
-	in the first iteration, time gets shifted 2 bytes to get 0x000000AA
-	then bitwise AND operation with 0xFF, then store in timeByte
-*/
-void preparePayload(char command, unsigned long time, int id) {
-
-	if ( (command == COMMAND_RESET_TIME) || (command == COMMAND_MODIFY_TIME) ) {
-		payload[0] = classCheck;
-		int i = 0;
-		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
-
-		for(i = 0; i < numTimeBytes; i++) {
-			payload[i+1] = (time >> j) & MSB;
-			j -= eightBits;
-		}
-	}
-	else if (command == COMMAND_REGISTER) {
-		payload[0] = (id >> eightBits) & MSB;
-		payload[1] = id & MSB;
-		payload[2] = 0x00;
-		payload[3] = 0x00;
-	}
-	
-
 }
 /*
 	Reads time data from card and stores it in one 4 byte chunk

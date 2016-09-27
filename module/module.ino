@@ -1,6 +1,8 @@
 #include <SoftwareSerial.h>
 #include "RFID.h"
 
+#define MODULE
+
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
@@ -28,6 +30,7 @@ void setup() {
 void loop() {
 	// some variables
 	bool isStaff = false;
+  	bool authorization = false;
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
@@ -41,21 +44,22 @@ void loop() {
 	// Scan for RFID tags
 	getStringFromMem(scan);
 	while (!isValidResponse) {
-		sendCommand(CMD_GET_SNR, blockID, machineID);
+		sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 	}
 	// ----------------------------------------------------------------------
-	// RFID tag detected, get user ID
-	sendCommand(CMD_READ, blockID, userData);
+	// RFID tag detected, get user ID and authorization for this machine
+	sendCommand(CMD_READ, blockID, userData, NULL);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (bool)readData[staffOffset];
+	authorization = (bool)readData[classOffset];
 	// ----------------------------------------------------------------------
-	// Read block that contains time data (for this machine)
+	// Read block that contains time data for this machine
 	getStringFromMem(detected);
-	sendCommand(CMD_READ, blockID, machineID);
+	sendCommand(CMD_READ, blockID, machineID, NULL);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	// -----------------------------------------------------------------------
@@ -66,15 +70,15 @@ void loop() {
 	}
 	// These statements run if a valid RFID tag is detected
 	else {
-		// Get the existing time
+		// Translate the time data bytes to a value
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
-		// Check if the user has taken the class
-		if (readData[classOffset] != classCheck) {
+		// Check if the user has taken the class, skip if staff member
+		if ( !authorization && !isStaff ) {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has reached the 60 min quota, skip if staff member
-		else if ( (existingTime >= quota) && (isStaff == false) ) {
+		else if ( (existingTime >= quota) && !isStaff ) {
 			//soundFeedback(isReject);
 			getStringFromMem(quotaMet);
 		}
@@ -87,7 +91,11 @@ void loop() {
 			Serial.println(existingTime);
 			getStringFromMem(user);
 			Serial.print(userID);
+<<<<<<< HEAD
 			if (isStaff == true) {
+=======
+			if (isStaff) {
+>>>>>>> frontdesk-web-interface
 				getStringFromMem(staff);
 			}
 			getStringFromMem(authorized);
@@ -107,8 +115,7 @@ void loop() {
 	// -------------------------------------------------------------------------
 	// Write time data to card
 	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
-		preparePayload(COMMAND_MODIFY_TIME, totalTime, NULL);
-		sendCommand(CMD_WRITE, blockID, machineID);
+		sendCommand(CMD_WRITE, blockID, machineID, totalTime);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
 
@@ -150,7 +157,7 @@ void loop() {
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some variables used in this scope
 	unsigned long startTime = 0;
-	unsigned long lastPollTime, lastBlink = 0;
+	unsigned long lastPollTime = 0;
 	unsigned int periodX, periodY;
 	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
@@ -166,7 +173,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		if (timeSince(lastPollTime) > pollInterval) {
 
 			// Polling logic
-			sendCommand(CMD_GET_SNR, blockID, machineID);
+			sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
 			// if card is missing, increment a counter
 			if (!getResponse(serialNumber)) {
 				pollCounter += 1;

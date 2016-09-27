@@ -41,10 +41,10 @@
 // Write constants
 #define writeLength 0x1A
 
-// Can be unique for each machine
 #define classCheck 0xCC
+#define machineID 0x04 // unique for each machine
+#define classOffset 11 // unique for each machine
 #define blockID 0x01
-#define machineID 0x04
 #define userData 0x01
 #define sampleSize 5
 #define quota 3600
@@ -70,7 +70,6 @@
 #define statusOffset 3
 #define numTimeBytes 3
 #define numUserBytes 2
-#define classOffset 8
 #define timeOffset 9
 #define userOffset 8
 #define staffOffset 10
@@ -111,6 +110,7 @@
 #define errorCommand 14
 #define cardUpdated 15
 #define sendingLog 16
+#define staff 17
 
 #define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
@@ -128,7 +128,11 @@ const unsigned char END_CHAR = 0x00;
 
 const char string0[] PROGMEM = "Initializing... ";
 const char string1[] PROGMEM = "Done.\n\n";
+<<<<<<< HEAD
 const char string2[] PROGMEM = "Scanning...\n";
+=======
+const char string2[] PROGMEM = "Scanning... ";
+>>>>>>> frontdesk-web-interface
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
 const char string5[] PROGMEM = "You are not authorized to use this machine.\n\n";
@@ -143,6 +147,7 @@ const char string13[] PROGMEM = "Unexpected result\n";
 const char string14[] PROGMEM = "Unexpected command\n";
 const char string15[] PROGMEM = "Card updated. You may now remove it.\n";
 const char string16[] PROGMEM = "Sending Time: ";
+const char string17[] PROGMEM = " Staff";
 
 const char * const message[] PROGMEM = {
 	string0,
@@ -161,5 +166,6 @@ const char * const message[] PROGMEM = {
 	string13,
 	string14,
 	string15,
-	string16
+	string16,
+	string17
 };
