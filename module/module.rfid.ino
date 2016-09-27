@@ -10,10 +10,15 @@
 bool getResponse(unsigned char response[]) {
 	int i = 0;
 
-	while (RFID.available()) {
-		response[i] = RFID.read();
-		i++;
-	}
+  while(1) {
+  	if (RFID.available()) {
+  		response[i] = RFID.read();
+      if (response[i] == 0xBB) { 
+        break;
+      }
+  		i++;
+  	}
+  }
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK
 	if (response[statusOffset] == 0x00) {
@@ -54,7 +59,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		// then bitwise AND operation with 0xFF, then store in timeByte
 		int i = 0;
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
-		timeByte[numTimeBytes]
+		unsigned char timeByte[numTimeBytes];
 
 		for(i = 0; i < numTimeBytes; i++) {
 			timeByte[i] = (time >> j) & MSB;
