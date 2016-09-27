@@ -13,9 +13,9 @@ bool getResponse(unsigned char response[]) {
   while(1) {
   	if (RFID.available()) {
   		response[i] = RFID.read();
-      if (response[i] == 0xBB) { 
-        break;
-      }
+      	if (response[i] == 0xBB) { 
+        	break;
+      	}
   		i++;
   	}
   }
