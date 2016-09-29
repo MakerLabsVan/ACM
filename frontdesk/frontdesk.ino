@@ -70,9 +70,6 @@ void loop() {
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
 
-		id = (long)characterRead[1];
-
-
 		preparePayload(COMMAND_REGISTER, NULL, id);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
