@@ -129,7 +129,6 @@ const unsigned char END_CHAR = 0x00;
 
 const char string0[] PROGMEM = "Initializing... ";
 const char string1[] PROGMEM = "Done.\n\n";
-const char string2[] PROGMEM = "Scanning...\n";
 const char string2[] PROGMEM = "Scanning... ";
 const char string3[] PROGMEM = "Card detected.\n";
 const char string4[] PROGMEM = "Read unsuccessful. Please try again.\n";
