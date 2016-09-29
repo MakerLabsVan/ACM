@@ -76,6 +76,12 @@ body {
   width: 100vh;
 }
 
+#time-data {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #registration-content {
   font-size: 13pt;
 }

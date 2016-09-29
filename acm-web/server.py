@@ -24,12 +24,12 @@ def registerCard():
 	data = request.get_json()
 	database.insertUser(data)
 	
-	return str(1)
-	#return arduino.registerCard(data)
+	#return data["uid"]
+	return arduino.registerCard(data)
 
-@app.route("/dbtest")
-def dbtest():
+@app.route("/serialTest")
+def serialTest():
 	return "yay"
 
-if __name__ == "__main__":
-    app.run()
+if (__name__ == "__main__"):
+    app.run(host='0.0.0.0')

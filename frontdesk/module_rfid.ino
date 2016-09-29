@@ -10,14 +10,9 @@
 bool getResponse(unsigned char response[]) {
 	int i = 0;
 
-	while(1) {
-		if (RFID.available()) {
-			response[i] = RFID.read();
-			if (response[i] == 0xBB) { 
-				break;
-			}
-			i++;
-		}
+	while (RFID.available()) {
+		response[i] = RFID.read();
+		i++;
 	}
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK

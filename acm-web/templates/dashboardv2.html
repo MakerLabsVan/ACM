@@ -76,16 +76,16 @@
 
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="guest-content">
-                  <center>
-                    <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
-                    <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
-                  </center>
                   
-                  <br></br>
-                  <center>
-                    <button type="button" class="btn btn-success" ng-click="getTime()">Get Time</button>
-                    <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
-                  </center>
+                  <div id="time-data">
+                    <center>
+                      <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
+                      <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
+                      <br>
+                      <button type="button" class="btn btn-success" ng-click="getTime()">Get Time</button>
+                      <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
+                    </center>
+                  </div>
 
                 </div>
 
@@ -110,8 +110,8 @@
 
                       <label for="type">Type of User</label>
                       <select id="type" ng-model="user.memberType">
-                        <option value="1">Member</option>
-                        <option value="0">Staff</option>
+                        <option value="0">Member</option>
+                        <option value="1">Staff</option>
                       </select>
 
                       <label for="laser">Laser Access</label>

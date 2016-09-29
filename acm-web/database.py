@@ -11,7 +11,7 @@ class Database:
 
         spreadsheet = gc.open("MakerLabs ACM")
         self.sheet = spreadsheet.worksheet("Users")
-        self.pKey = int(self.sheet.acell('A1').value)
+        self.pKey = int(self.sheet.acell(constant.CELL_PKEY).value)
         print("Opened database")
     
     def insertUser(self, data):
@@ -21,12 +21,14 @@ class Database:
         self.sheet.add_rows(1)
         endRow = self.sheet.row_count
         cellList = self.sheet.range(constant.COL_START_DATA + str(endRow) + constant.COL_END_DATA + str(endRow))
+        cellList.append(self.sheet.acell(constant.CELL_PKEY))
 
         # Update cell values
         cellList[constant.COL_PKEY].value = self.pKey
-        cellList[constant.COL_UID].value = data["id"]
+        cellList[constant.COL_UID].value = data["uid"]
         cellList[constant.COL_MEMBER_NAME].value = data["memberName"]
         cellList[constant.COL_MEMBER_TYPE].value = data["memberType"]
+        cellList[constant.COL_START_DAY].value = data["startDay"]
         cellList[constant.COL_USES_LASER_A].value = data["laserA"]
         cellList[constant.COL_USES_LASER_B].value = data["laserB"]
         cellList[constant.COL_USES_SHOPBOT].value = data["shopbot"]
@@ -37,5 +39,7 @@ class Database:
 
         # Push to sheet and increment primary key
         self.pKey += 1
-        self.sheet.update_acell(constant.CELL_PKEY, self.pKey)
+        cellList[-1].value = self.pKey
+        
         self.sheet.update_cells(cellList)
+        print("Done")

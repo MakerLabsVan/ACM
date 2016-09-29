@@ -4,7 +4,6 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.master = {};
 
 	$scope.time = new laserTime(123456);
-
 	function laserTime(rawTime) {
 		this.rawTime = rawTime;
 		this.set = function(newTime) { this.rawTime = newTime };
@@ -21,7 +20,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		$http.get("../getTime").success(function(res) {
 			if (res == 2) {
 				console.log("Error");
-				$scope.time.set('err');
+				$scope.time.set("Error");
 			}
 			else {
 				console.log("Raw Time: " + res);
@@ -48,7 +47,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	$scope.user = {
 		uid: "",
 		memberName: "",
-		memberType: "1",
+		memberType: "0",
+		startDay: "1",
 		laserA: "0",
 		laserB: "0",
 		shopbot: "0",
@@ -63,7 +63,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		console.log(JSON.stringify($scope.user));
 
 		if ($scope.user.uid && $scope.user.memberName) {
-			var input = $scope.user.id;
+			var input = $scope.user.uid;
 
 			$http({
 				url: "../registerCard",
@@ -71,6 +71,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.user)})
 				.success(function(data) {
+					
 					if (data != input) {
 						$scope.entered = "Error";
 						console.log($scope.entered);

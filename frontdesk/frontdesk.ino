@@ -5,8 +5,7 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
-bool isValidResponse = false;
-unsigned long newTime = 0;
+unsigned long existingTime = 0;
 unsigned char readData[bufferSize];
 
 volatile char characterRead[bufferSize];
@@ -19,23 +18,26 @@ void setup() {
 }
 
 void loop() {
-	isValidResponse = false;	
-
+	// Scan for RFID tags
+	bool isValidResponse = false;	
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		digitalWrite(ledPin, LOW);
 
+		// if a command is received before a card is
+		// scanned, send an error and clear buffer
 		if (Serial.available() && !isValidResponse) {
 			while (Serial.available()) {
 				Serial.read();
 			}
-			Serial.write(0x02);
+			Serial.write(ERROR_CHAR);
 			Serial.write(END_CHAR);
 		}
 	}
 
+	// card detected, get user data
 	digitalWrite(ledPin, HIGH);
 
 	if (characterRead[0] == COMMAND_GET_TIME) {
@@ -44,11 +46,11 @@ void loop() {
 		sendCommand(CMD_READ, blockID, machineID);
 		delay(waitforReadResponse);
 		isValidResponse = getResponse(readData);
-		newTime = getTime(readData, numTimeBytes, timeOffset);
+		existingTime = getTime(readData, numTimeBytes, timeOffset);
 
-		while (newTime != 0) {
-			Serial.write(newTime);
-			newTime >>= eightBits;
+		while (existingTime != 0) {
+			Serial.write(existingTime);
+			existingTime >>= eightBits;
 		}
 		
 		Serial.write(END_CHAR);
