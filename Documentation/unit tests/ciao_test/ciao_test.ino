@@ -9,6 +9,7 @@
 #define URI_TEST "/update?api_key=HWX6PI5X7NE99VPA&field1=500"
 
 String request;
+int id = 0;
 
 void setup() {
     pinMode(13, OUTPUT);
@@ -19,7 +20,8 @@ void setup() {
 }
 
 void loop() {
-    int id = 0;
+    blinky();
+
     request = URI + String(id);
 
     Serial.println(F("Attempting to connect..."));
