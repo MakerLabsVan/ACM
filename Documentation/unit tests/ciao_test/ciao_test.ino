@@ -1,7 +1,7 @@
 #include <Ciao.h>
 
 #define CONNECTOR "rest"
-#define HOSTNAME "Front-Desk.local:5000"
+#define HOSTNAME "front-desk.local:5000"
 #define ADDRESS "192.168.0.58:5000"
 #define URI "/helloWorld"
 
@@ -21,7 +21,7 @@ void loop() {
     blinky();
 
     Serial.println(F("Attempting to connect..."));
-    CiaoData data = Ciao.write(CONNECTOR, ADDRESS, URI);
+    CiaoData data = Ciao.write(CONNECTOR, HOSTNAME, URI);
     // CiaoData data = Ciao.write(CONNECTOR, ADDRESS_TEST, URI_TEST);
 
     if (!data.isEmpty()) {
