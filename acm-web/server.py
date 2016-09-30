@@ -31,6 +31,7 @@ def registerCard():
 
 @app.route("/serialTest")
 def serialTest():
+	print("hello from arduino wifi")
 	return "yay"
 	
 class HelloWorld(Resource):
