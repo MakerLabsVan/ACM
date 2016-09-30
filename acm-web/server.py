@@ -29,10 +29,10 @@ def registerCard():
 	#return data["uid"]
 	return arduino.registerCard(data)
 
-@app.route("/serialTest")
-def serialTest():
-	print("hello from arduino wifi")
-	return "yay"
+@app.route("/serialTest/<int:id>")
+def serialTest(id):
+	print("ayy from arduino, id sent: %d" % id)
+	return "y"
 	
 class HelloWorld(Resource):
 	def get(self):

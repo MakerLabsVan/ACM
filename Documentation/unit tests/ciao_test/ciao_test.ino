@@ -3,10 +3,12 @@
 #define CONNECTOR "rest"
 #define HOSTNAME "front-desk.local"
 #define ADDRESS "192.168.0.58"
-#define URI "/serialTest"
+#define URI "/serialTest/"
 
 #define ADDRESS_TEST "api.thingspeak.com"
 #define URI_TEST "/update?api_key=HWX6PI5X7NE99VPA&field1=500"
+
+String request;
 
 void setup() {
     pinMode(13, OUTPUT);
@@ -17,11 +19,11 @@ void setup() {
 }
 
 void loop() {
-
-    //blinky();
+    int id = 0;
+    request = URI + String(id);
 
     Serial.println(F("Attempting to connect..."));
-    CiaoData data = Ciao.write(CONNECTOR, ADDRESS, URI);
+    CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
     // CiaoData data = Ciao.write(CONNECTOR, ADDRESS_TEST, URI_TEST);
 
     if (!data.isEmpty()) {
@@ -34,6 +36,7 @@ void loop() {
     
     Serial.println();
     delay(20000);
+    id++;
 }
 
 void blinky() {
