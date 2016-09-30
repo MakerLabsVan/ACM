@@ -33,9 +33,10 @@ def registerCard():
 def serialTest():
 	return "yay"
 
-class restfulTest(Resource):
+class HelloWorld(Resource):
 	def get(self):
 		return {'hello': 'world'}
+api.add_resource(HelloWorld, '/restfulTest')
 
 if (__name__ == "__main__"):
     app.run(host='0.0.0.0')
