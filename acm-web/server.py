@@ -4,7 +4,7 @@ from arduino import Arduino
 from flask import Flask, request, render_template, json
 
 app = Flask(__name__)
-arduino = Arduino()
+#arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -30,7 +30,7 @@ def registerCard():
 @app.route("/laserLog/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(id, elapsedTime, existingTime):
 	print("Logging user %d" % id)
-	data = json.dumps(['id': id, 'elapsedTime': elapsedTime, 'existingTime': existingTime])
+	data = json.dumps({"id": id, "elapsedTime": elapsedTime, "existingTime": existingTime})
 	database.insertLaserTime(data)
 	return "1"
 
