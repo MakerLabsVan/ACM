@@ -51,7 +51,7 @@ void loop() {
 	}
 
 	// send to web app -- CIAO IS SO DAMN SLOW
-	if (scannedID != prevIDscanned) {
+	if ( (scanID > 0) && (scannedID != prevIDscanned) ) {
 		String request = URI + String(scannedID);
 		CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
 		prevIDscanned = scannedID;
