@@ -6,7 +6,7 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
-int prevIDscanned = 0;
+int scannedID, prevIDscanned = 0;
 unsigned char readData[bufferSize];
 
 volatile bool isValidResponse = false;
@@ -22,7 +22,6 @@ void setup() {
 
 void loop() {
 	// Scan for RFID tags
-	int scannedID = 0;
 	isValidResponse = false;
 
 	while (!isValidResponse) {
