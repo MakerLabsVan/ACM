@@ -23,7 +23,7 @@ void loop() {
 	int scannedID = 0;
 	bool isValidResponse = false;
 	unsigned long existingTime = 0;
-	
+
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
@@ -48,7 +48,7 @@ void loop() {
 	isValidResponse = getResponse(readData);
 	scannedID = (int)getTime(readData, numUserBytes, userOffset);
 
-	// send to web app
+	// send to web app -- CIAO IS SO DAMN SLOW
 	String request = URI + String(scannedID);
 	CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
 
