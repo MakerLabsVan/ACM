@@ -23,7 +23,7 @@ void loop() {
 	// Scan for RFID tags
 	int scannedID = 0;
 	isValidResponse = false;
-	
+
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
