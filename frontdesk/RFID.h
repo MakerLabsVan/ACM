@@ -112,6 +112,10 @@
 #define sendingLog 16
 #define staff 17
 
+#define CONNECTOR "rest"
+#define ADDRESS "192.168.0.200:5000"
+#define URI "/serialTest/"
+
 #define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
 #define timeSince(x) (millis() - x)

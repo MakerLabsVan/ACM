@@ -4,7 +4,6 @@ from arduino import Arduino
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
-api = Api(app)
 arduino = Arduino()
 database = Database()
 
