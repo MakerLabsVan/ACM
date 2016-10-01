@@ -2,12 +2,11 @@ import constant
 from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
-from flask_restful import Resource, Api
 
 app = Flask(__name__)
 api = Api(app)
-#arduino = Arduino()
-#database = Database()
+arduino = Arduino()
+database = Database()
 
 @app.route("/")
 def index():
@@ -32,12 +31,7 @@ def registerCard():
 @app.route("/serialTest/<int:id>")
 def serialTest(id):
 	print("ayy from arduino, id sent: %d" % id)
-	return "y"
-	
-class HelloWorld(Resource):
-	def get(self):
-		return {'hello': 'world'}
-api.add_resource(HelloWorld, '/helloWorld')
+	return "1"
 
 if (__name__ == "__main__"):
     app.run(host='0.0.0.0')

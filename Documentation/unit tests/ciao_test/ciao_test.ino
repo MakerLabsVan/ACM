@@ -1,8 +1,8 @@
 #include <Ciao.h>
 
 #define CONNECTOR "rest"
-#define HOSTNAME "front-desk.local"
-#define ADDRESS "192.168.0.58"
+#define HOSTNAME "Front-Desk.local:5000"
+#define ADDRESS "192.168.0.80"
 #define URI "/serialTest/"
 
 #define ADDRESS_TEST "api.thingspeak.com"
