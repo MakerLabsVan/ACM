@@ -6,6 +6,7 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 
+int prevIDscanned = 0;
 unsigned char readData[bufferSize];
 
 volatile bool isValidResponse = false;
@@ -46,11 +47,17 @@ void loop() {
 	sendCommand(CMD_READ, blockID, userData);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
-	scannedID = (int)getTime(readData, numUserBytes, userOffset);
+	if (isValidResponse) {
+		scannedID = (int)getTime(readData, numUserBytes, userOffset);	
+	}
 
 	// send to web app -- CIAO IS SO DAMN SLOW
-	String request = URI + String(scannedID);
-	CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
+	if (scannedID != prevIDscanned) {
+		String request = URI + String(scannedID);
+		CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
+		prevIDscanned = scannedID;
+	}
+	
 }
 
 void serialEvent() {
