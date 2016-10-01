@@ -4,7 +4,7 @@ from arduino import Arduino
 from flask import Flask, request, render_template, json
 
 app = Flask(__name__)
-#arduino = Arduino()
+arduino = Arduino()
 database = Database()
 
 @app.route("/")
