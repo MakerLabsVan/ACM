@@ -8,6 +8,7 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 
 unsigned char readData[bufferSize];
 
+volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
 volatile int id = 0;
 
@@ -21,9 +22,8 @@ void setup() {
 void loop() {
 	// Scan for RFID tags
 	int scannedID = 0;
-	bool isValidResponse = false;
-	unsigned long existingTime = 0;
-
+	isValidResponse = false;
+	
 	while (!isValidResponse) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
@@ -51,6 +51,23 @@ void loop() {
 	// send to web app -- CIAO IS SO DAMN SLOW
 	String request = URI + String(scannedID);
 	CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
+}
+
+void serialEvent() {
+	int i = 0;
+	unsigned long existingTime = 0;
+
+	while (Serial.available()) {
+		if (i > 2) {
+			if (characterRead[0] == COMMAND_REGISTER) {
+				id = Serial.parseInt();
+			}
+		}
+		else {
+			characterRead[i] = Serial.read();
+		}
+		i++;
+	}
 
 	if (characterRead[0] == COMMAND_GET_TIME) {
 		characterRead[0] = 0;
@@ -96,22 +113,6 @@ void loop() {
 
 		Serial.write(END_CHAR);
 
-	}
-
-}
-
-void serialEvent() {
-	int i = 0;
-	while (Serial.available()) {
-		if (i > 2) {
-			if (characterRead[0] == COMMAND_REGISTER) {
-				id = Serial.parseInt();
-			}
-		}
-		else {
-			characterRead[i] = Serial.read();
-		}
-		i++;
 	}
 }
 
