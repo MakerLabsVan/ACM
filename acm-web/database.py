@@ -43,3 +43,5 @@ class Database:
         
         self.sheet.update_cells(cellList)
         print("Done")
+    
+    def insertLaserTime(self, data):

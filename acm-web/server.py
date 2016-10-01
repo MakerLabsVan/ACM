@@ -27,6 +27,11 @@ def registerCard():
 	#return data["uid"]
 	return arduino.registerCard(data)
 
+@app.route("/laserLog/<int:id>/<int:elapsedTime>/<int:existingTime>")
+def laserLog(id, elapsedTime, existingTime):
+	print("Logging user %d" % id)
+	return "1"
+
 @app.route("/serialTest/<int:id>")
 def serialTest(id):
 	print("ayy from arduino, id sent: %d" % id)
