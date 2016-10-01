@@ -37,11 +37,13 @@ class Database:
         cellList[constant.COL_USES_TEXTILE].value = data["textile"]
         cellList[constant.COL_USES_THREE_D].value = data["threeD"]
 
-        # Push to sheet and increment primary key
+        # Increment primary key
         self.pKey += 1
         cellList[-1].value = self.pKey
         
+        # Push changes to sheet
         self.sheet.update_cells(cellList)
         print("Done")
     
     def insertLaserTime(self, data):
+        print(data)
