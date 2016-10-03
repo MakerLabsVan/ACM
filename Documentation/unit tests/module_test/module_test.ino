@@ -34,16 +34,16 @@ void manual() {
 
 void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existingTime) {
     String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.200\",5000";
-    String getStr = "GET /serialTest/" + String(ID) + " HTTP/1.1";
+    String getStr = "GET /laserLog/";
     String cmd = "AT+CIPSEND=";
     String closeConnection = "AT+CIPCLOSE";
 
     WIFI.println(beginConnection);
     delay(500);
 
-    // getStr += String(ID) + String("/");
-    // getStr += String(elapsedTime) + String("/");
-    // getStr += String(existingTime);
+    getStr += String(ID) + String("/");
+    getStr += String(elapsedTime) + String("/");
+    getStr += String(existingTime) + " HTTP/1.1";
 
     cmd += getStr.length();
 
