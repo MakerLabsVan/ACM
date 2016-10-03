@@ -1,5 +1,6 @@
 import gspread
 import constant
+from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 
 class Database:
@@ -48,4 +49,16 @@ class Database:
     
     def insertLaserTime(self, data):
         print(data)
-        self.laser_data.update_acell('A1', "ayy")
+
+        date = datetime.now().date()
+        time = datetime.now().time()
+
+        cellList = self.laser_data.range('A2:E2')
+
+        cellList[0].value = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
+        cellList[1].value = str(time.hour) + ':' + str(time.min)
+        cellList[2].value = data["id"]
+        cellList[3].value = data["elapsedTime"]
+        cellList[4].value = data["existingTime"]
+
+        self.laser_data.update_cells(cellList)
