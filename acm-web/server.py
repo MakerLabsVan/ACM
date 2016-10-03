@@ -1,10 +1,10 @@
 import constant
 from database import Database
 from arduino import Arduino
-from flask import Flask, request, render_template, json
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
-arduino = Arduino()
+#arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -29,7 +29,7 @@ def registerCard():
 
 @app.route("/laserLog/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(id, elapsedTime, existingTime):
-	data = json.dumps({"id": id, "elapsedTime": elapsedTime, "existingTime": existingTime})
+	data = {"id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
 	database.insertLaserTime(data)
 	return "1"
 

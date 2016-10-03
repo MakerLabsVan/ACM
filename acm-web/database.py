@@ -56,7 +56,7 @@ class Database:
         cellList = self.laser_data.range('A2:E2')
 
         cellList[0].value = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
-        cellList[1].value = str(time.hour) + ':' + str(time.min)
+        cellList[1].value = str(time.hour) + ':' + str(time.minute)
         cellList[2].value = data["id"]
         cellList[3].value = data["elapsedTime"]
         cellList[4].value = data["existingTime"]
