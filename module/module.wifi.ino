@@ -2,6 +2,16 @@
     All Wi-Fi related functions
 */
 #ifdef MODULE
+void connectWIFI() {
+    digitalWrite(wifi_rst, LOW);
+    delay(resetTime);
+    digitalWrite(wifi_rst, HIGH);
+    delay(resetTime);
+
+    WIFI.println("AT+CWMODE=1");
+    delay(waitforReadResponse);
+
+}
 void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existingTime) {
     String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.200\",5000";
     String getStr = "GET /laserLog/";
@@ -24,17 +34,6 @@ void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existin
     delay(waitForFlush);
 
     WIFI.println(closeConnection);
-}
-
-void connectWIFI() {
-    digitalWrite(wifi_rst, LOW);
-    delay(resetTime);
-    digitalWrite(wifi_rst, HIGH);
-    delay(resetTime);
-
-    WIFI.println("AT+CWMODE=1");
-    delay(waitforReadResponse);
-
 }
 #else
 void connectWIFI(void) {
