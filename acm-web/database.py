@@ -55,8 +55,8 @@ class Database:
         cellList = self.laser_data.range(constant.RANGE_LASER_START + str(endRow) + constant.RANGE_LASER_END + str(endRow))
 
         cellList[constant.COL_LASER_TYPE].value = data["laserType"]
-        cellList[constant.COL_DATE].value = datetime.now().date.isoformat()
-        cellList[constant.COL_TIME].value = datetime.now().time.isoformat()
+        cellList[constant.COL_DATE].value = datetime.now().date().isoformat()
+        cellList[constant.COL_TIME].value = datetime.now().time().isoformat()
         cellList[constant.COL_ID_LOG].value = data["id"]
         cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
         cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
