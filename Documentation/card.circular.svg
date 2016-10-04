@@ -46,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -68,13 +68,14 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:61.87436295px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="41.023563"
+       x="-81.205643"
        y="702.89301"
        id="text4143"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       transform="scale(-1,1)"><tspan
          sodipodi:role="line"
          id="tspan4145"
-         x="41.023563"
+         x="-81.205643"
          y="702.89301">2</tspan></text>
     <flowRoot
        xml:space="preserve"
@@ -100,11 +101,12 @@
        sodipodi:linespacing="125%"
        id="text3349"
        y="702.61981"
-       x="163.40039"
+       x="-203.12929"
        style="font-style:normal;font-weight:normal;font-size:61.87436295px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       transform="scale(-1,1)"><tspan
          y="702.61981"
-         x="163.40039"
+         x="-203.12929"
          id="tspan3351"
          sodipodi:role="line">3</tspan></text>
     <path
@@ -121,11 +123,12 @@
        sodipodi:linespacing="125%"
        id="text3357"
        y="840.19879"
-       x="42.365643"
+       x="-81.037117"
        style="font-style:normal;font-weight:normal;font-size:61.87436295px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       transform="scale(-1,1)"><tspan
          y="840.19879"
-         x="42.365643"
+         x="-81.037117"
          id="tspan3359"
          sodipodi:role="line">4</tspan></text>
     <path
@@ -141,13 +144,14 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:61.87436295px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="141.78128"
+       x="-225.92195"
        y="840.0011"
        id="text3365"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       transform="scale(-1,1)"><tspan
          sodipodi:role="line"
          id="tspan3367"
-         x="141.78128"
+         x="-225.92195"
          y="840.0011">14</tspan></text>
   </g>
 </svg>
