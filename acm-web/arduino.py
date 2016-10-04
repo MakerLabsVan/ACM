@@ -61,7 +61,7 @@ def listen(arduino):
 
 # converts an array of bytes to a single number
 # serial data from Arduino is sent by the lower 8 bits first
-# so the number "reads" from left to right in the buffer
+# so the number "reads" from right to left in the buffer
 def bytesToNum(rxbuffer):
 	j = 0
 	num = 0
