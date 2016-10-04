@@ -14,7 +14,7 @@ void connectWIFI() {
 }
 void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existingTime) {
     String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.200\",5000";
-    String getStr = "GET /laserLog/";
+    String getStr = "GET /laserLog/A/";
     String cmd = "AT+CIPSEND=";
     String closeConnection = "AT+CIPCLOSE";
 
