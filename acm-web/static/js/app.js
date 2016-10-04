@@ -85,8 +85,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 			$scope.user.uid = "";
 			$scope.user.memberName = "";
-			$scope.user.memberType = "1";
-			$scope.user.laserA = "0";
+			$scope.user.memberType = "0";
 		}
 	}
 
