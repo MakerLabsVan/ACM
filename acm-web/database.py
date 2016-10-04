@@ -45,10 +45,9 @@ class Database:
         
         # Push changes to sheet
         self.user_data.update_cells(cellList)
-        print("Done")
     
     def insertLaserTime(self, data):
-        print(data)
+        print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
 
         self.laser_data.add_rows(1)
         endRow = self.laser_data.row_count
