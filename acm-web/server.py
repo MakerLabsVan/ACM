@@ -27,9 +27,9 @@ def registerCard():
 	#return data["uid"]
 	return arduino.registerCard(data)
 
-@app.route("/laserLog/<int:id>/<int:elapsedTime>/<int:existingTime>")
-def laserLog(id, elapsedTime, existingTime):
-	data = {"id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
+@app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
+def laserLog(laser, id, elapsedTime, existingTime):
+	data = {"laserType": laser, "id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
 	database.insertLaserTime(data)
 	return "1"
 

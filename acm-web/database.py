@@ -53,12 +53,15 @@ class Database:
         date = datetime.now().date()
         time = datetime.now().time()
 
-        cellList = self.laser_data.range('A2:E2')
+        self.laser_data.add_rows(1)
+        endRow = self.laser_data.row_count
+        cellList = self.laser_data.range(constant.RANGE_LASER_START + str(endRow) + constant.RANGE_LASER_END + str(endRow))
 
-        cellList[0].value = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
-        cellList[1].value = str(time.hour) + ':' + str(time.minute)
-        cellList[2].value = data["id"]
-        cellList[3].value = data["elapsedTime"]
-        cellList[4].value = data["existingTime"]
+        cellList[constant.COL_LASER_TYPE].value = data["laserType"]
+        cellList[constant.COL_DATE].value = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
+        cellList[constant.COL_TIME].value = str(time.hour) + ':' + str(time.minute)
+        cellList[constant.COL_ID_LOG].value = data["id"]
+        cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
+        cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
 
         self.laser_data.update_cells(cellList)
