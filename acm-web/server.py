@@ -23,8 +23,7 @@ def resetTime():
 def registerCard():
 	data = request.get_json()
 	database.insertUser(data)
-	
-	#return data["uid"]
+
 	return arduino.registerCard(data)
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
