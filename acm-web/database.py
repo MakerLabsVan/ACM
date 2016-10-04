@@ -59,5 +59,14 @@ class Database:
         cellList[constant.COL_ID_LOG].value = data["id"]
         cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
         cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
-
         self.laser_data.update_cells(cellList)
+
+        idList = self.user_data.col_values(constant.COL_UID + 1)
+        idList[0] = 0
+
+        for i in range(len(idList)):
+            if idList[i] == "" or idList[i] == "RFID#":
+                continue
+            elif int(idList[i]) == data["id"]:
+                self.user_data.update_cell(i+1, constant.COL_LASER_TIME, data["elapsedTime"] + data["existingTime"])
+                break
