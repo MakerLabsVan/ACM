@@ -68,5 +68,5 @@ class Database:
                 continue
             elif int(idList[i]) == data["id"]:
                 existingTime = self.user_data.cell(i+1, constant.COL_LASER_TIME).value
-                self.user_data.update_cell(i+1, constant.COL_LASER_TIME, data["elapsedTime"] + existingTime)
+                self.user_data.update_cell(i+1, constant.COL_LASER_TIME, data["elapsedTime"] + int(existingTime))
                 break
