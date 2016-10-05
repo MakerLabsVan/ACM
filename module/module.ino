@@ -53,8 +53,8 @@ void loop() {
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
-	isStaff = (int)readData[staffOffset] - 48;
-	authorization = (int)readData[classOffset] - 48;
+	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
+	authorization = (int)readData[classOffset] - ASCII_OFFSET;
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);

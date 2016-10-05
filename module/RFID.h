@@ -17,6 +17,7 @@
 #define freeTime 5
 #define maximumValue 12
 #define maxTime 18000
+#define ASCII_OFFSET 48
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
