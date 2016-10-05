@@ -127,11 +127,7 @@ void loop() {
 		getStringFromMem(sendingLog);
 		Serial.println(elapsedTime);
 		WIFI.listen();
-		#ifdef MODULE
 		updateACM(userID, elapsedTime, existingTime);
-		#else
-		lastSend = updateThingSpeak(userID, elapsedTime, existingTime, lastSend);
-		#endif
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
 		getStringFromMem(done);

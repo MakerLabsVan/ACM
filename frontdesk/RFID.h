@@ -40,8 +40,6 @@
 
 // Write constants
 #define writeLength 0x1A
-
-#define classCheck 0xCC
 #define machineID 0x04 // unique for each machine
 #define classOffset 11 // unique for each machine
 #define blockID 0x01
