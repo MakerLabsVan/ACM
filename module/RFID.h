@@ -17,6 +17,7 @@
 #define freeTime 5
 #define maximumValue 12
 #define maxTime 18000
+#define ASCII_OFFSET 48
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
@@ -40,8 +41,6 @@
 
 // Write constants
 #define writeLength 0x1A
-
-#define classCheck 0xCC
 #define machineID 0x04 // unique for each machine
 #define classOffset 11 // unique for each machine
 #define blockID 0x01
@@ -111,6 +110,10 @@
 #define cardUpdated 15
 #define sendingLog 16
 #define staff 17
+
+#define CONNECTOR "rest"
+#define ADDRESS "192.168.0.200:5000"
+#define URI "/serialTest/"
 
 #define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000

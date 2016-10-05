@@ -29,8 +29,7 @@ void setup() {
 
 void loop() {
 	// some variables
-	bool isStaff = false;
-  	bool authorization = false;
+	int isStaff, authorization = 0;
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
@@ -54,8 +53,8 @@ void loop() {
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
-	isStaff = (bool)readData[staffOffset];
-	authorization = (bool)readData[classOffset];
+	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
+	authorization = (int)readData[classOffset] - ASCII_OFFSET;
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);
@@ -128,7 +127,7 @@ void loop() {
 		getStringFromMem(sendingLog);
 		Serial.println(elapsedTime);
 		WIFI.listen();
-		lastSend = updateThingSpeak(userID, elapsedTime, existingTime, lastSend);
+		updateACM(userID, elapsedTime, existingTime);
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
 		getStringFromMem(done);

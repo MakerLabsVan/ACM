@@ -23,13 +23,18 @@ def resetTime():
 def registerCard():
 	data = request.get_json()
 	database.insertUser(data)
-	
-	#return data["uid"]
 	return arduino.registerCard(data)
 
-@app.route("/serialTest")
-def serialTest():
-	return "yay"
+@app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
+def laserLog(laser, id, elapsedTime, existingTime):
+	data = {"laserType": laser, "id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
+	database.insertLaserTime(data)
+	return "1"
+
+@app.route("/serialTest/<int:id>")
+def serialTest(id):
+	print("ayy from arduino, id sent: %d" % id)
+	return "1"
 
 if (__name__ == "__main__"):
     app.run(host='0.0.0.0')

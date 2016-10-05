@@ -1,5 +1,6 @@
 import gspread
 import constant
+from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 
 class Database:
@@ -10,18 +11,19 @@ class Database:
         print("Authorization complete")
 
         spreadsheet = gc.open("MakerLabs ACM")
-        self.sheet = spreadsheet.worksheet("Users")
-        self.pKey = int(self.sheet.acell(constant.CELL_PKEY).value)
+        self.user_data = spreadsheet.worksheet("Users")
+        self.laser_data = spreadsheet.worksheet("Laser Log")
+        self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)
         print("Opened database")
     
     def insertUser(self, data):
         print("Inserting " + data["memberName"])
 
         # Create new row and get that row as a list of cell objects
-        self.sheet.add_rows(1)
-        endRow = self.sheet.row_count
-        cellList = self.sheet.range(constant.COL_START_DATA + str(endRow) + constant.COL_END_DATA + str(endRow))
-        cellList.append(self.sheet.acell(constant.CELL_PKEY))
+        self.user_data.add_rows(1)
+        endRow = self.user_data.row_count
+        cellList = self.user_data.range(constant.COL_START_DATA + str(endRow) + constant.COL_END_DATA + str(endRow))
+        cellList.append(self.user_data.acell(constant.CELL_PKEY))
 
         # Update cell values
         cellList[constant.COL_PKEY].value = self.pKey
@@ -37,9 +39,24 @@ class Database:
         cellList[constant.COL_USES_TEXTILE].value = data["textile"]
         cellList[constant.COL_USES_THREE_D].value = data["threeD"]
 
-        # Push to sheet and increment primary key
+        # Increment primary key
         self.pKey += 1
         cellList[-1].value = self.pKey
         
-        self.sheet.update_cells(cellList)
-        print("Done")
+        # Push changes to sheet
+        self.user_data.update_cells(cellList)
+    
+    def insertLaserTime(self, data):
+        print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
+
+        self.laser_data.add_rows(1)
+        endRow = self.laser_data.row_count
+        cellList = self.laser_data.range(constant.RANGE_LASER_START + str(endRow) + constant.RANGE_LASER_END + str(endRow))
+
+        cellList[constant.COL_LASER_TYPE].value = data["laserType"]
+        cellList[constant.COL_DATE].value = datetime.now().date().isoformat()
+        cellList[constant.COL_TIME].value = datetime.now().time().isoformat()
+        cellList[constant.COL_ID_LOG].value = data["id"]
+        cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
+        cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
+        self.laser_data.update_cells(cellList)
