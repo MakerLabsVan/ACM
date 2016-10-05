@@ -122,7 +122,7 @@ void loop() {
 			delay(timeToRemoveCard);
 		}
 		// --------------------------------------------------------------------
-  		// Push to ThingSpeak
+  		// Push to ACM
 		digitalWrite(ledPin, LOW);
 		getStringFromMem(sendingLog);
 		Serial.println(elapsedTime);

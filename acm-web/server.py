@@ -33,7 +33,7 @@ def laserLog(laser, id, elapsedTime, existingTime):
 
 @app.route("/serialTest/<int:id>")
 def serialTest(id):
-	print("ayy from arduino, id sent: %d" % id)
+	print("hello from arduino, id sent: %d" % id)
 	return "1"
 
 if (__name__ == "__main__"):

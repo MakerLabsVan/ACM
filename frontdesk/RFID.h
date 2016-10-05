@@ -14,9 +14,10 @@
 
 #define pollTimeout 5
 #define pollInterval 500
-#define freeTime 5
+#define freeTime 10
 #define maximumValue 12
 #define maxTime 18000
+#define ASCII_OFFSET 48
 
 // Start and End bytes for command/response packets
 #define STX 0xAA
