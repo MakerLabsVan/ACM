@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-// #include <Ciao.h>
+#include <Ciao.h>
 #include "RFID.h"
 
 #define FRONTDESK
@@ -16,7 +16,7 @@ volatile int id = 0;
 void setup() {
 	Serial.begin(moduleBaud);
 	RFID.begin(moduleBaud);
-	// Ciao.begin();
+	Ciao.begin();
 	pinMode(ledPin, OUTPUT);
 }
 
