@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-#include <Ciao.h>
+// #include <Ciao.h>
 #include "RFID.h"
 
 #define FRONTDESK
@@ -16,7 +16,7 @@ volatile int id = 0;
 void setup() {
 	Serial.begin(moduleBaud);
 	RFID.begin(moduleBaud);
-	Ciao.begin();
+	// Ciao.begin();
 	pinMode(ledPin, OUTPUT);
 }
 
@@ -43,19 +43,19 @@ void loop() {
 
 	// card detected, get user data
 	digitalWrite(ledPin, HIGH);
-	sendCommand(CMD_READ, blockID, userData);
-	delay(waitforReadResponse);
-	isValidResponse = getResponse(readData);
-	if (isValidResponse) {
-		scannedID = (int)getTime(readData, numUserBytes, userOffset);	
-	}
+	// sendCommand(CMD_READ, blockID, userData);
+	// delay(waitforReadResponse);
+	// isValidResponse = getResponse(readData);
+	// if (isValidResponse) {
+	// 	scannedID = (int)getTime(readData, numUserBytes, userOffset);	
+	// }
 
-	// send to web app -- CIAO IS SO DAMN SLOW
-	if ( (scanID > 0) && (scannedID != prevIDscanned) ) {
-		String request = URI + String(scannedID);
-		CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
-		prevIDscanned = scannedID;
-	}
+	// // send to web app -- CIAO IS SO DAMN SLOW
+	// if ( (scannedID > 0) && (scannedID != prevIDscanned) ) {
+	// 	String request = URI + String(scannedID);
+	// 	CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
+	// 	prevIDscanned = scannedID;
+	// }
 	
 }
 
