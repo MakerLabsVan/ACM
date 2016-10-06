@@ -2,8 +2,10 @@ import constant
 from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 arduino = Arduino()
 database = Database()
 
@@ -31,10 +33,13 @@ def laserLog(laser, id, elapsedTime, existingTime):
 	database.insertLaserTime(data)
 	return "1"
 
-@app.route("/serialTest/<int:id>")
+@app.route("/scanTest/<int:id>")
 def serialTest(id):
 	print("hello from arduino, id sent: %d" % id)
-	return "1"
+	socketio.emit('scan', {'data': id})
+	return str(id)
+
 
 if (__name__ == "__main__"):
-    app.run(host='0.0.0.0')
+    # app.run(host='0.0.0.0')
+	socketio.run(app, host='0.0.0.0')
