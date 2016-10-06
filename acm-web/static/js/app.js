@@ -46,7 +46,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.user = {
 		uid: "",
-		memberName: "",
+		memberName: "b",
 		memberType: "0",
 		startDay: "",
 		laserA: "1",
@@ -84,7 +84,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				});
 
 			$scope.user.uid = "";
-			$scope.user.memberName = "";
+			$scope.user.memberName = "b";
 			$scope.user.memberType = "0";
 		}
 	}

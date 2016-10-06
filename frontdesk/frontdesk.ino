@@ -64,14 +64,7 @@ void serialEvent() {
 	unsigned long existingTime = 0;
 
 	while (Serial.available()) {
-		if (i > 2) {
-			if (characterRead[0] == COMMAND_REGISTER) {
-				id = Serial.parseInt();
-			}
-		}
-		else {
-			characterRead[i] = Serial.read();
-		}
+		characterRead[i] = Serial.read();
 		i++;
 	}
 
@@ -105,11 +98,19 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
 
+		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);
+		
+		for (int i = 0; i < numDigits; i++) {
+			id *= 10;
+			id += (int)(characterRead[i+2] - ASCII_OFFSET);
+		}
+
 		preparePayload(COMMAND_REGISTER, NULL, id);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
 		if (id != 0) {
+			preparePayload(COMMAND_RESET_TIME, 0, NULL);
 			sendCommand(CMD_WRITE, blockID, machineID);
 			while (id != 0 ) {
 				Serial.write(id);

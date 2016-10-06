@@ -37,9 +37,10 @@ class Arduino:
 
 	def registerCard(self, data):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
+		self.serial.write( str(len(data["uid"])).encode() )
+		self.serial.write(data["uid"].encode())
 		self.serial.write(data["memberType"].encode())
 		self.serial.write(data["laserA"].encode())
-		self.serial.write(data["uid"].encode())
 
 		rxbuffer = listen(self.serial)
 
