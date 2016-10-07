@@ -89,6 +89,10 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		}
 	}
 
+	var socket = io.connect("http://localhost:5000");
+	
+	
+
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");
 		var pi = Math.PI;
