@@ -39,7 +39,7 @@ def serialTest(id):
 	if id != 6 or id != 12:
 		data = database.refreshUser(id)
 		socketio.emit('scan', data)
-	arduino.refreshUser(data)
+		# return arduino.refreshUser(data)
 	return str(id)
 
 
