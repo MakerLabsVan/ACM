@@ -36,7 +36,10 @@ def laserLog(laser, id, elapsedTime, existingTime):
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
 	print("hello from arduino, id sent: %d" % id)
-	socketio.emit('scan', {'data': id})
+	if id != 6 or id != 12:
+		data = database.refreshUser(id)
+		socketio.emit('scan', data)
+	arduino.refreshUser(data)
 	return str(id)
 
 

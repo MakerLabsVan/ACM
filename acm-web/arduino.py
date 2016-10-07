@@ -45,6 +45,12 @@ class Arduino:
 		rxbuffer = listen(self.serial)
 
 		return bytesToNum(rxbuffer)
+	
+	def refreshUser(self, data):
+		self.serial.write(constant.COMMAND_REGISTER.encode())
+		self.serial.write( str(len(data[0])).encode() )
+		for i in range(len(data)):
+			self.serial.write(data[i].encode())
 
 # waits for serial data until the end character is reached
 def listen(arduino):

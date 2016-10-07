@@ -92,7 +92,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
-        $scope.id = msg.data;
+		console.log(msg);
+        $scope.id = msg[0];
 		$scope.$apply();
     });
 	
