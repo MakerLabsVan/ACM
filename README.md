@@ -52,3 +52,5 @@ OUT (LM1117) -> VIN
 D2 -> TX  
 D3 -> RX  
 D9 -> CE  
+
+Hello from Peter
