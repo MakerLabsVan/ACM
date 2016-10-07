@@ -46,16 +46,16 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 	$scope.user = {
 		uid: "",
-		memberName: "b",
+		memberName: "",
 		memberType: "0",
 		startDay: "",
 		laserA: "1",
 		laserB: "1",
-		shopbot: "",
-		wood: "",
-		metal: "",
-		textile: "",
-		threeD: ""
+		shopbot: "0",
+		wood: "0",
+		metal: "0",
+		textile: "0",
+		threeD: "0"
 	};
 
 	$scope.registerCard = function() {
@@ -84,7 +84,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				});
 
 			$scope.user.uid = "";
-			$scope.user.memberName = "b";
+			$scope.user.memberName = "";
 			$scope.user.memberType = "0";
 		}
 	}
