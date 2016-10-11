@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-# arduino = Arduino()
+arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -33,9 +33,13 @@ def laserLog(laser, id, elapsedTime, existingTime):
 	database.insertLaserTime(data)
 	return "1"
 
+@app.route("/refresh/<int:id>")
+def refresh(id):
+	data = database.refreshUser(id)
+	return arduino.refreshUser(data)
+
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
-	print("hello from arduino, id sent: %d" % id)
 	if id != 6 or id != 12:
 		data = database.refreshUser(id)
 		socketio.emit('scan', data)

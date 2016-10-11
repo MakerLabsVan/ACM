@@ -113,7 +113,7 @@
 
 #define CONNECTOR "rest"
 #define ADDRESS "192.168.0.200:5000"
-#define URI "/serialTest/"
+#define URI "/scanTest/"
 
 #define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
@@ -121,7 +121,7 @@
 
 //const bool isReject = true;
 //const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00 };
+unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 const char COMMAND_GET_TIME = '1';
 const char COMMAND_RESET_TIME = '2';

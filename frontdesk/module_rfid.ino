@@ -50,7 +50,7 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 	else if(command == CMD_WRITE) {
 		unsigned char CMD[] = { 0x00, DADD, writeLength, CMD_WRITE, authTypeA, numBlocks, startAddress,
 						keyA[0], keyA[1], keyA[2], keyA[3], keyA[4], keyA[5],
-						payload[0], payload[1], payload[2], payload[3], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+						payload[0], payload[1], payload[2], payload[3], payload[4], payload[5], payload[6], payload[7], payload[8], payload[9], 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 						0x00, 0x00 };
 		int size = sizeof(CMD)/sizeof(CMD[0]);
 		sendToRFID(CMD, size);
@@ -86,7 +86,7 @@ void sendToRFID(unsigned char CMD[], int size) {
 	in the first iteration, time gets shifted 2 bytes to get 0x000000AA
 	then bitwise AND operation with 0xFF, then store in timeByte
 */
-void preparePayload(char command, unsigned long time, int id) {
+void preparePayload(char command, unsigned long time, int id, int numDigits) {
 
 	if ( (command == COMMAND_RESET_TIME) || (command == COMMAND_MODIFY_TIME) ) {
 		int i = 0;
@@ -102,9 +102,11 @@ void preparePayload(char command, unsigned long time, int id) {
 		payload[0] = (id >> eightBits) & MSB;
 		payload[1] = id & MSB;
 
-		// [ id, isStaff, laserA, laserB, shopbot, ... ]
-		for (int i = 0; i < 8; i++) {
-			payload[2 + i] = characterRead[1 + i];
+		// payload = [ id[1], id[0], isStaff, laserA, laserB, shopbot, ... ]
+		// charRead = [ command, numDigits, id[numDigits downto 0], isStaff , laserA, laserB ]
+		int i = 0;
+		for (i = 0; i < 8; i++) {
+			payload[2 + i] = characterRead[numDigits + 2 + i];
 		}
 	}
 

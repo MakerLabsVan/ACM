@@ -51,6 +51,10 @@ class Arduino:
 		self.serial.write( str(len(data[0])).encode() )
 		for i in range(len(data)):
 			self.serial.write(data[i].encode())
+		
+		rxbuffer = listen(self.serial)
+
+		return bytesToNum(rxbuffer)
 
 # waits for serial data until the end character is reached
 def listen(arduino):

@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-#include <Ciao.h>
+// #include <Ciao.h>
 #include "RFID.h"
 
 #define FRONTDESK
@@ -16,7 +16,7 @@ volatile int id = 0;
 void setup() {
 	Serial.begin(moduleBaud);
 	RFID.begin(moduleBaud);
-	Ciao.begin();
+	// Ciao.begin();
 	pinMode(ledPin, OUTPUT);
 }
 
@@ -50,10 +50,11 @@ void loop() {
 	// 	scannedID = (int)getTime(readData, numUserBytes, userOffset);	
 	// }
 
-	// // send to web app -- CIAO IS SO DAMN SLOW
+	// // send to web app
 	// if ( (scannedID > 0) && (scannedID != prevIDscanned) ) {
 	// 	String request = URI + String(scannedID);
-	// 	CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
+	// 	// CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
+	// 	CiaoData data = Ciao.write(CONNECTOR, "192.168.0.17", request);
 	// 	prevIDscanned = scannedID;
 	// }
 	
@@ -87,7 +88,7 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_RESET_TIME) {
 		characterRead[0] = 0;
 
-		preparePayload(COMMAND_RESET_TIME, 0, NULL);
+		preparePayload(COMMAND_RESET_TIME, 0, NULL, 0);
 		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 
@@ -105,12 +106,12 @@ void serialEvent() {
 			id += (int)(characterRead[i+2] - ASCII_OFFSET);
 		}
 
-		preparePayload(COMMAND_REGISTER, NULL, id);
+		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
 		if (id != 0) {
-			preparePayload(COMMAND_RESET_TIME, 0, NULL);
+			preparePayload(COMMAND_RESET_TIME, 0, NULL, 0);
 			sendCommand(CMD_WRITE, blockID, machineID);
 			while (id != 0 ) {
 				Serial.write(id);
