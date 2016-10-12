@@ -2,10 +2,10 @@ import constant
 from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
-from flask_socketio import SocketIO, emit
+# from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 arduino = Arduino()
 database = Database()
 
@@ -43,10 +43,10 @@ def refresh(id):
 def serialTest(id):
 	if id != 6 or id != 12:
 		data = database.refreshUser(id)
-		socketio.emit('scan', data)
+		# socketio.emit('scan', data)
 		return arduino.refreshUser(data)
 	return str(id)
 
 if (__name__ == "__main__"):
-    # app.run(host='0.0.0.0')
-	socketio.run(app, host='0.0.0.0')
+    app.run(host='0.0.0.0')
+	# socketio.run(app, host='0.0.0.0')
