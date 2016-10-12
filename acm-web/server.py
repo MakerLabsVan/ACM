@@ -41,10 +41,7 @@ def refresh(id):
 # ----------------------------------------
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
-	if id != 6 or id != 12:
-		data = database.refreshUser(id)
-		socketio.emit('scan', data)
-		return arduino.refreshUser(data)
+	socketio.emit('scan', data)
 	return str(id)
 
 if (__name__ == "__main__"):
