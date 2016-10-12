@@ -30,13 +30,15 @@ def registerCard():
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
 	data = {"laserType": laser, "id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
+	database.laserLog(data)
 	database.insertLaserTime(data)
 	return "1"
 
 @app.route("/refresh/<int:id>")
 def refresh(id):
 	data = database.refreshUser(id)
-	return arduino.refreshUser(data)
+	return "1"
+	# return arduino.refreshUser(data)
 
 # ----------------------------------------
 @app.route("/scanTest/<int:id>")

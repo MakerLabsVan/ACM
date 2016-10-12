@@ -46,13 +46,15 @@ class Database:
         # Push changes to sheet
         self.user_data.update_cells(cellList)
     
-    def insertLaserTime(self, data):
+    def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
 
+        # Add and retrieve new row
         self.laser_data.add_rows(1)
         endRow = self.laser_data.row_count
         cellList = self.laser_data.range(constant.RANGE_LASER_START + str(endRow) + constant.RANGE_LASER_END + str(endRow))
 
+        # Insert and push updated cells to sheet
         cellList[constant.COL_LASER_TYPE].value = data["laserType"]
         cellList[constant.COL_DATE].value = datetime.now().date().isoformat()
         cellList[constant.COL_TIME].value = datetime.now().time().isoformat()
@@ -61,28 +63,50 @@ class Database:
         cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
         self.laser_data.update_cells(cellList)
     
+    def insertLaserTime(self, data):
+        # Search for row containing user ID ** NOT CONSTANT TIME
+        userRow = self.searchID(data["id"])
+
+        # Update times
+        if userRow:
+            cellList = self.user_data.range(constant.COL_LASER_TIME_START + str(userRow) + constant.COL_LASER_TIME_END + str(userRow))
+            cellList[0].value = int(cellList[0].value) + data["elapsedTime"]
+            cellList[1].value = int(cellList[1].value) + data["elapsedTime"]
+            self.user_data.update_cells(cellList)
+
+    
     def refreshUser(self, id):
         print("Getting data for user %d" % id)
 
-        userRow = 0
-        idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
-
-        for i in range(len(idList)):
-            if idList[i] == "" or idList[i] == "RFID#":
-                continue
-            elif int(idList[i]) == id:
-                userRow = i + 1
-                break
+        # Search for row containing user ID ** NOT CONSTANT TIME
+        userRow = self.searchID(id)
         
-        if userRow > 0:
+        # If ID found, retrieve row and all values related to machine authorizations
+        if userRow:
             userData = [str(id)]
             userCells = self.user_data.range(constant.COL_START_DATA + str(userRow) + constant.COL_END_DATA + str(userRow))
             
+            # Create list of cell values to pass to Arduino
             userData.append(userCells[constant.COL_MEMBER_TYPE].value)
             for i in range(constant.COL_USES_LASER_A, constant.COL_USES_3D + 1):
                 userData.append(userCells[i].value)
             
             print(userData)
             return userData
+
+        # If not found, return 0
         else:
-            return "0"
+            return userRow
+        
+    def searchID(self, id):
+        row = 0
+        idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
+
+        for i in range(len(idList)):
+            if idList[i] == "" or idList[i] == "RFID#":
+                continue
+            elif int(idList[i]) == id:
+                row = i + 1
+                break
+        
+        return row
