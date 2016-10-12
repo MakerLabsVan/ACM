@@ -64,6 +64,7 @@ class Database:
     def refreshUser(self, id):
         print("Getting data for user %d" % id)
 
+        userRow = 0
         idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
         for i in range(len(idList)):
@@ -71,13 +72,17 @@ class Database:
                 continue
             elif int(idList[i]) == id:
                 userRow = i + 1
+                break
         
-        userData = [str(id)]
-        userCells = self.user_data.range(constant.COL_START_DATA + str(userRow) + constant.COL_END_DATA + str(userRow))
-        
-        userData.append(userCells[constant.COL_MEMBER_TYPE].value)
-        for i in range(constant.COL_USES_LASER_A, constant.COL_USES_3D + 1):
-            userData.append(userCells[i].value)
-        
-        print(userData)
-        return userData
+        if userRow > 0:
+            userData = [str(id)]
+            userCells = self.user_data.range(constant.COL_START_DATA + str(userRow) + constant.COL_END_DATA + str(userRow))
+            
+            userData.append(userCells[constant.COL_MEMBER_TYPE].value)
+            for i in range(constant.COL_USES_LASER_A, constant.COL_USES_3D + 1):
+                userData.append(userCells[i].value)
+            
+            print(userData)
+            return userData
+        else:
+            return "0"
