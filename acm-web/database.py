@@ -83,6 +83,8 @@ class Database:
             cellList[0].value = int(cellList[0].value) + data["elapsedTime"]
             cellList[1].value = int(cellList[1].value) + data["elapsedTime"]
             self.user_data.update_cells(cellList)
+        
+        return userRow
 
     
     def refreshUser(self, id):
