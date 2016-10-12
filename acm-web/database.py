@@ -84,7 +84,7 @@ class Database:
             cellList[1].value = int(cellList[1].value) + data["elapsedTime"]
             self.user_data.update_cells(cellList)
         
-        return userRow
+        return str(userRow)
 
     
     def refreshUser(self, id):
@@ -108,7 +108,7 @@ class Database:
 
         # If not found, return 0
         else:
-            return userRow
+            return str(userRow)
         
     def searchID(self, id):
         row = 0
