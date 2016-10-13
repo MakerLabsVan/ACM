@@ -19,15 +19,15 @@ class Database:
     def insertUser(self, data):
         print("Inserting " + data["memberName"])
 
-        # Create new row and get that row as a list of cell objects
+        # Create new row (and make sure its created)
         prevRowCount = self.user_data.row_count
         currRowCount = prevRowCount
         while currRowCount == prevRowCount:
             self.user_data.add_rows(1)
             currRowCount = self.user_data.row_count
-
-        endRow = self.user_data.row_count
-        cellList = self.user_data.range(constant.COL_START_DATA + str(endRow) + constant.COL_END_DATA + str(endRow))
+        
+        # Get that row as a list of cell objects
+        cellList = self.user_data.range(constant.COL_START_DATA + str(currRowCount) + constant.COL_END_DATA + str(currRowCount))
         cellList.append(self.user_data.acell(constant.CELL_PKEY))
 
         # Update cell values
@@ -61,8 +61,7 @@ class Database:
             self.laser_data.add_rows(1)
             currRowCount = self.laser_data.row_count
 
-        endRow = self.laser_data.row_count
-        cellList = self.laser_data.range(constant.RANGE_LASER_START + str(endRow) + constant.RANGE_LASER_END + str(endRow))
+        cellList = self.laser_data.range(constant.RANGE_LASER_START + str(currRowCount) + constant.RANGE_LASER_END + str(currRowCount))
 
         # Insert and push updated cells to sheet
         cellList[constant.COL_LASER_TYPE].value = data["laserType"]
