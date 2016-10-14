@@ -24,8 +24,8 @@ class Database:
     def isTokenExpired(self):
         currentTime = datetime.now().time()
         referenceTime = self.lastAuthorizationTime
-        currentTimeDelta = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)        
-        referenceTimeDelta = timedelta(hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second)
+        currentTimeDelta = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second).total_seconds()        
+        referenceTimeDelta = timedelta(hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second).total_seconds()
 
         if (currentTimeDelta - referenceTimeDelta) > constant.TIME_TOKEN_EXPIRE:
             return True
