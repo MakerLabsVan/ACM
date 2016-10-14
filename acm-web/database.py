@@ -21,7 +21,7 @@ class Database:
             self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
             print("Opened database")
     
-    def isTokenExpired():
+    def isTokenExpired(self):
         currentTime = datetime.now().time()
         referenceTime = self.lastAuthorizationTime
         currentTimeDelta = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)        
