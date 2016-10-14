@@ -91,7 +91,6 @@ class Database:
         self.laser_data.update_cells(cellList)
     
     def insertLaserTime(self, data):
-        # Search for row containing user ID ** NOT CONSTANT TIME
         self.authorize()
         userRow = self.searchID(data["id"])
 
@@ -109,7 +108,6 @@ class Database:
         print("Getting data for user %d" % id)
         self.authorize()
 
-        # Search for row containing user ID ** NOT CONSTANT TIME
         userRow = self.searchID(id)
         
         # If ID found, retrieve row and all values related to machine authorizations
@@ -129,7 +127,7 @@ class Database:
         else:
             return str(userRow)
         
-    def searchID(self, id):
+    def searchID(self, id): # This is not constant time
         row = 0
         idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
