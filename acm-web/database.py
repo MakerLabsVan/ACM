@@ -8,7 +8,7 @@ class Database:
         self.authorize(isStartUp=True)
     
     def authorize(self, isStartUp=False):
-        if isStartUp or timeSince(self.lastAuthorizationTime):
+        if isStartUp or self.isTokenExpired():
             scope = ['https://spreadsheets.google.com/feeds']
             credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)
             gc = gspread.authorize(credentials)
@@ -21,8 +21,9 @@ class Database:
             self.lastAuthorizationTime = datetime.now().time()        
             print("Opened database")
     
-    def timeSince(referenceTime):
+    def isTokenExpired():
         currentTime = datetime.now().time()
+        referenceTime = self.lastAuthorizationTime
         currentTimeDelta = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)        
         referenceTimeDelta = timedelta(hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second)
 
