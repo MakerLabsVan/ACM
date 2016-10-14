@@ -12,13 +12,13 @@ class Database:
             scope = ['https://spreadsheets.google.com/feeds']
             credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)
             gc = gspread.authorize(credentials)
-            print("Authorization complete")
+            self.lastAuthorizationTime = datetime.now().time()
+            print("Authorization complete at time: " + str(self.lastAuthorizationTime))
 
             spreadsheet = gc.open("MakerLabs ACM")
             self.user_data = spreadsheet.worksheet("Users")
             self.laser_data = spreadsheet.worksheet("Laser Log")
-            self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)
-            self.lastAuthorizationTime = datetime.now().time()        
+            self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
             print("Opened database")
     
     def isTokenExpired():
