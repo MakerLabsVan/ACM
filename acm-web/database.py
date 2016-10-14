@@ -1,23 +1,39 @@
 import gspread
 import constant
-from datetime import datetime
+from datetime import datetime, timedelta
 from oauth2client.service_account import ServiceAccountCredentials
 
 class Database:
     def __init__(self):
-        scope = ['https://spreadsheets.google.com/feeds']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)
-        gc = gspread.authorize(credentials)
-        print("Authorization complete")
-
-        spreadsheet = gc.open("MakerLabs ACM")
-        self.user_data = spreadsheet.worksheet("Users")
-        self.laser_data = spreadsheet.worksheet("Laser Log")
-        self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)
-        print("Opened database")
+        self.authorize(isStartUp=True)
     
+    def authorize(self, isStartUp=False):
+        if isStartUp or timeSince(self.lastAuthorizationTime):
+            scope = ['https://spreadsheets.google.com/feeds']
+            credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)
+            gc = gspread.authorize(credentials)
+            print("Authorization complete")
+
+            spreadsheet = gc.open("MakerLabs ACM")
+            self.user_data = spreadsheet.worksheet("Users")
+            self.laser_data = spreadsheet.worksheet("Laser Log")
+            self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)
+            self.lastAuthorizationTime = datetime.now().time()        
+            print("Opened database")
+    
+    def timeSince(referenceTime):
+        currentTime = datetime.now().time()
+        currentTimeDelta = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)        
+        referenceTimeDelta = timedelta(hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second)
+
+        if (currentTimeDelta - referenceTimeDelta) > constant.TIME_TOKEN_EXPIRE:
+            return True
+        else:
+            return False
+
     def insertUser(self, data):
         print("Inserting " + data["memberName"])
+        self.authorize()
 
         # Create new row (and make sure its created)
         prevRowCount = self.user_data.row_count
@@ -53,6 +69,7 @@ class Database:
     
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
+        self.authorize()
 
         # Add and retrieve new row
         prevRowCount = self.laser_data.row_count
@@ -74,6 +91,7 @@ class Database:
     
     def insertLaserTime(self, data):
         # Search for row containing user ID ** NOT CONSTANT TIME
+        self.authorize()
         userRow = self.searchID(data["id"])
 
         # Update times
@@ -88,6 +106,7 @@ class Database:
     
     def refreshUser(self, id):
         print("Getting data for user %d" % id)
+        self.authorize()
 
         # Search for row containing user ID ** NOT CONSTANT TIME
         userRow = self.searchID(id)
