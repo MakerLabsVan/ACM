@@ -16,7 +16,7 @@
 #define pollInterval 500
 #define freeTime 10
 #define maximumValue 12
-#define maxTime 
+#define maxTime 18000
 #define supportTimer 300000
 #define ASCII_OFFSET 48
 
