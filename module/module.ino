@@ -37,7 +37,7 @@ void loop() {
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
-	unsigned long lastSend, lastOn = millis();
+	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
 	// Turn LED off, lock laser cutter
@@ -110,7 +110,7 @@ void loop() {
 			totalTime = elapsedTime + existingTime;
 
 			// Job done
-			// lock laser cutter and record timestamp
+			// lock laser cutter
 			lastOn = millis();
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
@@ -295,7 +295,7 @@ void supportSystem(unsigned long lastOn) {
 	if (digitalRead(supportPin) == HIGH) {
 		// check if it's been more than 5 mins
 		// since the last card was scanned
-		if (timeSince(lastOn) > supportTimer) {
+		if (timeSince(lastOn) > supportTimeout) {
 			digitalWrite(supportPin, LOW);
 		}
 	}
