@@ -13,7 +13,11 @@ void setup() {
 	pinMode(driverY, INPUT);
 	pinMode(speakerPin, OUTPUT);
   	pinMode(interlock, OUTPUT);
+	pinMode(supportPin, OUTPUT);
   	pinMode(wifi_rst, OUTPUT);
+
+	// Start with support systems off
+	digitalWrite(supportPin, LOW);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
@@ -36,13 +40,14 @@ void loop() {
 	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
-	// Turn LED off and lock laser cutter
+	// Turn LED off, lock laser cutter
 	digitalWrite(ledPin, LOW);
   	digitalWrite(interlock, LOW);
 	// ----------------------------------------------------------------------
-	// Scan for RFID tags
+	// Scan for RFID tags and see if support systems need to be off
 	getStringFromMem(scan);
 	while (!isValidResponse) {
+		supportTimer(lastOn);
 		sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
@@ -95,13 +100,18 @@ void loop() {
 			}
 			getStringFromMem(authorized);
 
-			// Ready to accumulate time, turn LED on, unlock laser cutter
+			// Ready to accumulate time
+			// turn LED and support systems on
+			// unlock laser cutter
 			digitalWrite(ledPin, HIGH);
+			digitalWrite(supportPin, HIGH);
       		digitalWrite(interlock, HIGH);
 			elapsedTime = accumulator(readData, elapsedTime);
 			totalTime = elapsedTime + existingTime;
 
 			// Job done
+			// lock laser cutter and record timestamp
+			lastOn = millis()
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
 			Serial.println(totalTime);
@@ -278,4 +288,15 @@ void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
 	Serial.print(stringBuffer);
+}
+
+void supportTimer(unsigned long lastOn) {
+	// check if the support systems are on
+	if (digitalRead(supportPin) == HIGH) {
+		// check if it's been more than 5 mins
+		// since the last card was scanned
+		if timeSince(lastOn) > supportTimer {
+			digitalWrite(supportPin, LOW);
+		}
+	}
 }

@@ -16,7 +16,8 @@
 #define pollInterval 500
 #define freeTime 10
 #define maximumValue 12
-#define maxTime 18000
+#define maxTime 
+#define supportTimer 300000
 #define ASCII_OFFSET 48
 
 // Start and End bytes for command/response packets
@@ -83,6 +84,7 @@
 
 // Pins
 #define interlock A5
+#define supportPin A4
 #define driverX 4
 #define driverY 7
 #define speakerPin 8
@@ -119,8 +121,7 @@
 #define calcTime(x) (millis() - x)/1000
 #define timeSince(x) (millis() - x)
 
-//const bool isReject = true;
-//const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned long lastOn = 0;
 unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00 };
 
 const char COMMAND_GET_TIME = '1';
