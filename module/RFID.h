@@ -84,7 +84,7 @@
 
 // Pins
 #define interlock A5
-#define supportPin A4
+#define supportPin 10
 #define driverX 4
 #define driverY 7
 #define speakerPin 8
