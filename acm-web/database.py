@@ -125,17 +125,15 @@ class Database:
 
         # If not found, return 0
         else:
+            print("User does not exist")
             return str(userRow)
-        
-    def searchID(self, id): # This is not constant time
-        row = 0
+  
+    def searchID(self, id):
         idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
-        for i in range(len(idList)):
-            if idList[i] == "" or idList[i] == "RFID#":
-                continue
-            elif int(idList[i]) == id:
-                row = i + 1
-                break
-        
-        return row
+        try:
+            row = idList.index(str(id))
+        except:
+            row = 0
+
+        return row 
