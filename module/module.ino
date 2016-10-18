@@ -37,7 +37,7 @@ void loop() {
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
-	unsigned long lastSend = millis();
+	unsigned long lastSend, lastOn = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
 	// Turn LED off, lock laser cutter
