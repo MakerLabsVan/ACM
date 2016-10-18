@@ -60,6 +60,7 @@ void loop() {
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
 	authorization = (int)readData[classOffset] - ASCII_OFFSET;
+  lastOn = millis();
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);
