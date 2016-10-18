@@ -47,7 +47,7 @@ void loop() {
 	// Scan for RFID tags and see if support systems need to be off
 	getStringFromMem(scan);
 	while (!isValidResponse) {
-		supportTimer(lastOn);
+		supportSystem(lastOn);
 		sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
@@ -111,7 +111,7 @@ void loop() {
 
 			// Job done
 			// lock laser cutter and record timestamp
-			lastOn = millis()
+			lastOn = millis();
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
 			Serial.println(totalTime);
@@ -290,12 +290,12 @@ void getStringFromMem(int index) {
 	Serial.print(stringBuffer);
 }
 
-void supportTimer(unsigned long lastOn) {
+void supportSystem(unsigned long lastOn) {
 	// check if the support systems are on
 	if (digitalRead(supportPin) == HIGH) {
 		// check if it's been more than 5 mins
 		// since the last card was scanned
-		if timeSince(lastOn) > supportTimer {
+		if (timeSince(lastOn) > supportTimer) {
 			digitalWrite(supportPin, LOW);
 		}
 	}
