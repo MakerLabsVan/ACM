@@ -33,11 +33,10 @@ void setup() {
 
 void loop() {
 	// some variables
-	int isStaff, authorization = 0;
+	int isStaff, isAuthorized = 0;
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
-	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
 	// Turn LED off, lock laser cutter
@@ -59,8 +58,7 @@ void loop() {
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
-	authorization = (int)readData[classOffset] - ASCII_OFFSET;
-  lastOn = millis();
+	isAuthorized = (int)readData[classOffset] - ASCII_OFFSET;
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);
@@ -78,7 +76,7 @@ void loop() {
 		// Translate the time data bytes to a value
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class, skip if staff member
-		if ( !authorization && !isStaff ) {
+		if ( !isAuthorized && !isStaff ) {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
@@ -110,8 +108,7 @@ void loop() {
 			elapsedTime = accumulator(readData, elapsedTime);
 			totalTime = elapsedTime + existingTime;
 
-			// Job done
-			// lock laser cutter
+			// Job done, lock laser cutter, get timestamp
 			lastOn = millis();
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
@@ -120,7 +117,7 @@ void loop() {
 	}
 	// -------------------------------------------------------------------------
 	// Write time data to card
-	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
+	if ( isRange(elapsedTime, freeTime, maxTime) ) {
 		sendCommand(CMD_WRITE, blockID, machineID, totalTime);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
@@ -190,7 +187,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// Any valid accumulated time will be returned
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime) ) {
+					if ( (startTime > 0) && isRange(elapsedTime, freeTime, maxTime) ) {
 	          			return elapsedTime;
 					}
 					else {
@@ -207,7 +204,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			// Begin signal monitoring logic
 			periodX = pulseIn(driverX, HIGH);
 			periodY = pulseIn(driverY, HIGH);
-	    	signals[i] = isRange(periodX + periodY);
+	    	signals[i] = isRange(periodX + periodY, 0, maximumValue);
 
 			// Only here temporarily for debugging
 			// if (debug) {
@@ -248,7 +245,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// if a job was detected, return
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime) ) {
+					if ( (startTime > 0) && isRange(elapsedTime, freeTime, maxTime) ) {
 						return elapsedTime;
 					}
 					else {
