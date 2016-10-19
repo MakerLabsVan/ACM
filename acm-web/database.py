@@ -12,8 +12,8 @@ class Database:
             scope = ['https://spreadsheets.google.com/feeds']
             credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)
             gc = gspread.authorize(credentials)
-            self.lastAuthorizationTime = datetime.now().time().replace(microsecond=0)
-            print("Authorization complete at time: " + str(self.lastAuthorizationTime))
+            self.lastAuthorizationTime = datetime.now()
+            print("Authorization complete at time: " + str(self.lastAuthorizationTime.time().replace(microsecond=0)))
 
             spreadsheet = gc.open("MakerLabs ACM")
             self.user_data = spreadsheet.worksheet("Users")
@@ -22,10 +22,10 @@ class Database:
             print("Opened database")
     
     def isTokenExpired(self):
-        currentTime = datetime.now().time()
+        currentTime = datetime.now()
         referenceTime = self.lastAuthorizationTime
-        currentTimeDelta = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second).total_seconds()        
-        referenceTimeDelta = timedelta(hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second).total_seconds()
+        currentTimeDelta = timedelta(days=currentTime.day, hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second).total_seconds()        
+        referenceTimeDelta = timedelta(days=referenceTime.day, hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second).total_seconds()
 
         if (currentTimeDelta - referenceTimeDelta) > constant.TIME_TOKEN_EXPIRE:
             return True
