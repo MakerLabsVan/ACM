@@ -6,7 +6,7 @@ from flask import Flask, request, render_template
 
 app = Flask(__name__)
 # socketio = SocketIO(app)
-# arduino = Arduino()
+arduino = Arduino()
 database = Database()
 
 @app.route("/")
