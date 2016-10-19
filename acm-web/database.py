@@ -12,7 +12,7 @@ class Database:
             scope = ['https://spreadsheets.google.com/feeds']
             credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)
             gc = gspread.authorize(credentials)
-            self.lastAuthorizationTime = datetime.now().time()
+            self.lastAuthorizationTime = datetime.now().time().replace(microsecond=0)
             print("Authorization complete at time: " + str(self.lastAuthorizationTime))
 
             spreadsheet = gc.open("MakerLabs ACM")
@@ -37,11 +37,8 @@ class Database:
         self.authorize()
 
         # Create new row (and make sure its created)
-        prevRowCount = self.user_data.row_count
-        currRowCount = prevRowCount
-        while currRowCount == prevRowCount:
-            self.user_data.add_rows(1)
-            currRowCount = self.user_data.row_count
+        self.user_data.add_rows(1)
+        currRowCount = self.user_data.row_count
         
         # Get that row as a list of cell objects
         cellList = self.user_data.range(constant.COL_START_DATA + str(currRowCount) + constant.COL_END_DATA + str(currRowCount))
@@ -73,11 +70,8 @@ class Database:
         self.authorize()
 
         # Add and retrieve new row
-        prevRowCount = self.laser_data.row_count
-        currRowCount = prevRowCount
-        while currRowCount == prevRowCount:
-            self.laser_data.add_rows(1)
-            currRowCount = self.laser_data.row_count
+        self.laser_data.add_rows(1)
+        currRowCount = self.laser_data.row_count
 
         cellList = self.laser_data.range(constant.RANGE_LASER_START + str(currRowCount) + constant.RANGE_LASER_END + str(currRowCount))
 
