@@ -37,10 +37,21 @@ class Arduino:
 
 	def registerCard(self, data):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
+		self.serial.write( str(len(data["uid"])).encode() )
+		self.serial.write(data["uid"].encode())
 		self.serial.write(data["memberType"].encode())
 		self.serial.write(data["laserA"].encode())
-		self.serial.write(data["uid"].encode())
 
+		rxbuffer = listen(self.serial)
+
+		return bytesToNum(rxbuffer)
+	
+	def refreshUser(self, data):
+		self.serial.write(constant.COMMAND_REGISTER.encode())
+		self.serial.write( str(len(data[0])).encode() )
+		for i in range(len(data)):
+			self.serial.write(data[i].encode())
+		
 		rxbuffer = listen(self.serial)
 
 		return bytesToNum(rxbuffer)

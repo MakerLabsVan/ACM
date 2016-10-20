@@ -2,8 +2,10 @@ import constant
 from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
+# from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+# socketio = SocketIO(app)
 arduino = Arduino()
 database = Database()
 
@@ -22,19 +24,33 @@ def resetTime():
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
 	data = request.get_json()
-	database.insertUser(data)
-	return arduino.registerCard(data)
+	if arduino.registerCard(data) == data["uid"]:
+		return database.insertUser(data)
+	else:
+		return "0"
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
 	data = {"laserType": laser, "id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
-	database.insertLaserTime(data)
-	return "1"
+	database.laserLog(data)
+	return database.insertLaserTime(data)
 
-@app.route("/serialTest/<int:id>")
+@app.route("/refresh/<int:id>")
+def refresh(id):
+	data = database.refreshUser(id)
+	return arduino.refreshUser(data)
+
+# ----------------------------------------
+@app.route("/scanTest/<int:id>")
 def serialTest(id):
-	print("hello from arduino, id sent: %d" % id)
-	return "1"
+	# ignore guest cards for now
+	if id != 0 and id != 6 and id != 12:
+		database.scanLog(id)
+	# 	data = database.refreshUser(id)
+	# 	# socketio.emit('scan', data)
+	# 	return arduino.refreshUser(data)
+	return str(id)
 
 if (__name__ == "__main__"):
     app.run(host='0.0.0.0')
+	# socketio.run(app, host='0.0.0.0')

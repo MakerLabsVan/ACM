@@ -17,6 +17,7 @@
 #define freeTime 10
 #define maximumValue 12
 #define maxTime 18000
+#define supportTimeout 120000
 #define ASCII_OFFSET 48
 
 // Start and End bytes for command/response packets
@@ -83,6 +84,7 @@
 
 // Pins
 #define interlock A5
+#define supportPin 10
 #define driverX 4
 #define driverY 7
 #define speakerPin 8
@@ -115,12 +117,11 @@
 #define ADDRESS "192.168.0.200:5000"
 #define URI "/serialTest/"
 
-#define isRange(x) (0 < x && x <= maximumValue) ? 1 : 0
+#define isRange(x, low, high) (low < x && x <= high) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
 #define timeSince(x) (millis() - x)
 
-//const bool isReject = true;
-//const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+unsigned long lastOn = 0;
 unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00 };
 
 const char COMMAND_GET_TIME = '1';

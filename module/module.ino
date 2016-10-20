@@ -13,7 +13,11 @@ void setup() {
 	pinMode(driverY, INPUT);
 	pinMode(speakerPin, OUTPUT);
   	pinMode(interlock, OUTPUT);
+	pinMode(supportPin, OUTPUT);
   	pinMode(wifi_rst, OUTPUT);
+
+	// Start with support systems off
+	digitalWrite(supportPin, LOW);
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
@@ -29,20 +33,20 @@ void setup() {
 
 void loop() {
 	// some variables
-	int isStaff, authorization = 0;
+	int isStaff, isAuthorized = 0;
 	bool isValidResponse = false;
 	unsigned int userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
-	unsigned long lastSend = millis();
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
-	// Turn LED off and lock laser cutter
+	// Turn LED off, lock laser cutter
 	digitalWrite(ledPin, LOW);
   	digitalWrite(interlock, LOW);
 	// ----------------------------------------------------------------------
-	// Scan for RFID tags
+	// Scan for RFID tags and see if support systems need to be off
 	getStringFromMem(scan);
 	while (!isValidResponse) {
+		supportSystem(lastOn);
 		sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
@@ -54,7 +58,7 @@ void loop() {
 	isValidResponse = getResponse(readData);
 	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
-	authorization = (int)readData[classOffset] - ASCII_OFFSET;
+	isAuthorized = (int)readData[classOffset] - ASCII_OFFSET;
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);
@@ -72,7 +76,7 @@ void loop() {
 		// Translate the time data bytes to a value
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class, skip if staff member
-		if ( !authorization && !isStaff ) {
+		if ( !isAuthorized && !isStaff ) {
 			//soundFeedback(isReject);
 			getStringFromMem(notAuthorized);
 		}
@@ -95,13 +99,17 @@ void loop() {
 			}
 			getStringFromMem(authorized);
 
-			// Ready to accumulate time, turn LED on, unlock laser cutter
+			// Ready to accumulate time
+			// turn LED and support systems on
+			// unlock laser cutter
 			digitalWrite(ledPin, HIGH);
+			digitalWrite(supportPin, HIGH);
       		digitalWrite(interlock, HIGH);
 			elapsedTime = accumulator(readData, elapsedTime);
 			totalTime = elapsedTime + existingTime;
 
-			// Job done
+			// Job done, lock laser cutter, get timestamp
+			lastOn = millis();
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
 			Serial.println(totalTime);
@@ -109,7 +117,7 @@ void loop() {
 	}
 	// -------------------------------------------------------------------------
 	// Write time data to card
-	if ( (0 < elapsedTime) && (elapsedTime < maxTime) ) {
+	if ( isRange(elapsedTime, freeTime, maxTime) ) {
 		sendCommand(CMD_WRITE, blockID, machineID, totalTime);
 		delay(waitforWriteResponse);
 		isValidResponse = getResponse(readData);
@@ -179,7 +187,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// Any valid accumulated time will be returned
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime) ) {
+					if ( (startTime > 0) && isRange(elapsedTime, freeTime, maxTime) ) {
 	          			return elapsedTime;
 					}
 					else {
@@ -196,7 +204,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 			// Begin signal monitoring logic
 			periodX = pulseIn(driverX, HIGH);
 			periodY = pulseIn(driverY, HIGH);
-	    	signals[i] = isRange(periodX + periodY);
+	    	signals[i] = isRange(periodX + periodY, 0, maximumValue);
 
 			// Only here temporarily for debugging
 			// if (debug) {
@@ -237,7 +245,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 					elapsedTime = calcTime(startTime);
 
 					// if a job was detected, return
-					if ( (startTime > 0) && (freeTime < elapsedTime) && (elapsedTime < maxTime) ) {
+					if ( (startTime > 0) && isRange(elapsedTime, freeTime, maxTime) ) {
 						return elapsedTime;
 					}
 					else {
@@ -278,4 +286,15 @@ void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index])) );
 	Serial.print(stringBuffer);
+}
+
+void supportSystem(unsigned long lastOn) {
+	// check if the support systems are on
+	if (digitalRead(supportPin) == HIGH) {
+		// check if it's been more than 5 mins
+		// since the last card was scanned
+		if (timeSince(lastOn) > supportTimeout) {
+			digitalWrite(supportPin, LOW);
+		}
+	}
 }

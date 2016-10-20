@@ -1,12 +1,12 @@
 #include <SoftwareSerial.h>
-// #include <Ciao.h>
 #include "RFID.h"
 
 #define FRONTDESK
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
+SoftwareSerial WIFI(WIFI_TX, WIFI_RX);
 
-int scannedID, prevIDscanned = 0;
+int scannedID, prevID = 0;
 unsigned char readData[bufferSize];
 
 volatile bool isValidResponse = false;
@@ -15,9 +15,13 @@ volatile int id = 0;
 
 void setup() {
 	Serial.begin(moduleBaud);
-	RFID.begin(moduleBaud);
-	// Ciao.begin();
+	WIFI.begin(moduleBaud);
+
 	pinMode(ledPin, OUTPUT);
+	pinMode(wifi_rst, OUTPUT);
+	connectWIFI();
+
+	RFID.begin(moduleBaud);
 }
 
 void loop() {
@@ -43,20 +47,21 @@ void loop() {
 
 	// card detected, get user data
 	digitalWrite(ledPin, HIGH);
-	// sendCommand(CMD_READ, blockID, userData);
-	// delay(waitforReadResponse);
-	// isValidResponse = getResponse(readData);
-	// if (isValidResponse) {
-	// 	scannedID = (int)getTime(readData, numUserBytes, userOffset);	
-	// }
+	sendCommand(CMD_READ, blockID, userData);
+	delay(waitforReadResponse);
+	isValidResponse = getResponse(readData);
+	if (isValidResponse) {
+		scannedID = (int)getTime(readData, numUserBytes, userOffset);	
+	}
 
-	// // send to web app -- CIAO IS SO DAMN SLOW
-	// if ( (scannedID > 0) && (scannedID != prevIDscanned) ) {
-	// 	String request = URI + String(scannedID);
-	// 	CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
-	// 	prevIDscanned = scannedID;
-	// }
-	
+	// send to web app
+	if (scannedID != prevID) {
+		WIFI.listen();
+		scanTest(scannedID);
+		prevID = scannedID;
+	}
+
+	RFID.listen();
 }
 
 void serialEvent() {
@@ -64,14 +69,7 @@ void serialEvent() {
 	unsigned long existingTime = 0;
 
 	while (Serial.available()) {
-		if (i > 2) {
-			if (characterRead[0] == COMMAND_REGISTER) {
-				id = Serial.parseInt();
-			}
-		}
-		else {
-			characterRead[i] = Serial.read();
-		}
+		characterRead[i] = Serial.read();
 		i++;
 	}
 
@@ -94,7 +92,7 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_RESET_TIME) {
 		characterRead[0] = 0;
 
-		preparePayload(COMMAND_RESET_TIME, 0, NULL);
+		preparePayload(COMMAND_RESET_TIME, 0, NULL, 0);
 		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 
@@ -105,11 +103,19 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
 
-		preparePayload(COMMAND_REGISTER, NULL, id);
+		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);
+		
+		for (int i = 0; i < numDigits; i++) {
+			id *= 10;
+			id += (int)(characterRead[i+2] - ASCII_OFFSET);
+		}
+
+		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
 		if (id != 0) {
+			preparePayload(COMMAND_RESET_TIME, 0, NULL, 0);
 			sendCommand(CMD_WRITE, blockID, machineID);
 			while (id != 0 ) {
 				Serial.write(id);

@@ -51,11 +51,11 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		startDay: "",
 		laserA: "1",
 		laserB: "1",
-		shopbot: "",
-		wood: "",
-		metal: "",
-		textile: "",
-		threeD: ""
+		shopbot: "0",
+		wood: "0",
+		metal: "0",
+		textile: "0",
+		threeD: "0"
 	};
 
 	$scope.registerCard = function() {
@@ -88,6 +88,16 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 			$scope.user.memberType = "0";
 		}
 	}
+
+	// var socket = io.connect("http://localhost:5000");
+	// console.log("Socket Connected.");
+	// socket.on('scan', function(msg) {
+	// 	console.log(msg);
+    //     $scope.id = msg[0];
+	// 	$scope.$apply();
+    // });
+	
+	
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");
