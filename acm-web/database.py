@@ -65,7 +65,7 @@ class Database:
         
         # Push changes to sheet
         self.user_data.update_cells(cellList)
-        return data["id"]
+        return data["uid"]
     
     def scanLog(self, id):
         print("Logging user %d at Front Desk" % id)
@@ -74,7 +74,7 @@ class Database:
         self.scan_data.insert_row(cellList, 2)
     
     def laserLog(self, data):
-        print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
+        print("Logging user %d on Laser %s" % (data["uid"], data["laserType"]))
         self.authorize()
 
         # Add and retrieve new row
@@ -87,7 +87,7 @@ class Database:
         cellList[constant.COL_LASER_TYPE].value = data["laserType"]
         cellList[constant.COL_DATE].value = datetime.now().date().isoformat()
         cellList[constant.COL_TIME].value = datetime.now().time().isoformat()
-        cellList[constant.COL_ID_LOG].value = data["id"]
+        cellList[constant.COL_ID_LOG].value = data["uid"]
         cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
         cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
         self.laser_data.update_cells(cellList)
