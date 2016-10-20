@@ -15,13 +15,3 @@ $(function() {
     });
 
 });
-
-// $(document).ready(function() {
-//     var socket = io.connect('http://localhost:5000');
-//     console.log("Socket connected.");
-
-//     socket.on('scan', function(msg) {
-//         console.log("hi from arduino: " + msg.data);
-//     });
-
-// });
