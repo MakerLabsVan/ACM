@@ -17,6 +17,7 @@ class Database:
 
             spreadsheet = gc.open("MakerLabs ACM")
             self.user_data = spreadsheet.worksheet("Users")
+            self.scan_data = spreadsheet.worksheet("Scan Log")
             self.laser_data = spreadsheet.worksheet("Laser Log")
             self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
             print("Opened database")
@@ -65,6 +66,12 @@ class Database:
         # Push changes to sheet
         self.user_data.update_cells(cellList)
     
+    def scanLog(self, id):
+        print("Logging user %d at Front Desk" % id)
+        cellList = [ datetime.now().date().isoformat(), datetime.now().time().isoformat(), id ]
+        self.authorize()
+        self.scan_data.insert_row(cellList, 2)
+    
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
         self.authorize()
@@ -96,8 +103,17 @@ class Database:
             self.user_data.update_cells(cellList)
         
         return str(userRow)
+  
+    def searchID(self, id):
+        idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
-    
+        try:
+            row = idList.index(str(id))
+        except:
+            row = 0
+
+        return row 
+# ------------------------------- NOT IN USE -----------------------------------------
     def refreshUser(self, id):
         print("Getting data for user %d" % id)
         self.authorize()
@@ -121,13 +137,17 @@ class Database:
         else:
             print("User does not exist")
             return str(userRow)
-  
-    def searchID(self, id):
-        idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
+    
+    def laserLog2(self, data):
+        print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
 
-        try:
-            row = idList.index(str(id))
-        except:
-            row = 0
+        cellList = []
+        cellList.append( data["laserType"] )
+        cellList.append( datetime.now().date().isoformat() )
+        cellList.append( datetime.now().time().isoformat() )
+        cellList.append( data["id"] )
+        cellList.append( data["elapsedTime"] )
+        cellList.append( data["existingTime"] )
 
-        return row 
+        self.authorize()
+        self.laser_data(cellList, 2)
