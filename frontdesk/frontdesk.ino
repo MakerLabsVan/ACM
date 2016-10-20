@@ -1,12 +1,12 @@
 #include <SoftwareSerial.h>
-// #include <Ciao.h>
 #include "RFID.h"
 
 #define FRONTDESK
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
+SoftwareSerial WIFI(WIFI_TX, WIFI_RX);
 
-int scannedID, prevIDscanned = 0;
+int scannedID = 0;
 unsigned char readData[bufferSize];
 
 volatile bool isValidResponse = false;
@@ -15,9 +15,13 @@ volatile int id = 0;
 
 void setup() {
 	Serial.begin(moduleBaud);
-	RFID.begin(moduleBaud);
-	// Ciao.begin();
+	WIFI.begin(moduleBaud);
+
 	pinMode(ledPin, OUTPUT);
+	pinMode(wifi_rst, OUTPUT);
+	connectWIFI();
+
+	RFID.begin(moduleBaud);
 }
 
 void loop() {
@@ -42,22 +46,20 @@ void loop() {
 	}
 
 	// card detected, get user data
+	WIFI.listen();
 	digitalWrite(ledPin, HIGH);
-	// sendCommand(CMD_READ, blockID, userData);
-	// delay(waitforReadResponse);
-	// isValidResponse = getResponse(readData);
-	// if (isValidResponse) {
-	// 	scannedID = (int)getTime(readData, numUserBytes, userOffset);	
-	// }
+	sendCommand(CMD_READ, blockID, userData);
+	delay(waitforReadResponse);
+	isValidResponse = getResponse(readData);
+	if (isValidResponse) {
+		scannedID = (unsigned int)getTime(readData, numUserBytes, userOffset);	
+	}
 
-	// // send to web app
-	// if ( (scannedID > 0) && (scannedID != prevIDscanned) ) {
-	// 	String request = URI + String(scannedID);
-	// 	// CiaoData data = Ciao.write(CONNECTOR, ADDRESS, request);
-	// 	CiaoData data = Ciao.write(CONNECTOR, "192.168.0.17", request);
-	// 	prevIDscanned = scannedID;
-	// }
-	
+	// send to web app
+	scanTest(scannedID);
+	//delay(5000);
+
+	RFID.listen();
 }
 
 void serialEvent() {
