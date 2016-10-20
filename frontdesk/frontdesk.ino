@@ -6,7 +6,7 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_TX, WIFI_RX);
 
-int scannedID = 0;
+int scannedID, prevID = 0;
 unsigned char readData[bufferSize];
 
 volatile bool isValidResponse = false;
@@ -46,18 +46,20 @@ void loop() {
 	}
 
 	// card detected, get user data
-	WIFI.listen();
 	digitalWrite(ledPin, HIGH);
 	sendCommand(CMD_READ, blockID, userData);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	if (isValidResponse) {
-		scannedID = (unsigned int)getTime(readData, numUserBytes, userOffset);	
+		scannedID = (int)getTime(readData, numUserBytes, userOffset);	
 	}
 
 	// send to web app
-	scanTest(scannedID);
-	//delay(5000);
+	if (scannedID != prevID) {
+		WIFI.listen();
+		scanTest(scannedID);
+		prevID = scannedID;
+	}
 
 	RFID.listen();
 }
