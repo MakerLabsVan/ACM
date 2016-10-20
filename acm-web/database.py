@@ -65,7 +65,7 @@ class Database:
         
         # Push changes to sheet
         self.user_data.update_cells(cellList)
-	return data["id"]
+        return data["id"]
     
     def scanLog(self, id):
         print("Logging user %d at Front Desk" % id)
