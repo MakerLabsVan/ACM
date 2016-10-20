@@ -138,7 +138,7 @@ class Database:
             print("User does not exist")
             return str(userRow)
     
-    def laserLog2(self, data):
+    def laserLog2(self, data): # this takes 5 - 10 seconds longer than the old append method
         print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
 
         cellList = []

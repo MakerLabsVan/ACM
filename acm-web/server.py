@@ -42,7 +42,7 @@ def refresh(id):
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
 	# ignore guest cards for now
-	if id != 6 or id != 12:
+	if id != 6 and id != 12:
 		database.scanLog(id)
 	# 	data = database.refreshUser(id)
 	# 	# socketio.emit('scan', data)
