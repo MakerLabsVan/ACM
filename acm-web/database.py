@@ -109,7 +109,7 @@ class Database:
         idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
         try:
-            row = idList.index(str(id))
+            row = idList.index(str(id)) + 1
         except:
             row = 0
 
