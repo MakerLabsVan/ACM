@@ -46,7 +46,7 @@ def serialTest(id):
 	# ignore guest cards for now
 	if id != 0 and id != 6 and id != 12:
 		database.scanLog(id)
-		socketio.emit('scan', data)
+		socketio.emit('scan', id)
 	return str(id)
 
 if (__name__ == "__main__"):
