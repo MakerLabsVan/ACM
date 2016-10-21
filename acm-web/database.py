@@ -128,7 +128,7 @@ class Database:
             
             # Create list of cell values to pass to Arduino
             userData.append(userCells[constant.COL_MEMBER_TYPE].value)
-            for i in range(constant.COL_USES_LASER_A, constant.COL_USES_3D + 3):
+            for i in range(constant.COL_USES_LASER_A, constant.COL_LASER_TIME):
                 userData.append(userCells[i].value)
             
             print(userData)
