@@ -31,7 +31,7 @@ def registerCard():
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
-	data = {"laserType": laser, "id": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
+	data = {"laserType": laser, "uid": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
 	database.laserLog(data)
 	return database.insertLaserTime(data)
 
