@@ -108,7 +108,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.display.name = msg[2];
 		$scope.display.monthtime = msg[16];
 		$scope.display.lifetime = msg[17];
-		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg"; 
+		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";
 		$scope.$apply();
     });
 	
