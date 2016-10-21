@@ -109,7 +109,7 @@ class Database:
         idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
         try:
-            row = idList.index(str(id))
+            row = idList.index(str(id)) + 1
         except:
             row = 0
 
@@ -128,7 +128,7 @@ class Database:
             
             # Create list of cell values to pass to Arduino
             userData.append(userCells[constant.COL_MEMBER_TYPE].value)
-            for i in range(constant.COL_USES_LASER_A, constant.COL_USES_3D + 1):
+            for i in range(constant.COL_USES_LASER_A, constant.COL_USES_3D + 3):
                 userData.append(userCells[i].value)
             
             print(userData)

@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-arduino = Arduino()
+# arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -46,7 +46,8 @@ def serialTest(id):
 	# ignore guest cards for now
 	if id != 0 and id != 6 and id != 12:
 		database.scanLog(id)
-		socketio.emit('scan', id)
+		data = database.refreshUser(id)
+		socketio.emit('scan', data)
 	return str(id)
 
 if (__name__ == "__main__"):

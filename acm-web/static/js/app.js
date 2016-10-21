@@ -93,7 +93,9 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
 		console.log(msg);
-        $scope.id = msg;
+		$scope.scanned = "Scanned ID: " + msg[0];
+        $scope.scanned = $scope.scanned + " Month's Laser Time: " + msg[9];
+		$scope.scanned = $scope.scanned + " Lifetime: " + msg[10];
 		$scope.$apply();
     });
 	
