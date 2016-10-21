@@ -76,6 +76,46 @@ body {
   width: 100vh;
 }
 
+#home-content > img {
+  float: left;
+}
+
+#home-content, #scan-content {
+  overflow: hidden;
+}
+
+img.resize {
+  height: 300px;
+  width: 25%;
+}
+
+#scan-content {
+  height: 300px;
+  width: 75%;
+  vertical-align: bottom;
+}
+
+#user-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#table-info {
+  color: #fff;
+  background-color: #428bca;
+}
+
+th, td {
+  font-size: 10pt;
+  padding: 5px;
+}
+
+.panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
 #time-data {
   width: 100%;
   margin-left: auto;

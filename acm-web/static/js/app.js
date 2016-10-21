@@ -1,6 +1,11 @@
 var app = angular.module('ACM-Dash',[]);
 
-app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
+app.config(function($interpolateProvider) {
+	$interpolateProvider.startSymbol('//');
+    $interpolateProvider.endSymbol('//');
+});
+
+app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
 
 	$scope.time = new laserTime(123456);
@@ -59,10 +64,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	};
 
 	$scope.registerCard = function() {
-
-		console.log(JSON.stringify($scope.user));
-
 		if ($scope.user.uid && $scope.user.memberName) {
+			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
 
 			$http({
@@ -89,16 +92,34 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		}
 	}
 
+	$scope.display = {
+			id: "",
+			name: "",
+			monthtime: "",
+			lifetime: "",
+			image: "../static/img/users/person.jpg"
+	};
+
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
 		console.log(msg);
-		$scope.scanned = "Scanned ID: " + msg[0];
-        $scope.scanned = $scope.scanned + " Month's Laser Time: " + msg[9];
-		$scope.scanned = $scope.scanned + " Lifetime: " + msg[10];
+		$scope.display.id = msg[1];
+		$scope.display.name = msg[2];
+		$scope.display.monthtime = msg[16];
+		$scope.display.lifetime = msg[17];
+		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg"; 
 		$scope.$apply();
     });
 	
+	$scope.changePic = function() {
+		$scope.display.id = "420";
+		$scope.display.name = "Harambe";
+		$scope.display.monthtime = "01234";
+		$scope.display.lifetime = "56789";
+		$scope.display.image = "../static/img/users/harambe.jpg"; 
+		$scope.$apply();
+	}
 	
 
 	/*$scope.drawDonut = function() {

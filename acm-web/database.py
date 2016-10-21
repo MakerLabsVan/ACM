@@ -111,14 +111,35 @@ class Database:
         try:
             row = idList.index(str(id)) + 1
         except:
+            print("User does not exist")
             row = 0
 
         return row 
-# ------------------------------- NOT IN USE -----------------------------------------
-    def refreshUser(self, id):
+
+    def retrieveUser(self, id):
         print("Getting data for user %d" % id)
         self.authorize()
+        userRow = self.searchID(id)
+        
+        # If ID found, retrieve row and all values related to machine authorizations
+        if userRow:
+            userData = []
+            userCells = self.user_data.range(constant.COL_START_DATA + str(userRow) + constant.COL_END_DATA + str(userRow))
+            
+            # Create list of cell values to pass
+            for cell in userCells:
+                userData.append(cell.value)
+            
+            print(userData)
+            return userData
 
+        # If not found, return 0
+        else:
+            return str(userRow)
+# ------------------------------- NOT IN USE -----------------------------------------
+    def refreshUser(self, id):
+        print("Getting machine data for user %d" % id)
+        self.authorize()
         userRow = self.searchID(id)
         
         # If ID found, retrieve row and all values related to machine authorizations
@@ -136,7 +157,6 @@ class Database:
 
         # If not found, return 0
         else:
-            print("User does not exist")
             return str(userRow)
     
     def laserLog2(self, data): # this takes 5 - 10 seconds longer than the old append method
