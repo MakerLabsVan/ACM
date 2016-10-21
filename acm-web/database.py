@@ -94,7 +94,7 @@ class Database:
     
     def insertLaserTime(self, data):
         self.authorize()
-        userRow = self.searchID(data["id"])
+        userRow = self.searchID(data["uid"])
 
         # Update times
         if userRow:
