@@ -2,10 +2,10 @@ import constant
 from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
-# from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-# socketio = SocketIO(app)
+socketio = SocketIO(app)
 arduino = Arduino()
 database = Database()
 
@@ -46,11 +46,9 @@ def serialTest(id):
 	# ignore guest cards for now
 	if id != 0 and id != 6 and id != 12:
 		database.scanLog(id)
-	# 	data = database.refreshUser(id)
-	# 	# socketio.emit('scan', data)
-	# 	return arduino.refreshUser(data)
+		socketio.emit('scan', data)
 	return str(id)
 
 if (__name__ == "__main__"):
-    app.run(host='0.0.0.0')
-	# socketio.run(app, host='0.0.0.0')
+    # app.run(host='0.0.0.0')
+	socketio.run(app, host='0.0.0.0')
