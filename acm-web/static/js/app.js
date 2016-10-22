@@ -81,7 +81,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 					}
 					else {
 						$scope.entered = "User " + data + " registered.";
-						console.log("ID registered: " + parseInt(data));					
+						console.log("ID registered: " + parseInt(data));				
 					}
 
 				});
