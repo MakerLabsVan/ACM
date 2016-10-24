@@ -90,14 +90,25 @@ img.resize {
 }
 
 #scan-content {
+  position: relative;
   height: 300px;
   width: 75%;
   vertical-align: bottom;
 }
 
-#user-table, #access-table {
+#user-table {
   table-layout: fixed;
   width: 100%;
+  border-bottom-style: solid;
+}
+
+#access-table {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 #table-info {
@@ -120,7 +131,7 @@ th, td {
   background-color: #27AE60;
 }
 
-.panel-primary>.panel-heading {
+.panel-primary > .panel-heading {
     color: #fff;
     background-color: #428bca;
     border-color: #428bca;

@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-arduino = Arduino()
+# arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -25,6 +25,7 @@ def resetTime():
 def registerCard():
 	data = request.get_json()
 	if arduino.registerCard(data) == data["uid"]:
+		print("RFID tag registered")
 		return database.insertUser(data)
 	else:
 		return "0"

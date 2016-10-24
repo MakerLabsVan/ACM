@@ -95,6 +95,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	$scope.display = {
 			id: "",
 			name: "",
+			access: ["red", "red", "red", "red", "red", "red", "red"],
 			monthtime: "",
 			lifetime: "",
 			image: "../static/img/users/person.jpg"
@@ -103,9 +104,13 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
-		console.log(msg);
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
+
+		for (var i = 0; i < $scope.display.access.length; i++) {
+			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
+		}
+
 		$scope.display.monthtime = msg[16];
 		$scope.display.lifetime = msg[17];
 		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";
@@ -117,9 +122,9 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.display.name = "Harambe";
 		$scope.display.monthtime = "01234";
 		$scope.display.lifetime = "56789";
-		$scope.display.image = "../static/img/users/harambe.jpg"; 
+		$scope.display.image = "../static/img/users/harambe.jpg";
 		$scope.$apply();
-	}
+	};
 	
 
 	/*$scope.drawDonut = function() {

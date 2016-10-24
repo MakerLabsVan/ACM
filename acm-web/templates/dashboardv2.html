@@ -79,27 +79,18 @@
                         <td id="table-info">Laser Time to Date</td>
                         <td>// display.lifetime //</td>
                       </tr>
-                      <tr>
-                        <td></span></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
                     </table>
                     <table id="access-table" class="table-bordered">
                       <tr>
-                        <td class="green">Laser A</td>
-                        <td class="green">Laser B</td>
-                        <td class="red">Shopbot</td>
-                        <td class="red">Woodshop</td>
-                        <td class="red">Metalshop</td>
-                        <td class="red">Textile</td>
-                        <td class="red">3D Printer</td>
+                        <td ng-class="display.access[0]">Laser A</td>
+                        <td ng-class="display.access[1]">Laser B</td>
+                        <td ng-class="display.access[2]">Shopbot</td>
+                        <td ng-class="display.access[3]">Woodshop</td>
+                        <td ng-class="display.access[4]">Metalshop</td>
+                        <td ng-class="display.access[5]">Textile</td>
+                        <td ng-class="display.access[6]">3D Printer</td>
                       </tr>
                     </table>
-                    <div class="panel body">
-                    </div>
-                    <button type="button" class="btn btn-success" ng-click="changePic()">Click me</button>
               
                   </div>
                 </div>
