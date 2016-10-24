@@ -47,7 +47,7 @@ def serialTest(id):
 @app.route("/refresh")
 def refresh(id, data):
 	userData = [ id ]
-	userData.extend(data[9:16])
+	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
 	print(userData)
 	# return arduino.refreshUser(userData)
 
