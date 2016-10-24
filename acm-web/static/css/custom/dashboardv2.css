@@ -95,7 +95,7 @@ img.resize {
   vertical-align: bottom;
 }
 
-#user-table {
+#user-table, #access-table {
   table-layout: fixed;
   width: 100%;
 }
@@ -108,6 +108,16 @@ img.resize {
 th, td {
   font-size: 10pt;
   padding: 5px;
+}
+
+.red {
+  color: #fff;
+  background-color: #EC7063;
+}
+
+.green {
+  color: #fff;
+  background-color: #27AE60;
 }
 
 .panel-primary>.panel-heading {
