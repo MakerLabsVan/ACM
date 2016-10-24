@@ -35,12 +35,6 @@ def laserLog(laser, id, elapsedTime, existingTime):
 	database.laserLog(data)
 	return database.insertLaserTime(data)
 
-@app.route("/refresh/<int:id>")
-def refresh(id):
-	data = database.refreshUser(id)
-	return arduino.refreshUser(data)
-
-# ----------------------------------------
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
 	# ignore guest cards for now
@@ -49,6 +43,13 @@ def serialTest(id):
 		data = database.retrieveUser(id)
 		socketio.emit('scan', data)
 	return str(id)
+# ----------------------------------------
+@app.route("/refresh")
+def refresh(id, data):
+	userData = [ id ]
+	userData.extend(data[9:16])
+	print(userData)
+	# return arduino.refreshUser(userData)
 
 if (__name__ == "__main__"):
     # app.run(host='0.0.0.0')

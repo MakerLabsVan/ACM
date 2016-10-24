@@ -36,7 +36,7 @@ void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existin
 }
 #else
 void scanTest(unsigned int ID) {
-    String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.21\",5000";
+    String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.200\",5000";
     String getStr = "GET /scanTest/";
     String cmd = "AT+CIPSEND=";
     String closeConnection = "AT+CIPCLOSE";
