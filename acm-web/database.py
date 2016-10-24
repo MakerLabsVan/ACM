@@ -136,28 +136,6 @@ class Database:
         # If not found, return 0
         else:
             return str(userRow)
-# ------------------------------- NOT IN USE -----------------------------------------
-    def refreshUser(self, id):
-        print("Getting machine data for user %d" % id)
-        self.authorize()
-        userRow = self.searchID(id)
-        
-        # If ID found, retrieve row and all values related to machine authorizations
-        if userRow:
-            userData = [str(id)]
-            userCells = self.user_data.range(constant.COL_START_DATA + str(userRow) + constant.COL_END_DATA + str(userRow))
-            
-            # Create list of cell values to pass to Arduino
-            userData.append(userCells[constant.COL_MEMBER_TYPE].value)
-            for i in range(constant.COL_USES_LASER_A, constant.COL_LASER_TIME):
-                userData.append(userCells[i].value)
-            
-            print(userData)
-            return userData
-
-        # If not found, return 0
-        else:
-            return str(userRow)
     
     def laserLog2(self, data): # this takes 5 - 10 seconds longer than the old append method
         print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
