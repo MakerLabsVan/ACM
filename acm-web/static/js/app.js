@@ -20,7 +20,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		else {
 			$scope.tabs[2] = "active";
 		}
-	}
+	};
 
 	$scope.time = new laserTime(123456);
 	function laserTime(rawTime) {
