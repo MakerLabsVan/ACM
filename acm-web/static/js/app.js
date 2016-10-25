@@ -8,6 +8,20 @@ app.config(function($interpolateProvider) {
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
 
+	$scope.tabs = [ "active", "", "" ];
+	$scope.activeTab = function(tab) {
+		$scope.tabs = [ "", "", ""];
+		if (tab == 0) {
+			$scope.tabs[0] = "active";
+		}
+		else if (tab == 1) {
+			$scope.tabs[1] = "active";
+		}
+		else {
+			$scope.tabs[2] = "active";
+		}
+	}
+
 	$scope.time = new laserTime(123456);
 	function laserTime(rawTime) {
 		this.rawTime = rawTime;
@@ -18,7 +32,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		this.seconds = function() { return this.rawTime % 60 };
 
 		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
-	}
+	};
 
 
 	$scope.getTime = function() {
@@ -31,10 +45,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 				console.log("Raw Time: " + res);
 				$scope.time.set(res);
 			}
-			
-
-		})
-	}
+		});
+	};
 
 	$scope.resetTime = function() {
 		$http.get("../resetTime").success(function(res) {
@@ -46,8 +58,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 
 			console.log($scope.status);
 
-		})
-	}
+		});
+	};
 
 	$scope.user = {
 		uid: "",
@@ -100,12 +112,14 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			lifetime: "",
 			image: "../static/img/users/person.jpg"
 	};
+	console.log($scope.display);
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
+		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";		
 
 		for (var i = 0; i < $scope.display.access.length; i++) {
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
@@ -113,15 +127,14 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 
 		$scope.display.monthtime = msg[16];
 		$scope.display.lifetime = msg[17];
-		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";
 		$scope.$apply();
     });
 	
 	$scope.changePic = function() {
 		$scope.display.id = "420";
 		$scope.display.name = "Harambe";
-		$scope.display.monthtime = "01234";
-		$scope.display.lifetime = "56789";
+		$scope.display.monthtime = "";
+		$scope.display.lifetime = "";
 		$scope.display.image = "../static/img/users/harambe.jpg";
 		$scope.$apply();
 	};
