@@ -76,6 +76,67 @@ body {
   width: 100vh;
 }
 
+#home-content > img {
+  float: left;
+}
+
+#home-content, #scan-content {
+  overflow: hidden;
+}
+
+img.resize {
+  height: 300px;
+  width: 25%;
+}
+
+#scan-content {
+  position: relative;
+  height: 300px;
+  width: 75%;
+  vertical-align: bottom;
+}
+
+#user-table {
+  table-layout: fixed;
+  width: 100%;
+  border-bottom-style: solid;
+}
+
+#access-table {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+#table-info {
+  color: #fff;
+  background-color: #428bca;
+}
+
+th, td {
+  font-size: 10pt;
+  padding: 5px;
+}
+
+.red {
+  color: #fff;
+  background-color: #EC7063;
+}
+
+.green {
+  color: #fff;
+  background-color: #27AE60;
+}
+
+.panel-primary > .panel-heading {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
 #time-data {
   width: 100%;
   margin-left: auto;
@@ -112,7 +173,7 @@ input[type=submit]:hover {
 }
 
 #registration-form {
-    width: 50%;
+    width: 35%;
     margin-top: 15vh;
     margin-left: auto;
     margin-right: auto;

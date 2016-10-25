@@ -41,9 +41,9 @@
         <!-- SIDE NAV BAR -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul id="sidebar" class="nav nav-sidebar">
-            <li class="active"><a data-toggle="tab" href="#home">Dashboard</a></li>
-            <li class=""><a data-toggle="tab" href="#guest-card">Guest Card</a></li>
-            <li class=""><a data-toggle="tab" href="#registration">Registration</a></li>
+            <li ng-class="tabs[0]"><a ng-click="activeTab(0)" href="#home">Dashboard</a></li>
+            <li ng-class="tabs[1]"><a ng-click="activeTab(1)" href="#guest-card">Guest Card</a></li>
+            <li ng-class="tabs[2]"><a ng-click="activeTab(2)" href="#registration">Registration</a></li>
           </ul>
         </div>
         <!-- END SIDE NAV BAR -->
@@ -61,9 +61,39 @@
                 <div id="home-content">
                   <center>
                     <img src="../static/img/banner.png" alt="MakerLabs Banner" height="150" width="600">
-                    <p>Welcome to the ACM web interface!</p>
-                    <p>Last ID: <span ng-bind="id"></span></p>
                   </center>
+
+                  <img ng-src="// display.image //" class="resize">
+                  <div id="scan-content" class="panel panel-primary">
+                    <div class="panel-heading">User Info</div>
+                    <table id="user-table" class="table-bordered">
+                      <tr>
+                        <td id="table-info">RFID#</td>
+                        <td>// display.id //</td>
+                        <td id="table-info">Month's Laser Time</td>
+                        <td>// display.monthtime //</td>
+                      </tr>
+                      <tr>
+                        <td id="table-info">Name</span></td>
+                        <td>// display.name //</td>
+                        <td id="table-info">Laser Time to Date</td>
+                        <td>// display.lifetime //</td>
+                      </tr>
+                    </table>
+                    <table id="access-table" class="table-bordered">
+                      <th colspan="2">Classes Taken</th>                      
+                      <tr>
+                        <td ng-class="display.access[0]">Laser A</td>
+                        <td ng-class="display.access[1]">Laser B</td>
+                        <td ng-class="display.access[2]">Shopbot</td>
+                        <td ng-class="display.access[3]">Woodshop</td>
+                        <td ng-class="display.access[4]">Metalshop</td>
+                        <td ng-class="display.access[5]">Textile</td>
+                        <td ng-class="display.access[6]">3D Printer</td>
+                      </tr>
+                    </table>
+              
+                  </div>
                 </div>
 
               </div>
@@ -141,7 +171,7 @@
         <script src="../static/js/vendor/bootstrap.min.js"></script>
 
         <!-- jQuery -->
-        <!--<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>-->
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="../static/js/vendor/jquery-3.1.0.js"></script>
         <script src="../static/js/views.js"></script>
 

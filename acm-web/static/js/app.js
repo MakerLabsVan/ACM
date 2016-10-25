@@ -1,7 +1,26 @@
 var app = angular.module('ACM-Dash',[]);
 
-app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
+app.config(function($interpolateProvider) {
+	$interpolateProvider.startSymbol('//');
+    $interpolateProvider.endSymbol('//');
+});
+
+app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
+
+	$scope.tabs = [ "active", "", "" ];
+	$scope.activeTab = function(tab) {
+		$scope.tabs = [ "", "", ""];
+		if (tab == 0) {
+			$scope.tabs[0] = "active";
+		}
+		else if (tab == 1) {
+			$scope.tabs[1] = "active";
+		}
+		else {
+			$scope.tabs[2] = "active";
+		}
+	};
 
 	$scope.time = new laserTime(123456);
 	function laserTime(rawTime) {
@@ -13,7 +32,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		this.seconds = function() { return this.rawTime % 60 };
 
 		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
-	}
+	};
 
 
 	$scope.getTime = function() {
@@ -26,10 +45,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 				console.log("Raw Time: " + res);
 				$scope.time.set(res);
 			}
-			
-
-		})
-	}
+		});
+	};
 
 	$scope.resetTime = function() {
 		$http.get("../resetTime").success(function(res) {
@@ -41,8 +58,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 
 			console.log($scope.status);
 
-		})
-	}
+		});
+	};
 
 	$scope.user = {
 		uid: "",
@@ -59,10 +76,8 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 	};
 
 	$scope.registerCard = function() {
-
-		console.log(JSON.stringify($scope.user));
-
 		if ($scope.user.uid && $scope.user.memberName) {
+			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
 
 			$http({
@@ -78,7 +93,7 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 					}
 					else {
 						$scope.entered = "User " + data + " registered.";
-						console.log("ID registered: " + parseInt(data));					
+						console.log("ID registered: " + parseInt(data));				
 					}
 
 				});
@@ -89,14 +104,40 @@ app.controller('ACM-Controller', ['$scope', '$http', function($scope, $http) {
 		}
 	}
 
-	// var socket = io.connect("http://localhost:5000");
-	// console.log("Socket Connected.");
-	// socket.on('scan', function(msg) {
-	// 	console.log(msg);
-    //     $scope.id = msg[0];
-	// 	$scope.$apply();
-    // });
+	$scope.display = {
+			id: "",
+			name: "",
+			access: ["red", "red", "red", "red", "red", "red", "red"],
+			monthtime: "",
+			lifetime: "",
+			image: "../static/img/users/person.jpg"
+	};
+	console.log($scope.display);
+
+	var socket = io.connect("http://localhost:5000");
+	console.log("Socket Connected.");
+	socket.on('scan', function(msg) {
+		$scope.display.id = msg[1];
+		$scope.display.name = msg[2];
+		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";		
+
+		for (var i = 0; i < $scope.display.access.length; i++) {
+			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
+		}
+
+		$scope.display.monthtime = msg[16];
+		$scope.display.lifetime = msg[17];
+		$scope.$apply();
+    });
 	
+	$scope.changePic = function() {
+		$scope.display.id = "420";
+		$scope.display.name = "Harambe";
+		$scope.display.monthtime = "";
+		$scope.display.lifetime = "";
+		$scope.display.image = "../static/img/users/harambe.jpg";
+		$scope.$apply();
+	};
 	
 
 	/*$scope.drawDonut = function() {

@@ -55,7 +55,7 @@ void loop() {
 	}
 
 	// send to web app
-	if (scannedID != prevID) {
+	if (scannedID != prevID && scannedID < 100) {
 		WIFI.listen();
 		scanTest(scannedID);
 		prevID = scannedID;
