@@ -38,8 +38,7 @@ def laserLog(laser, id, elapsedTime, existingTime):
 
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
-	# ignore guest cards for now
-	if id != 0 and id != 6 and id != 12:
+	if id != 0:
 		database.scanLog(id)
 		data = database.retrieveUser(id)
 		socketio.emit('scan', data)

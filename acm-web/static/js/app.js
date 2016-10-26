@@ -116,7 +116,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			access: ["red", "red", "red", "red", "red", "red", "red"],
 			monthtime: "",
 			lifetime: "",
-			image: PATH + "person.jpg"
+			image: PATH + "GUEST.jpg"
 	};
 
 	var socket = io.connect("http://localhost:5000");
