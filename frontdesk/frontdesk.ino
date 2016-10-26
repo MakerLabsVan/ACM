@@ -4,7 +4,7 @@
 #define FRONTDESK
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
-SoftwareSerial WIFI(WIFI_TX, WIFI_RX);
+SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 int scannedID, prevID = 0;
 unsigned char readData[bufferSize];
