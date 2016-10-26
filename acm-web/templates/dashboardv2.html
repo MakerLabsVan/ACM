@@ -41,9 +41,9 @@
         <!-- SIDE NAV BAR -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul id="sidebar" class="nav nav-sidebar">
-            <li ng-class="tabs[0]"><a ng-click="activeTab(0)" href="#home">Dashboard</a></li>
-            <li ng-class="tabs[1]"><a ng-click="activeTab(1)" href="#guest-card">Guest Card</a></li>
-            <li ng-class="tabs[2]"><a ng-click="activeTab(2)" href="#registration">Registration</a></li>
+            <li ng-class="tab[0]"><a ng-click="activeTab(0)" href="#home">Dashboard</a></li>
+            <li ng-class="tab[1]"><a ng-click="activeTab(1)" href="#guest-card">Guest Card</a></li>
+            <li ng-class="tab[2]"><a ng-click="activeTab(2)" href="#registration">Registration</a></li>
           </ul>
         </div>
         <!-- END SIDE NAV BAR -->
@@ -54,7 +54,7 @@
           <div class="tab-content">
 
             <!-- HOME SCREEN -->
-            <div id="home" class="tab-pane active">
+            <div id="home" ng-class="tabPane[0]">
               <div class="well well-lg">
                 <h1 id="page-header">Dashboard</h1>
 
@@ -101,7 +101,7 @@
             <!-- END HOME SCREEN -->
 
             <!-- GUEST CARD SCREEN -->
-            <div id="guest-card" class="tab-pane">
+            <div id="guest-card" ng-class="tabPane[1]">
               <div class="well well-lg">
                 <h1 id="page-header">Guest Card</h1>
 
@@ -125,7 +125,7 @@
             <!-- END GUEST CARD SCREEN -->
 
             <!-- REGISTRATION -->
-            <div id="registration" class="tab-pane">
+            <div id="registration" ng-class="tabPane[2]">
               <div class="well well-lg">
                 <h1 id="page-header">Registration</h1>
 

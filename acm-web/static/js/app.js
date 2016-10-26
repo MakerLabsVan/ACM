@@ -8,17 +8,22 @@ app.config(function($interpolateProvider) {
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
 
-	$scope.tabs = [ "active", "", "" ];
+	$scope.tab = [ "active", "", "" ];
+	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane"];
 	$scope.activeTab = function(tab) {
-		$scope.tabs = [ "", "", ""];
+		$scope.tab = [ "", "", ""];
+		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ]
 		if (tab == 0) {
-			$scope.tabs[0] = "active";
+			$scope.tab[0] = "active";
+			$scope.tabPane[0] += " " + $scope.tab[0];
 		}
 		else if (tab == 1) {
-			$scope.tabs[1] = "active";
+			$scope.tab[1] = "active";
+			$scope.tabPane[1] += " " + $scope.tab[1];
 		}
 		else {
-			$scope.tabs[2] = "active";
+			$scope.tab[2] = "active";
+			$scope.tabPane[3] += " " + $scope.tab[2];
 		}
 	};
 
