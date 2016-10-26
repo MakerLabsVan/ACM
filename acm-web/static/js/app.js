@@ -21,9 +21,9 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.tab[1] = "active";
 			$scope.tabPane[1] += " " + $scope.tab[1];
 		}
-		else {
+		else if (tab == 2) {
 			$scope.tab[2] = "active";
-			$scope.tabPane[3] += " " + $scope.tab[2];
+			$scope.tabPane[2] += " " + $scope.tab[2];
 		}
 	};
 
@@ -109,22 +109,22 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		}
 	}
 
+	var PATH = "../../../../Google Drive/MakerLabs/ACM/MakerLabs Photos (modified)/";
 	$scope.display = {
 			id: "",
 			name: "",
 			access: ["red", "red", "red", "red", "red", "red", "red"],
 			monthtime: "",
 			lifetime: "",
-			image: "../static/img/users/person.jpg"
+			image: PATH + "person.jpg"
 	};
-	console.log($scope.display);
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
-		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";		
+		$scope.display.image = PATH + msg[2] + ".jpg";		
 
 		for (var i = 0; i < $scope.display.access.length; i++) {
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
@@ -140,7 +140,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.display.name = "Harambe";
 		$scope.display.monthtime = "";
 		$scope.display.lifetime = "";
-		$scope.display.image = "../static/img/users/harambe.jpg";
+		$scope.display.image = PATH + "harambe.jpg";
 		$scope.$apply();
 	};
 	

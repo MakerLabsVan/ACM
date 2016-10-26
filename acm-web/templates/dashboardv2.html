@@ -41,9 +41,9 @@
         <!-- SIDE NAV BAR -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul id="sidebar" class="nav nav-sidebar">
-            <li ng-class="tab[0]"><a ng-click="activeTab(0)" href="#home">Dashboard</a></li>
-            <li ng-class="tab[1]"><a ng-click="activeTab(1)" href="#guest-card">Guest Card</a></li>
-            <li ng-class="tab[2]"><a ng-click="activeTab(2)" href="#registration">Registration</a></li>
+            <li ng-class="tab[0]"><a ng-click="activeTab(0)">Dashboard</a></li>
+            <li ng-class="tab[1]"><a ng-click="activeTab(1)">Guest Card</a></li>
+            <li ng-class="tab[2]"><a ng-click="activeTab(2)">Registration</a></li>
           </ul>
         </div>
         <!-- END SIDE NAV BAR -->
@@ -145,7 +145,7 @@
                         <option value="1">Staff</option>
                       </select>
 
-                      <input type="submit" ng-click="registerCard()" value="Register">
+                      <input type="submit" ng-click="registerCard()" value="Register New User"><input type="submit" value="Register Existing User" style="background-color: #428bca">
                     </form>
 
                     <center><span ng-bind="entered"></span></center>
