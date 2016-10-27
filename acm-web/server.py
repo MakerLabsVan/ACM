@@ -40,7 +40,7 @@ def laserLog(laser, id, elapsedTime, existingTime):
 def serialTest(id):
 	if id != 0:
 		# ignore guest cards for now
-		if id != 6 and id != 12:
+		if id != 6 and id != 12 and id < 100:
 			database.scanLog(id)
 			data = database.retrieveUser(id)
 			socketio.emit('scan', data)
