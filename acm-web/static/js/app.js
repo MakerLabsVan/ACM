@@ -109,7 +109,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		}
 	}
 
-	var PATH = "../../../../Google Drive/MakerLabs/ACM/MakerLabs Photos (modified)/";
+	var PATH = "../static/img/users/";
 	$scope.display = {
 			id: "",
 			name: "",
