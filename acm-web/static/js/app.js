@@ -134,8 +134,12 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 		}
 
-		$scope.display.monthTime = msg[16];
-		$scope.display.lifeTime = msg[17];
+		$scope.display.monthTime = (parseInt(msg[16]) / 60).toFixed(0);	
+		$scope.display.lifeTime = (parseInt(msg[17]) / 60).toFixed(0);
+
+		$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
+		$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
+		
 		$scope.$apply();
     });
 	
