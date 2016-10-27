@@ -38,8 +38,8 @@ body {
 }
 
 .nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
+.nav-sidebar > li > a:hover {
+  cursor: pointer;
   color: #fff;
   background-color: #428bca;
 }
@@ -158,7 +158,7 @@ input[type=text], select {
 }
 
 input[type=submit] {
-    width: 50%;
+    width: 75%;
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
@@ -168,9 +168,9 @@ input[type=submit] {
     cursor: pointer;
 }
 
-input[type=submit]:hover {
+/*input[type=submit]:hover {
     background-color: #45a049;
-}
+}*/
 
 #registration-form {
     width: 35%;

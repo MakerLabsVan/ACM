@@ -79,6 +79,12 @@
                         <td id="table-info">Laser Time to Date</td>
                         <td>// display.lifetime //</td>
                       </tr>
+                      <tr>
+                        <td id="table-info">Start Date</td>
+                        <td>// display.startDay //</td>
+                        <td id="table-info">Studio Size</td>
+                        <td>// display.stduio //</td>
+                      </tr>
                     </table>
                     <table id="access-table" class="table-bordered">
                       <th colspan="2">Classes Taken</th>                      
@@ -145,7 +151,10 @@
                         <option value="1">Staff</option>
                       </select>
 
-                      <input type="submit" ng-click="registerCard()" value="Register New User"><input type="submit" value="Register Existing User" style="background-color: #428bca">
+                      <center>
+                        <input type="submit" ng-click="registerCard()" value="Register New User">
+                      </center>
+                      <!--<input type="submit" value="Register Existing User" style="background-color: #428bca">-->
                     </form>
 
                     <center><span ng-bind="entered"></span></center>

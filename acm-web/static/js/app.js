@@ -113,10 +113,12 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	$scope.display = {
 			id: "",
 			name: "",
+			image: PATH + "GUEST.jpg",
+			startDay: "",
+			studio: "",		
 			access: ["red", "red", "red", "red", "red", "red", "red"],
-			monthtime: "",
-			lifetime: "",
-			image: PATH + "GUEST.jpg"
+			monthTime: "",
+			lifeTime: ""
 	};
 
 	var socket = io.connect("http://localhost:5000");
@@ -124,23 +126,25 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	socket.on('scan', function(msg) {
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
-		$scope.display.image = PATH + msg[2] + ".jpg";		
+		$scope.display.image = PATH + msg[2] + ".jpg";
+		$scope.display.startDay = msg[4];
+		$scope.display.studio = msg[8];
 
 		for (var i = 0; i < $scope.display.access.length; i++) {
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 		}
 
-		$scope.display.monthtime = msg[16];
-		$scope.display.lifetime = msg[17];
+		$scope.display.monthTime = msg[16];
+		$scope.display.lifeTime = msg[17];
 		$scope.$apply();
     });
 	
 	$scope.changePic = function() {
 		$scope.display.id = "420";
 		$scope.display.name = "Harambe";
-		$scope.display.monthtime = "";
-		$scope.display.lifetime = "";
-		$scope.display.image = PATH + "harambe.jpg";
+		$scope.display.image = PATH + "harambe.jpg";		
+		$scope.display.monthTime = "";
+		$scope.display.lifeTime = "";
 		$scope.$apply();
 	};
 	
