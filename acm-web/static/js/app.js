@@ -5,7 +5,7 @@ app.config(function($interpolateProvider) {
     $interpolateProvider.endSymbol('//');
 });
 
-app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
+app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout', function($scope, $http, $interpolate, $timeout) {
 	$scope.master = {};
 
 	$scope.tab = [ "active", "", "" ];
@@ -39,8 +39,14 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
 	};
 
+	$scope.progress = {
+			isWaiting: false,
+			button1: "btn btn-success",
+			button2: "btn btn-danger"
+		};
 
 	$scope.getTime = function() {
+		inProgress(true);
 		$http.get("../getTime").success(function(res) {
 			if (res == 2) {
 				console.log("Error");
@@ -50,21 +56,34 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 				console.log("Raw Time: " + res);
 				$scope.time.set(res);
 			}
+			inProgress(false);			
 		});
 	};
 
 	$scope.resetTime = function() {
+		inProgress(true);
 		$http.get("../resetTime").success(function(res) {
 			$scope.status = "Not successful";
-
 			if (res[0] == 1) {
 				$scope.status = "Success";
 			}
-
 			console.log($scope.status);
-
+			inProgress(false);
 		});
 	};
+
+	var inProgress = function(startRequest) {
+		if (startRequest) {
+			$scope.progress.isWaiting = true;
+			$scope.progress.button1 = "btn btn-success disabled";
+			$scope.progress.button2 = "btn btn-danger disabled";
+		}
+		else {
+			$scope.progress.isWaiting = false;
+			$scope.progress.button1 = "btn btn-success";
+			$scope.progress.button2 = "btn btn-danger";
+		}
+	}
 
 	$scope.user = {
 		uid: "",

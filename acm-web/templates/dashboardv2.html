@@ -119,8 +119,8 @@
                       <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
                       <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
                       <br>
-                      <button type="button" class="btn btn-success" ng-click="getTime()">Get Time</button>
-                      <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
+                      <button type="button" ng-class="progress.button1" ng-click="progress.isWaiting || getTime()">Get Time</button>
+                      <button type="button" ng-class="progress.button2" ng-click="progress.isWaiting || resetTime()">Reset Card</button>
                     </center>
                   </div>
 
