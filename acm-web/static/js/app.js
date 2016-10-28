@@ -143,6 +143,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout',
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
+		$scope.activeTab(0);
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
 		$scope.display.image = PATH + msg[2] + ".jpg";
