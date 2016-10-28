@@ -43,7 +43,9 @@ def serialTest(id):
 		if id != 6 and id != 12 and id < 100:
 			data = database.retrieveUser(id)
 			socketio.emit('scan', data)
-			database.scanLog(id)			
+			database.scanLog(id)
+			# if refresh(id, data) == id:
+			# 	print("RFID tag refreshed")		
 	return str(id)
 # ----------------------------------------
 @app.route("/refresh")
@@ -51,7 +53,7 @@ def refresh(id, data):
 	userData = [ id ]
 	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
 	print(userData)
-	# return arduino.refreshUser(userData)
+	return arduino.refreshUser(userData)
 
 if (__name__ == "__main__"):
     # app.run(host='0.0.0.0')
