@@ -5,7 +5,7 @@ app.config(function($interpolateProvider) {
     $interpolateProvider.endSymbol('//');
 });
 
-app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout', function($scope, $http, $interpolate, $timeout) {
+app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
 
 	$scope.tab = [ "active", "", "" ];
