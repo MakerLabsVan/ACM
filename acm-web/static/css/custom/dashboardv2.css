@@ -168,12 +168,12 @@ input[type=submit] {
     cursor: pointer;
 }
 
-/*input[type=submit]:hover {
+input[type=submit]:hover {
     background-color: #45a049;
-}*/
+}
 
 #registration-form {
-    width: 35%;
+    width: 25%;
     margin-top: 15vh;
     margin-left: auto;
     margin-right: auto;
