@@ -10,21 +10,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 
 	$scope.tab = [ "active", "", "" ];
 	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane"];
-	$scope.activeTab = function(tab) {
+	$scope.activeTab = function(clicked) {
 		$scope.tab = [ "", "", ""];
-		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ]
-		if (tab == 0) {
-			$scope.tab[0] = "active";
-			$scope.tabPane[0] += " " + $scope.tab[0];
-		}
-		else if (tab == 1) {
-			$scope.tab[1] = "active";
-			$scope.tabPane[1] += " " + $scope.tab[1];
-		}
-		else if (tab == 2) {
-			$scope.tab[2] = "active";
-			$scope.tabPane[2] += " " + $scope.tab[2];
-		}
+		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ];
+		$scope.tab[clicked] = "active";
+		$scope.tabPane[clicked] += " " + $scope.tab[clicked];
 	};
 
 	$scope.time = new laserTime(123456);
@@ -43,7 +33,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			isWaiting: false,
 			button1: "btn btn-success",
 			button2: "btn btn-danger"
-		};
+	};
 
 	$scope.getTime = function() {
 		inProgress(true);

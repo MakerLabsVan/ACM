@@ -113,12 +113,15 @@
 
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="guest-content">
-                  
+
                   <div id="time-data">
                     <center>
                       <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
                       <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
                       <br>
+                      <div class="progress" style="width:30%">
+                        <div class="progress-bar" role="progressbar"></div>
+                      </div>
                       <button type="button" ng-class="progress.button1" ng-click="progress.isWaiting || getTime()">Get Time</button>
                       <button type="button" ng-class="progress.button2" ng-click="progress.isWaiting || resetTime()">Reset Card</button>
                     </center>
