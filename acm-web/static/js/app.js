@@ -24,6 +24,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		textile: "0",
 		threeD: "0"
 	};
+	var PATH = "../static/img/users/";	
 	$scope.display = {
 			id: "",
 			name: "",
@@ -112,7 +113,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		}
 	}
 
-	var PATH = "../static/img/users/";
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
