@@ -24,11 +24,16 @@ def resetTime():
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
 	data = request.get_json()
-	if arduino.registerCard(data) == data["uid"]:
+	arduinoStatus = arduino.registerCard(data)
+	if arduinoStatus == data["uid"]:
 		print("RFID tag registered")
-		return database.insertUser(data)
+		if data["isNew"]:
+			return database.insertUser(data)
+		else:
+			return arduinoStatus
 	else:
 		return "0"
+
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
