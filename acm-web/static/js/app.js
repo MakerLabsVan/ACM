@@ -7,9 +7,34 @@ app.config(function($interpolateProvider) {
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
-
 	$scope.tab = [ "active", "", "" ];
 	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane"];
+	$scope.progress = { isWaiting: false };
+	$scope.user = {
+		isNew: true,
+		uid: "",
+		memberName: "",
+		memberType: "0",
+		startDay: "",
+		laserA: "1",
+		laserB: "1",
+		shopbot: "0",
+		wood: "0",
+		metal: "0",
+		textile: "0",
+		threeD: "0"
+	};
+	$scope.display = {
+			id: "",
+			name: "",
+			image: PATH + "GUEST.jpg",
+			startDay: "",
+			studio: "",		
+			access: ["red", "red", "red", "red", "red", "red", "red"],
+			lifeTime: "",
+			monthTime: ""
+	};
+
 	$scope.activeTab = function(clicked) {
 		$scope.tab = [ "", "", ""];
 		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ];
@@ -27,10 +52,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		this.seconds = function() { return this.rawTime % 60 };
 
 		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
-	};
-
-	$scope.progress = {
-			isWaiting: false
 	};
 
 	$scope.getTime = function() {
@@ -58,21 +79,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			console.log($scope.status);
 			$scope.progress.isWaiting = false;
 		});
-	};
-
-	$scope.user = {
-		isNew: true,
-		uid: "",
-		memberName: "",
-		memberType: "0",
-		startDay: "",
-		laserA: "1",
-		laserB: "1",
-		shopbot: "0",
-		wood: "0",
-		metal: "0",
-		textile: "0",
-		threeD: "0"
 	};
 
 	$scope.registerCard = function(isNew) {
@@ -107,17 +113,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	}
 
 	var PATH = "../static/img/users/";
-	$scope.display = {
-			id: "",
-			name: "",
-			image: PATH + "GUEST.jpg",
-			startDay: "",
-			studio: "",		
-			access: ["red", "red", "red", "red", "red", "red", "red"],
-			lifeTime: "",
-			monthTime: ""
-	};
-
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
@@ -139,17 +134,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
 		
 		$scope.$apply();
-    });
-	
-	$scope.changePic = function() {
-		$scope.display.id = "420";
-		$scope.display.name = "Harambe";
-		$scope.display.image = PATH + "harambe.jpg";		
-		$scope.display.lifeTime = "";
-		$scope.display.monthTime = "";
-		$scope.$apply();
-	};
-	
+    });	
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");
