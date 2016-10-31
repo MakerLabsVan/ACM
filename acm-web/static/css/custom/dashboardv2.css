@@ -137,6 +137,10 @@ th, td {
     border-color: #428bca;
 }
 
+.progress-bar-striped {
+  width: 100%;
+}
+
 #time-data {
   width: 100%;
   margin-left: auto;

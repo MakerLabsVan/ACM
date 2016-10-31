@@ -114,16 +114,16 @@
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="guest-content">
 
+                  <!-- This should be a component -->
                   <div id="time-data">
                     <center>
-                      <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
-                      <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
-                      <br>
-                      <div class="progress" style="width:30%">
-                        <div class="progress-bar" role="progressbar"></div>
+                      <p>//time.hours()// Hours //time.minutes()// Minutes //time.seconds()// Seconds</p>
+                      <p>Drop-in charge: $//time.charge()//</p>
+                      <div class="progress" style="width:30%" ng-show="progress.isWaiting">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar"></div>
                       </div>
-                      <button type="button" ng-class="progress.button1" ng-click="progress.isWaiting || getTime()">Get Time</button>
-                      <button type="button" ng-class="progress.button2" ng-click="progress.isWaiting || resetTime()">Reset Card</button>
+                      <button type="button" ng-class="progress.button1" ng-click="getTime()" ng-hide="progress.isWaiting">Get Time</button>
+                      <button type="button" ng-class="progress.button2" ng-click="resetTime()" ng-hide="progress.isWaiting">Reset Card</button>
                     </center>
                   </div>
 
@@ -140,6 +140,7 @@
 
                 <div id="registration-content">
 
+                  <!-- This should be component -->
                   <div id="registration-form">
                     <form novalidate class="simple-form">
                       <label for="userID">User ID</label>
@@ -160,7 +161,7 @@
                       <!--<input type="submit" value="Register Existing User" style="background-color: #428bca">-->
                     </form>
 
-                    <center><span ng-bind="entered"></span></center>
+                    <center>//entered//</center>
                   </div>
                   
                 </div>
