@@ -30,13 +30,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	};
 
 	$scope.progress = {
-			isWaiting: false,
-			button1: "btn btn-success",
-			button2: "btn btn-danger"
+			isWaiting: false
 	};
 
 	$scope.getTime = function() {
-		inProgress(true);
+		$scope.progress.isWaiting = true;
 		$http.get("../getTime").success(function(res) {
 			if (res == 2) {
 				console.log("Error");
@@ -46,36 +44,24 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 				console.log("Raw Time: " + res);
 				$scope.time.set(res);
 			}
-			inProgress(false);			
+			$scope.progress.isWaiting = false;			
 		});
 	};
 
 	$scope.resetTime = function() {
-		inProgress(true);
+		$scope.progress.isWaiting = true;
 		$http.get("../resetTime").success(function(res) {
 			$scope.status = "Not successful";
 			if (res[0] == 1) {
 				$scope.status = "Success";
 			}
 			console.log($scope.status);
-			inProgress(false);
+			$scope.progress.isWaiting = false;
 		});
 	};
 
-	var inProgress = function(startRequest) {
-		if (startRequest) {
-			$scope.progress.isWaiting = true;
-			$scope.progress.button1 = "btn btn-success disabled";
-			$scope.progress.button2 = "btn btn-danger disabled";
-		}
-		else {
-			$scope.progress.isWaiting = false;
-			$scope.progress.button1 = "btn btn-success";
-			$scope.progress.button2 = "btn btn-danger";
-		}
-	}
-
 	$scope.user = {
+		isNew: "",
 		uid: "",
 		memberName: "",
 		memberType: "0",
@@ -89,7 +75,9 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		threeD: "0"
 	};
 
-	$scope.registerCard = function() {
+	$scope.registerCard = function(isNew) {
+		$scope.user.isNew = isNew;
+	
 		if ($scope.user.uid && $scope.user.memberName) {
 			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;

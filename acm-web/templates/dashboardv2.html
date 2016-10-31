@@ -122,8 +122,8 @@
                       <div class="progress" style="width:30%" ng-show="progress.isWaiting">
                         <div class="progress-bar progress-bar-striped active" role="progressbar"></div>
                       </div>
-                      <button type="button" ng-class="progress.button1" ng-click="getTime()" ng-hide="progress.isWaiting">Get Time</button>
-                      <button type="button" ng-class="progress.button2" ng-click="resetTime()" ng-hide="progress.isWaiting">Reset Card</button>
+                      <button type="button" class="btn btn-success" ng-click="getTime()" ng-hide="progress.isWaiting">Get Time</button>
+                      <button type="button" class="btn btn-danger" ng-click="resetTime()" ng-hide="progress.isWaiting">Reset Card</button>
                     </center>
                   </div>
 
@@ -156,7 +156,8 @@
                       </select>
 
                       <center>
-                        <input type="submit" ng-click="registerCard()" value="Register New User">
+                        <input type="submit" ng-click="registerCard(true)" value="Register New User">
+                        <input type="submit" ng-click="registerCard(false)" value="Register Existing User" style="background-color: #428bca">
                       </center>
                       <!--<input type="submit" value="Register Existing User" style="background-color: #428bca">-->
                     </form>
