@@ -61,7 +61,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	};
 
 	$scope.user = {
-		isNew: "",
+		isNew: true,
 		uid: "",
 		memberName: "",
 		memberType: "0",
