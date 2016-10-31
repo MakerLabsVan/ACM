@@ -15,3 +15,8 @@
 //     });
 
 // });
+
+// var clock = $('.clock').FlipClock({
+//     autoStart: false,
+// 	clockFace: 'HourlyCounter'
+// });

@@ -14,6 +14,9 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Flipclock -->
+    <link href="../static/css/flipclock.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="../static/css/custom/dashboardv2.css" rel="stylesheet">
 
@@ -117,8 +120,9 @@
                   <!-- This should be a component -->
                   <div id="time-data">
                     <center>
-                      <p>//time.hours()// Hours //time.minutes()// Minutes //time.seconds()// Seconds</p>
-                      <p>Drop-in charge: $//time.charge()//</p>
+                      <div class="clock"></div>                                          
+                      <!--<p>//time.hours()// Hours //time.minutes()// Minutes //time.seconds()// Seconds</p>-->
+                      <!--<p>Drop-in charge: $//time.charge()//</p>-->
                       <div class="progress" style="width:30%" ng-show="progress.isWaiting">
                         <div class="progress-bar progress-bar-striped active" role="progressbar"></div>
                       </div>
@@ -187,6 +191,7 @@
         <!-- jQuery -->
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="../static/js/vendor/jquery-3.1.0.js"></script>
+        <script src="../static/js/vendor/flipclock.min.js"></script>
         <script src="../static/js/views.js"></script>
 
         <!-- AngularJS -->

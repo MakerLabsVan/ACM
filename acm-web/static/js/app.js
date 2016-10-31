@@ -61,10 +61,12 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			if (res == 2) {
 				console.log("Error");
 				$scope.time.set("Error");
+				clock.setTime("Error");
 			}
 			else {
 				console.log("Raw Time: " + res);
 				$scope.time.set(res);
+				clock.setTime(res);
 			}
 			$scope.progress.isWaiting = false;			
 		});
@@ -134,7 +136,14 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
 		
 		$scope.$apply();
-    });	
+    });
+
+	var clock = $('.clock').FlipClock({
+		autoStart: false,
+		clockFace: 'HourlyCounter'
+	});
+
+	clock.setTime($scope.time.rawTime);
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");

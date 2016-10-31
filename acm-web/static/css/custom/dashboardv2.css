@@ -141,6 +141,11 @@ th, td {
   width: 100%;
 }
 
+.clock {
+  margin-left: 25%;
+  margin-right: auto;
+}
+
 #time-data {
   width: 100%;
   margin-left: auto;
