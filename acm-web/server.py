@@ -33,6 +33,10 @@ def registerCard():
 			return arduinoStatus
 	else:
 		return "0"
+	# if arduino.registerCard(data) == data["uid"]:
+	# 	return database.insertUser(data)
+	# else:
+	# 	return "0"
 
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
