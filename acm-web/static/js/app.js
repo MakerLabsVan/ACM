@@ -59,14 +59,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.progress.isWaiting = true;
 		$http.get("../getTime").success(function(res) {
 			if (res == 2) {
-				console.log("Error");
-				$scope.time.set("Error");
-				$scope.isError = true;				
+				$scope.isError = true;			
 				clock.setTime(0);
 			}
 			else {
 				console.log("Raw Time: " + res);
-				$scope.time.set(res);
 				$scope.isError = false;				
 				clock.setTime(res);
 			}
