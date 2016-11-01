@@ -80,7 +80,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.status = "Not successful";
 			if (res[0] == 1) {
 				$scope.status = "Success";
-				getTime();
+				$scope.getTime();
 			}
 			console.log($scope.status);
 			$scope.progress.isWaiting = false;
