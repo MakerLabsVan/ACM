@@ -70,7 +70,7 @@ body {
 /* Pages */
 
 #home-content, #guest-content {
-  font-size: 18pt;
+  font-size: 16pt;
   margin: 0 auto;
   height: 100vh;
   width: 100vh;
@@ -142,7 +142,7 @@ th, td {
 }
 
 .clock {
-  margin-left: 25%;
+  margin-left: 24%;
   margin-right: auto;
 }
 
