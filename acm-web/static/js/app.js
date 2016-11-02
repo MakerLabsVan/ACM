@@ -74,12 +74,13 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	$scope.resetTime = function() {
 		$scope.progress.isWaiting = true;
 		$http.get("../resetTime").success(function(res) {
-			$scope.status = "Not successful";
 			if (res[0] == 1) {
-				$scope.status = "Success";
+				$scope.isError = false;
 				$scope.getTime();
 			}
-			console.log($scope.status);
+			else {
+				$scope.isError = true;
+			}
 			$scope.progress.isWaiting = false;
 		});
 	};

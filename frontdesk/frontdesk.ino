@@ -7,8 +7,10 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 int scannedID, prevID = 0;
+int coinNotes[] = { 988, 1319 };
+int coinNoteDurations[] = { 125, 400 };
+int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
 unsigned char readData[bufferSize];
-
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
 volatile int id = 0;
@@ -19,6 +21,7 @@ void setup() {
 
 	pinMode(ledPin, OUTPUT);
 	pinMode(wifi_rst, OUTPUT);
+	pinMode(speakerPin, OUTPUT);
 	connectWIFI();
 
 	RFID.begin(moduleBaud);
@@ -59,6 +62,11 @@ void loop() {
 		WIFI.listen();
 		scanTest(scannedID);
 		prevID = scannedID;
+		for (int i = 0; i < numCoinNotes; i++) {
+			tone(speakerPin, coinNotes[i]);
+			delay(coinNoteDurations[i]);
+			noTone(speakerPin);
+		}
 	}
 
 	RFID.listen();
