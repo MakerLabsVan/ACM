@@ -6,18 +6,15 @@
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
-// nLEDs, dataPin, clockPin
-LPD8806 LED = LPD8806(4, 10, 11);
 
 int coinNotes[] = { 988, 1319 };
 int coinNoteDurations[] = { 125, 400 };
 int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
 
-int upNotes[] = { 330, 392, 659, 523, 587, 784 };
-int numUpNotes = sizeof(upNotes) / sizeof(upNotes[0]);
-
 int j = 0;
 unsigned long lastLEDchange = 0;
+// nLEDs, dataPin, clockPin
+LPD8806 LED = LPD8806(4, 10, 11);
 
 int scannedID, prevID = 0;
 unsigned char readData[bufferSize];
@@ -28,13 +25,13 @@ volatile int id = 0;
 void setup() {
 	Serial.begin(moduleBaud);
 	WIFI.begin(moduleBaud);
-  LED.begin();
+  	LED.begin();
 	pinMode(ledPin, OUTPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
 	connectWIFI();
 
-  LED.show();
+  	LED.show();
 	RFID.begin(moduleBaud);
 }
 
@@ -59,7 +56,7 @@ void loop() {
 		}
 		
 		//redBeat(1);
-    rainbow(1);
+    	//rainbow(1);
 		//colorWipe(LED.Color(127, 0, 0), 0);	
 	}
 
@@ -88,6 +85,8 @@ void loop() {
 	}
 
 	RFID.listen();
+
+	
 }
 
 void serialEvent() {
