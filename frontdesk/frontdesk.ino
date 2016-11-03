@@ -1,15 +1,19 @@
 #include <SoftwareSerial.h>
+#include <LPD8806.h>
 #include "RFID.h"
 
 #define FRONTDESK
 
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
+// nLEDs, dataPin, clockPin
+LPD8806 LED = LPD8806(4, 10, 11);
 
-int scannedID, prevID = 0;
+int j, scannedID, prevID = 0;
 int coinNotes[] = { 988, 1319 };
 int coinNoteDurations[] = { 125, 400 };
 int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+unsigned long lastLEDchange = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
@@ -18,12 +22,13 @@ volatile int id = 0;
 void setup() {
 	Serial.begin(moduleBaud);
 	WIFI.begin(moduleBaud);
-
+  	LED.begin();
 	pinMode(ledPin, OUTPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
 	connectWIFI();
 
+  	LED.show();
 	RFID.begin(moduleBaud);
 }
 
@@ -46,8 +51,12 @@ void loop() {
 			Serial.write(ERROR_CHAR);
 			Serial.write(END_CHAR);
 		}
+		
+		redBeat(10);
+		//colorWipe(LED.Color(127, 0, 0), 0);	
 	}
 
+	colorWipe(LED.Color(0, 0, 127), 0);
 	// card detected, get user data
 	digitalWrite(ledPin, HIGH);
 	sendCommand(CMD_READ, blockID, userData);
@@ -140,4 +149,35 @@ void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
 	strcpy_P(stringBuffer, (char*)pgm_read_word( &(message[index]) ));
 	Serial.print(stringBuffer);
+}
+
+void redBeat(uint8_t wait) {
+	int i = 0;
+
+	if (timeSince(lastLEDchange) > wait) {
+		j++;
+		for (i = 0; i < LED.numPixels(); i++) {
+			if (j < 16) {
+				LED.setPixelColor(i, LED.Color(j, 0, 0));			
+			}
+			else {
+				LED.setPixelColor(i, LED.Color(32 - j, 0, 0));
+			}
+		}
+		if (j == 32) {
+			j = 0;
+		}
+		LED.show();
+		lastLEDchange = millis();
+	}
+}
+
+void colorWipe(uint32_t c, uint8_t wait) {
+	int i;
+
+	for (i=0; i < LED.numPixels(); i++) {
+		LED.setPixelColor(i, c);
+		LED.show();
+		delay(wait);
+	}
 }
