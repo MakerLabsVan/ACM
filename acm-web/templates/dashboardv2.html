@@ -14,6 +14,9 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Flipclock -->
+    <link href="../static/css/flipclock.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="../static/css/custom/dashboardv2.css" rel="stylesheet">
 
@@ -41,9 +44,9 @@
         <!-- SIDE NAV BAR -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul id="sidebar" class="nav nav-sidebar">
-            <li ng-class="tabs[0]"><a ng-click="activeTab(0)" href="#home">Dashboard</a></li>
-            <li ng-class="tabs[1]"><a ng-click="activeTab(1)" href="#guest-card">Guest Card</a></li>
-            <li ng-class="tabs[2]"><a ng-click="activeTab(2)" href="#registration">Registration</a></li>
+            <li ng-class="tab[0]"><a ng-click="activeTab(0)">Dashboard</a></li>
+            <li ng-class="tab[1]"><a ng-click="activeTab(1)">Guest Card</a></li>
+            <li ng-class="tab[2]"><a ng-click="activeTab(2)">Registration</a></li>
           </ul>
         </div>
         <!-- END SIDE NAV BAR -->
@@ -54,7 +57,7 @@
           <div class="tab-content">
 
             <!-- HOME SCREEN -->
-            <div id="home" class="tab-pane active">
+            <div id="home" ng-class="tabPane[0]">
               <div class="well well-lg">
                 <h1 id="page-header">Dashboard</h1>
 
@@ -63,7 +66,7 @@
                     <img src="../static/img/banner.png" alt="MakerLabs Banner" height="150" width="600">
                   </center>
 
-                  <img ng-src="// display.image //" class="resize">
+                  <img ng-src="//display.image//" class="resize">
                   <div id="scan-content" class="panel panel-primary">
                     <div class="panel-heading">User Info</div>
                     <table id="user-table" class="table-bordered">
@@ -71,13 +74,19 @@
                         <td id="table-info">RFID#</td>
                         <td>// display.id //</td>
                         <td id="table-info">Month's Laser Time</td>
-                        <td>// display.monthtime //</td>
+                        <td>// display.monthTime // </td>
                       </tr>
                       <tr>
                         <td id="table-info">Name</span></td>
                         <td>// display.name //</td>
                         <td id="table-info">Laser Time to Date</td>
-                        <td>// display.lifetime //</td>
+                        <td>// display.lifeTime //</td>
+                      </tr>
+                      <tr>
+                        <td id="table-info">Start Date</td>
+                        <td>// display.startDay //</td>
+                        <td id="table-info">Studio Size</td>
+                        <td>// display.studio //</td>
                       </tr>
                     </table>
                     <table id="access-table" class="table-bordered">
@@ -101,20 +110,27 @@
             <!-- END HOME SCREEN -->
 
             <!-- GUEST CARD SCREEN -->
-            <div id="guest-card" class="tab-pane">
+            <div id="guest-card" ng-class="tabPane[1]">
               <div class="well well-lg">
                 <h1 id="page-header">Guest Card</h1>
 
                 <br></br><br></br><br></br><br></br><br></br><br></br>
                 <div id="guest-content">
-                  
+
+                  <!-- This should be a component -->
                   <div id="time-data">
                     <center>
-                      <p><span ng-bind="time.hours()"></span> Hours <span ng-bind="time.minutes()"></span> Minutes <span ng-bind="time.seconds()"></span> Seconds</p>
-                      <p>Drop-in charge: $<span ng-bind="time.charge()"></span></p>
+                      <div class="clock"></div>                      
+                      <!--<p>//time.hours()// Hours //time.minutes()// Minutes //time.seconds()// Seconds</p>-->
+                      <!--<p>Drop-in charge: $//time.charge()//</p>-->
+                      <span ng-hide="isError">Drop-in Rate: $//time.charge()//</span>
+                      <span ng-show="isError">Error</span>
                       <br>
-                      <button type="button" class="btn btn-success" ng-click="getTime()">Get Time</button>
-                      <button type="button" class="btn btn-danger" ng-click="resetTime()">Reset Card</button>
+                      <div class="progress" style="width:30%" ng-show="progress.isWaiting">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar"></div>
+                      </div>
+                      <button type="button" class="btn btn-success" ng-click="getTime()" ng-hide="progress.isWaiting">Get Time</button>
+                      <button type="button" class="btn btn-danger" ng-click="resetTime()" ng-hide="progress.isWaiting">Reset Card</button>
                     </center>
                   </div>
 
@@ -125,12 +141,13 @@
             <!-- END GUEST CARD SCREEN -->
 
             <!-- REGISTRATION -->
-            <div id="registration" class="tab-pane">
+            <div id="registration" ng-class="tabPane[2]">
               <div class="well well-lg">
                 <h1 id="page-header">Registration</h1>
 
                 <div id="registration-content">
 
+                  <!-- This should be component -->
                   <div id="registration-form">
                     <form novalidate class="simple-form">
                       <label for="userID">User ID</label>
@@ -145,10 +162,13 @@
                         <option value="1">Staff</option>
                       </select>
 
-                      <input type="submit" ng-click="registerCard()" value="Register">
+                      <center>
+                        <input type="submit" ng-click="registerCard(true)" value="Register New User">
+                        <input type="submit" ng-click="registerCard(false)" value="Register Existing User" style="background-color: #428bca">
+                      </center>
                     </form>
 
-                    <center><span ng-bind="entered"></span></center>
+                    <center>//entered//</center>
                   </div>
                   
                 </div>
@@ -173,6 +193,7 @@
         <!-- jQuery -->
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="../static/js/vendor/jquery-3.1.0.js"></script>
+        <script src="../static/js/vendor/flipclock.min.js"></script>
         <script src="../static/js/views.js"></script>
 
         <!-- AngularJS -->

@@ -7,19 +7,40 @@ app.config(function($interpolateProvider) {
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
+	$scope.tab = [ "active", "", "" ];
+	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane"];
+	$scope.progress = { isWaiting: false };
+	$scope.user = {
+		isNew: true,
+		uid: "",
+		memberName: "",
+		memberType: "0",
+		startDay: "",
+		laserA: "1",
+		laserB: "1",
+		shopbot: "0",
+		wood: "0",
+		metal: "0",
+		textile: "0",
+		threeD: "0"
+	};
+	var PATH = "../static/img/users/";	
+	$scope.display = {
+			id: "",
+			name: "",
+			image: PATH + "GUEST.jpg",
+			startDay: "",
+			studio: "",		
+			access: ["red", "red", "red", "red", "red", "red", "red"],
+			lifeTime: "",
+			monthTime: ""
+	};
 
-	$scope.tabs = [ "active", "", "" ];
-	$scope.activeTab = function(tab) {
-		$scope.tabs = [ "", "", ""];
-		if (tab == 0) {
-			$scope.tabs[0] = "active";
-		}
-		else if (tab == 1) {
-			$scope.tabs[1] = "active";
-		}
-		else {
-			$scope.tabs[2] = "active";
-		}
+	$scope.activeTab = function(clicked) {
+		$scope.tab = [ "", "", ""];
+		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ];
+		$scope.tab[clicked] = "active";
+		$scope.tabPane[clicked] += " " + $scope.tab[clicked];
 	};
 
 	$scope.time = new laserTime(123456);
@@ -34,48 +55,41 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
 	};
 
-
 	$scope.getTime = function() {
+		$scope.progress.isWaiting = true;
 		$http.get("../getTime").success(function(res) {
 			if (res == 2) {
-				console.log("Error");
-				$scope.time.set("Error");
+				$scope.isError = true;		
+				$scope.time.set(0);	
+				clock.setTime(0);
 			}
 			else {
 				console.log("Raw Time: " + res);
-				$scope.time.set(res);
+				$scope.isError = false;	
+				$scope.time.set(res);			
+				clock.setTime(res);
 			}
+			$scope.progress.isWaiting = false;			
 		});
 	};
 
 	$scope.resetTime = function() {
+		$scope.progress.isWaiting = true;
 		$http.get("../resetTime").success(function(res) {
-			$scope.status = "Not successful";
-
 			if (res[0] == 1) {
-				$scope.status = "Success";
+				$scope.isError = false;
+				$scope.getTime();
 			}
-
-			console.log($scope.status);
-
+			else {
+				$scope.isError = true;
+			}
+			$scope.progress.isWaiting = false;
 		});
 	};
 
-	$scope.user = {
-		uid: "",
-		memberName: "",
-		memberType: "0",
-		startDay: "",
-		laserA: "1",
-		laserB: "1",
-		shopbot: "0",
-		wood: "0",
-		metal: "0",
-		textile: "0",
-		threeD: "0"
-	};
-
-	$scope.registerCard = function() {
+	$scope.registerCard = function(isNew) {
+		$scope.user.isNew = isNew;
+	
 		if ($scope.user.uid && $scope.user.memberName) {
 			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
@@ -104,41 +118,35 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		}
 	}
 
-	$scope.display = {
-			id: "",
-			name: "",
-			access: ["red", "red", "red", "red", "red", "red", "red"],
-			monthtime: "",
-			lifetime: "",
-			image: "../static/img/users/person.jpg"
-	};
-	console.log($scope.display);
-
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
+		$scope.activeTab(0);
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
-		$scope.display.image = "../static/img/users/" + msg[2] + ".jpg";		
+		$scope.display.image = PATH + msg[2] + ".jpg";
+		$scope.display.startDay = msg[4];
+		$scope.display.studio = msg[8];
 
 		for (var i = 0; i < $scope.display.access.length; i++) {
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 		}
 
-		$scope.display.monthtime = msg[16];
-		$scope.display.lifetime = msg[17];
+		$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);		
+		$scope.display.monthTime = (parseInt(msg[17]) / 60).toFixed(0);	
+
+		$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
+		$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
+		
 		$scope.$apply();
     });
-	
-	$scope.changePic = function() {
-		$scope.display.id = "420";
-		$scope.display.name = "Harambe";
-		$scope.display.monthtime = "";
-		$scope.display.lifetime = "";
-		$scope.display.image = "../static/img/users/harambe.jpg";
-		$scope.$apply();
-	};
-	
+
+	var clock = $('.clock').FlipClock({
+		autoStart: false,
+		clockFace: 'HourlyCounter'
+	});
+
+	clock.setTime($scope.time.rawTime);
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");
