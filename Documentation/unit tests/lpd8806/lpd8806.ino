@@ -68,8 +68,8 @@ void loop() {
 //  colorWipe(strip.Color(  0, 127,   0), 50);  // Green
 //  colorWipe(strip.Color(  0,   0, 127), 50);  // Blue
 //
-  rainbow(10);
-//  rainbowCycle(0);  // make it go through the cycle fairly fast
+//  rainbow(10);
+  rainbowCycle(100);  // make it go through the cycle fairly fast
 //  theaterChaseRainbow(50);
 //  redBeat(100);
 }

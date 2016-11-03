@@ -7,12 +7,12 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
-int j = 0;
-unsigned long lastLEDchange = 0;
+int j;
+int currentLevel = 8;
 // nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(4, 10, 11);
 
-int state, scannedID, prevID = 0;
+int state, scannedID = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
@@ -40,7 +40,9 @@ void loop() {
 
 		// LEDs stay off
 		digitalWrite(ledPin, LOW);
-		redBeat(0);
+		redBeat(8, 16);
+		// rainbow();
+		// rainbowCycle();
 
 		// If a tag is detected, go to the next state
 		if (isValidResponse) {
@@ -58,7 +60,7 @@ void loop() {
 			scannedID = (int)getTime(readData, numUserBytes, userOffset);
 
 			// LEDs on
-			colorWipe(LED.Color(0, 0, 127), 0);
+			colorWipe(LED.Color(0, 0, 127));
 			digitalWrite(ledPin, HIGH);
 			playCoinSound();
 
@@ -173,46 +175,48 @@ void playCoinSound() {
     }
 }
 
-void redBeat(uint8_t wait) {
-	int i = 0;
+void redBeat( int minimumLevel, int peak) {
+	currentLevel >= 2*peak - minimumLevel ? currentLevel = minimumLevel : currentLevel += 1;
 
-	if (timeSince(lastLEDchange) > wait) {
-		j++;
-		for (i = 0; i < LED.numPixels(); i++) {
-			if (j < 16) {
-				LED.setPixelColor(i, LED.Color(j, 0, 0));			
-			}
-			else {
-				LED.setPixelColor(i, LED.Color(24 - j, 0, 0));
-			}
+	for (int i = 0; i < LED.numPixels(); i++) {
+		if (currentLevel < peak) {
+			LED.setPixelColor(i, LED.Color(currentLevel, 0, 0));			
 		}
-		if (j == 24) {
-			j = 0;
+		else {
+			LED.setPixelColor(i, LED.Color(2*peak - currentLevel, 0, 0));
 		}
-		LED.show();
-		lastLEDchange = millis();
 	}
+	LED.show();
 }
 
-void colorWipe(uint32_t c, uint8_t wait) {
-	int i;
-
-	for (i=0; i < LED.numPixels(); i++) {
+void colorWipe(uint32_t c) {
+	for (int i = 0; i < LED.numPixels(); i++) {
 		LED.setPixelColor(i, c);
 		LED.show();
-		delay(wait);
 	}
 }
 
-void rainbow(uint8_t wait) {
-    int i;
-    if (timeSince(lastLEDchange) > wait) {
-      j++;
-      for (i=0; i < LED.numPixels(); i++) {
-        LED.setPixelColor(i, Wheel( (i + j) % 384));
-      }  
-      LED.show();   // write all the pixels out
-    }
+void rainbow() {
+	j == 384 ? j = 0 : j++;
+
+	for (int i = 0; i < LED.numPixels(); i++) {
+		LED.setPixelColor(i, Wheel( (i + j) % 384));
+	}
+	LED.show();   // write all the pixels out
+}
+
+void rainbowCycle() {
+	j == 384 ? j = 0 : j++;
+
+    for (int i = 0; i < LED.numPixels(); i++) {
+		// tricky math! we use each pixel as a fraction of the full 384-color wheel
+		// (thats the i / strip.numPixels() part)
+		// Then add in j which makes the colors go around per pixel
+		// the % 384 is to make the wheel cycle around
+		LED.setPixelColor(i, Wheel( ((i * 384 / LED.numPixels()) + j) % 384) );
+    }  
+
+    LED.show();
 }
 
 uint32_t Wheel(uint16_t WheelPos)
