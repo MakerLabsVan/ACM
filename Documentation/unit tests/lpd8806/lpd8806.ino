@@ -12,8 +12,8 @@
 int nLEDs = 4;
 
 // Chose 2 pins for output; can be any valid output pins:
-int dataPin  = 2;
-int clockPin = 3;
+int dataPin  = 10;
+int clockPin = 11;
 
 // First parameter is the number of LEDs in the strand.  The LED strips
 // are 32 LEDs per meter but you can extend or cut the strip.  Next two
@@ -51,7 +51,7 @@ void loop() {
 //  colorChase(strip.Color(127, 127,   0), 50); // Yellow
 //  colorChase(strip.Color(  0, 127,   0), 50); // Blue
 //  colorChase(strip.Color(  0, 127, 127), 50); // Cyan
-//  colorChase(strip.Color(  0,   0, 127), 50); // Green
+//  colorChase(strip.Color(  0,   0, 127), 100); // Green
 //  colorChase(strip.Color(127,   0, 127), 50); // Violet
 
 //  // Send a theater pixel chase in...
@@ -68,10 +68,10 @@ void loop() {
 //  colorWipe(strip.Color(  0, 127,   0), 50);  // Green
 //  colorWipe(strip.Color(  0,   0, 127), 50);  // Blue
 //
-//  rainbow(500);
+  rainbow(10);
 //  rainbowCycle(0);  // make it go through the cycle fairly fast
 //  theaterChaseRainbow(50);
-    redBeat(100);
+//  redBeat(100);
 }
 
 void rainbow(uint8_t wait) {

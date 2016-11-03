@@ -9,11 +9,17 @@ SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 // nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(4, 10, 11);
 
-int j, scannedID, prevID = 0;
 int coinNotes[] = { 988, 1319 };
 int coinNoteDurations[] = { 125, 400 };
 int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+
+int upNotes[] = { 330, 392, 659, 523, 587, 784 };
+int numUpNotes = sizeof(upNotes) / sizeof(upNotes[0]);
+
+int j = 0;
 unsigned long lastLEDchange = 0;
+
+int scannedID, prevID = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
@@ -22,13 +28,13 @@ volatile int id = 0;
 void setup() {
 	Serial.begin(moduleBaud);
 	WIFI.begin(moduleBaud);
-  	LED.begin();
+  LED.begin();
 	pinMode(ledPin, OUTPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
 	connectWIFI();
 
-  	LED.show();
+  LED.show();
 	RFID.begin(moduleBaud);
 }
 
@@ -52,7 +58,8 @@ void loop() {
 			Serial.write(END_CHAR);
 		}
 		
-		redBeat(1);
+		//redBeat(1);
+    rainbow(1);
 		//colorWipe(LED.Color(127, 0, 0), 0);	
 	}
 
@@ -68,14 +75,16 @@ void loop() {
 
 	// send to web app
 	if (scannedID != prevID && scannedID < 100) {
+  
+     for (int i = 0; i < numCoinNotes; i++) {
+        tone(speakerPin, coinNotes[i]);
+        delay(coinNoteDurations[i]);
+        noTone(speakerPin);
+     }
+    
 		WIFI.listen();
-		scanTest(scannedID);
+		scanTest(scannedID);    
 		prevID = scannedID;
-		for (int i = 0; i < numCoinNotes; i++) {
-			tone(speakerPin, coinNotes[i]);
-			delay(coinNoteDurations[i]);
-			noTone(speakerPin);
-		}
 	}
 
 	RFID.listen();
@@ -180,4 +189,39 @@ void colorWipe(uint32_t c, uint8_t wait) {
 		LED.show();
 		delay(wait);
 	}
+}
+
+void rainbow(uint8_t wait) {
+    int i;
+    if (timeSince(lastLEDchange) > wait) {
+      j++;
+      for (i=0; i < LED.numPixels(); i++) {
+        LED.setPixelColor(i, Wheel( (i + j) % 384));
+      }  
+      LED.show();   // write all the pixels out
+    }
+}
+
+uint32_t Wheel(uint16_t WheelPos)
+{
+  byte r, g, b;
+  switch(WheelPos / 128)
+  {
+    case 0:
+      r = 127 - WheelPos % 128;   //Red down
+      g = WheelPos % 128;      // Green up
+      b = 0;                  //blue off
+      break; 
+    case 1:
+      g = 127 - WheelPos % 128;  //green down
+      b = WheelPos % 128;      //blue up
+      r = 0;                  //red off
+      break; 
+    case 2:
+      b = 127 - WheelPos % 128;  //blue down 
+      r = WheelPos % 128;      //red up
+      g = 0;                  //green off
+      break; 
+  }
+  return(LED.Color(r,g,b));
 }
