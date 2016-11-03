@@ -52,7 +52,7 @@ void loop() {
 			Serial.write(END_CHAR);
 		}
 		
-		redBeat(10);
+		redBeat(1);
 		//colorWipe(LED.Color(127, 0, 0), 0);	
 	}
 
