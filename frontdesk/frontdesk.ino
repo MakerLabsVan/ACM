@@ -7,7 +7,7 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
-int j;
+int j = 0;
 int currentLevel = 8;
 // nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(4, 10, 11);
@@ -40,7 +40,7 @@ void loop() {
 
 		// LEDs stay off
 		digitalWrite(ledPin, LOW);
-		redBeat(8, 16);
+		redBeat(8, 64);
 		// rainbow();
 		// rainbowCycle();
 
@@ -74,6 +74,7 @@ void loop() {
 		}
 		// If data read fails, go back to scan state
 		else {
+			playDeath();			
 			state = 0;
 		}
 	}
@@ -175,8 +176,31 @@ void playCoinSound() {
     }
 }
 
-void redBeat( int minimumLevel, int peak) {
-	currentLevel >= 2*peak - minimumLevel ? currentLevel = minimumLevel : currentLevel += 1;
+void playUnderground() {
+	int notes[] = { 131, 262, 110, 220, 117, 233 };
+	int numNotes = sizeof(notes) / sizeof(notes[0]);
+
+	for (int i = 0; i < numNotes; i++) {
+		tone(speakerPin, notes[i]);
+		delay(200);
+		noTone(speakerPin);
+	}
+}
+
+void playDeath() {
+	int notes[] = { 247, 247, 247 };
+	int numNotes = sizeof(notes) / sizeof(notes[0]);
+
+	for (int i = 0; i < numNotes; i++) {
+		tone(speakerPin, notes[i]);
+		delay(150);
+		noTone(speakerPin);
+		delay(150);
+	}
+}
+
+void redBeat(int minimumLevel, int peak) {
+	currentLevel >= 2*peak - minimumLevel ? currentLevel = minimumLevel : currentLevel += 2;
 
 	for (int i = 0; i < LED.numPixels(); i++) {
 		if (currentLevel < peak) {
@@ -206,7 +230,7 @@ void rainbow() {
 }
 
 void rainbowCycle() {
-	j == 384 ? j = 0 : j++;
+	j >= 384 ? j = 0 : j += 25;
 
     for (int i = 0; i < LED.numPixels(); i++) {
 		// tricky math! we use each pixel as a fraction of the full 384-color wheel
