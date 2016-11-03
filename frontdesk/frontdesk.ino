@@ -7,16 +7,12 @@
 SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
-int coinNotes[] = { 988, 1319 };
-int coinNoteDurations[] = { 125, 400 };
-int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
-
 int j = 0;
 unsigned long lastLEDchange = 0;
 // nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(4, 10, 11);
 
-int scannedID, prevID = 0;
+int state, scannedID, prevID = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
@@ -36,57 +32,63 @@ void setup() {
 }
 
 void loop() {
-	// Scan for RFID tags
-	isValidResponse = false;
-
-	while (!isValidResponse) {
+	// Scan
+	if (state == 0) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
+
+		// LEDs stay off
 		digitalWrite(ledPin, LOW);
+		redBeat(0);
 
-		// if a command is received before a card is
-		// scanned, send an error and clear buffer
-		if (Serial.available() && !isValidResponse) {
-			while (Serial.available()) {
-				Serial.read();
-			}
-			Serial.write(ERROR_CHAR);
-			Serial.write(END_CHAR);
+		// If a tag is detected, go to the next state
+		if (isValidResponse) {
+			state = 1;
 		}
-		
-		//redBeat(1);
-    	//rainbow(1);
-		//colorWipe(LED.Color(127, 0, 0), 0);	
 	}
+	// Read data 
+	else if (state == 1) {
+		sendCommand(CMD_READ, blockID, userData);
+		delay(waitforReadResponse);
+		isValidResponse = getResponse(readData);
 
-	colorWipe(LED.Color(0, 0, 127), 0);
-	// card detected, get user data
-	digitalWrite(ledPin, HIGH);
-	sendCommand(CMD_READ, blockID, userData);
-	delay(waitforReadResponse);
-	isValidResponse = getResponse(readData);
-	if (isValidResponse) {
-		scannedID = (int)getTime(readData, numUserBytes, userOffset);	
+		// If data is successfully read, alert web app
+		if (isValidResponse) {
+			scannedID = (int)getTime(readData, numUserBytes, userOffset);
+
+			// LEDs on
+			colorWipe(LED.Color(0, 0, 127), 0);
+			digitalWrite(ledPin, HIGH);
+			playCoinSound();
+
+			WIFI.listen();
+			if (id != 6 && id != 12 && id != 0 && id < 100) {
+				scanTest(scannedID);
+			}
+
+			RFID.listen();
+			state = 2;
+		}
+		// If data read fails, go back to scan state
+		else {
+			state = 0;
+		}
 	}
+	// Other tag operations
+	else if (state == 2) {
+		sendCommand(CMD_GET_SNR, blockID, machineID);
+		delay(waitforSerialResponse);
+		isValidResponse = getResponse(readData);
 
-	// send to web app
-	if (scannedID != prevID && scannedID < 100) {
-  
-     for (int i = 0; i < numCoinNotes; i++) {
-        tone(speakerPin, coinNotes[i]);
-        delay(coinNoteDurations[i]);
-        noTone(speakerPin);
-     }
-    
-		WIFI.listen();
-		scanTest(scannedID);    
-		prevID = scannedID;
+		// If tag is removed, go back to scan state
+		if (!isValidResponse) {
+			state = 0;
+		}
 	}
-
-	RFID.listen();
-
-	
+	else {
+		state = 0;
+	}
 }
 
 void serialEvent() {
@@ -159,6 +161,18 @@ void getStringFromMem(int index) {
 	Serial.print(stringBuffer);
 }
 
+void playCoinSound() {
+	int coinNotes[] = { 988, 1319 };
+	int coinNoteDurations[] = { 125, 400 };
+	int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+
+	for (int i = 0; i < numCoinNotes; i++) {
+        tone(speakerPin, coinNotes[i]);
+        delay(coinNoteDurations[i]);
+        noTone(speakerPin);
+    }
+}
+
 void redBeat(uint8_t wait) {
 	int i = 0;
 
@@ -169,10 +183,10 @@ void redBeat(uint8_t wait) {
 				LED.setPixelColor(i, LED.Color(j, 0, 0));			
 			}
 			else {
-				LED.setPixelColor(i, LED.Color(32 - j, 0, 0));
+				LED.setPixelColor(i, LED.Color(24 - j, 0, 0));
 			}
 		}
-		if (j == 32) {
+		if (j == 24) {
 			j = 0;
 		}
 		LED.show();
