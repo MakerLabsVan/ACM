@@ -66,7 +66,7 @@ void loop() {
 			playCoinSound();
 
 			WIFI.listen();
-			if (id != 6 && id != 12 && id != 0 && id < 100) {
+			if (scannedID != 6 && scannedID != 12 && scannedID != 0 && scannedID < 100) {
 				scanTest(scannedID);
 			}
 
