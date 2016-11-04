@@ -40,9 +40,9 @@ void loop() {
 
 		// LEDs stay off
 		digitalWrite(ledPin, LOW);
-		redBeat(8, 64);
+		// redBeat(8, 64);
 		// rainbow();
-		// rainbowCycle();
+		 rainbowCycle();
 
 		// If a tag is detected, go to the next state
 		if (isValidResponse) {
@@ -60,7 +60,8 @@ void loop() {
 			scannedID = (int)getTime(readData, numUserBytes, userOffset);
 
 			// LEDs on
-			colorWipe(LED.Color(0, 0, 127));
+      green();
+			// colorWipe(LED.Color(0, 0, 127));
 			digitalWrite(ledPin, HIGH);
 			playCoinSound();
 
@@ -74,7 +75,9 @@ void loop() {
 		}
 		// If data read fails, go back to scan state
 		else {
-			playDeath();			
+      red();
+      //colorWipe(LED.Color(127, 0, 0));
+			playDeath();
 			state = 0;
 		}
 	}
@@ -213,6 +216,22 @@ void redBeat(int minimumLevel, int peak) {
 	LED.show();
 }
 
+void green() {
+  LED.setPixelColor(0, LED.Color(23, 9, 68));
+  LED.setPixelColor(1, LED.Color(58, 33, 127));
+  LED.setPixelColor(2, LED.Color(46, 17, 127));
+  LED.setPixelColor(3, LED.Color(41, 26, 84));
+  LED.show();
+}
+
+void red() {
+  LED.setPixelColor(0, LED.Color(68, 0, 5));
+  LED.setPixelColor(1, LED.Color(127, 16, 25));
+  LED.setPixelColor(2, LED.Color(127, 0, 0));
+  LED.setPixelColor(3, LED.Color(84, 20, 15));
+  LED.show();
+}
+
 void colorWipe(uint32_t c) {
 	for (int i = 0; i < LED.numPixels(); i++) {
 		LED.setPixelColor(i, c);
@@ -230,7 +249,7 @@ void rainbow() {
 }
 
 void rainbowCycle() {
-	j >= 384 ? j = 0 : j += 25;
+	j >= 384 ? j = 0 : j += 7;
 
     for (int i = 0; i < LED.numPixels(); i++) {
 		// tricky math! we use each pixel as a fraction of the full 384-color wheel
