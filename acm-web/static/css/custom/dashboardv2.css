@@ -156,6 +156,11 @@ th, td {
   font-size: 13pt;
 }
 
+#registration-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
 input[type=text], select {
     width: 100%;
     padding: 12px 20px;
@@ -167,7 +172,7 @@ input[type=text], select {
 }
 
 input[type=submit] {
-    width: 90%;
+    width: 49%;
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
