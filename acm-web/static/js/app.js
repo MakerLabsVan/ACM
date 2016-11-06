@@ -16,7 +16,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		memberName: "",
 		memberType: "0",
 		startDay: "",
-		laserA: "1",
+		laserA: "0",
 		laserB: "1",
 		shopbot: "0",
 		wood: "0",
