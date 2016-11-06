@@ -197,9 +197,5 @@ input[type=submit]:hover {
 }
 
 #registration-table td {
-  padding: 1px;
-}
-
-#registration-table button {
-  width: 100%;
+  padding-left: 5%;
 }
