@@ -60,7 +60,7 @@ void loop() {
 			scannedID = (int)getTime(readData, numUserBytes, userOffset);
 
 			// LEDs on
-      green();
+      		green();
 			// colorWipe(LED.Color(0, 0, 127));
 			digitalWrite(ledPin, HIGH);
 			playCoinSound();
@@ -75,8 +75,8 @@ void loop() {
 		}
 		// If data read fails, go back to scan state
 		else {
-      red();
-      //colorWipe(LED.Color(127, 0, 0));
+      		red();
+      		//colorWipe(LED.Color(127, 0, 0));
 			playDeath();
 			state = 0;
 		}
@@ -102,8 +102,16 @@ void serialEvent() {
 	unsigned long existingTime = 0;
 
 	while (Serial.available()) {
-		characterRead[i] = Serial.read();
-		i++;
+		if (state == 0 || state == 1) {
+			Serial.write(ERROR_CHAR);
+			while (Serial.available()) {
+				Serial.read();
+			}
+		}
+		else {
+			characterRead[i] = Serial.read();
+			i++;
+		}
 	}
 
 	if (characterRead[0] == COMMAND_GET_TIME) {
