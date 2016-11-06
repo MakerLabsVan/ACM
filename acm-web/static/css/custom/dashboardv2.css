@@ -156,11 +156,6 @@ th, td {
   font-size: 13pt;
 }
 
-#registration-table {
-  table-layout: fixed;
-  width: 100%;
-}
-
 input[type=text], select {
     width: 100%;
     padding: 12px 20px;
@@ -182,10 +177,6 @@ input[type=submit] {
     cursor: pointer;
 }
 
-input[type=submit]:hover {
-    background-color: #45a049;
-}
-
 #registration-form {
     width: 35%;
     margin-top: 15vh;
@@ -194,4 +185,17 @@ input[type=submit]:hover {
     border-radius: 5px;
     background-color: #f5f5f5;
     padding: 20px;
+}
+
+#registration-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#registration-table td {
+  padding: 1px;
+}
+
+#registration-table button {
+  width: 100%;
 }
