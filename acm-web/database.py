@@ -58,6 +58,8 @@ class Database:
         cellList[constant.COL_USES_METAL].value = data["metal"]
         cellList[constant.COL_USES_TEXTILE].value = data["textile"]
         cellList[constant.COL_USES_3D].value = data["threeD"]
+        cellList[constant.COL_LIFETIME].value = "0"
+        cellList[constant.COL_LASERTIME].value = "0"
 
         # Increment primary key
         self.pKey += 1

@@ -162,9 +162,25 @@
                         <option value="1">Staff</option>
                       </select>
 
+                      <div>
+                        <label for="registration-table">Access</label>
+                        <table id="registration-table">
+                          <tr>
+                            <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.laserA" ng-true-value="'1'" ng-false-value="'0'">Laser</label></td>
+                            <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.shopbot" ng-true-value="'1'" ng-false-value="'0'">Shopbot</label></td>
+                            <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.wood" ng-true-value="'1'" ng-false-value="'0'">Woodshop</label></td>
+                          </tr>
+                          <tr>
+                            <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.metal" ng-true-value="'1'" ng-false-value="'0'">Metalshop</label></td>
+                            <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.textile" ng-true-value="'1'" ng-false-value="'0'">Textile</label></td>
+                            <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.threeD" ng-true-value="'1'" ng-false-value="'0'">3D Printer</label></td>
+                          </tr>
+                        </table>
+                      <hr>                        
+                      </div>
                       <center>
-                        <input type="submit" ng-click="registerCard(true)" value="Register New User">
-                        <input type="submit" ng-click="registerCard(false)" value="Register Existing User" style="background-color: #428bca">
+                        <input type="submit" ng-click="registerCard(true)" value="New User"> <input type="submit" ng-click="registerCard(false)" value="Existing User">
+                        <!--<button type="button" class="btn btn-success">New User</button> <button type="button" class="btn btn-primary">Existing User</button>-->
                       </center>
                     </form>
 

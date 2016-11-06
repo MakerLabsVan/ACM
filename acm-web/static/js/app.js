@@ -16,7 +16,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		memberName: "",
 		memberType: "0",
 		startDay: "",
-		laserA: "1",
+		laserA: "0",
 		laserB: "1",
 		shopbot: "0",
 		wood: "0",
@@ -78,7 +78,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$http.get("../resetTime").success(function(res) {
 			if (res[0] == 1) {
 				$scope.isError = false;
-				$scope.getTime();
+				//$scope.getTime();
 			}
 			else {
 				$scope.isError = true;
@@ -89,6 +89,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 
 	$scope.registerCard = function(isNew) {
 		$scope.user.isNew = isNew;
+		console.log($scope.user);
 	
 		if ($scope.user.uid && $scope.user.memberName) {
 			console.log(JSON.stringify($scope.user));
