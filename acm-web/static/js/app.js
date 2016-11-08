@@ -89,8 +89,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 
 	$scope.registerCard = function(isNew) {
 		$scope.user.isNew = isNew;
-		console.log($scope.user);
-	
+			
 		if ($scope.user.uid && $scope.user.memberName) {
 			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
