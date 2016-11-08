@@ -12,11 +12,11 @@ int currentLevel = 8;
 // nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(4, 10, 11);
 
-int state, scannedID = 0;
+int scannedID = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
-volatile int id = 0;
+volatile int state, id = 0;
 
 void setup() {
 	Serial.begin(moduleBaud);
@@ -225,19 +225,19 @@ void redBeat(int minimumLevel, int peak) {
 }
 
 void green() {
-  LED.setPixelColor(0, LED.Color(23, 9, 68));
-  LED.setPixelColor(1, LED.Color(58, 33, 127));
-  LED.setPixelColor(2, LED.Color(46, 17, 127));
-  LED.setPixelColor(3, LED.Color(41, 26, 84));
-  LED.show();
+	LED.setPixelColor(0, LED.Color(23, 9, 68));
+	LED.setPixelColor(1, LED.Color(58, 33, 127));
+	LED.setPixelColor(2, LED.Color(46, 17, 127));
+	LED.setPixelColor(3, LED.Color(41, 26, 84));
+	LED.show();
 }
 
 void red() {
-  LED.setPixelColor(0, LED.Color(68, 0, 5));
-  LED.setPixelColor(1, LED.Color(127, 16, 25));
-  LED.setPixelColor(2, LED.Color(127, 0, 0));
-  LED.setPixelColor(3, LED.Color(84, 20, 15));
-  LED.show();
+	LED.setPixelColor(0, LED.Color(68, 0, 5));
+	LED.setPixelColor(1, LED.Color(127, 16, 25));
+	LED.setPixelColor(2, LED.Color(127, 0, 0));
+	LED.setPixelColor(3, LED.Color(84, 20, 15));
+	LED.show();
 }
 
 void colorWipe(uint32_t c) {

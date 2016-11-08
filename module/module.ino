@@ -68,7 +68,7 @@ void loop() {
 	// -----------------------------------------------------------------------
 	// Analyze response packet and data
 	if (!isValidResponse) {
-		//soundFeedback(isReject);
+		playDeath();
 		getStringFromMem(readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
@@ -77,19 +77,19 @@ void loop() {
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class, skip if staff member
 		if ( !isAuthorized && !isStaff ) {
-			//soundFeedback(isReject);
+			playDeath();
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has reached the 60 min quota, skip if staff member
 		else if ( (existingTime >= quota) && !isStaff ) {
-			//soundFeedback(isReject);
+			playDeath();
 			getStringFromMem(quotaMet);
 		}
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
 		else {
 			// Sound and text feedback
-			//soundFeedback(!isReject);
+			playCoinSound();
 			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
 			getStringFromMem(user);
@@ -97,7 +97,7 @@ void loop() {
 			if (isStaff) {
 				getStringFromMem(staff);
 			}
-			getStringFromMem(authorized);
+			// getStringFromMem(authorized);
 
 			// Ready to accumulate time
 			// turn LED and support systems on
@@ -145,8 +145,6 @@ void loop() {
 	}
 
 	RFID.listen();
-	delay(scanInterval);
-
 }
 /*
 	This function monitors the motor driver signals on the laser cutter.
@@ -166,7 +164,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	int signals[] = { 0, 0, 0, 0, 0 };
   	int i, numValid, numInvalid = 0;
 
-	// Only here temporarily for debugging
 	if (debug) {
 		Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
 	}
@@ -269,18 +266,30 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		}
 	}
 }
-/*void soundFeedback(bool isReject) {
-	if (isReject) {
-		tone(speakerPin, rejectNote, rejectDuration);
-		delay(rejectInterval);
-		tone(speakerPin, rejectNote, rejectDuration);
-		delay(rejectInterval);
-		tone(speakerPin, rejectNote, rejectDuration);
+
+void playCoinSound() {
+	int coinNotes[] = { 988, 1319 };
+	int coinNoteDurations[] = { 125, 400 };
+	int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+
+	for (int i = 0; i < numCoinNotes; i++) {
+        tone(speakerPin, coinNotes[i]);
+        delay(coinNoteDurations[i]);
+        noTone(speakerPin);
+    }
+}
+
+void playDeath() {
+	int notes[] = { 247, 247, 247 };
+	int numNotes = sizeof(notes) / sizeof(notes[0]);
+
+	for (int i = 0; i < numNotes; i++) {
+		tone(speakerPin, notes[i]);
+		delay(150);
+		noTone(speakerPin);
+		delay(150);
 	}
-	else {
-		tone(speakerPin, acceptNote, acceptDuration);
-	}
-}*/
+}
 
 void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
