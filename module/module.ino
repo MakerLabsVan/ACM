@@ -166,7 +166,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	int signals[] = { 0, 0, 0, 0, 0 };
   	int i, numValid, numInvalid = 0;
 
-	// Only here temporarily for debugging
 	if (debug) {
 		Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
 	}
