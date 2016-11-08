@@ -97,7 +97,7 @@ void loop() {
 			if (isStaff) {
 				getStringFromMem(staff);
 			}
-			getStringFromMem(authorized);
+			// getStringFromMem(authorized);
 
 			// Ready to accumulate time
 			// turn LED and support systems on
@@ -145,8 +145,6 @@ void loop() {
 	}
 
 	RFID.listen();
-	delay(scanInterval);
-
 }
 /*
 	This function monitors the motor driver signals on the laser cutter.
