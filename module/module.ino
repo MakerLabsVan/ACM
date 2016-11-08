@@ -68,7 +68,7 @@ void loop() {
 	// -----------------------------------------------------------------------
 	// Analyze response packet and data
 	if (!isValidResponse) {
-		//soundFeedback(isReject);
+		playDeath();
 		getStringFromMem(readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
