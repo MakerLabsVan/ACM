@@ -48,9 +48,9 @@ def serialTest(id):
 		if id != 6 and id != 12 and id < 100:
 			data = database.retrieveUser(id)
 			socketio.emit('scan', data)
-			database.scanLog(id)
-			# if refresh(id, data) == id:
-			# 	print("RFID tag refreshed")		
+			if refresh(id, data) == id:
+				print("RFID tag refreshed")	
+			database.scanLog(id)				
 	return str(id)
 # ----------------------------------------
 @app.route("/refresh")
