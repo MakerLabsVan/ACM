@@ -50,12 +50,12 @@ def serialTest(id):
 			socketio.emit('scan', data)
 			if refresh(id, data) == id:
 				print("RFID tag refreshed")	
-			database.scanLog(id)				
+			database.scanLog(id)	
 	return str(id)
 # ----------------------------------------
 @app.route("/refresh")
 def refresh(id, data):
-	userData = [ str(id) ]
+	userData = [ str(id), data[2] ]
 	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
 	print(userData)
 	return arduino.refreshUser(userData)
