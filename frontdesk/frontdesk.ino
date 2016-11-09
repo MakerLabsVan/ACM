@@ -128,7 +128,6 @@ void serialEvent() {
 		}
 		
 		Serial.write(END_CHAR);
-		state = 0;
 	}
 
 	if (characterRead[0] == COMMAND_RESET_TIME) {
@@ -140,7 +139,6 @@ void serialEvent() {
 
 		Serial.write(done);
 		Serial.write(END_CHAR);
-		state = 0;		
 	}
 
 	if (characterRead[0] == COMMAND_REGISTER) {
