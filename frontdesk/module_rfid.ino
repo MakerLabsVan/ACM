@@ -103,7 +103,7 @@ void preparePayload(char command, unsigned long time, int id, int numDigits) {
 		payload[1] = id & MSB;
 
 		// payload = [ id[1], id[0], isStaff, laserA, laserB, shopbot, ... ]
-		// charRead = [ command, numDigits, id[numDigits downto 0], isStaff , laserA, laserB ]
+		// charRead = [ command, numDigits, id[numDigits downto 0], isStaff , laserA, laserB, ... ]
 		int i = 0;
 		for (i = 0; i < 8; i++) {
 			payload[2 + i] = characterRead[numDigits + 2 + i];

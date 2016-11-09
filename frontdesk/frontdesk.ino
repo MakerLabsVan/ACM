@@ -149,12 +149,8 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
 
-		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);
-		
-		for (int i = 0; i < numDigits; i++) {
-			id *= 10;
-			id += (int)(characterRead[i+2] - ASCII_OFFSET);
-		}
+		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
+		convertASCII(numDigits);
 
 		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
 		sendCommand(CMD_WRITE, blockID, userData);
@@ -170,7 +166,33 @@ void serialEvent() {
 		}
 
 		Serial.write(END_CHAR);
-		playUnderground();		
+		playUnderground();
+	}
+
+	if (characterRead[0] == COMMAND_REFRESH) {
+		characterRead[0] = 0;
+		
+		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
+		convertASCII(numDigits);
+
+		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
+		sendCommand(CMD_WRITE, blockID, userData);
+		delay(waitforWriteResponse);
+
+		while (id != 0) {
+			Serial.write(id);
+			id >>= eightBits;
+		}
+
+		Serial.write(END_CHAR);
+		playUnderground();
+	}
+}
+
+void convertASCII(int numDigits) {
+	for (int i = 0; i < numDigits; i++) {
+		id *= 10;
+		id += (int)(characterRead[i+2] - ASCII_OFFSET);
 	}
 }
 
