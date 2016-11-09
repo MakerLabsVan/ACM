@@ -50,7 +50,7 @@ def serialTest(id):
 			socketio.emit('scan', data)
 			if refresh(id, data) == id:
 				print("RFID tag refreshed")	
-			database.scanLog(id)	
+			database.scanLog(id)
 	return str(id)
 # ----------------------------------------
 @app.route("/refresh")
