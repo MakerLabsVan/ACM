@@ -47,7 +47,7 @@ class Arduino:
 		return bytesToNum(rxbuffer)
 	
 	def refreshUser(self, data):
-		self.serial.write(constant.COMMAND_REGISTER.encode())
+		self.serial.write(constant.COMMAND_REFRESH.encode())
 		self.serial.write( str(len(data[0])).encode() )
 		for i in range(len(data)):
 			self.serial.write(data[i].encode())
