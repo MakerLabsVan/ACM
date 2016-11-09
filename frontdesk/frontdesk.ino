@@ -10,9 +10,9 @@ SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 int j = 0;
 int currentLevel = 8;
 // nLEDs, dataPin, clockPin
-LPD8806 LED = LPD8806(4, 10, 11);
+LPD8806 LED = LPD8806(4, dataPin, clockPin);
 
-int scannedID = 0;
+int pollCounter, scannedID = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
@@ -42,7 +42,7 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		// redBeat(8, 64);
 		// rainbow();
-		 rainbowCycle();
+		rainbowCycle();
 
 		// If a tag is detected, go to the next state
 		if (isValidResponse) {
@@ -89,7 +89,11 @@ void loop() {
 
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
-			state = 0;
+			pollCounter++;
+			if (pollCounter == pollTimeout) {
+				pollCounter = 0;
+				state = 0;
+			}
 		}
 	}
 	else {
@@ -226,10 +230,10 @@ void redBeat(int minimumLevel, int peak) {
 }
 
 void green() {
-	LED.setPixelColor(0, LED.Color(23, 9, 68));
-	LED.setPixelColor(1, LED.Color(58, 33, 127));
-	LED.setPixelColor(2, LED.Color(46, 17, 127));
-	LED.setPixelColor(3, LED.Color(41, 26, 84));
+	LED.setPixelColor(0, LED.Color(5, 0, 68));
+	LED.setPixelColor(1, LED.Color(25, 16, 127));
+	LED.setPixelColor(2, LED.Color(10, 0, 127));
+	LED.setPixelColor(3, LED.Color(20, 14, 84));
 	LED.show();
 }
 

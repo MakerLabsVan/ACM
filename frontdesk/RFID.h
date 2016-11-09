@@ -87,6 +87,8 @@
 #define driverY 7
 #define speakerPin 8
 #define wifi_rst 9
+#define dataPin 10
+#define clockPin 11
 #define ledPin 13
 #define eightBits 8
 
