@@ -103,10 +103,11 @@ void serialEvent() {
 
 	while (Serial.available()) {
 		if (state == 0 || state == 1) {
-			Serial.write(ERROR_CHAR);
 			while (Serial.available()) {
 				Serial.read();
 			}
+			Serial.write(ERROR_CHAR);
+			Serial.write(END_CHAR);
 		}
 		else {
 			characterRead[i] = Serial.read();
@@ -165,7 +166,7 @@ void serialEvent() {
 		}
 
 		Serial.write(END_CHAR);
-		state = 0;		
+		playUnderground();		
 	}
 }
 
