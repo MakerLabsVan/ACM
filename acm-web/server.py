@@ -49,11 +49,9 @@ def serialTest(id):
 			data = database.retrieveUser(id)
 			socketio.emit('scan', data)
 
-			refresh_status = refresh(id, data)
-			print(refresh_status)
 			if data[-1] == "1":
 				resetTime()
-			if refresh_status == id:
+			if refresh(id, data) == str(id):
 				print("RFID tag refreshed")
 			
 			database.scanLog(id)
