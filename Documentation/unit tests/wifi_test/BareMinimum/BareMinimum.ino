@@ -11,7 +11,7 @@
 
 #include <SoftwareSerial.h>
 
-SoftwareSerial WIFI(3, 2);
+SoftwareSerial WIFI(2, 3);
 
 void setup() {
   Serial.begin(9600);

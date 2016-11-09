@@ -2,11 +2,11 @@ import constant
 from database import Database
 from arduino import Arduino
 from flask import Flask, request, render_template
-# from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-# socketio = SocketIO(app)
-arduino = Arduino()
+socketio = SocketIO(app)
+arduino = Arduino()	
 database = Database()
 
 @app.route("/")
@@ -24,10 +24,20 @@ def resetTime():
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
 	data = request.get_json()
-	if arduino.registerCard(data) == data["uid"]:
-		return database.insertUser(data)
+	arduinoStatus = arduino.registerCard(data)
+	if arduinoStatus == data["uid"]:
+		print("RFID tag registered")
+		if data["isNew"]:
+			return database.insertUser(data)
+		else:
+			return arduinoStatus
 	else:
 		return "0"
+	# if arduino.registerCard(data) == data["uid"]:
+	# 	return database.insertUser(data)
+	# else:
+	# 	return "0"
+
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
@@ -35,22 +45,25 @@ def laserLog(laser, id, elapsedTime, existingTime):
 	database.laserLog(data)
 	return database.insertLaserTime(data)
 
-@app.route("/refresh/<int:id>")
-def refresh(id):
-	data = database.refreshUser(id)
-	return arduino.refreshUser(data)
-
-# ----------------------------------------
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
-	# ignore guest cards for now
-	if id != 0 and id != 6 and id != 12:
-		database.scanLog(id)
-	# 	data = database.refreshUser(id)
-	# 	# socketio.emit('scan', data)
-	# 	return arduino.refreshUser(data)
+	if id != 0:
+		# ignore guest cards for now
+		if id != 6 and id != 12 and id < 100:
+			data = database.retrieveUser(id)
+			socketio.emit('scan', data)
+			database.scanLog(id)
+			# if refresh(id, data) == id:
+			# 	print("RFID tag refreshed")		
 	return str(id)
+# ----------------------------------------
+@app.route("/refresh")
+def refresh(id, data):
+	userData = [ id ]
+	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
+	print(userData)
+	return arduino.refreshUser(userData)
 
 if (__name__ == "__main__"):
-    app.run(host='0.0.0.0')
-	# socketio.run(app, host='0.0.0.0')
+    # app.run(host='0.0.0.0')
+	socketio.run(app, host='0.0.0.0')

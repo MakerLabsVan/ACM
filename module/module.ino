@@ -1,10 +1,14 @@
 #include <SoftwareSerial.h>
+#include <LPD8806.h>
 #include "RFID.h"
 
 #define MODULE
 
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 SoftwareSerial RFID(RFID_RX, RFID_TX);
+LPD8806 LED = LPD8806(4, 11, 12);
+
+int j = 0;
 
 void setup() {
 	// Set up pins
@@ -18,6 +22,7 @@ void setup() {
 
 	// Start with support systems off
 	digitalWrite(supportPin, LOW);
+	LED.begin();
 
 	// Set up serial communication
 	Serial.begin(monitorBaud);
@@ -50,6 +55,7 @@ void loop() {
 		sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
+		rainbowCycle();	
 	}
 	// ----------------------------------------------------------------------
 	// RFID tag detected, get user ID and authorization for this machine
@@ -68,7 +74,8 @@ void loop() {
 	// -----------------------------------------------------------------------
 	// Analyze response packet and data
 	if (!isValidResponse) {
-		//soundFeedback(isReject);
+		red();		
+		playDeath();
 		getStringFromMem(readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
@@ -77,19 +84,22 @@ void loop() {
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class, skip if staff member
 		if ( !isAuthorized && !isStaff ) {
-			//soundFeedback(isReject);
+			red();
+			playDeath();
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has reached the 60 min quota, skip if staff member
 		else if ( (existingTime >= quota) && !isStaff ) {
-			//soundFeedback(isReject);
+			red();
+			playDeath();
 			getStringFromMem(quotaMet);
 		}
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
 		else {
 			// Sound and text feedback
-			//soundFeedback(!isReject);
+			green();			
+			playCoinSound();
 			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
 			getStringFromMem(user);
@@ -97,7 +107,7 @@ void loop() {
 			if (isStaff) {
 				getStringFromMem(staff);
 			}
-			getStringFromMem(authorized);
+			// getStringFromMem(authorized);
 
 			// Ready to accumulate time
 			// turn LED and support systems on
@@ -145,8 +155,6 @@ void loop() {
 	}
 
 	RFID.listen();
-	delay(scanInterval);
-
 }
 /*
 	This function monitors the motor driver signals on the laser cutter.
@@ -166,7 +174,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 	int signals[] = { 0, 0, 0, 0, 0 };
   	int i, numValid, numInvalid = 0;
 
-	// Only here temporarily for debugging
 	if (debug) {
 		Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
 	}
@@ -269,18 +276,81 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		}
 	}
 }
-/*void soundFeedback(bool isReject) {
-	if (isReject) {
-		tone(speakerPin, rejectNote, rejectDuration);
-		delay(rejectInterval);
-		tone(speakerPin, rejectNote, rejectDuration);
-		delay(rejectInterval);
-		tone(speakerPin, rejectNote, rejectDuration);
+
+void red() {
+	LED.setPixelColor(0, LED.Color(68, 0, 5));
+	LED.setPixelColor(1, LED.Color(127, 16, 25));
+	LED.setPixelColor(2, LED.Color(127, 0, 0));
+	LED.setPixelColor(3, LED.Color(84, 20, 15));
+	LED.show();
+}
+
+void rainbowCycle() {
+	j == 384 * 5 ? j = 0 : j++;
+	for (int i = 0; i < LED.numPixels(); i++) {
+		// tricky math! we use each pixel as a fraction of the full 384-color wheel
+		// (thats the i / strip.numPixels() part)
+		// Then add in j which makes the colors go around per pixel
+		// the % 384 is to make the wheel cycle around
+		LED.setPixelColor(i, Wheel( ((i * 384 / LED.numPixels()) + j) % 384) );
+	}  
+	LED.show();   // write all the pixels out
+}
+
+void green() {
+	LED.setPixelColor(0, LED.Color(5, 0, 68));
+	LED.setPixelColor(1, LED.Color(25, 16, 127));
+	LED.setPixelColor(2, LED.Color(10, 0, 127));
+	LED.setPixelColor(3, LED.Color(20, 14, 84));
+	LED.show();
+}
+
+uint32_t Wheel(uint16_t WheelPos)
+{
+  byte r, g, b;
+  switch(WheelPos / 128)
+  {
+    case 0:
+      r = 127 - WheelPos % 128;   //Red down
+      g = WheelPos % 128;      // Green up
+      b = 0;                  //blue off
+      break; 
+    case 1:
+      g = 127 - WheelPos % 128;  //green down
+      b = WheelPos % 128;      //blue up
+      r = 0;                  //red off
+      break; 
+    case 2:
+      b = 127 - WheelPos % 128;  //blue down 
+      r = WheelPos % 128;      //red up
+      g = 0;                  //green off
+      break; 
+  }
+  return(LED.Color(r,g,b));
+}
+void playCoinSound() {
+	int coinNotes[] = { 988, 1319 };
+	int coinNoteDurations[] = { 125, 400 };
+	int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+
+	for (int i = 0; i < numCoinNotes; i++) {
+        tone(speakerPin, coinNotes[i]);
+        delay(coinNoteDurations[i]);
+        noTone(speakerPin);
+    }
+}
+
+void playDeath() {
+	int notes[] = { 247, 247, 247 };
+	int numNotes = sizeof(notes) / sizeof(notes[0]);
+
+	for (int i = 0; i < numNotes; i++) {
+		tone(speakerPin, notes[i]);
+		delay(150);
+		noTone(speakerPin);
+		delay(150);
 	}
-	else {
-		tone(speakerPin, acceptNote, acceptDuration);
-	}
-}*/
+}
 
 void getStringFromMem(int index) {
 	char stringBuffer[stringSize];
