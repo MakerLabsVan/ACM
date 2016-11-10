@@ -52,10 +52,10 @@ def serialTest(id):
 
 		# ignore logging and refreshing guest cards
 		if id != 6 and id != 12:
-			database.scanLog(id)
 			if refresh(id, data) == str(id):
 				print("RFID tag refreshed")
-
+			database.scanLog(id)
+						
 	return str(id)
 
 @app.route("/refresh")
