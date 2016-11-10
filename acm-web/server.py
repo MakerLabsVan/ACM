@@ -34,7 +34,6 @@ def registerCard():
 	else:
 		return "0"
 
-
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
 	data = {"laserType": laser, "uid": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
@@ -56,7 +55,7 @@ def serialTest(id):
 			
 			database.scanLog(id)
 	return str(id)
-# ----------------------------------------
+
 @app.route("/refresh")
 def refresh(id, data):
 	userData = [ str(id), data[3] ]
