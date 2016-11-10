@@ -50,8 +50,8 @@ def serialTest(id):
 		if data[-1] == "1":
 			resetTime()
 
-		# ignore logging and refreshing guest cards
-		if id != 6 and id != 12:
+		# ignore logging and refreshing guest card permissions
+		if id not in constant.GUEST_IDS:
 			if refresh(id, data) == str(id):
 				print("RFID tag refreshed")
 			database.scanLog(id)
