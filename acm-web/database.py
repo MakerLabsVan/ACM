@@ -144,7 +144,7 @@ class Database:
         cellList.append( data["laserType"] )
         cellList.append( datetime.now().date().isoformat() )
         cellList.append( datetime.now().time().isoformat() )
-        cellList.append( data["id"] )
+        cellList.append( data["uid"] )
         cellList.append( data["elapsedTime"] )
         cellList.append( data["existingTime"] )
 
