@@ -42,7 +42,8 @@ def laserLog(laser, id, elapsedTime, existingTime):
 
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
-	if id != 0 and id < 50000:		
+	# need to figure out why large ids are being sent randomly
+	if 0 < id and id < 50000:		
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
 			# push data to web app			
@@ -52,7 +53,7 @@ def serialTest(id):
 			# reset card if a month has passed
 			if data[-1] == "1":
 				resetTime()
-				
+
 			# refresh card permissions
 			if refresh(id, data) == str(id):
 				print("RFID tag refreshed")
