@@ -90,7 +90,7 @@ void loop() {
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
 			pollCounter++;
-			if (pollCounter == pollTimeout) {
+			if (pollCounter == 3) {
 				pollCounter = 0;
 				state = 0;
 			}
@@ -215,7 +215,7 @@ void playCoinSound() {
 }
 
 void playUnderground() {
-	int notes[] = { 131, 262, 110, 220, 117, 233 };
+	int notes[] = { 131, 262 };
 	int numNotes = sizeof(notes) / sizeof(notes[0]);
 
 	for (int i = 0; i < numNotes; i++) {
@@ -235,20 +235,6 @@ void playDeath() {
 		noTone(speakerPin);
 		delay(150);
 	}
-}
-
-void redBeat(int minimumLevel, int peak) {
-	currentLevel >= 2*peak - minimumLevel ? currentLevel = minimumLevel : currentLevel += 2;
-
-	for (int i = 0; i < LED.numPixels(); i++) {
-		if (currentLevel < peak) {
-			LED.setPixelColor(i, LED.Color(currentLevel, 0, 0));			
-		}
-		else {
-			LED.setPixelColor(i, LED.Color(2*peak - currentLevel, 0, 0));
-		}
-	}
-	LED.show();
 }
 
 void green() {
