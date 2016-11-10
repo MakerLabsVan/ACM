@@ -44,17 +44,20 @@ def laserLog(laser, id, elapsedTime, existingTime):
 def serialTest(id):
 	if id != 0 and id < 50000:		
 		data = database.retrieveUser(id)
-		socketio.emit('scan', data)
 
-		# reset card if a month has passed
-		if data[-1] == "1":
-			resetTime()
-
-		# ignore logging and refreshing guest card permissions
+		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
+			# push data to web app
+			socketio.emit('scan', data)		
+			# reset card if a month has passed
+			if data[-1] == "1":
+				resetTime()
+			# refresh card permissions
 			if refresh(id, data) == str(id):
 				print("RFID tag refreshed")
+
 			database.scanLog(id)
+
 		else:
 			getTime()
 						
@@ -62,7 +65,7 @@ def serialTest(id):
 
 @app.route("/refresh")
 def refresh(id, data):
-	userData = [ str(id), data[3] ]
+	userData = [ str(id), data[constant.COL_MEMBER_TYPE] ]
 	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
 	print(userData)
 	return arduino.refreshUser(userData)
