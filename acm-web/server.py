@@ -55,6 +55,8 @@ def serialTest(id):
 			if refresh(id, data) == str(id):
 				print("RFID tag refreshed")
 			database.scanLog(id)
+		else:
+			getTime()
 						
 	return str(id)
 
