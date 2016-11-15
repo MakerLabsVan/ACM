@@ -51,11 +51,11 @@ void scanTest(unsigned int ID) {
 
     WIFI.println(cmd);
     //delay(waitForGET);
-    delay(100);
+    delay(250);
 
     WIFI.println(getStr);
     //delay(waitForFlush);
-    delay(100);
+    delay(250);
 
     WIFI.println(closeConnection);
 }
