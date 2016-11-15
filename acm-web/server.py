@@ -43,7 +43,7 @@ def laserLog(laser, id, elapsedTime, existingTime):
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
 	# need to figure out why large ids are being sent randomly
-	if 0 < id and id < 50000:		
+	if 0 < id and id < 50000:
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
 			# push data to web app			
@@ -71,11 +71,6 @@ def refresh(id, data):
 	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
 	print(userData)
 	return arduino.refreshUser(userData)
-
-@app.route("/hi/<int:id>")
-def hi(id):
-	database.scanLog(id)
-	return str(id)
 
 if (__name__ == "__main__"):
     # app.run(host='0.0.0.0')
