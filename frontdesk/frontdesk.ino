@@ -89,11 +89,11 @@ void loop() {
 
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
-			pollCounter++;
-			if (pollCounter == 3) {
-				pollCounter = 0;
-				state = 0;
-			}
+      pollCounter++;
+      if (pollCounter == 1) {
+        state = 0;
+        pollCounter = 0;  
+      }
 		}
 	}
 	else {

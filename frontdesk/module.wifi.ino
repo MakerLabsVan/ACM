@@ -45,17 +45,17 @@ void scanTest(unsigned int ID) {
     //delay(waitForConnect);
     delay(100);
 
-    getStr += String(ID) + " HTTP/1.1";
+    getStr += String(ID) + " HTTP/1.1\r\n";
 
     cmd += getStr.length();
 
     WIFI.println(cmd);
     //delay(waitForGET);
-    delay(250);
+    delay(500);
 
-    WIFI.println(getStr);
+    WIFI.print(getStr);
     //delay(waitForFlush);
-    delay(250);
+    delay(100);
 
     WIFI.println(closeConnection);
 }
