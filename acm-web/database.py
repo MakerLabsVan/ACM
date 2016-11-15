@@ -73,7 +73,7 @@ class Database:
         print("Logging user %d at Front Desk" % id)
         cellList = [ datetime.now().date().isoformat(), datetime.now().time().isoformat(), id ]
         self.authorize()
-        self.scan_data.insert_row(cellList, 2)
+        self.scan_data.append_row(cellList)
     
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["uid"], data["laserType"]))

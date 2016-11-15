@@ -72,6 +72,11 @@ def refresh(id, data):
 	print(userData)
 	return arduino.refreshUser(userData)
 
+@app.route("/hi/<int:id>")
+def hi(id):
+	database.scanLog(id)
+	return str(id)
+
 if (__name__ == "__main__"):
     # app.run(host='0.0.0.0')
 	socketio.run(app, host='0.0.0.0')
