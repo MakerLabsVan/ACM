@@ -8,7 +8,6 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 int j = 0;
-int currentLevel = 8;
 // nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(4, dataPin, clockPin);
 
