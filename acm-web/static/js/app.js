@@ -141,7 +141,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.$apply();
     });
 	socket.on('guest-scan', function(msg) {
-		console.log(msg);
+		clock.setTime(msg);
 	})
 
 	var clock = $('.clock').FlipClock({
