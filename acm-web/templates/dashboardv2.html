@@ -156,15 +156,15 @@
                       <label for="name">Name</label>
                       <input id="name" type="text" ng-model="user.memberName">
 
+                      <label for="start">Membership Start Date</label>
+                      <input id="start" type="date" ng-model="user.startDay" min="2000-01-01">
+
                       <label for="type">Type of User</label>
                       <select id="type" ng-model="user.memberType">
                         <option value="0">Member</option>
                         <option value="1">Staff</option>
                       </select>
-
-                      <label for="start">Membership Start Date</label>
-                      <input id="start" type="date" ng-model="user.startDay" min="2000-01-01">
-
+                
                       <div>
                         <label for="registration-table">Access</label>
                         <table id="registration-table">
@@ -179,7 +179,7 @@
                             <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.threeD" ng-true-value="'1'" ng-false-value="'0'">3D Printer</label></td>
                           </tr>
                         </table>
-                                            
+
                       </div>
                       <center>
                         <input type="submit" ng-click="registerCard(true)" value="New User"> <input type="submit" ng-click="registerCard(false)" value="Existing User">
