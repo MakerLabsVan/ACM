@@ -60,8 +60,8 @@ def serialTest(id):
 
 			database.scanLog(id)
 
-		else:
-			socketio.emit('guest-scan', getTime())
+		# else:
+		# 	socketio.emit('guest-scan', getTime())
 						
 	return str(id)
 
