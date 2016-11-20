@@ -35,7 +35,7 @@ void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existin
     WIFI.println(closeConnection);
 }
 #else
-void scanTest(unsigned int ID) {
+void scanTest(int ID) {
     String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.200\",5000";
     String getStr = "GET /scanTest/";
     String cmd = "AT+CIPSEND=";
