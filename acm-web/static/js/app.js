@@ -123,6 +123,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	socket.on('scan', function(msg) {
 		$scope.activeTab(0);
 		$scope.display.id = msg;
+		$scope.$apply();
 	});
 	socket.on('data', function(msg) {
 		$scope.activeTab(0);
