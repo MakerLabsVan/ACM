@@ -124,7 +124,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.activeTab(0);
 		$scope.display.id = msg;
 		$scope.display.name = "";
-		$scope,display.image = PATH + "GUEST.jpg";
+		$scope.display.image = PATH + "GUEST.jpg";
 		$scope.refresh = "";
 		$scope.$apply();
 	});
