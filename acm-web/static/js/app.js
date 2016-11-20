@@ -123,6 +123,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	socket.on('scan', function(msg) {
 		$scope.activeTab(0);
 		$scope.display.id = msg;
+		$scope.display.name = "";
+		$scope,display.image = PATH + "GUEST.jpg";
 		$scope.refresh = "";
 		$scope.$apply();
 	});
@@ -138,7 +140,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 		}
 
-		$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);		
+		$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);
 		$scope.display.monthTime = (parseInt(msg[17]) / 60).toFixed(0);	
 
 		$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"

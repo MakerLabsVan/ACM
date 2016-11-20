@@ -138,17 +138,3 @@ class Database:
         # If not found, return 0
         else:
             return str(userRow)
-    
-    def laserLog2(self, data): # this takes 5 - 10 seconds longer than the old append method
-        print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
-
-        cellList = []
-        cellList.append( data["laserType"] )
-        cellList.append( datetime.now().date().isoformat() )
-        cellList.append( datetime.now().time().isoformat() )
-        cellList.append( data["id"] )
-        cellList.append( data["elapsedTime"] )
-        cellList.append( data["existingTime"] )
-
-        self.authorize()
-        self.laser_data(cellList, 2)

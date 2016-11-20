@@ -47,7 +47,7 @@ def serialTest(id):
 		socketio.emit('scan', id)
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
-			# push data to web app			
+			# push data to web app
 			data = database.retrieveUser(id)			
 			socketio.emit('data', data)		
 
