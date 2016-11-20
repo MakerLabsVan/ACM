@@ -8,11 +8,10 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 int j = 0;
-int currentLevel = 8;
 // nLEDs, dataPin, clockPin
-LPD8806 LED = LPD8806(4, 10, 11);
+LPD8806 LED = LPD8806(4, dataPin, clockPin);
 
-int scannedID = 0;
+int pollCounter, scannedID = 0;
 unsigned char readData[bufferSize];
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
@@ -42,7 +41,7 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		// redBeat(8, 64);
 		// rainbow();
-		 rainbowCycle();
+		rainbowCycle();
 
 		// If a tag is detected, go to the next state
 		if (isValidResponse) {
@@ -66,7 +65,7 @@ void loop() {
 			playCoinSound();
 
 			WIFI.listen();
-			if (scannedID != 6 && scannedID != 12 && scannedID != 0 && scannedID < 100) {
+			if ( 0 < scannedID && scannedID < 100) {
 				scanTest(scannedID);
 			}
 
@@ -89,7 +88,11 @@ void loop() {
 
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
-			state = 0;
+      pollCounter++;
+      if (pollCounter == 1) {
+        state = 0;
+        pollCounter = 0;  
+      }
 		}
 	}
 	else {
@@ -103,10 +106,11 @@ void serialEvent() {
 
 	while (Serial.available()) {
 		if (state == 0 || state == 1) {
-			Serial.write(ERROR_CHAR);
 			while (Serial.available()) {
 				Serial.read();
 			}
+			Serial.write(ERROR_CHAR);
+			Serial.write(END_CHAR);
 		}
 		else {
 			characterRead[i] = Serial.read();
@@ -144,12 +148,8 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_REGISTER) {
 		characterRead[0] = 0;
 
-		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);
-		
-		for (int i = 0; i < numDigits; i++) {
-			id *= 10;
-			id += (int)(characterRead[i+2] - ASCII_OFFSET);
-		}
+		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
+		convertASCII(numDigits);
 
 		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
 		sendCommand(CMD_WRITE, blockID, userData);
@@ -165,7 +165,33 @@ void serialEvent() {
 		}
 
 		Serial.write(END_CHAR);
+		playUnderground();
+	}
 
+	if (characterRead[0] == COMMAND_REFRESH) {
+		characterRead[0] = 0;
+		
+		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
+		convertASCII(numDigits);
+
+		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
+		sendCommand(CMD_WRITE, blockID, userData);
+		delay(waitforWriteResponse);
+
+		while (id != 0) {
+			Serial.write(id);
+			id >>= eightBits;
+		}
+
+		Serial.write(END_CHAR);
+		playUnderground();
+	}
+}
+
+void convertASCII(int numDigits) {
+	for (int i = 0; i < numDigits; i++) {
+		id *= 10;
+		id += (int)(characterRead[i+2] - ASCII_OFFSET);
 	}
 }
 
@@ -188,7 +214,7 @@ void playCoinSound() {
 }
 
 void playUnderground() {
-	int notes[] = { 131, 262, 110, 220, 117, 233 };
+	int notes[] = { 131, 262 };
 	int numNotes = sizeof(notes) / sizeof(notes[0]);
 
 	for (int i = 0; i < numNotes; i++) {
@@ -210,25 +236,11 @@ void playDeath() {
 	}
 }
 
-void redBeat(int minimumLevel, int peak) {
-	currentLevel >= 2*peak - minimumLevel ? currentLevel = minimumLevel : currentLevel += 2;
-
-	for (int i = 0; i < LED.numPixels(); i++) {
-		if (currentLevel < peak) {
-			LED.setPixelColor(i, LED.Color(currentLevel, 0, 0));			
-		}
-		else {
-			LED.setPixelColor(i, LED.Color(2*peak - currentLevel, 0, 0));
-		}
-	}
-	LED.show();
-}
-
 void green() {
-	LED.setPixelColor(0, LED.Color(23, 9, 68));
-	LED.setPixelColor(1, LED.Color(58, 33, 127));
-	LED.setPixelColor(2, LED.Color(46, 17, 127));
-	LED.setPixelColor(3, LED.Color(41, 26, 84));
+	LED.setPixelColor(0, LED.Color(5, 0, 68));
+	LED.setPixelColor(1, LED.Color(25, 16, 127));
+	LED.setPixelColor(2, LED.Color(10, 0, 127));
+	LED.setPixelColor(3, LED.Color(20, 14, 84));
 	LED.show();
 }
 

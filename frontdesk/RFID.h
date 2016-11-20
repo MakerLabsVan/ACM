@@ -87,6 +87,8 @@
 #define driverY 7
 #define speakerPin 8
 #define wifi_rst 9
+#define dataPin 10
+#define clockPin 11
 #define ledPin 13
 #define eightBits 8
 
@@ -127,6 +129,7 @@ const char COMMAND_GET_TIME = '1';
 const char COMMAND_RESET_TIME = '2';
 const char COMMAND_REGISTER = '3';
 const char COMMAND_MODIFY_TIME = '4';
+const char COMMAND_REFRESH = '5';
 const unsigned char ERROR_CHAR = 0x02;
 const unsigned char END_CHAR = 0x00;
 
