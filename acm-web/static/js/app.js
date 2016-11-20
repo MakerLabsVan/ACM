@@ -122,6 +122,10 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
 		$scope.activeTab(0);
+		$scope.display.id = msg;
+	});
+	socket.on('data', function(msg) {
+		$scope.activeTab(0);
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
 		$scope.display.image = PATH + msg[2] + ".jpg";
@@ -140,11 +144,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		
 		$scope.$apply();
     });
-	socket.on('guest-scan', function(msg) {
-		clock.setTime(msg);
-		$scope.time.set(msg);
-		$scope.$apply();
-	})
 
 	var clock = $('.clock').FlipClock({
 		autoStart: false,
