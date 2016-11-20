@@ -57,7 +57,9 @@ def serialTest(id):
 
 			# refresh card permissions
 			if refresh(id, data) == str(id):
-				print("RFID tag refreshed")
+				msg = "Card successfully updated"
+				socketio.emit('refresh', msg)
+				print(msg)
 
 			database.scanLog(id)
 

@@ -123,6 +123,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	socket.on('scan', function(msg) {
 		$scope.activeTab(0);
 		$scope.display.id = msg;
+		$scope.refresh = "";
 		$scope.$apply();
 	});
 	socket.on('data', function(msg) {
@@ -145,6 +146,10 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		
 		$scope.$apply();
     });
+	socket.on('refresh', function(msg) {
+		$scope.refresh = msg;
+		$scope.$apply();
+	})
 
 	var clock = $('.clock').FlipClock({
 		autoStart: false,
