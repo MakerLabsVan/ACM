@@ -44,11 +44,12 @@ def laserLog(laser, id, elapsedTime, existingTime):
 def serialTest(id):
 	# need to figure out why large ids are being sent randomly
 	if 0 < id and id < 50000:
+		socketio.emit('scan', id);
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
 			# push data to web app			
 			data = database.retrieveUser(id)			
-			socketio.emit('scan', data)		
+			socketio.emit('data', data)		
 
 			# reset card if a month has passed
 			if data[-1] == "1":
