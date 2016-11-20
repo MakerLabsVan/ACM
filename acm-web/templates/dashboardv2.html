@@ -120,9 +120,7 @@
                   <!-- This should be a component -->
                   <div id="time-data">
                     <center>
-                      <div class="clock"></div>                      
-                      <!--<p>//time.hours()// Hours //time.minutes()// Minutes //time.seconds()// Seconds</p>-->
-                      <!--<p>Drop-in charge: $//time.charge()//</p>-->
+                      <div class="clock"></div>
                       <span ng-hide="isError">Drop-in Rate: $//time.charge()//</span>
                       <span ng-show="isError">Error</span>
                       <br>
@@ -156,12 +154,15 @@
                       <label for="name">Name</label>
                       <input id="name" type="text" ng-model="user.memberName">
 
+                      <label for="start">Membership Start Date</label>
+                      <input id="start" type="date" ng-model="user.startDay" min="2000-01-01" max="2552-09-19">
+
                       <label for="type">Type of User</label>
                       <select id="type" ng-model="user.memberType">
                         <option value="0">Member</option>
                         <option value="1">Staff</option>
                       </select>
-
+                
                       <div>
                         <label for="registration-table">Access</label>
                         <table id="registration-table">
@@ -176,7 +177,7 @@
                             <td><label class="checkbox-inline"><input type="checkbox" ng-model="user.threeD" ng-true-value="'1'" ng-false-value="'0'">3D Printer</label></td>
                           </tr>
                         </table>
-                      <hr>                        
+
                       </div>
                       <center>
                         <input type="submit" ng-click="registerCard(true)" value="New User"> <input type="submit" ng-click="registerCard(false)" value="Existing User">

@@ -1,7 +1,9 @@
 COMMAND_GET_TIME = '1'
 COMMAND_RESET_TIME = '2'
 COMMAND_REGISTER = '3'
+COMMAND_REFRESH ='5'
 EIGHT_BITS = 8
+GUEST_IDS = [ 6, 12 ]
 
 # These refer to list indices, not columns in the spreadsheet
 CELL_PKEY = 'A1'

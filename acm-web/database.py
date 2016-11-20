@@ -50,7 +50,7 @@ class Database:
         cellList[constant.COL_UID].value = data["uid"]
         cellList[constant.COL_MEMBER_NAME].value = data["memberName"]
         cellList[constant.COL_MEMBER_TYPE].value = data["memberType"]
-        cellList[constant.COL_START_DAY].value = data["startDay"]
+        cellList[constant.COL_START_DAY].value = data["startDay"][0:10]
         cellList[constant.COL_USES_LASER_A].value = data["laserA"]
         cellList[constant.COL_USES_LASER_B].value = data["laserB"]
         cellList[constant.COL_USES_SHOPBOT].value = data["shopbot"]
@@ -73,7 +73,7 @@ class Database:
         print("Logging user %d at Front Desk" % id)
         cellList = [ datetime.now().date().isoformat(), datetime.now().time().isoformat(), id ]
         self.authorize()
-        self.scan_data.insert_row(cellList, 2)
+        self.scan_data.append_row(cellList)
     
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["uid"], data["laserType"]))
