@@ -58,8 +58,11 @@ def serialTest(id):
 			# refresh card permissions
 			if refresh(id, data) == str(id):
 				msg = "Card successfully updated"
-				socketio.emit('refresh', msg)
-				print(msg)
+			else:
+				msg = "Card not updated"
+			
+			print(msg)
+			socketio.emit('refresh', msg)
 
 			database.scanLog(id)
 
