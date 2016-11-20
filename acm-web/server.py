@@ -44,7 +44,7 @@ def laserLog(laser, id, elapsedTime, existingTime):
 def serialTest(id):
 	# need to figure out why large ids are being sent randomly
 	if 0 < id and id < 50000:
-		socketio.emit('scan', id);
+		socketio.emit('scan', id)
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
 			# push data to web app			
@@ -57,17 +57,13 @@ def serialTest(id):
 
 			# refresh card permissions
 			if refresh(id, data) == str(id):
-				msg = "Card successfully updated"
+				refreshStatus = "Card successfully updated"
 			else:
-				msg = "Card not updated"
-			
-			print(msg)
-			socketio.emit('refresh', msg)
+				refreshStatus = "Card not updated"
+
+			socketio.emit('refresh', refreshStatus)
 
 			database.scanLog(id)
-
-		# else:
-		# 	socketio.emit('guest-scan', getTime())
 						
 	return str(id)
 
