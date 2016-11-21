@@ -54,8 +54,7 @@ void scanTest(int ID) {
     delay(500);
 
     WIFI.print(getStr);
-    //delay(waitForFlush);
-    delay(100);
+    delay(waitForFlush);
 
     WIFI.println(closeConnection);
 }
