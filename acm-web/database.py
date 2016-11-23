@@ -69,6 +69,17 @@ class Database:
         self.user_data.update_cells(cellList)
         return data["uid"]
     
+    def existingUser(self, data):
+        self.authorize()
+        try:
+            user = self.user_data.find(data["memberName"])
+            self.user_data.update_cell(user.col - 1, user.row, data["uid"])
+            found = True
+        except:
+            found = False
+      
+        return found
+    
     def scanLog(self, id):
         print("Logging user %d at Front Desk" % id)
         cellList = [ datetime.now().date().isoformat(), datetime.now().time().isoformat(), id ]
