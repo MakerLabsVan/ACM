@@ -29,7 +29,7 @@ def registerCard():
 		print("RFID tag registered")
 		if data["isNew"]:
 			return database.insertUser(data)
-		else:
+		elif database.existingUser(data):
 			return arduinoStatus
 	else:
 		return "0"
