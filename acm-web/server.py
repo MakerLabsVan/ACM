@@ -30,6 +30,7 @@ def registerCard():
 		if data["isNew"]:
 			return database.insertUser(data)
 		elif database.existingUser(data):
+			print("ID updated")
 			return arduinoStatus
 	else:
 		return "0"

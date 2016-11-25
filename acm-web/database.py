@@ -73,7 +73,7 @@ class Database:
         self.authorize()
         try:
             user = self.user_data.find(data["memberName"])
-            self.user_data.update_cell(user.col - 1, user.row, data["uid"])
+            self.user_data.update_cell(user.row, user.col - 1, data["uid"])
             found = True
         except:
             found = False
