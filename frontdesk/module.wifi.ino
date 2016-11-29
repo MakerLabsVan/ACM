@@ -42,18 +42,16 @@ void scanTest(int ID) {
     String closeConnection = "AT+CIPCLOSE";
 
     WIFI.println(beginConnection);
-    //delay(waitForConnect);
-    delay(100);
+    delay(waitForConnect);
 
-    getStr += String(ID) + " HTTP/1.1\r\n";
+    getStr += String(ID) + " HTTP/1.1";
 
     cmd += getStr.length();
 
     WIFI.println(cmd);
-    //delay(waitForGET);
-    delay(500);
+    delay(waitForGET);
 
-    WIFI.print(getStr);
+    WIFI.println(getStr);
     delay(waitForFlush);
 
     WIFI.println(closeConnection);
