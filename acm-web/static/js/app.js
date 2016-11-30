@@ -61,13 +61,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			if (res == 2) {
 				$scope.isError = true;		
 				$scope.time.set(0);	
-				clock.setTime(0);
 			}
 			else {
 				console.log("Raw Time: " + res);
 				$scope.isError = false;	
 				$scope.time.set(res);			
-				clock.setTime(res);
 			}
 			$scope.progress.isWaiting = false;			
 		});
