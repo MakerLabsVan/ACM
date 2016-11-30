@@ -116,6 +116,7 @@ class Database:
             cellList[1].value = int(cellList[1].value) + data["elapsedTime"]
             self.user_data.update_cells(cellList)
         
+        print("Updated user: %d" % userRow)
         return str(userRow)
   
     def searchID(self, id):
