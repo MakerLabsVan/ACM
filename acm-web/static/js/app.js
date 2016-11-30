@@ -153,13 +153,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$scope.$apply();
 	})
 
-	var clock = $('.clock').FlipClock({
-		autoStart: false,
-		clockFace: 'HourlyCounter'
-	});
-
-	clock.setTime($scope.time.rawTime);
-
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");
 		var pi = Math.PI;
