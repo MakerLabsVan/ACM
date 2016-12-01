@@ -19,12 +19,13 @@ Arduino IDE
 # Schematics
 TO-DO: Add picture
 
-__RDM8800 Pinout__
+__RDM8800__
 
 ![alt text][rdm8800]
 [rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View" 
-
-__ESP8266 Pinout__  
+Top left pins: Antenna
+Bottom right pins: 5V GND TX RX RST
+__ESP8266__  
 
 ![alt text][esp8266]
 [esp8266]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG "ESP8266 Top View"
