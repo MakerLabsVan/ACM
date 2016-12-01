@@ -20,8 +20,8 @@ Arduino IDE
 TO-DO: Add picture
 
 __RDM8800__
-
 Antenna Pins
+
 ![alt text][rdm8800]
 [rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View" 
 5 pin Header -> 5V GND TX RX RST
