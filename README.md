@@ -1,7 +1,7 @@
 # ACM
 Access Control Management system
 
-This system is designed to authorize access to MakerLabs' laser cutter by an RFID tag. The system consists of an Arduino Uno, an RDM880-T-A breakout board, and an ESP8266 breakout board. This module actively scans for RFID tags that follow the ISO14443A protocol. Details on ISO14443A, specifically MiFare, can be found in ACM/Documentation/ISO14443AB.pdf.
+This system is designed to authorize access to MakerLabs' laser cutter by an RFID tag. The system consists of an Arduino Uno, an RDM8800-T-A breakout board, and an ESP8266 breakout board. This module actively scans for RFID tags that follow the ISO14443A protocol. Details on ISO14443A, specifically MiFare, can be found in ACM/Documentation/ISO14443AB.pdf.
 
 
 # Hardware Required
@@ -19,18 +19,13 @@ Arduino IDE
 # Schematics
 TO-DO: Add picture
 
-__RDM8800 Pinout__  
-Top View
+__RDM8800 Pinout__
 ![alt text][rdm8800]
 [rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View" 
 
 __ESP8266 Pinout__  
-Top View  
-
-GND | GPIO2 | GPIO0 | TX 
---- | --- | --- | ---
-RX | CE | RST | VIN
-
+![alt text][esp8266]
+[esp8266]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG "ESP8266 Top View"
 
 # Wiring
 __Arduino -> RDM8800__  
