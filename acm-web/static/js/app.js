@@ -61,13 +61,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			if (res == 2) {
 				$scope.isError = true;		
 				$scope.time.set(0);	
-				clock.setTime(0);
 			}
 			else {
 				console.log("Raw Time: " + res);
 				$scope.isError = false;	
 				$scope.time.set(res);			
-				clock.setTime(res);
 			}
 			$scope.progress.isWaiting = false;			
 		});
@@ -78,6 +76,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$http.get("../resetTime").success(function(res) {
 			if (res[0] == 1) {
 				$scope.isError = false;
+				$scope.time.set(0);
 				//$scope.getTime();
 			}
 			else {
@@ -122,6 +121,14 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {
 		$scope.activeTab(0);
+		$scope.display.id = msg;
+		$scope.display.name = "";
+		$scope.display.image = PATH + "GUEST.jpg";
+		$scope.refresh = "";
+		$scope.$apply();
+	});
+	socket.on('data', function(msg) {
+		$scope.activeTab(0);
 		$scope.display.id = msg[1];
 		$scope.display.name = msg[2];
 		$scope.display.image = PATH + msg[2] + ".jpg";
@@ -132,7 +139,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 		}
 
-		$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);		
+		$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);
 		$scope.display.monthTime = (parseInt(msg[17]) / 60).toFixed(0);	
 
 		$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
@@ -140,18 +147,10 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		
 		$scope.$apply();
     });
-	socket.on('guest-scan', function(msg) {
-		clock.setTime(msg);
-		$scope.time.set(msg);
+	socket.on('refresh', function(msg) {
+		$scope.refresh = msg;
 		$scope.$apply();
 	})
-
-	var clock = $('.clock').FlipClock({
-		autoStart: false,
-		clockFace: 'HourlyCounter'
-	});
-
-	clock.setTime($scope.time.rawTime);
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");

@@ -29,7 +29,8 @@ def registerCard():
 		print("RFID tag registered")
 		if data["isNew"]:
 			return database.insertUser(data)
-		else:
+		elif database.existingUser(data):
+			print("ID updated")
 			return arduinoStatus
 	else:
 		return "0"
@@ -46,9 +47,10 @@ def serialTest(id):
 	if 0 < id and id < 50000:
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
-			# push data to web app			
+			socketio.emit('scan', id)		
+			# push data to web app
 			data = database.retrieveUser(id)			
-			socketio.emit('scan', data)		
+			socketio.emit('data', data)		
 
 			# reset card if a month has passed
 			if data[-1] == "1":
@@ -56,12 +58,13 @@ def serialTest(id):
 
 			# refresh card permissions
 			if refresh(id, data) == str(id):
-				print("RFID tag refreshed")
+				refreshStatus = "Card successfully updated"
+			else:
+				refreshStatus = "Card not updated"
+
+			socketio.emit('refresh', refreshStatus)
 
 			database.scanLog(id)
-
-		# else:
-		# 	socketio.emit('guest-scan', getTime())
 						
 	return str(id)
 

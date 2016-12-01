@@ -50,7 +50,7 @@ class Database:
         cellList[constant.COL_UID].value = data["uid"]
         cellList[constant.COL_MEMBER_NAME].value = data["memberName"]
         cellList[constant.COL_MEMBER_TYPE].value = data["memberType"]
-        cellList[constant.COL_START_DAY].value = data["startDay"][0:10]
+        cellList[constant.COL_START_DAY].value = "'" + data["startDay"][0:10]
         cellList[constant.COL_USES_LASER_A].value = data["laserA"]
         cellList[constant.COL_USES_LASER_B].value = data["laserB"]
         cellList[constant.COL_USES_SHOPBOT].value = data["shopbot"]
@@ -68,6 +68,17 @@ class Database:
         # Push changes to sheet
         self.user_data.update_cells(cellList)
         return data["uid"]
+    
+    def existingUser(self, data):
+        self.authorize()
+        try:
+            user = self.user_data.find(data["memberName"])
+            self.user_data.update_cell(user.row, user.col - 1, data["uid"])
+            found = True
+        except:
+            found = False
+      
+        return found
     
     def scanLog(self, id):
         print("Logging user %d at Front Desk" % id)
@@ -104,6 +115,8 @@ class Database:
             cellList[0].value = int(cellList[0].value) + data["elapsedTime"]
             cellList[1].value = int(cellList[1].value) + data["elapsedTime"]
             self.user_data.update_cells(cellList)
+            print("Updated user at row %d" % userRow)
+            
         
         return str(userRow)
   
