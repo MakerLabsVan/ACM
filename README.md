@@ -21,10 +21,10 @@ TO-DO: Add picture
 
 __RDM8800__
 
+Antenna Pins
 ![alt text][rdm8800]
 [rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View" 
-Top left pins: Antenna
-Bottom right pins: 5V GND TX RX RST
+5 pin Header -> 5V GND TX RX RST
 
 __ESP8266__  
 
@@ -44,6 +44,4 @@ GND -> GND (LM1117)
 OUT (LM1117) -> VIN  
 D2 -> TX  
 D3 -> RX  
-D9 -> CE  
-
-Hello from Peter
+D9 -> CE
