@@ -76,6 +76,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$http.get("../resetTime").success(function(res) {
 			if (res[0] == 1) {
 				$scope.isError = false;
+				$scope.time.set(0);
 				//$scope.getTime();
 			}
 			else {
