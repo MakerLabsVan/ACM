@@ -24,7 +24,6 @@ __RDM8800__
 ![alt text][rdm8800]
 [rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View" 
 Top left pins: Antenna
-
 Bottom right pins: 5V GND TX RX RST
 
 __ESP8266__  
