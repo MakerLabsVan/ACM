@@ -35,17 +35,16 @@ void updateACM(unsigned int ID, unsigned long elapsedTime, unsigned long existin
     WIFI.println(closeConnection);
 }
 #else
-void scanTest(unsigned int ID) {
+void scanTest(int ID) {
     String beginConnection = "AT+CIPSTART=\"TCP\",\"192.168.0.200\",5000";
     String getStr = "GET /scanTest/";
     String cmd = "AT+CIPSEND=";
     String closeConnection = "AT+CIPCLOSE";
 
     WIFI.println(beginConnection);
-    //delay(waitForConnect);
-    delay(100);
+    delay(waitForConnect);
 
-    getStr += String(ID) + " HTTP/1.1\r\n";
+    getStr += String(ID) + " HTTP/1.1";
 
     cmd += getStr.length();
 
@@ -53,9 +52,8 @@ void scanTest(unsigned int ID) {
     //delay(waitForGET);
     delay(500);
 
-    WIFI.print(getStr);
-    //delay(waitForFlush);
-    delay(100);
+    WIFI.println(getStr);
+    delay(waitForFlush);
 
     WIFI.println(closeConnection);
 }

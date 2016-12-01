@@ -39,8 +39,6 @@ void loop() {
 
 		// LEDs stay off
 		digitalWrite(ledPin, LOW);
-		// redBeat(8, 64);
-		// rainbow();
 		rainbowCycle();
 
 		// If a tag is detected, go to the next state
@@ -60,7 +58,6 @@ void loop() {
 
 			// LEDs on
       		green();
-			// colorWipe(LED.Color(0, 0, 127));
 			digitalWrite(ledPin, HIGH);
 			playCoinSound();
 
@@ -75,7 +72,6 @@ void loop() {
 		// If data read fails, go back to scan state
 		else {
       		red();
-      		//colorWipe(LED.Color(127, 0, 0));
 			playDeath();
 			state = 0;
 		}
@@ -88,11 +84,11 @@ void loop() {
 
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
-      pollCounter++;
-      if (pollCounter == 1) {
-        state = 0;
-        pollCounter = 0;  
-      }
+      		pollCounter++;
+      		if (pollCounter == 1) {
+        		state = 0;
+        		pollCounter = 0;  
+      		}
 		}
 	}
 	else {
