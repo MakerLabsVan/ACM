@@ -22,7 +22,7 @@ TO-DO: Add picture
 __RDM8800 Pinout__  
 Top View
 ![alt text][rdm8800]
-[rdm8800]: https://github.com/MakerLabsVan/ACM/Documentation/imgs/rdm8800.png "RDM8800 Top View" 
+[rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View" 
 
 __ESP8266 Pinout__  
 Top View  
