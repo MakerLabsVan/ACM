@@ -49,7 +49,8 @@ void scanTest(int ID) {
     cmd += getStr.length();
 
     WIFI.println(cmd);
-    delay(waitForGET);
+    //delay(waitForGET);
+    delay(500);
 
     WIFI.println(getStr);
     delay(waitForFlush);
