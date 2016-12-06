@@ -8,8 +8,8 @@ This system is designed to authorize access to MakerLabs' laser cutter by an RFI
 Arduino
 RDM8800 (RFID reader)  
 ESP8266 (WiFi module)  
-LM1117 3.3 V linear regulator
-IRL530 MOSFET     
+LM1117 (3.3V linear regulator)   
+IRL530 (MOSFET)     
 LPD8806 LED strip
 
 # Software Required
