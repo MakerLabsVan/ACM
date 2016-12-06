@@ -16,8 +16,9 @@ Arduino IDE
 	- SoftwareSerial library  
 	- LPD8806 library
   
-# Schematics
-TO-DO: Add picture
+# Schematic  
+![alt text][schematic]
+[Schematic]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/schematic.PNG
 
 __RDM8800__  
 Antenna Pins  
