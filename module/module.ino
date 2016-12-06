@@ -6,7 +6,7 @@
 
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 SoftwareSerial RFID(RFID_RX, RFID_TX);
-LPD8806 LED = LPD8806(4, 11, 12);
+LPD8806 LED = LPD8806(numLEDs, dataPin, clockPin);
 
 int j = 0;
 

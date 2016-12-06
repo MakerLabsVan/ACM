@@ -84,12 +84,15 @@
 
 // Pins
 #define interlock A5
-#define supportPin 10
 #define driverX 4
 #define driverY 7
 #define speakerPin 8
 #define wifi_rst 9
+#define supportPin 10
+#define dataPin 11
+#define clockPin 12
 #define ledPin 13
+#define numLEDs 4
 #define eightBits 8
 
 // String related
