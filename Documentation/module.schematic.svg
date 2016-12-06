@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="236.34028"
-     inkscape:cy="531.58357"
+     inkscape:zoom="2.8"
+     inkscape:cx="446.07396"
+     inkscape:cy="523.47567"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -577,11 +577,11 @@
        transform="translate(-1.6828263,166.53543)"><flowRegion
          id="flowRegion4271"><rect
            id="rect4273"
-           width="77.14286"
-           height="14.642857"
+           width="82.85714"
+           height="15.714281"
            x="369.64285"
            y="373.32678" /></flowRegion><flowPara
-         id="flowPara4275">IoT Relay Signal</flowPara></flowRoot>    <path
+         id="flowPara4275">IoT RELAY SIGNAL</flowPara></flowRoot>    <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 273.75134,845.78601 49.24493,0 0,-115.40993 -98.74241,-0.25254"
        id="path4277"
@@ -727,5 +727,16 @@
        id="path4351"
        d="m 358.14984,586.10875 21.63229,0 0,201.3793 208.082,0"
        style="fill:none;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.02499461px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-  </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4353"
+       style="font-style:normal;font-weight:normal;font-size:8.56183434px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(-2.0277064,166.53543)"><flowRegion
+         id="flowRegion4355"><rect
+           id="rect4357"
+           width="69.64286"
+           height="11.785714"
+           x="370"
+           y="333.68393" /></flowRegion><flowPara
+         id="flowPara4359">SPEAKER</flowPara></flowRoot>  </g>
 </svg>
