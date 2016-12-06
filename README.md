@@ -5,7 +5,7 @@ This system is designed to authorize access to MakerLabs' laser cutter by an RFI
 
 
 # Hardware Required
-Arduino
+Arduino  
 RDM8800 (RFID reader)  
 ESP8266 (WiFi module)  
 LM1117 (3.3V linear regulator)   
