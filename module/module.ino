@@ -62,7 +62,7 @@ void loop() {
 	sendCommand(CMD_READ, blockID, userData, NULL);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
-	userID = (unsigned int)getTime(readData, numUserBytes, userOffset);
+	userID = (int)getTime(readData, numUserBytes, userOffset);
 	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
 	isAuthorized = (int)readData[classOffset] - ASCII_OFFSET;
 	// ----------------------------------------------------------------------
@@ -137,7 +137,7 @@ void loop() {
 		}
 		else {
 			getStringFromMem(cardUpdated);
-			delay(timeToRemoveCard);
+			//delay(timeToRemoveCard);
 		}
 		// --------------------------------------------------------------------
   		// Push to ACM
@@ -175,7 +175,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
   	int i, numValid, numInvalid = 0;
 
 	if (debug) {
-		Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
+		Serial.print(F(" ")); Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
 	}
  
 	while (1) {
