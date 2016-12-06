@@ -82,8 +82,8 @@ void loop() {
 	else {
 		// Translate the time data bytes to a value
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
-		// Check if the user has taken the class, skip if staff member
-		if ( !isAuthorized && !isStaff ) {
+		// Check if the user has taken the class and if the card has been initialized
+		if ( !isAuthorized && !userID ) {
 			red();
 			playDeath();
 			getStringFromMem(notAuthorized);
@@ -264,13 +264,14 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				}
 			}
 
-			if (i == sampleSize - 1) {
-				i = 0;
-			}
-	    	else {
-	      		i += 1;
-	    	}
+			// if (i == sampleSize - 1) {
+			// 	i = 0;
+			// }
+	    	// else {
+	      	// 	i += 1;
+	    	// }
 
+			i < sampleSize - 1 ? i += 1 : i = 0;
 	    	digitalWrite(interlock, HIGH);
 			lastPollTime = millis();
 		}
