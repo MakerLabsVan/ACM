@@ -98,8 +98,7 @@ void loop() {
 		// --------------------------------------------------------------------
 		else {
 			// Sound and text feedback
-			green();			
-			playCoinSound();
+			green();						
 			getStringFromMem(displayUsedTime);
 			Serial.println(existingTime);
 			getStringFromMem(user);
@@ -149,6 +148,7 @@ void loop() {
 		// --------------------------------------------------------------------
 		// Finished, prepare for next loop by switching to RFID serial port
 		getStringFromMem(done);
+		playCoinSound();					
 	}
 	else {
 		Serial.println();

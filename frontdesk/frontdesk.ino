@@ -37,7 +37,6 @@ void loop() {
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 
-		// LEDs stay off
 		digitalWrite(ledPin, LOW);
 		rainbowCycle();
 
@@ -62,7 +61,7 @@ void loop() {
 			playCoinSound();
 
 			WIFI.listen();
-			if ( 0 < scannedID && scannedID < 100) {
+			if ( isRange(scannedID, 0, 100) ) {
 				scanTest(scannedID);
 			}
 
