@@ -332,7 +332,7 @@ uint32_t Wheel(uint16_t WheelPos)
 void playCoinSound() {
 	int coinNotes[] = { 988, 1319 };
 	int coinNoteDurations[] = { 125, 400 };
-	int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+	int numCoinNotes = numElements(coinNotes);
 
 	for (int i = 0; i < numCoinNotes; i++) {
         tone(speakerPin, coinNotes[i]);
@@ -343,7 +343,7 @@ void playCoinSound() {
 
 void playDeath() {
 	int notes[] = { 247, 247, 247 };
-	int numNotes = sizeof(notes) / sizeof(notes[0]);
+	int numNotes = numElements(notes);
 
 	for (int i = 0; i < numNotes; i++) {
 		tone(speakerPin, notes[i]);

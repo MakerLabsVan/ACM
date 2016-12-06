@@ -123,6 +123,7 @@
 #define isRange(x, low, high) (low < x && x <= high) ? 1 : 0
 #define calcTime(x) (millis() - x)/1000
 #define timeSince(x) (millis() - x)
+#define numElements(x) sizeof(x)/sizeof(x[0])
 
 unsigned long lastOn = 0;
 unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00 };
