@@ -83,7 +83,7 @@ void loop() {
 		// Translate the time data bytes to a value
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 		// Check if the user has taken the class and if the card has been initialized
-		if ( !isAuthorized && !userID ) {
+		if ( !userID || !isAuthorized ) {
 			red();
 			playDeath();
 			getStringFromMem(notAuthorized);
