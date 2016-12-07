@@ -13,7 +13,7 @@ bool getResponse(unsigned char response[]) {
 	while (1) {
 		if (RFID.available()) {
 			response[i] = RFID.read();
-			if (response[i] == 0xBB) { 
+			if ( (response[i] == 0xBB) && (!RFID.available()) ) { 
 				break;
 			}
 			i++;
@@ -22,10 +22,10 @@ bool getResponse(unsigned char response[]) {
 
 	// 4th byte of response packet is the STATUS byte, 0x00 means OK
 	if (response[statusOffset] == 0x00) {
-		return true;
+		return 1;
 	}
 	else {
-		return false;
+		return 0;
 	}
 }
 /*
@@ -38,7 +38,7 @@ bool getResponse(unsigned char response[]) {
 		  Sector trailers (multiples of 4) should also not be written to.
 		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 */
-void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
+void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, unsigned long time = 0) {
 	unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 	if (command == CMD_GET_SNR) {

@@ -38,9 +38,8 @@ void setup() {
 
 void loop() {
 	// some variables
-	int isStaff, isAuthorized = 0;
-	bool isValidResponse = false;
-	unsigned int userID, totalTime = 0;
+	int8_t isStaff, isAuthorized, isValidResponse = 0;
+	int16_t userID, totalTime = 0;
 	unsigned long existingTime, elapsedTime = 0;
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
@@ -52,23 +51,23 @@ void loop() {
 	getStringFromMem(scan);
 	while (!isValidResponse) {
 		supportSystem(lastOn);
-		sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
+		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		rainbowCycle();	
 	}
 	// ----------------------------------------------------------------------
 	// RFID tag detected, get user ID and authorization for this machine
-	sendCommand(CMD_READ, blockID, userData, NULL);
+	sendCommand(CMD_READ, blockID, userData);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
-	userID = (int)getTime(readData, numUserBytes, userOffset);
-	isStaff = (int)readData[staffOffset] - ASCII_OFFSET;
-	isAuthorized = (int)readData[classOffset] - ASCII_OFFSET;
+	userID = (int16_t)getTime(readData, numUserBytes, userOffset);
+	isStaff = (int8_t)readData[staffOffset] - ASCII_OFFSET;
+	isAuthorized = (int8_t)readData[classOffset] - ASCII_OFFSET;
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);
-	sendCommand(CMD_READ, blockID, machineID, NULL);
+	sendCommand(CMD_READ, blockID, machineID);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	// -----------------------------------------------------------------------
@@ -183,7 +182,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		if (timeSince(lastPollTime) > pollInterval) {
 
 			// Polling logic
-			sendCommand(CMD_GET_SNR, blockID, machineID, NULL);
+			sendCommand(CMD_GET_SNR, blockID, machineID);
 			// if card is missing, increment a counter
 			if (!getResponse(serialNumber)) {
 				pollCounter += 1;
