@@ -57,11 +57,10 @@ void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char s
 		// timeByte is in format { 0xAA, 0xBB, 0xCC }
 		// in the first iteration, time gets shifted 2 bytes to get 0x000000AA
 		// then bitwise AND operation with 0xFF, then store in timeByte
-		int i = 0;
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
 		unsigned char timeByte[numTimeBytes];
 
-		for(i = 0; i < numTimeBytes; i++) {
+		for(int i = 0; i < numTimeBytes; i++) {
 			timeByte[i] = (time >> j) & MSB;
 			j -= eightBits;
 		}
