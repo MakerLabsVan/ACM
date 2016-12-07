@@ -95,11 +95,13 @@ void loop() {
 	}
 }
 
+/* This functions runs after every time loop runs */
 void serialEvent() {
 	int i = 0;
 	unsigned long existingTime = 0;
 
 	while (Serial.available()) {
+		// if no tag present, consume all data and send error
 		if (state == 0 || state == 1) {
 			while (Serial.available()) {
 				Serial.read();
@@ -121,7 +123,7 @@ void serialEvent() {
 		isValidResponse = getResponse(readData);
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 
-		while (existingTime != 0) {
+		while (!existingTime) {
 			Serial.write(existingTime);
 			existingTime >>= eightBits;
 		}
@@ -132,7 +134,7 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_RESET_TIME) {
 		characterRead[0] = 0;
 
-		preparePayload(COMMAND_RESET_TIME, 0, NULL, 0);
+		preparePayload(COMMAND_RESET_TIME);
 		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 
@@ -146,14 +148,14 @@ void serialEvent() {
 		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
 		convertASCII(numDigits);
 
-		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
+		preparePayload(COMMAND_REGISTER, 0, id, numDigits);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
-		if (id != 0) {
-			preparePayload(COMMAND_RESET_TIME, 0, NULL, 0);
+		if (!id) {
+			preparePayload(COMMAND_RESET_TIME);
 			sendCommand(CMD_WRITE, blockID, machineID);
-			while (id != 0 ) {
+			while (!id) {
 				Serial.write(id);
 				id >>= eightBits;
 			}
@@ -169,11 +171,11 @@ void serialEvent() {
 		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
 		convertASCII(numDigits);
 
-		preparePayload(COMMAND_REGISTER, NULL, id, numDigits);
+		preparePayload(COMMAND_REGISTER, id, numDigits);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
-		while (id != 0) {
+		while (!id) {
 			Serial.write(id);
 			id >>= eightBits;
 		}
@@ -199,7 +201,7 @@ void getStringFromMem(int index) {
 void playCoinSound() {
 	int coinNotes[] = { 988, 1319 };
 	int coinNoteDurations[] = { 125, 400 };
-	int numCoinNotes = sizeof(coinNotes) / sizeof(coinNotes[0]);
+	int numCoinNotes = numElements(coinNotes);
 
 	for (int i = 0; i < numCoinNotes; i++) {
         tone(speakerPin, coinNotes[i]);
@@ -210,7 +212,7 @@ void playCoinSound() {
 
 void playUnderground() {
 	int notes[] = { 131, 262 };
-	int numNotes = sizeof(notes) / sizeof(notes[0]);
+	int numNotes = numElements(notes);
 
 	for (int i = 0; i < numNotes; i++) {
 		tone(speakerPin, notes[i]);
@@ -221,7 +223,7 @@ void playUnderground() {
 
 void playDeath() {
 	int notes[] = { 247, 247, 247 };
-	int numNotes = sizeof(notes) / sizeof(notes[0]);
+	int numNotes = numElements(notes);
 
 	for (int i = 0; i < numNotes; i++) {
 		tone(speakerPin, notes[i]);
