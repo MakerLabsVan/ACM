@@ -122,8 +122,6 @@
 #define timeSince(x) (millis() - x)
 #define numElements(x) sizeof(x)/sizeof(x[0])
 
-//const bool isReject = true;
-//const unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 unsigned char payload[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 const char COMMAND_GET_TIME = '1';
