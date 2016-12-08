@@ -9,10 +9,11 @@ SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 int j = 0;
 // nLEDs, dataPin, clockPin
-LPD8806 LED = LPD8806(4, dataPin, clockPin);
+LPD8806 LED = LPD8806(numLEDs, dataPin, clockPin);
 
 int pollCounter, scannedID = 0;
 unsigned char readData[bufferSize];
+
 volatile bool isValidResponse = false;
 volatile char characterRead[bufferSize];
 volatile int state, id = 0;
@@ -21,11 +22,12 @@ void setup() {
 	Serial.begin(moduleBaud);
 	WIFI.begin(moduleBaud);
   	LED.begin();
+
 	pinMode(ledPin, OUTPUT);
 	pinMode(wifi_rst, OUTPUT);
 	pinMode(speakerPin, OUTPUT);
-	connectWIFI();
 
+	connectWIFI();
   	LED.show();
 	RFID.begin(moduleBaud);
 }
@@ -45,7 +47,7 @@ void loop() {
 			state = 1;
 		}
 	}
-	// Read data 
+	// Read data -- this should probably not be state
 	else if (state == 1) {
 		sendCommand(CMD_READ, blockID, userData);
 		delay(waitforReadResponse);
