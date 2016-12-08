@@ -6,7 +6,7 @@ This system is designed to authorize access to MakerLabs' laser cutter by an RFI
 
 # Hardware Required
 Arduino  
-RDM8800 (RFID reader)  
+RDM880 (RFID reader)  
 ESP8266 (WiFi module)  
 LM1117 (3.3V linear regulator)   
 IRL530 (MOSFET)     
@@ -21,7 +21,7 @@ Arduino IDE
 ![alt text][schematic]
 [Schematic]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/schematic.PNG
 
-__RDM8800__  
+__RDM880__  
 Antenna Pins  
 ![alt text][rdm8800]
 [rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View"  
