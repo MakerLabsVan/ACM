@@ -27,7 +27,7 @@ Antenna Pins
 5 pin Header -> 5V GND TX RX RST
 
 __ESP8266__  
-<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG">
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG" height="350" width="150">
 
 __Other Parts and Notes__
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
