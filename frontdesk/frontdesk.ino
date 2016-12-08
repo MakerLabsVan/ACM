@@ -138,10 +138,7 @@ void serialEvent() {
 		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 
-		while (!id) {
-			Serial.write(id);
-			id >>= eightBits;
-		}
+		Serial.write(done);
 		Serial.write(END_CHAR);
 	}
 
