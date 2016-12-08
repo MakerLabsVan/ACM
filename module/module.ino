@@ -51,14 +51,14 @@ void loop() {
 	getStringFromMem(scan);
 	while (!isValidResponse) {
 		supportSystem(lastOn);
-		sendCommand(CMD_GET_SNR, blockID, machineID);
+		sendCommand(CMD_GET_SNR, blockID, machineID, 0);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
 		rainbowCycle();	
 	}
 	// ----------------------------------------------------------------------
 	// RFID tag detected, get user ID and authorization for this machine
-	sendCommand(CMD_READ, blockID, userData);
+	sendCommand(CMD_READ, blockID, userData, 0);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	userID = (int16_t)getTime(readData, numUserBytes, userOffset);
@@ -67,7 +67,7 @@ void loop() {
 	// ----------------------------------------------------------------------
 	// Read block that contains time data for this machine
 	getStringFromMem(detected);
-	sendCommand(CMD_READ, blockID, machineID);
+	sendCommand(CMD_READ, blockID, machineID, 0);
 	delay(waitforReadResponse);
 	isValidResponse = getResponse(readData);
 	// -----------------------------------------------------------------------
@@ -182,7 +182,7 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 		if (timeSince(lastPollTime) > pollInterval) {
 
 			// Polling logic
-			sendCommand(CMD_GET_SNR, blockID, machineID);
+			sendCommand(CMD_GET_SNR, blockID, machineID, 0);
 			// if card is missing, increment a counter
 			if (!getResponse(serialNumber)) {
 				pollCounter += 1;

@@ -38,7 +38,7 @@ bool getResponse(unsigned char response[]) {
 		  Sector trailers (multiples of 4) should also not be written to.
 		  i.e. Block 3, 7 and 11 are sector trailers that contain authentication keys.
 */
-void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, unsigned long time = 0) {
+void sendCommand(unsigned char command, unsigned char numBlocks, unsigned char startAddress, unsigned long time) {
 	unsigned char keyA[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 	if (command == CMD_GET_SNR) {

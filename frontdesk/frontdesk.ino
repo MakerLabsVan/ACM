@@ -134,11 +134,14 @@ void serialEvent() {
 	if (characterRead[0] == COMMAND_RESET_TIME) {
 		characterRead[0] = 0;
 
-		preparePayload(COMMAND_RESET_TIME);
+		preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
 		sendCommand(CMD_WRITE, blockID, machineID);
 		delay(waitforWriteResponse);
 
-		Serial.write(done);
+		while (!id) {
+			Serial.write(id);
+			id >>= eightBits;
+		}
 		Serial.write(END_CHAR);
 	}
 
@@ -148,12 +151,12 @@ void serialEvent() {
 		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
 		convertASCII(numDigits);
 
-		preparePayload(COMMAND_REGISTER, 0, id, numDigits);
+		preparePayload(COMMAND_REGISTER, id, numDigits, 0);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
 		if (!id) {
-			preparePayload(COMMAND_RESET_TIME);
+			preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
 			sendCommand(CMD_WRITE, blockID, machineID);
 			while (!id) {
 				Serial.write(id);
@@ -171,7 +174,7 @@ void serialEvent() {
 		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
 		convertASCII(numDigits);
 
-		preparePayload(COMMAND_REGISTER, id, numDigits);
+		preparePayload(COMMAND_REGISTER, id, numDigits, 0);
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 

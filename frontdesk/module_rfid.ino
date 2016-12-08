@@ -86,7 +86,7 @@ void sendToRFID(unsigned char CMD[], int size) {
 	in the first iteration, time gets shifted 2 bytes to get 0x000000AA
 	then bitwise AND operation with 0xFF, then store in timeByte
 */
-void preparePayload(char command, int id = 0, int numDigits = 0, unsigned long time = 0) {
+void preparePayload(char command, int id, int numDigits, unsigned long time) {
 
 	if ( (command == COMMAND_RESET_TIME) || (command == COMMAND_MODIFY_TIME) ) {
 		int j = 2 * eightBits; // only need to shift 2 times, 1 byte == 8 bits
