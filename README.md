@@ -29,7 +29,7 @@ Antenna Pins
 __ESP8266__  
 <img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG" height="150" width="400">
 
-__Other Parts and Notes__
+__Other Parts and Notes__  
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
 the current going into the RX pin of the WiFi module does not exceed 12 mA.  
 <img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300">
