@@ -23,17 +23,14 @@ Arduino IDE
 
 __RDM880__  
 Antenna Pins  
-![alt text][rdm8800]
-[rdm8800]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG "RDM8800 Top View"  
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG">  
 5 pin Header -> 5V GND TX RX RST
 
 __ESP8266__  
-![alt text][esp8266]
-[esp8266]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG "ESP8266 Top View"
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG">
 
 __Other Parts and Notes__
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
-the current going into the RX pin of the WiFi module does not exceed 12 mA.
-<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="250" width="250">
-![alt text][levelshifter]
-[levelshifter]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG "Level Shifter"
+the current going into the RX pin of the WiFi module does not exceed 12 mA.  
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300">
+
