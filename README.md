@@ -35,4 +35,4 @@ __Other Parts and Notes__
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
 the current going into the RX pin of the WiFi module does not exceed 12 mA.  
 ![alt text][levelshifter]
-[levelshifter]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG "Level Shifter"
+[levelshifter]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG =250x250 "Level Shifter"
