@@ -33,6 +33,7 @@ __ESP8266__
 
 __Other Parts and Notes__
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
-the current going into the RX pin of the WiFi module does not exceed 12 mA.  
+the current going into the RX pin of the WiFi module does not exceed 12 mA.
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="250" width="250">
 ![alt text][levelshifter]
 [levelshifter]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG "Level Shifter"
