@@ -4,9 +4,9 @@ is attached through a serial connection to the application. This app can run on 
 
 # Requirements  
 Flask  
-- SocketIO extension  
+- SocketIO extension
 AngularJS  
-- SocketIO library  
+- SocketIO library
 Python 3  
 - PySerial module  
 - GSpread module  
