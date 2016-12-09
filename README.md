@@ -32,5 +32,10 @@ __ESP8266__
 # Other Parts and Notes  
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
 the current going into the RX pin of the WiFi module does not exceed 12 mA.  
-<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300">
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300">  
+
+The baud rate of the WiFi module varies with the supplier. Depending on the firmware version, the baud rate can
+be changed through the command set. Otherwise, firmware can be flashed to update the command set. The baud rate used here
+was 9600 for reliable performance with SoftwareSerial. YMMV.    
+Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
