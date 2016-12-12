@@ -62,6 +62,8 @@ void loop() {
 			digitalWrite(ledPin, HIGH);
 			playCoinSound();
 
+			// Constrain ID range for now... need to figure out why
+			// large IDs are being sent randomly
 			WIFI.listen();
 			if ( isRange(scannedID, 0, 100) ) {
 				scanTest(scannedID);
@@ -86,7 +88,7 @@ void loop() {
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
       		pollCounter++;
-      		if (pollCounter == 1) {
+      		if (pollCounter == 2) {
         		state = 0;
         		pollCounter = 0;  
       		}
@@ -117,6 +119,7 @@ void serialEvent() {
 		}
 	}
 
+	// Read the time on card
 	if (characterRead[0] == COMMAND_GET_TIME) {
 		characterRead[0] = 0;
 
@@ -125,6 +128,7 @@ void serialEvent() {
 		isValidResponse = getResponse(readData);
 		existingTime = getTime(readData, numTimeBytes, timeOffset);
 
+		// Send it to ACM
 		while (!existingTime) {
 			Serial.write(existingTime);
 			existingTime >>= eightBits;
@@ -133,6 +137,7 @@ void serialEvent() {
 		Serial.write(END_CHAR);
 	}
 
+	// Reset the time on card
 	if (characterRead[0] == COMMAND_RESET_TIME) {
 		characterRead[0] = 0;
 
@@ -154,6 +159,7 @@ void serialEvent() {
 		sendCommand(CMD_WRITE, blockID, userData);
 		delay(waitforWriteResponse);
 
+		// Make sure time on card is zero when registered
 		if (!id) {
 			preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
 			sendCommand(CMD_WRITE, blockID, machineID);
@@ -167,6 +173,7 @@ void serialEvent() {
 		playUnderground();
 	}
 
+	// Update card permissions
 	if (characterRead[0] == COMMAND_REFRESH) {
 		characterRead[0] = 0;
 		

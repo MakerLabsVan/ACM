@@ -3,17 +3,17 @@ This is a locally run application that serves as a web interface for ACM data an
 is attached through a serial connection to the application. This app can run on Windows, OS X and Linux.
 
 # Requirements  
-Flask  
-- SocketIO extension  
+Flask (http://flask.pocoo.org)  
+- SocketIO extension (https://flask-socketio.readthedocs.io/en/latest/)  
 
 AngularJS  
-- SocketIO library  
+- SocketIO library (https://socket.io)  
 
-Python 3  
-- PySerial module  
-- GSpread module  
+Python 3 (https://www.python.org/downloads/) 
+- PySerial module (https://pythonhosted.org/pyserial/)  
+- GSpread module (https://gspread.readthedocs.io/en/latest/)  
 
 # Installation  
-1. Install Flask and Python3
+1. Install Python 3 and Flask
 2. Install PySerial, GSpread, and Flask-SocketIO modules
 3. App is started by entering "python3 server.py"
