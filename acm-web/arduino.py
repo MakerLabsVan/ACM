@@ -17,11 +17,14 @@ class Arduino:
 			try:
 				COM = PATH + str(i)
 				self.serial = serial.Serial(COM)
+				print("Successfully connected to %s" % COM)				
 				break
 			except:
 				i += 1
-
-		print("Successfully connected to %s" % COM)
+				if i == 1000:
+					print("Scanner not detected")
+					break
+		
 
 	def resetTime(self):
 		self.serial.write(constant.COMMAND_RESET_TIME.encode())

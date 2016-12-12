@@ -92,8 +92,8 @@
                     <table id="access-table" class="table-bordered">
                       <th colspan="2">Classes Taken</th>                      
                       <tr>
-                        <td ng-class="display.access[0]">Laser A</td>
-                        <td ng-class="display.access[1]">Laser B</td>
+                        <td ng-class="display.access[0]">Laser</td>
+                        <!--<td ng-class="display.access[1]">Laser B</td>-->
                         <td ng-class="display.access[2]">Shopbot</td>
                         <td ng-class="display.access[3]">Woodshop</td>
                         <td ng-class="display.access[4]">Metalshop</td>
@@ -158,11 +158,11 @@
                       <label for="start">Membership Start Date</label>
                       <input id="start" type="date" ng-model="user.startDay" min="2000-01-01" max="2552-09-19">
 
-                      <label for="type">Type of User</label>
+                      <!--<label for="type">Type of User</label>
                       <select id="type" ng-model="user.memberType">
                         <option value="0">Member</option>
                         <option value="1">Staff</option>
-                      </select>
+                      </select>-->
                 
                       <div>
                         <label for="registration-table">Access</label>
@@ -211,7 +211,6 @@
         <!-- jQuery -->
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="../static/js/vendor/jquery-3.1.0.js"></script>
-        <script src="../static/js/views.js"></script>
 
         <!-- AngularJS -->
         <script src="../static/js/vendor/angular.min.js"></script>
