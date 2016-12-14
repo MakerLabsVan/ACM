@@ -17,9 +17,9 @@ class Database:
 
             spreadsheet = gc.open("MakerLabs ACM")
             self.user_data = spreadsheet.worksheet("Users")
-            self.scan_data = spreadsheet.worksheet("Scan Log")
-            self.laser_data = spreadsheet.worksheet("Laser Log")
-            self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
+            self.scan_data = spreadsheet.worksheet("Check Ins")
+            self.laser_data = { "A": spreadsheet.worksheet("Laser A Log"), "B": spreadsheet.worksheet("Laser B Log") }
+
             print("Opened database")
     
     def isTokenExpired(self):
@@ -36,7 +36,8 @@ class Database:
     def insertUser(self, data):
         print("Inserting " + data["memberName"])
         self.authorize()
-
+        self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
+        
         # Create new row (and make sure its created)
         self.user_data.add_rows(1)
         currRowCount = self.user_data.row_count
@@ -81,29 +82,33 @@ class Database:
         return found
     
     def scanLog(self, id):
-        print("Logging user %d at Front Desk" % id)
-        cellList = [ datetime.now().date().isoformat(), datetime.now().time().isoformat(), id ]
+        print("Logging User %d at Front Desk" % id)
+        cellList = [ " ", datetime.now().date().isoformat() + " " + datetime.now().time().isoformat(), id ]
+        
         self.authorize()
-        self.scan_data.append_row(cellList)
+        current_row = int(self.scan_data.acell(constant.CELL_PKEY).value) + 1
+        if current_row == constant.MAX_LOG:
+            current_row = constant.MIN_LOG
+
+        self.scan_data.insert_row(cellList, current_row)
+        self.scan_data.update_acell(constant.CELL_PKEY, current_row)
     
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["uid"], data["laserType"]))
+
         self.authorize()
+        current_row = int(self.laser_data[ data["laserType"] ].acell(constant.CELL_PKEY).value) + 1
+        if current_row == constant.MAX_LOG:
+            current_row = constant.MIN_LOG
 
-        # Add and retrieve new row
-        self.laser_data.add_rows(1)
-        currRowCount = self.laser_data.row_count
-
-        cellList = self.laser_data.range(constant.RANGE_LASER_START + str(currRowCount) + constant.RANGE_LASER_END + str(currRowCount))
-
-        # Insert and push updated cells to sheet
-        cellList[constant.COL_LASER_TYPE].value = data["laserType"]
-        cellList[constant.COL_DATE].value = datetime.now().date().isoformat()
-        cellList[constant.COL_TIME].value = datetime.now().time().isoformat()
-        cellList[constant.COL_ID_LOG].value = data["uid"]
-        cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
-        cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
-        self.laser_data.update_cells(cellList)
+        cellList = []
+        cellList.append(data["laserType"])
+        cellList.append(datetime.now().date().isoformat() + " " + datetime.now().time().isoformat())
+        cellList.append(data["uid"])
+        cellList.append(data["elapsedTime"])
+        cellList.append(data["existingTime"])
+        self.laser_data[ data["laserType"] ].insert_row(cellList, current_row)
+        self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, current_row)
     
     def insertLaserTime(self, data):
         self.authorize()

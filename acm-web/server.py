@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-arduino = Arduino()
+# arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -39,7 +39,13 @@ def registerCard():
 def laserLog(laser, id, elapsedTime, existingTime):
 	data = {"laserType": laser, "uid": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
 	database.laserLog(data)
-	return database.insertLaserTime(data)
+	# return database.insertLaserTime(data)
+	return "1"
+
+@app.route("/scanTest2/<int:id>")
+def scanTest2(id):
+	database.scanLog(id)
+	return str(id)
 
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
@@ -55,12 +61,6 @@ def serialTest(id):
 			# reset card if a month has passed
 			if data[-1] == "1":
 				resetTime()
-
-			# refresh card permissions
-			if refresh(id, data) == str(id):
-				refreshStatus = "Card successfully updated"
-			else:
-				refreshStatus = "Card not updated"
 
 			socketio.emit('refresh', refreshStatus)
 
