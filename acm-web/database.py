@@ -83,7 +83,6 @@ class Database:
     
     def scanLog(self, id):
         print("Logging User %d at Front Desk" % id)
-        cellList = [ " ", datetime.now().date().isoformat() + " " + datetime.now().time().isoformat(), id ]
         
         self.authorize()
         currentRow = int(self.scan_data.acell(constant.CELL_PKEY).value) + 1

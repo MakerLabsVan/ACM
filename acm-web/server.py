@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-# arduino = Arduino()
+arduino = Arduino()
 database = Database()
 
 @app.route("/")
@@ -39,13 +39,7 @@ def registerCard():
 def laserLog(laser, id, elapsedTime, existingTime):
 	data = {"laserType": laser, "uid": id, "elapsedTime": elapsedTime, "existingTime": existingTime}
 	database.laserLog(data)
-	# return database.insertLaserTime(data)
-	return "1"
-
-@app.route("/scanTest2/<int:id>")
-def scanTest2(id):
-	database.scanLog(id)
-	return str(id)
+	return database.insertLaserTime(data)
 
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
@@ -53,14 +47,15 @@ def serialTest(id):
 	if 0 < id and id < 50000:
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
-			socketio.emit('scan', id)		
-			# push data to web app
-			data = database.retrieveUser(id)			
-			socketio.emit('data', data)		
+			# immediately send ID to web app for responsiveness
+			socketio.emit('scan', id)
 
-			# reset card if a month has passed
-			if data[-1] == "1":
-				resetTime()
+			# get user data and push to web app
+			data = database.retrieveUser(id)			
+			socketio.emit('data', data)
+
+			# send data to arduino	
+			refresh(id, data)
 
 			database.scanLog(id)
 						
@@ -68,6 +63,9 @@ def serialTest(id):
 
 @app.route("/refresh")
 def refresh(id, data):
+	if data[-1] == "1":
+		resetTime()
+	
 	userData = [ str(id), data[constant.COL_MEMBER_TYPE] ]
 	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
 	print(userData)
