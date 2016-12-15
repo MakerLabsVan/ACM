@@ -116,7 +116,7 @@ void serialEvent() {
 		}
 	}
 
-	if (!characterRead[0]) {
+	if (characterRead[0]) {
 		// Read the time on card
 		if (characterRead[0] == COMMAND_GET_TIME) {
 			characterRead[0] = 0;
