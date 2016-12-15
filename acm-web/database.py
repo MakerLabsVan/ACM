@@ -70,6 +70,7 @@ class Database:
         self.user_data.update_cells(cellList)
         return data["uid"]
     
+    # replace an existing users RFID
     def existingUser(self, data):
         self.authorize()
         try:
@@ -136,8 +137,8 @@ class Database:
         try:
             row = idList.index(str(id)) + 1
         except:
-            print("User does not exist")
             row = 0
+            print("User does not exist")            
 
         return row 
 
