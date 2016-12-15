@@ -7,8 +7,8 @@ app.config(function($interpolateProvider) {
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
-	$scope.tab = [ "active", "", "" ];
-	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane"];
+	$scope.tab = [ "active", "", "", "" ];
+	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane", "tab-pane"];
 	$scope.progress = { isWaiting: false };
 	$scope.user = {
 		isNew: true,
@@ -37,8 +37,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	};
 
 	$scope.activeTab = function(clicked) {
-		$scope.tab = [ "", "", ""];
-		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ];
+		$scope.tab = [ "", "", "", "" ];
+		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane", "tab-pane" ];
 		$scope.tab[clicked] = "active";
 		$scope.tabPane[clicked] += " " + $scope.tab[clicked];
 	};
