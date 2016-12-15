@@ -63,11 +63,14 @@ def serialTest(id):
 
 @app.route("/refresh")
 def refresh(id, data):
+	# if a month has passed, reset time on card
 	if data[-1] == "1":
 		resetTime()
 	
+	# format user data
 	userData = [ str(id), data[constant.COL_MEMBER_TYPE] ]
-	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
+	userData.extend( data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1] )
+
 	print(userData)
 	return arduino.refreshUser(userData)
 
