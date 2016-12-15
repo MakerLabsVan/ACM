@@ -39,8 +39,8 @@ void setup() {
 void loop() {
 	// some variables
 	int8_t isStaff, isAuthorized, isValidResponse = 0;
-	int16_t userID, totalTime = 0;
-	unsigned long existingTime, elapsedTime = 0;
+	int16_t userID = 0;
+	unsigned long existingTime, elapsedTime, totalTime = 0;
 	unsigned char readData[bufferSize];
 	// ----------------------------------------------------------------------
 	// Turn LED off, lock laser cutter
