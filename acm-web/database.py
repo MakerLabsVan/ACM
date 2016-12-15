@@ -86,29 +86,35 @@ class Database:
         cellList = [ " ", datetime.now().date().isoformat() + " " + datetime.now().time().isoformat(), id ]
         
         self.authorize()
-        current_row = int(self.scan_data.acell(constant.CELL_PKEY).value) + 1
-        if current_row == constant.MAX_LOG:
-            current_row = constant.MIN_LOG
+        currentRow = int(self.scan_data.acell(constant.CELL_PKEY).value) + 1
+        if currentRow == constant.MAX_LOG:
+            currentRow = constant.MIN_LOG
+        
+        cellList = self.scan_data.range(constant.RANGE_SCAN_START + str(currentRow) + constant.RANGE_SCAN_END + str(currentRow))
 
-        self.scan_data.insert_row(cellList, current_row)
-        self.scan_data.update_acell(constant.CELL_PKEY, current_row)
+        cellList[constant.COL_DATE].value = datetime.now().date().isoformat() + " " + datetime.now().time().isoformat()
+        cellList[constant.COL_ID_LOG].value = id
+
+        self.scan_data.update_cells(cellList)
+        self.scan_data.update_acell(constant.CELL_PKEY, currentRow)
     
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["uid"], data["laserType"]))
 
         self.authorize()
-        current_row = int(self.laser_data[ data["laserType"] ].acell(constant.CELL_PKEY).value) + 1
-        if current_row == constant.MAX_LOG:
-            current_row = constant.MIN_LOG
+        currentRow = int(self.laser_data[ data["laserType"] ].acell(constant.CELL_PKEY).value) + 1
+        if currentRow == constant.MAX_LOG:
+            currentRow = constant.MIN_LOG
+        
+        cellList = self.laser_data[ data["laserType"] ].range(constant.RANGE_LASER_START + str(currentRow) + constant.RANGE_LASER_END + str(currentRow))
 
-        cellList = []
-        cellList.append(data["laserType"])
-        cellList.append(datetime.now().date().isoformat() + " " + datetime.now().time().isoformat())
-        cellList.append(data["uid"])
-        cellList.append(data["elapsedTime"])
-        cellList.append(data["existingTime"])
-        self.laser_data[ data["laserType"] ].insert_row(cellList, current_row)
-        self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, current_row)
+        cellList[constant.COL_LASER_TYPE].value = data["laserType"]
+        cellList[constant.COL_DATE].value = datetime.now().date().isoformat() + " " + datetime.now().time().isoformat()
+        cellList[constant.COL_ID_LOG].value = data["uid"]
+        cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
+        cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
+        self.laser_data[ data["laserType"] ].update_cells(cellList)
+        self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, currentRow)
     
     def insertLaserTime(self, data):
         self.authorize()

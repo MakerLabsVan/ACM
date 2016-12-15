@@ -62,8 +62,6 @@ def serialTest(id):
 			if data[-1] == "1":
 				resetTime()
 
-			socketio.emit('refresh', refreshStatus)
-
 			database.scanLog(id)
 						
 	return str(id)
