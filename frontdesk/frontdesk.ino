@@ -42,45 +42,40 @@ void loop() {
 		digitalWrite(ledPin, LOW);
 		rainbowCycle();
 
-		// If a tag is detected, go to the next state
+		// If a tag is detected, read data and alert web app
 		if (isValidResponse) {
-			state = 1;
-		}
-	}
-	// Read data -- this should probably not be state
-	else if (state == 1) {
-		sendCommand(CMD_READ, blockID, userData);
-		delay(waitforReadResponse);
-		isValidResponse = getResponse(readData);
+			sendCommand(CMD_READ, blockID, userData);
+			delay(waitforReadResponse);
+			isValidResponse = getResponse(readData);
 
-		// If data is successfully read, alert web app
-		if (isValidResponse) {
-			scannedID = (int)getTime(readData, numUserBytes, userOffset);
+			// If data is successfully read, alert web app
+			if (isValidResponse) {
+				scannedID = (int)getTime(readData, numUserBytes, userOffset);
 
-			// LEDs on
-      		green();
-			digitalWrite(ledPin, HIGH);
-			playCoinSound();
+				// LEDs on
+				green();
+				digitalWrite(ledPin, HIGH);
+				playCoinSound();
+				WIFI.listen();
+				
+				// Constrain ID range for now... need to figure out why
+				// large IDs are being sent randomly
+				if ( isRange(scannedID, 0, 100) ) {
+					scanTest(scannedID);
+				}
 
-			// Constrain ID range for now... need to figure out why
-			// large IDs are being sent randomly
-			WIFI.listen();
-			if ( isRange(scannedID, 0, 100) ) {
-				scanTest(scannedID);
+				RFID.listen();
+				state = 1;
 			}
-
-			RFID.listen();
-			state = 2;
-		}
-		// If data read fails, go back to scan state
-		else {
-      		red();
-			playDeath();
-			state = 0;
+			else {
+      			red();
+				playDeath();
+				state = 0;
+			}
 		}
 	}
 	// Other tag operations
-	else if (state == 2) {
+	else if (state == 1) {
 		sendCommand(CMD_GET_SNR, blockID, machineID);
 		delay(waitforSerialResponse);
 		isValidResponse = getResponse(readData);
@@ -94,6 +89,7 @@ void loop() {
       		}
 		}
 	}
+	// Go back to scan state otherwise
 	else {
 		state = 0;
 	}
@@ -106,91 +102,94 @@ void serialEvent() {
 
 	while (Serial.available()) {
 		// if no tag present, consume all data and send error
-		if (state == 0 || state == 1) {
+		if (state == 0) {
 			while (Serial.available()) {
 				Serial.read();
 			}
 			Serial.write(ERROR_CHAR);
 			Serial.write(END_CHAR);
 		}
+		// otherwise, receive data and process
 		else {
 			characterRead[i] = Serial.read();
 			i++;
 		}
 	}
 
-	// Read the time on card
-	if (characterRead[0] == COMMAND_GET_TIME) {
-		characterRead[0] = 0;
+	if (characterRead[0]) {
+		// Read the time on card
+		if (characterRead[0] == COMMAND_GET_TIME) {
+			characterRead[0] = 0;
 
-		sendCommand(CMD_READ, blockID, machineID);
-		delay(waitforReadResponse);
-		isValidResponse = getResponse(readData);
-		existingTime = getTime(readData, numTimeBytes, timeOffset);
+			sendCommand(CMD_READ, blockID, machineID);
+			delay(waitforReadResponse);
+			isValidResponse = getResponse(readData);
+			existingTime = getTime(readData, numTimeBytes, timeOffset);
 
-		// Send it to ACM
-		while (!existingTime) {
-			Serial.write(existingTime);
-			existingTime >>= eightBits;
+			// Send it to ACM
+			while (existingTime) {
+				Serial.write(existingTime);
+				existingTime >>= eightBits;
+			}
+			
+			Serial.write(END_CHAR);
 		}
-		
-		Serial.write(END_CHAR);
-	}
 
-	// Reset the time on card
-	if (characterRead[0] == COMMAND_RESET_TIME) {
-		characterRead[0] = 0;
+		// Reset the time on card
+		if (characterRead[0] == COMMAND_RESET_TIME) {
+			characterRead[0] = 0;
 
-		preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
-		sendCommand(CMD_WRITE, blockID, machineID);
-		delay(waitforWriteResponse);
-
-		Serial.write(done);
-		Serial.write(END_CHAR);
-	}
-
-	if (characterRead[0] == COMMAND_REGISTER) {
-		characterRead[0] = 0;
-
-		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
-		convertASCII(numDigits);
-
-		preparePayload(COMMAND_REGISTER, id, numDigits, 0);
-		sendCommand(CMD_WRITE, blockID, userData);
-		delay(waitforWriteResponse);
-
-		// Make sure time on card is zero when registered
-		if (!id) {
 			preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
 			sendCommand(CMD_WRITE, blockID, machineID);
-			while (!id) {
+			delay(waitforWriteResponse);
+
+			Serial.write(done);
+			Serial.write(END_CHAR);
+		}
+
+		if (characterRead[0] == COMMAND_REGISTER) {
+			characterRead[0] = 0;
+
+			int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
+			convertASCII(numDigits);
+
+			preparePayload(COMMAND_REGISTER, id, numDigits, 0);
+			sendCommand(CMD_WRITE, blockID, userData);
+			delay(waitforWriteResponse);
+
+			// Make sure time on card is zero when registered
+			if (id) {
+				preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
+				sendCommand(CMD_WRITE, blockID, machineID);
+				while (id) {
+					Serial.write(id);
+					id >>= eightBits;
+				}
+			}
+
+			Serial.write(END_CHAR);
+			playUnderground();
+		}
+
+		// Update card permissions
+		if (characterRead[0] == COMMAND_REFRESH) {
+			characterRead[0] = 0;
+			
+			int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
+			convertASCII(numDigits);
+
+			preparePayload(COMMAND_REGISTER, id, numDigits, 0);
+			sendCommand(CMD_WRITE, blockID, userData);
+			delay(waitforWriteResponse);
+
+			while (id) {
 				Serial.write(id);
 				id >>= eightBits;
 			}
+
+			Serial.write(END_CHAR);
+			playUnderground();
 		}
-
-		Serial.write(END_CHAR);
-		playUnderground();
-	}
-
-	// Update card permissions
-	if (characterRead[0] == COMMAND_REFRESH) {
-		characterRead[0] = 0;
-		
-		int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
-		convertASCII(numDigits);
-
-		preparePayload(COMMAND_REGISTER, id, numDigits, 0);
-		sendCommand(CMD_WRITE, blockID, userData);
-		delay(waitforWriteResponse);
-
-		while (!id) {
-			Serial.write(id);
-			id >>= eightBits;
-		}
-
-		Serial.write(END_CHAR);
-		playUnderground();
 	}
 }
 
