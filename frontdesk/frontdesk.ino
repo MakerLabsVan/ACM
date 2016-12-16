@@ -127,7 +127,7 @@ void serialEvent() {
 			existingTime = getTime(readData, numTimeBytes, timeOffset);
 
 			// Send it to ACM
-			while (!existingTime) {
+			while (existingTime) {
 				Serial.write(existingTime);
 				existingTime >>= eightBits;
 			}
@@ -158,10 +158,10 @@ void serialEvent() {
 			delay(waitforWriteResponse);
 
 			// Make sure time on card is zero when registered
-			if (!id) {
+			if (id) {
 				preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
 				sendCommand(CMD_WRITE, blockID, machineID);
-				while (!id) {
+				while (id) {
 					Serial.write(id);
 					id >>= eightBits;
 				}
@@ -182,7 +182,7 @@ void serialEvent() {
 			sendCommand(CMD_WRITE, blockID, userData);
 			delay(waitforWriteResponse);
 
-			while (!id) {
+			while (id) {
 				Serial.write(id);
 				id >>= eightBits;
 			}
