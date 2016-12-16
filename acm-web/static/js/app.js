@@ -116,6 +116,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.user.memberType = "0";
 		}
 	}
+	$scope.getLaserData = function() {
+		$http.get("../laserData").success(function(res) {
+			$scope.laserData = res;
+		})
+	}
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");

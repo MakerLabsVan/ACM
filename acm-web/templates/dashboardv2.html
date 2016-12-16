@@ -14,9 +14,6 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Flipclock -->
-    <link href="../static/css/flipclock.css" rel="stylesheet">
-
     <!-- Custom styles for this template -->
     <link href="../static/css/custom/dashboardv2.css" rel="stylesheet">
 
@@ -198,7 +195,10 @@
 
 
             <!-- START LASER DATA -->
-            
+            <div id="laser-data" ng-class="tabPane[3]">
+              <button type="button" class="btn btn-success" ng-click="getLaserData()">Get Data</button>              
+              //laserData//
+            </div>
             <!-- END LASER DATA -->
 
           </div>
