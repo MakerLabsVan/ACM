@@ -166,12 +166,10 @@ void loop() {
 */
 unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTime) {
 	// some variables used in this scope
-	unsigned long startTime = 0;
-	unsigned long lastPollTime = 0;
+	unsigned long startTime, lastPollTime = 0;
 	unsigned int periodX, periodY;
-	unsigned int pollCounter = 0;
 	int signals[] = { 0, 0, 0, 0, 0 };
-  	int i, numValid, numInvalid = 0;
+  	int i, numValid, numInvalid, pollCounter = 0;
 
 	if (debug) {
 		Serial.print(F(" ")); Serial.print(startTime); Serial.print(F(" ")); Serial.println(elapsedTime);
@@ -263,13 +261,6 @@ unsigned long accumulator(unsigned char serialNumber[], unsigned long elapsedTim
 				}
 			}
 
-			// if (i == sampleSize - 1) {
-			// 	i = 0;
-			// }
-	    	// else {
-	      	// 	i += 1;
-	    	// }
-
 			i < sampleSize - 1 ? i += 1 : i = 0;
 	    	digitalWrite(interlock, HIGH);
 			lastPollTime = millis();
@@ -328,6 +319,7 @@ uint32_t Wheel(uint16_t WheelPos)
   }
   return(LED.Color(r,g,b));
 }
+
 void playCoinSound() {
 	int coinNotes[] = { 988, 1319 };
 	int coinNoteDurations[] = { 125, 400 };

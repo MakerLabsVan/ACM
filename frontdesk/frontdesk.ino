@@ -8,7 +8,6 @@ SoftwareSerial RFID(RFID_RX, RFID_TX);
 SoftwareSerial WIFI(WIFI_RX, WIFI_TX);
 
 int j = 0;
-// nLEDs, dataPin, clockPin
 LPD8806 LED = LPD8806(numLEDs, dataPin, clockPin);
 
 int pollCounter, scannedID = 0;
@@ -60,7 +59,7 @@ void loop() {
 				
 				// Constrain ID range for now... need to figure out why
 				// large IDs are being sent randomly
-				if ( isRange(scannedID, 0, 100) ) {
+				if ( isRange(scannedID, 0, 500) ) {
 					scanTest(scannedID);
 				}
 
@@ -136,7 +135,7 @@ void serialEvent() {
 		}
 
 		// Reset the time on card
-		if (characterRead[0] == COMMAND_RESET_TIME) {
+		else if (characterRead[0] == COMMAND_RESET_TIME) {
 			characterRead[0] = 0;
 
 			preparePayload(COMMAND_RESET_TIME, 0, 0, 0);
@@ -147,7 +146,7 @@ void serialEvent() {
 			Serial.write(END_CHAR);
 		}
 
-		if (characterRead[0] == COMMAND_REGISTER) {
+		else if (characterRead[0] == COMMAND_REGISTER) {
 			characterRead[0] = 0;
 
 			int numDigits = (int)(characterRead[1] - ASCII_OFFSET);		
@@ -172,7 +171,7 @@ void serialEvent() {
 		}
 
 		// Update card permissions
-		if (characterRead[0] == COMMAND_REFRESH) {
+		else if (characterRead[0] == COMMAND_REFRESH) {
 			characterRead[0] = 0;
 			
 			int numDigits = (int)(characterRead[1] - ASCII_OFFSET);				
