@@ -120,7 +120,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 		$http.get("../laserData").success(function(res) {
 			$scope.laserData = res;
 		})
-	}
+	};
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
@@ -155,7 +155,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	socket.on('refresh', function(msg) {
 		$scope.refresh = msg;
 		$scope.$apply();
-	})
+	});
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");

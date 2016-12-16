@@ -1,7 +1,7 @@
 import constant
 from database import Database
 from arduino import Arduino
-from flask import Flask, request, render_template
+from flask import Flask, jsonify, request, render_template
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -73,6 +73,11 @@ def refresh(id, data):
 
 	print(userData)
 	return arduino.refreshUser(userData)
+
+@app.route("/laserData/<type>")
+def laserData(type):
+	data = database.retrieveData(type)
+	return jsonify(data)
 
 if (__name__ == "__main__"):
     # app.run(host='0.0.0.0')

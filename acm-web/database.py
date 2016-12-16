@@ -162,3 +162,6 @@ class Database:
         # If not found, return 0
         else:
             return str(userRow)
+
+    def retrieveData(self, type):
+        return self.laser_data[type].get_all_values()
