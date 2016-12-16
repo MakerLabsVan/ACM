@@ -7,8 +7,8 @@ app.config(function($interpolateProvider) {
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
 	$scope.master = {};
-	$scope.tab = [ "active", "", "" ];
-	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane"];
+	$scope.tab = [ "active", "", "", "" ];
+	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane", "tab-pane"];
 	$scope.progress = { isWaiting: false };
 	$scope.user = {
 		isNew: true,
@@ -37,8 +37,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	};
 
 	$scope.activeTab = function(clicked) {
-		$scope.tab = [ "", "", ""];
-		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane" ];
+		$scope.tab = [ "", "", "", "" ];
+		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane", "tab-pane" ];
 		$scope.tab[clicked] = "active";
 		$scope.tabPane[clicked] += " " + $scope.tab[clicked];
 	};
@@ -116,6 +116,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.user.memberType = "0";
 		}
 	}
+	$scope.getLaserData = function() {
+		$http.get("../laserData").success(function(res) {
+			$scope.laserData = res;
+		})
+	};
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
@@ -150,7 +155,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 	socket.on('refresh', function(msg) {
 		$scope.refresh = msg;
 		$scope.$apply();
-	})
+	});
 
 	/*$scope.drawDonut = function() {
 		var vis = d3.select("#time-display").append("g").append("svg");

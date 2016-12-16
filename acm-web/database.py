@@ -17,9 +17,9 @@ class Database:
 
             spreadsheet = gc.open("MakerLabs ACM")
             self.user_data = spreadsheet.worksheet("Users")
-            self.scan_data = spreadsheet.worksheet("Scan Log")
-            self.laser_data = spreadsheet.worksheet("Laser Log")
-            self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
+            self.scan_data = spreadsheet.worksheet("Check Ins")
+            self.laser_data = { "A": spreadsheet.worksheet("Laser A Log"), "B": spreadsheet.worksheet("Laser B Log") }
+
             print("Opened database")
     
     def isTokenExpired(self):
@@ -36,7 +36,8 @@ class Database:
     def insertUser(self, data):
         print("Inserting " + data["memberName"])
         self.authorize()
-
+        self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
+        
         # Create new row (and make sure its created)
         self.user_data.add_rows(1)
         currRowCount = self.user_data.row_count
@@ -69,6 +70,7 @@ class Database:
         self.user_data.update_cells(cellList)
         return data["uid"]
     
+    # replace an existing users RFID
     def existingUser(self, data):
         self.authorize()
         try:
@@ -81,29 +83,38 @@ class Database:
         return found
     
     def scanLog(self, id):
-        print("Logging user %d at Front Desk" % id)
-        cellList = [ datetime.now().date().isoformat(), datetime.now().time().isoformat(), id ]
+        print("Logging User %d at Front Desk" % id)
+        
         self.authorize()
-        self.scan_data.append_row(cellList)
+        currentRow = int(self.scan_data.acell(constant.CELL_PKEY).value) + 1
+        if currentRow == constant.MAX_LOG:
+            currentRow = constant.MIN_LOG
+        
+        cellList = self.scan_data.range(constant.RANGE_SCAN_START + str(currentRow) + constant.RANGE_SCAN_END + str(currentRow))
+
+        cellList[constant.COL_DATE].value = datetime.now().date().isoformat() + " " + datetime.now().time().isoformat()
+        cellList[constant.COL_ID_LOG].value = id
+
+        self.scan_data.update_cells(cellList)
+        self.scan_data.update_acell(constant.CELL_PKEY, currentRow)
     
     def laserLog(self, data):
         print("Logging user %d on Laser %s" % (data["uid"], data["laserType"]))
+
         self.authorize()
+        currentRow = int(self.laser_data[ data["laserType"] ].acell(constant.CELL_PKEY).value) + 1
+        if currentRow == constant.MAX_LOG:
+            currentRow = constant.MIN_LOG
+        
+        cellList = self.laser_data[ data["laserType"] ].range(constant.RANGE_LASER_START + str(currentRow) + constant.RANGE_LASER_END + str(currentRow))
 
-        # Add and retrieve new row
-        self.laser_data.add_rows(1)
-        currRowCount = self.laser_data.row_count
-
-        cellList = self.laser_data.range(constant.RANGE_LASER_START + str(currRowCount) + constant.RANGE_LASER_END + str(currRowCount))
-
-        # Insert and push updated cells to sheet
         cellList[constant.COL_LASER_TYPE].value = data["laserType"]
-        cellList[constant.COL_DATE].value = datetime.now().date().isoformat()
-        cellList[constant.COL_TIME].value = datetime.now().time().isoformat()
+        cellList[constant.COL_DATE].value = datetime.now().date().isoformat() + " " + datetime.now().time().isoformat()
         cellList[constant.COL_ID_LOG].value = data["uid"]
         cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
         cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
-        self.laser_data.update_cells(cellList)
+        self.laser_data[ data["laserType"] ].update_cells(cellList)
+        self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, currentRow)
     
     def insertLaserTime(self, data):
         self.authorize()
@@ -126,8 +137,8 @@ class Database:
         try:
             row = idList.index(str(id)) + 1
         except:
-            print("User does not exist")
             row = 0
+            print("User does not exist")            
 
         return row 
 
@@ -151,17 +162,6 @@ class Database:
         # If not found, return 0
         else:
             return str(userRow)
-    
-    def laserLog2(self, data): # this takes 5 - 10 seconds longer than the old append method
-        print("Logging user %d on Laser %s" % (data["id"], data["laserType"]))
 
-        cellList = []
-        cellList.append( data["laserType"] )
-        cellList.append( datetime.now().date().isoformat() )
-        cellList.append( datetime.now().time().isoformat() )
-        cellList.append( data["uid"] )
-        cellList.append( data["elapsedTime"] )
-        cellList.append( data["existingTime"] )
-
-        self.authorize()
-        self.laser_data(cellList, 2)
+    def retrieveData(self, type):
+        return self.laser_data[type].get_all_values()

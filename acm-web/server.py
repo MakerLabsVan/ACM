@@ -1,7 +1,7 @@
 import constant
 from database import Database
 from arduino import Arduino
-from flask import Flask, request, render_template
+from flask import Flask, jsonify, request, render_template
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -47,22 +47,15 @@ def serialTest(id):
 	if 0 < id and id < 50000:
 		# ignore logging, resetting and refreshing guest card permissions
 		if id not in constant.GUEST_IDS:
-			socketio.emit('scan', id)		
-			# push data to web app
+			# immediately send ID to web app for responsiveness
+			socketio.emit('scan', id)
+
+			# get user data and push to web app
 			data = database.retrieveUser(id)			
-			socketio.emit('data', data)		
+			socketio.emit('data', data)
 
-			# reset card if a month has passed
-			if data[-1] == "1":
-				resetTime()
-
-			# refresh card permissions
-			if refresh(id, data) == str(id):
-				refreshStatus = "Card successfully updated"
-			else:
-				refreshStatus = "Card not updated"
-
-			socketio.emit('refresh', refreshStatus)
+			# send data to arduino	
+			refresh(id, data)
 
 			database.scanLog(id)
 						
@@ -70,10 +63,21 @@ def serialTest(id):
 
 @app.route("/refresh")
 def refresh(id, data):
+	# if a month has passed, reset time on card
+	if data[-1] == "1":
+		resetTime()
+	
+	# format user data
 	userData = [ str(id), data[constant.COL_MEMBER_TYPE] ]
-	userData.extend(data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1])
+	userData.extend( data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1] )
+
 	print(userData)
 	return arduino.refreshUser(userData)
+
+@app.route("/laserData/<type>")
+def laserData(type):
+	data = database.retrieveData(type)
+	return jsonify(data)
 
 if (__name__ == "__main__"):
     # app.run(host='0.0.0.0')
