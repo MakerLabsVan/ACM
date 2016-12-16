@@ -82,7 +82,7 @@ void loop() {
 		// If tag is removed, go back to scan state
 		if (!isValidResponse) {
       		pollCounter++;
-      		if (pollCounter == 2) {
+      		if (pollCounter == scan) {
         		state = 0;
         		pollCounter = 0;  
       		}
