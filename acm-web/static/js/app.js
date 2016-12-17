@@ -116,10 +116,17 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.user.memberType = "0";
 		}
 	}
-	$scope.getLaserData = function() {
-		$http.get("../laserData").success(function(res) {
-			$scope.laserData = res;
-		})
+	$scope.getLaserData = function(type) {
+		if (type) {
+			$http.get("../laserData/A").success(function(res) {
+				$scope.laserAData = res;
+			});
+		}
+		else {
+			$http.get("../laserData/B").success(function(res) {
+				$scope.laserBData = res;
+			});
+		}
 	};
 
 	var socket = io.connect("http://localhost:5000");

@@ -164,4 +164,19 @@ class Database:
             return str(userRow)
 
     def retrieveData(self, type):
-        return self.laser_data[type].get_all_values()
+        consolidatedLogs = []
+        data = self.laser_data[type].get_all_values()
+
+        cell = sorted(data, key = lambda x: x[1], reverse = True)
+        newLog = [ cell[1][constant.COL_DATE], cell[1][constant.COL_ID_LOG], cell[1][constant.COL_ELAPSED_TIME] ]
+        
+        for row in range(2, len(cell)):
+            if newLog[1] == cell[row][constant.COL_ID_LOG]:
+                newLog[2] = int(newLog[2]) + int(cell[row][constant.COL_ELAPSED_TIME])
+                if row == len(cell) - 1:
+                    consolidatedLogs.append(newLog)
+            else:
+                consolidatedLogs.append(newLog)
+                newLog = [ cell[row][constant.COL_DATE], cell[row][constant.COL_ID_LOG], cell[row][constant.COL_ELAPSED_TIME] ]
+
+        return consolidatedLogs

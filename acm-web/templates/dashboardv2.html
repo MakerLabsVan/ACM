@@ -196,8 +196,30 @@
 
             <!-- START LASER DATA -->
             <div id="laser-data" ng-class="tabPane[3]">
-              <button type="button" class="btn btn-success" ng-click="getLaserData()">Get Data</button>             
-              //laserData//
+              <center>
+              <button type="button" class="btn btn-success" ng-click="getLaserData(1)">Get Data A</button><button type="button" class="btn btn-success" ng-click="getLaserData(0)">Get Data B</button>             
+              <br>
+              <table id="laserA-table" style="float: left">
+                <tr>
+                  <td id="laser-table-timestamp">Timestamp A</td>
+                  <td>User ID</td>
+                  <td>Laser Time</td>
+                </tr>
+                <tr ng-repeat="row in laserAData">
+                  <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
+                </tr>
+              </table>
+              <table id="laserB-table" style="float: right">
+                <tr>
+                  <td id="laser-table-timestamp">Timestamp B</td>
+                  <td>User ID</td>
+                  <td>Laser Time</td>
+                </tr>
+                <tr ng-repeat="row in laserBData">
+                  <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
+                </tr>
+              </table>
+              </center>
             </div>
             <!-- END LASER DATA -->
 
