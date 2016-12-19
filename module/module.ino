@@ -88,11 +88,11 @@ void loop() {
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has reached the 60 min quota, skip if staff member
-		else if ( (existingTime >= quota) && !isStaff ) {
-			red();
-			playDeath();
-			getStringFromMem(quotaMet);
-		}
+		// else if ( (existingTime >= quota) && !isStaff ) {
+		// 	red();
+		// 	playDeath();
+		// 	getStringFromMem(quotaMet);
+		// }
 		// User passed all checks and is able to use the machine
 		// --------------------------------------------------------------------
 		else {
@@ -116,7 +116,7 @@ void loop() {
 			elapsedTime = accumulator(readData, elapsedTime);
 			totalTime = elapsedTime + existingTime;
 
-			// Job done, lock laser cutter, get timestamp
+			// Job done, lock laser cutter, get time
 			lastOn = millis();
 			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
