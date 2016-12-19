@@ -11,7 +11,7 @@ database = Database()
 
 @app.route("/")
 def index():
-    return render_template("dashboardv2.html")
+	return render_template("dashboardv2.html")
 
 @app.route("/getTime")
 def getTime():
@@ -51,7 +51,7 @@ def serialTest(id):
 			socketio.emit('scan', id)
 
 			# get user data and push to web app
-			data = database.retrieveUser(id)			
+			data = database.retrieveUser(id)
 			socketio.emit('data', data)
 
 			# send data to arduino	

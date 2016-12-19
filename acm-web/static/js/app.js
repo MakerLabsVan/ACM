@@ -5,7 +5,7 @@ app.config(function($interpolateProvider) {
     $interpolateProvider.endSymbol('//');
 });
 
-app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($scope, $http, $interpolate) {
+app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout', function($scope, $http, $interpolate, $timeout) {
 	$scope.master = {};
 	$scope.tab = [ "active", "", "", "" ];
 	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane", "tab-pane"];
@@ -116,10 +116,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', function($s
 			$scope.user.memberType = "0";
 		}
 	}
+
 	$scope.getLaserData = function(type) {
 		if (type) {
 			$http.get("../laserData/A").success(function(res) {
-				$scope.laserAData = res;
+				$scope.laserAData = res;				
 			});
 		}
 		else {

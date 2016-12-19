@@ -164,6 +164,8 @@ class Database:
             return str(userRow)
 
     def retrieveData(self, type):
+        self.authorize()
+        
         consolidatedLogs = []
         data = self.laser_data[type].get_all_values()
 
@@ -174,8 +176,10 @@ class Database:
             if newLog[1] == cell[row][constant.COL_ID_LOG]:
                 newLog[2] = int(newLog[2]) + int(cell[row][constant.COL_ELAPSED_TIME])
                 if row == len(cell) - 1:
+                    newLog[2] = int(int(newLog[2]) / 60)
                     consolidatedLogs.append(newLog)
             else:
+                newLog[2] = int(int(newLog[2]) / 60)     
                 consolidatedLogs.append(newLog)
                 newLog = [ cell[row][constant.COL_DATE], cell[row][constant.COL_ID_LOG], cell[row][constant.COL_ELAPSED_TIME] ]
 

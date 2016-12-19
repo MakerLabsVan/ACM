@@ -197,9 +197,12 @@ input[type=submit]:hover {
 }
 
 #laserA-table, #laserB-table {
+  display: inline-block;
   table-layout: fixed;
 }
 
 #laser-table-timestamp {
+  color: #fff;
+  background-color: #428bca;
   width: 130px;
 }
