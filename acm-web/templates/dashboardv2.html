@@ -194,15 +194,12 @@
             <!-- END REGISTRATION -->
 
 
-            <!-- START LASER DATA -->
-            <div id="laser-data" ng-class="tabPane[3]">
+            <!-- START SUMMARY -->
+            <div id="summary" ng-class="tabPane[3]">
               <div class="well well-lg">
                 <h1 id="page-header">Summary</h1>
 
-                <!--<center>
-                <button type="button" class="btn btn-success" ng-click="getLaserData(1)">Get Data A</button><button type="button" class="btn btn-success" ng-click="getLaserData(0)">Get Data B</button>
-                </center><br>-->
-                <div>
+                <div id="summaryLaserA">
                   <table id="laserA-table" class="table-bordered">
                     <th id="table-info" colspan="4">Laser A</tr>
                     <tr>
@@ -215,7 +212,7 @@
                     </tr>
                   </table>
                 </div>
-                <div>
+                <div id="summaryLaserB">
                   <table id="laserB-table" class="table-bordered">
                     <th id="table-info" colspan="4">Laser B</tr>                  
                     <tr>

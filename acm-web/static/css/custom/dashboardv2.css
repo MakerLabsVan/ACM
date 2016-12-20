@@ -196,13 +196,23 @@ input[type=submit]:hover {
   padding-left: 5%;
 }
 
-#laserA-table {
+#summaryLaserA {
   float: left;
+  overflow-y: auto;
+  height: 75%;
+}
+
+#summaryLaserB {
+  float: right;
+  overflow-y: auto;
+  height: 75%;
+}
+
+#laserA-table {
   table-layout: fixed;
 }
 
 #laserB-table {
-  float: right;
   table-layout: fixed;
 }
 
