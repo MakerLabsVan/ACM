@@ -143,21 +143,26 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	});
 	socket.on('data', function(msg) {
 		$scope.activeTab(0);
-		$scope.display.id = msg[1];
-		$scope.display.name = msg[2];
-		$scope.display.image = PATH + msg[2] + ".jpg";
-		$scope.display.startDay = msg[4];
-		$scope.display.studio = msg[8];
+		if (data) {
+			$scope.display.id = msg[1];
+			$scope.display.name = msg[2];
+			$scope.display.image = PATH + msg[2] + ".jpg";
+			$scope.display.startDay = msg[4];
+			$scope.display.studio = msg[8];
 
-		for (var i = 0; i < $scope.display.access.length; i++) {
-			$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
+			for (var i = 0; i < $scope.display.access.length; i++) {
+				$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
+			}
+
+			$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);
+			$scope.display.monthTime = (parseInt(msg[17]) / 60).toFixed(0);	
+
+			$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
+			$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
 		}
-
-		$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);
-		$scope.display.monthTime = (parseInt(msg[17]) / 60).toFixed(0);	
-
-		$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
-		$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
+		else {
+			$scope.refresh = "User does not exist and/or is no longer a member";
+		}
 		
 		$scope.$apply();
     });
