@@ -120,20 +120,16 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		}
 	}
 	
-	$scope.getLaserData = function(type) {
-		if (type) {
-			$http.get("../laserData/A").success(function(res) {
-				$scope.laserAData = res;				
-			});
-		}
-		else {
-			$http.get("../laserData/B").success(function(res) {
-				$scope.laserBData = res;
-			});
-		}
+	$scope.getLaserData = function() {
+		$http.get("../laserData/A").success(function(res) {
+			$scope.laserAData = res;				
+		});
+		$http.get("../laserData/B").success(function(res) {
+			$scope.laserBData = res;
+		});
 	};
-	$interval($scope.getLaserData(0), 10*60*60*1000);
-	$interval($scope.getLaserData(1), 10*60*60*1000);
+	//$interval($scope.getLaserData(), 5000);
+	//$interval($scope.getLaserData(), 5000);
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");

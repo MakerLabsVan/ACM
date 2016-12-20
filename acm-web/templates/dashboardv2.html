@@ -44,7 +44,7 @@
             <li ng-class="tab[0]"><a ng-click="activeTab(0)">Dashboard</a></li>
             <li ng-class="tab[1]"><a ng-click="activeTab(1)">Guest Card</a></li>
             <li ng-class="tab[2]"><a ng-click="activeTab(2)">Registration</a></li>
-            <li ng-class="tab[3]"><a ng-click="activeTab(3)">Laser Data</a></li>
+            <li ng-class="tab[3]"><a ng-click="activeTab(3)">Summary</a></li>
           </ul>
         </div>
         <!-- END SIDE NAV BAR -->
@@ -197,7 +197,7 @@
             <!-- START LASER DATA -->
             <div id="laser-data" ng-class="tabPane[3]">
               <div class="well well-lg">
-                <h1 id="page-header">Laser Data</h1>
+                <h1 id="page-header">Summary</h1>
 
                 <!--<center>
                 <button type="button" class="btn btn-success" ng-click="getLaserData(1)">Get Data A</button><button type="button" class="btn btn-success" ng-click="getLaserData(0)">Get Data B</button>
@@ -208,7 +208,7 @@
                     <tr>
                       <td id="laser-table-timestamp">Timestamp</td>
                       <td id="table-info">User ID</td>
-                      <td id="table-info">Laser Time</td>
+                      <td id="table-info">Laser Time (min)</td>
                     </tr>
                     <tr ng-repeat="row in laserAData">
                       <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
@@ -221,7 +221,7 @@
                     <tr>
                       <td id="laser-table-timestamp">Timestamp</td>
                       <td id="table-info">User ID</td>
-                      <td id="table-info">Laser Time</td>
+                      <td id="table-info">Laser Time (min)</td>
                     </tr>
                     <tr ng-repeat="row in laserBData">
                       <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
