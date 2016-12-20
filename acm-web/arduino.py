@@ -3,6 +3,9 @@ import constant
 from platform import system
 
 class Arduino:
+	# Connect to the Arduino through serial
+	# This should work for all platforms
+	# Only been tested on Windows and Mac
 	def __init__(self):
 		i = 0
 		host = system()

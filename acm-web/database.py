@@ -7,6 +7,7 @@ class Database:
     def __init__(self):
         self.authorize(isStartUp=True)
     
+    # authorizes and opens Google Sheet
     def authorize(self, isStartUp=False):
         if isStartUp or self.isTokenExpired():
             scope = ['https://spreadsheets.google.com/feeds']
@@ -22,13 +23,13 @@ class Database:
 
             print("Opened database")
     
+    # helper that determines if Google API access token has expired
     def isTokenExpired(self):
         currentTime = datetime.now()
         referenceTime = self.lastAuthorizationTime
-        currentTimeDelta = timedelta(days=currentTime.day, hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second).total_seconds()        
-        referenceTimeDelta = timedelta(days=referenceTime.day, hours=referenceTime.hour, minutes=referenceTime.minute, seconds=referenceTime.second).total_seconds()
+        difference = currentTime - referenceTime
 
-        if (currentTimeDelta - referenceTimeDelta) > constant.TIME_TOKEN_EXPIRE:
+        if difference.total_seconds() > constant.TIME_TOKEN_EXPIRE:
             return True
         else:
             return False
@@ -38,7 +39,7 @@ class Database:
         self.authorize()
         self.pKey = int(self.user_data.acell(constant.CELL_PKEY).value)        
         
-        # Create new row (and make sure its created)
+        # Create new row
         self.user_data.add_rows(1)
         currRowCount = self.user_data.row_count
         
@@ -165,19 +166,24 @@ class Database:
         consolidatedLogs = []
         data = self.laser_data[type].get_all_values()
 
+        # sort in descending order
         cell = sorted(data, key = lambda x: x[1], reverse = True)
         newLog = [ cell[1][constant.COL_DATE], cell[1][constant.COL_ID_LOG], int(cell[1][constant.COL_ELAPSED_TIME]) ]
         
         for row in range(2, len(cell)):
+            # log is more than a week old
             if not self.isWeek(newLog[0][0:10]):
                 newLog[2] = int(newLog[2] / 60)
                 consolidatedLogs.append(newLog)
                 break
+            # if IDs are the same, accumulate the time
             if newLog[1] == cell[row][constant.COL_ID_LOG]:
                 newLog[2] = newLog[2] + int(cell[row][constant.COL_ELAPSED_TIME])
+                # end of spreadsheet is reached
                 if row == len(cell) - 1:
                     newLog[2] = int(newLog[2] / 60)
                     consolidatedLogs.append(newLog)
+            # new ID detected, create log and start a new one
             else:
                 newLog[2] = int(newLog[2] / 60)
                 consolidatedLogs.append(newLog)
@@ -185,6 +191,7 @@ class Database:
 
         return consolidatedLogs
     
+    # helper that takes in a date string and determines if a week has passed
     def isWeek(self, referenceDate):
         currentDate = datetime.now()
         referenceDate = datetime.strptime(referenceDate, "%Y-%m-%d")

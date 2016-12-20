@@ -1,5 +1,8 @@
 var app = angular.module('ACM-Dash',[]);
 
+// Changing interpolation symbols here
+// Flask Jinga2 templating uses {{}}, which
+// inteferes with Angular. 
 app.config(function($interpolateProvider) {
 	$interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
@@ -7,9 +10,12 @@ app.config(function($interpolateProvider) {
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval', function($scope, $http, $interpolate, $interval) {
 	$scope.master = {};
+	// For tab switching
 	$scope.tab = [ "active", "", "", "" ];
 	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane", "tab-pane"];
+	// Progress bar for guest card screen
 	$scope.progress = { isWaiting: false };
+	// Model for registration form and user data table
 	$scope.user = {
 		isNew: true,
 		uid: "",
@@ -37,6 +43,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	};
 
 	$scope.activeTab = function(clicked) {
+		// reset then add active class to clicked tab
 		$scope.tab = [ "", "", "", "" ];
 		$scope.tabPane = [ "tab-pane", "tab-pane", "tab-pane", "tab-pane" ];
 		$scope.tab[clicked] = "active";
@@ -55,6 +62,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
 	};
 
+	// Initialize the summary tables
 	$http.get("../laserData/A").success(function(res) {
 			$scope.laserAData = res;				
 	});
@@ -84,7 +92,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			if (res[0] == 1) {
 				$scope.isError = false;
 				$scope.time.set(0);
-				//$scope.getTime();
 			}
 			else {
 				$scope.isError = true;
@@ -93,13 +100,12 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		});
 	};
 
-	$scope.registerCard = function(isNew) {
-		$scope.user.isNew = isNew;
-			
+	$scope.registerCard = function(isNew) {			
 		if ($scope.user.uid && $scope.user.memberName && $scope.user.startDay) {
 			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
-
+			$scope.user.isNew = isNew;
+			
 			$http({
 				url: "../registerCard",
 				method: "POST",
@@ -127,6 +133,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		}
 	}
 
+	// Refresh summary every hour
 	$interval(function() {
 		console.log("Refreshing Laser Data");
 		$http.get("../laserData/A").success(function(res) {
@@ -137,6 +144,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		})
 	}, 60*60*1000);
 
+	// socket for pushing data from server to web page
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
 	socket.on('scan', function(msg) {

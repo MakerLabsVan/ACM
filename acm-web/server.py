@@ -24,16 +24,20 @@ def resetTime():
 @app.route("/registerCard", methods=['POST'])
 def registerCard():
 	data = request.get_json()
+
+	# Register RFID
 	arduinoStatus = arduino.registerCard(data)
 	if arduinoStatus == data["uid"]:
 		print("RFID tag registered")
+		# if new to ACM, create a new entry
 		if data["isNew"]:
 			return database.insertUser(data)
+		# modify if not new to ACM
 		elif database.existingUser(data):
 			print("ID updated")
 			return arduinoStatus
 	else:
-		return "0"
+		return str(0)
 
 @app.route("/laserLog/<laser>/<int:id>/<int:elapsedTime>/<int:existingTime>")
 def laserLog(laser, id, elapsedTime, existingTime):
@@ -43,18 +47,18 @@ def laserLog(laser, id, elapsedTime, existingTime):
 
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
-	# need to figure out why large ids are being sent randomly
+	# need to figure out why large ids are being sent randomly - probably from bad reads
 	if 0 < id and id < 50000:
-		# ignore logging, resetting and refreshing guest card permissions
+		# ignore guest cards
 		if id not in constant.GUEST_IDS:
-			# immediately send ID to web app for responsiveness
+			# immediately send ID to web app
 			socketio.emit('scan', id)
 
-			# get user data and push to web app
+			# once data is received, send to web app
 			data = database.retrieveUser(id)
 			socketio.emit('data', data)
 
-			# send data to arduino	
+			# send data to arduino
 			refresh(id, data)
 
 			database.scanLog(id)
@@ -63,11 +67,9 @@ def serialTest(id):
 
 @app.route("/refresh")
 def refresh(id, data):
-	# format user data
+	# format user data according to card protocol
 	userData = [ str(id), data[constant.COL_MEMBER_TYPE] ]
 	userData.extend( data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1] )
-
-	print(userData)
 	return arduino.refreshUser(userData)
 
 @app.route("/laserData/<type>")
