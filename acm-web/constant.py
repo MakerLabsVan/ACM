@@ -5,7 +5,7 @@ COMMAND_REFRESH ='5'
 EIGHT_BITS = 8
 GUEST_IDS = [ 6, 12 ]
 
-# These refer to list indices, not columns in the spreadsheet
+# These refer to list indices, not columns in the spreadsheet; add 1 to get actual column number
 CELL_PKEY = 'A1'
 COL_PKEY = 0
 COL_UID = 1
@@ -41,3 +41,4 @@ COL_EXISTING_TIME = 4
 MIN_LOG = 2
 MAX_LOG = 4001
 TIME_TOKEN_EXPIRE = 3600
+SECONDS_IN_WEEK = 7*24*60*60
