@@ -87,15 +87,13 @@ class Database:
         
         self.authorize()
         currentRow = int(self.scan_data.acell(constant.CELL_PKEY).value) + 1
-        if currentRow == constant.MAX_LOG:
-            currentRow = constant.MIN_LOG
         
-        cellList = self.scan_data.range(constant.RANGE_SCAN_START + str(currentRow) + constant.RANGE_SCAN_END + str(currentRow))
+        cellList = []
+        cellList.append(currentRow)
+        cellList.append(datetime.now().date().isoformat() + " " + datetime.now().time().isoformat())
+        cellList.append(id)
 
-        cellList[constant.COL_DATE].value = datetime.now().date().isoformat() + " " + datetime.now().time().isoformat()
-        cellList[constant.COL_ID_LOG].value = id
-
-        self.scan_data.update_cells(cellList)
+        self.scan_data.append_row(cellList)
         self.scan_data.update_acell(constant.CELL_PKEY, currentRow)
     
     def laserLog(self, data):
@@ -103,16 +101,14 @@ class Database:
 
         self.authorize()
         currentRow = int(self.laser_data[ data["laserType"] ].acell(constant.CELL_PKEY).value) + 1
-        if currentRow == constant.MAX_LOG:
-            currentRow = constant.MIN_LOG
         
-        cellList = self.laser_data[ data["laserType"] ].range(constant.RANGE_LASER_START + str(currentRow) + constant.RANGE_LASER_END + str(currentRow))
+        cellList = []
+        cellList.append(currentRow)
+        cellList.append(datetime.now().date().isoformat() + " " + datetime.now().time().isoformat())
+        cellList.append(data["uid"])
+        cellList.append(data["elapsedTime"])
+        cellList.append(data["existingTime"])
 
-        cellList[constant.COL_LASER_TYPE].value = data["laserType"]
-        cellList[constant.COL_DATE].value = datetime.now().date().isoformat() + " " + datetime.now().time().isoformat()
-        cellList[constant.COL_ID_LOG].value = data["uid"]
-        cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
-        cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
         self.laser_data[ data["laserType"] ].append_row(cellList)
         self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, currentRow)
     
