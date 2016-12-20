@@ -132,8 +132,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			});
 		}
 	};
-	// $interval($scope.getLaserData(0), 10*60*60*1000);
-	// $interval($scope.getLaserData(1), 10*60*60*1000);
+	$interval($scope.getLaserData(0), 10*60*60*1000);
+	$interval($scope.getLaserData(1), 10*60*60*1000);
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");

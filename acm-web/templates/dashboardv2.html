@@ -199,32 +199,35 @@
               <div class="well well-lg">
                 <h1 id="page-header">Laser Data</h1>
 
-                <center>
-                <button type="button" class="btn btn-success" ng-click="getLaserData(1)">Get Data A</button><button type="button" class="btn btn-success" ng-click="getLaserData(0)">Get Data B</button>             
-                <br>
-                <table id="laserA-table" class="table-bordered">
-                  <th id="table-info" colspan="4">Laser A</tr>
-                  <tr>
-                    <td id="laser-table-timestamp">Timestamp</td>
-                    <td id="table-info">User ID</td>
-                    <td id="table-info">Laser Time</td>
-                  </tr>
-                  <tr ng-repeat="row in laserAData">
-                    <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
-                  </tr>
-                </table>
-                <table id="laserB-table" class="table-bordered">
-                  <th id="table-info" colspan="4">Laser B</tr>                  
-                  <tr>
-                    <td id="laser-table-timestamp">Timestamp</td>
-                    <td id="table-info">User ID</td>
-                    <td id="table-info">Laser Time</td>
-                  </tr>
-                  <tr ng-repeat="row in laserBData">
-                    <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
-                  </tr>
-                </table>
-                </center>
+                <!--<center>
+                <button type="button" class="btn btn-success" ng-click="getLaserData(1)">Get Data A</button><button type="button" class="btn btn-success" ng-click="getLaserData(0)">Get Data B</button>
+                </center><br>-->
+                <div>
+                  <table id="laserA-table" class="table-bordered">
+                    <th id="table-info" colspan="4">Laser A</tr>
+                    <tr>
+                      <td id="laser-table-timestamp">Timestamp</td>
+                      <td id="table-info">User ID</td>
+                      <td id="table-info">Laser Time</td>
+                    </tr>
+                    <tr ng-repeat="row in laserAData">
+                      <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
+                    </tr>
+                  </table>
+                </div>
+                <div>
+                  <table id="laserB-table" class="table-bordered">
+                    <th id="table-info" colspan="4">Laser B</tr>                  
+                    <tr>
+                      <td id="laser-table-timestamp">Timestamp</td>
+                      <td id="table-info">User ID</td>
+                      <td id="table-info">Laser Time</td>
+                    </tr>
+                    <tr ng-repeat="row in laserBData">
+                      <td ng-repeat="col in [0, 1, 2]">//row[col]//</td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <!-- END LASER DATA -->

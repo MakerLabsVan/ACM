@@ -196,13 +196,18 @@ input[type=submit]:hover {
   padding-left: 5%;
 }
 
-#laserA-table, #laserB-table {
-  display: inline-block;
+#laserA-table {
+  float: left;
+  table-layout: fixed;
+}
+
+#laserB-table {
+  float: right;
   table-layout: fixed;
 }
 
 #laser-table-timestamp {
   color: #fff;
   background-color: #428bca;
-  width: 130px;
+  width: 175px;
 }
