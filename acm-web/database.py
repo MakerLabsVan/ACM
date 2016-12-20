@@ -170,17 +170,31 @@ class Database:
         data = self.laser_data[type].get_all_values()
 
         cell = sorted(data, key = lambda x: x[1], reverse = True)
-        newLog = [ cell[1][constant.COL_DATE], cell[1][constant.COL_ID_LOG], cell[1][constant.COL_ELAPSED_TIME] ]
+        newLog = [ cell[1][constant.COL_DATE], cell[1][constant.COL_ID_LOG], int(cell[1][constant.COL_ELAPSED_TIME]) ]
         
         for row in range(2, len(cell)):
+            if not self.isWeek(newLog[0][0:10]):
+                newLog[2] = int(newLog[2] / 60)
+                consolidatedLogs.append(newLog)
+                break
             if newLog[1] == cell[row][constant.COL_ID_LOG]:
-                newLog[2] = int(newLog[2]) + int(cell[row][constant.COL_ELAPSED_TIME])
+                newLog[2] = newLog[2] + int(cell[row][constant.COL_ELAPSED_TIME])
                 if row == len(cell) - 1:
-                    newLog[2] = int(int(newLog[2]) / 60)
+                    newLog[2] = int(newLog[2] / 60)
                     consolidatedLogs.append(newLog)
             else:
-                newLog[2] = int(int(newLog[2]) / 60)     
+                newLog[2] = int(newLog[2] / 60)
                 consolidatedLogs.append(newLog)
-                newLog = [ cell[row][constant.COL_DATE], cell[row][constant.COL_ID_LOG], cell[row][constant.COL_ELAPSED_TIME] ]
+                newLog = [ cell[row][constant.COL_DATE], cell[row][constant.COL_ID_LOG], int(cell[row][constant.COL_ELAPSED_TIME]) ]
 
         return consolidatedLogs
+    
+    def isWeek(self, referenceDate):
+        currentDate = datetime.now()
+        referenceDate = datetime.strptime(referenceDate, "%Y-%m-%d")
+        difference = currentDate - referenceDate
+
+        if difference.total_seconds() < constant.SECONDS_IN_WEEK:
+            return True
+        else:
+            return False
