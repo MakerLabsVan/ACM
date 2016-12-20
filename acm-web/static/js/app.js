@@ -5,7 +5,7 @@ app.config(function($interpolateProvider) {
     $interpolateProvider.endSymbol('//');
 });
 
-app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout', function($scope, $http, $interpolate, $timeout) {
+app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval', function($scope, $http, $interpolate, $interval) {
 	$scope.master = {};
 	$scope.tab = [ "active", "", "", "" ];
 	$scope.tabPane = [ "tab-pane active", "tab-pane", "tab-pane", "tab-pane"];
@@ -89,7 +89,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout',
 	$scope.registerCard = function(isNew) {
 		$scope.user.isNew = isNew;
 			
-		if ($scope.user.uid && $scope.user.memberName) {
+		if ($scope.user.uid && $scope.user.memberName && $scope.user.startDay) {
 			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
 
@@ -115,8 +115,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout',
 			$scope.user.memberName = "";
 			$scope.user.memberType = "0";
 		}
+		else {
+			$scope.entered = "All fields are required."
+		}
 	}
-
+	
 	$scope.getLaserData = function(type) {
 		if (type) {
 			$http.get("../laserData/A").success(function(res) {
@@ -129,6 +132,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$timeout',
 			});
 		}
 	};
+	// $interval($scope.getLaserData(0), 10*60*60*1000);
+	// $interval($scope.getLaserData(1), 10*60*60*1000);
 
 	var socket = io.connect("http://localhost:5000");
 	console.log("Socket Connected.");
