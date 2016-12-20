@@ -113,7 +113,7 @@ class Database:
         cellList[constant.COL_ID_LOG].value = data["uid"]
         cellList[constant.COL_ELAPSED_TIME].value = data["elapsedTime"]
         cellList[constant.COL_EXISTING_TIME].value = data["existingTime"]
-        self.laser_data[ data["laserType"] ].update_cells(cellList)
+        self.laser_data[ data["laserType"] ].append_row(cellList)
         self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, currentRow)
     
     def insertLaserTime(self, data):
