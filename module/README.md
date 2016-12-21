@@ -25,7 +25,7 @@ Arduino IDE
 
 # Other Parts and Notes  
 __Level Shifter__  
-<center><img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300"></center>  
+<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300">  
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
 the current going into the RX pin of the WiFi module does not exceed 12 mA.
 
@@ -36,7 +36,5 @@ update the command set. The baud rate used here was 9600 for reliable performanc
 Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
 # How It Works
-<center>
 ![alt text][modulestate]
 [modulestate]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/module.state.PNG
-</center>
