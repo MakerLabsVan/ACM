@@ -60,8 +60,8 @@ class Database:
         cellList[constant.COL_USES_METAL].value = data["metal"]
         cellList[constant.COL_USES_TEXTILE].value = data["textile"]
         cellList[constant.COL_USES_3D].value = data["threeD"]
-        cellList[constant.COL_LIFETIME].value = "0"
-        cellList[constant.COL_LASERTIME].value = "0"
+        cellList[constant.COL_LIFETIME].value = "1"
+        cellList[constant.COL_LASERTIME].value = "1"
 
         # Increment primary key
         self.pKey += 1
@@ -113,6 +113,7 @@ class Database:
         self.laser_data[ data["laserType"] ].append_row(cellList)
         self.laser_data[ data["laserType"] ].update_acell(constant.CELL_PKEY, currentRow)
     
+    # add to accumulated time on Users sheet
     def insertLaserTime(self, data):
         self.authorize()
         userRow = self.searchID(data["uid"])
@@ -127,7 +128,8 @@ class Database:
             
         
         return str(userRow)
-  
+    
+    # return the row of the user
     def searchID(self, id):
         idList = self.user_data.col_values(constant.COL_MEMBER_NAME)
 
@@ -138,7 +140,8 @@ class Database:
             print("User does not exist")            
 
         return row 
-
+    
+    # return all user information
     def retrieveUser(self, id):
         print("Getting data for user %d" % id)
         self.authorize()
@@ -159,7 +162,8 @@ class Database:
         # If not found, return 0
         else:
             return str(userRow)
-
+    
+    # laser data retrieval
     def retrieveData(self, type):
         self.authorize()
         
