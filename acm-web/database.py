@@ -172,8 +172,9 @@ class Database:
         
         for row in range(2, len(cell)):
             # log is more than a week old
+            # slice the timestamp string to only take in the date portion
             if not self.isWeek(newLog[0][0:10]):
-                newLog[2] = int(newLog[2] / 60)
+                newLog[2] = int(newLog[2] / constant.SECONDS_IN_MIN)
                 consolidatedLogs.append(newLog)
                 break
             # if IDs are the same, accumulate the time
@@ -181,11 +182,11 @@ class Database:
                 newLog[2] = newLog[2] + int(cell[row][constant.COL_ELAPSED_TIME])
                 # end of spreadsheet is reached
                 if row == len(cell) - 1:
-                    newLog[2] = int(newLog[2] / 60)
+                    newLog[2] = int(newLog[2] / constant.SECONDS_IN_MIN)
                     consolidatedLogs.append(newLog)
             # new ID detected, create log and start a new one
             else:
-                newLog[2] = int(newLog[2] / 60)
+                newLog[2] = int(newLog[2] / constant.SECONDS_IN_MIN)
                 consolidatedLogs.append(newLog)
                 newLog = [ cell[row][constant.COL_DATE], cell[row][constant.COL_ID_LOG], int(cell[row][constant.COL_ELAPSED_TIME]) ]
 
