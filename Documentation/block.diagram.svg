@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="349.96249"
-     inkscape:cy="935.49596"
+     inkscape:cx="231.59249"
+     inkscape:cy="899.65923"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -144,7 +144,7 @@
        xml:space="preserve"
        id="flowRoot4186"
        style="font-style:normal;font-weight:normal;font-size:8.56183434px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-18.397771,6.1388454)"><flowRegion
+       transform="translate(-18.397771,0.6476453)"><flowRegion
          id="flowRegion4188"><rect
            id="rect4190"
            width="80.714287"
@@ -152,7 +152,9 @@
            x="52.142857"
            y="240.21935" /></flowRegion><flowPara
          id="flowPara4192"
-         style="text-align:center;text-anchor:middle">FrontDesk</flowPara><flowPara
+         style="text-align:center;text-anchor:middle">Front</flowPara><flowPara
+         style="text-align:center;text-anchor:middle"
+         id="flowPara4264">Desk</flowPara><flowPara
          id="flowPara4194"
          style="text-align:center;text-anchor:middle">Module</flowPara></flowRoot>    <flowRoot
        style="font-style:normal;font-weight:normal;font-size:8.56183434px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
