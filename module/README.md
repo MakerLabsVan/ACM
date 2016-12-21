@@ -35,3 +35,5 @@ the baud rate can be changed through the command set. Otherwise, firmware can be
 update the command set. The baud rate used here was 9600 for reliable performance with SoftwareSerial. YMMV.    
 Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
+# How It Works
+
