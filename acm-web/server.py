@@ -65,7 +65,6 @@ def serialTest(id):
 						
 	return str(id)
 
-@app.route("/refresh")
 def refresh(id, data):
 	# format user data according to card protocol
 	userData = [ str(id), data[constant.COL_MEMBER_TYPE] ]
