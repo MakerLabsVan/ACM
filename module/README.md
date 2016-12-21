@@ -21,7 +21,7 @@ Arduino IDE
   
 # Schematic  
 ![alt text][schematic]
-[Schematic]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/schematic.PNG
+[schematic]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/schematic.PNG
 
 # Other Parts and Notes  
 __Level Shifter__  
@@ -36,4 +36,5 @@ update the command set. The baud rate used here was 9600 for reliable performanc
 Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
 # How It Works
-
+![alt text][modulestate]
+[modulestate]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/module.state.PNG
