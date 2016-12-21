@@ -9,6 +9,12 @@ app.config(function($interpolateProvider) {
 });
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval', function($scope, $http, $interpolate, $interval) {
+	var PATH = "../static/img/users/";
+	var DROP_IN_RATE = 1.5;
+	var SECONDS_IN_MINUTE = 60;		
+	var SECONDS_IN_HOUR = 3600;
+	var MILLISECONDS_PER_HOUR = SECONDS_IN_HOUR*1000;	
+	
 	$scope.master = {};
 	// For tab switching
 	$scope.tab = [ "active", "", "", "" ];
@@ -30,7 +36,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		textile: "0",
 		threeD: "0"
 	};
-	var PATH = "../static/img/users/";	
 	$scope.display = {
 			id: "",
 			name: "",
@@ -51,8 +56,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	};
 
 	$scope.time = new laserTime(123456);
-	var SECONDS_IN_HOUR = 3600;
-	var SECONDS_IN_MINUTE = 60;
+	
 	function laserTime(rawTime) {
 		this.rawTime = rawTime;
 		this.set = function(newTime) { this.rawTime = newTime };
@@ -61,7 +65,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		this.minutes = function() { return parseInt(this.rawTime % SECONDS_IN_HOUR / SECONDS_IN_MINUTE) };
 		this.seconds = function() { return this.rawTime % SECONDS_IN_MINUTE };
 
-		this.charge = function() { return (1.5 * parseFloat(this.rawTime / SECONDS_IN_MINUTE)).toFixed(2) };
+		this.charge = function() { return (DROP_IN_RATE * parseFloat(this.rawTime / SECONDS_IN_MINUTE)).toFixed(2) };
 	};
 
 	// Initialize the summary tables
@@ -135,7 +139,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	}
 
 	// Refresh summary every hour
-	var MILLISECONDS_PER_HOUR = 60*60*1000;
 	$interval(function() {
 		console.log("Refreshing Laser Data");
 		$http.get("../laserData/A").success(function(res) {
