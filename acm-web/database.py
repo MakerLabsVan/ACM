@@ -52,6 +52,8 @@ class Database:
         cellList[constant.COL_UID].value = data["uid"]
         cellList[constant.COL_MEMBER_NAME].value = data["memberName"]
         cellList[constant.COL_MEMBER_TYPE].value = data["memberType"]
+        # The leading apostrophe is to prevent Google Sheets from autoformatting date string
+        # Slice timestamp string to only input the date
         cellList[constant.COL_START_DAY].value = "'" + data["startDay"][0:10]
         cellList[constant.COL_USES_LASER_A].value = data["laserA"]
         cellList[constant.COL_USES_LASER_B].value = data["laserB"]
