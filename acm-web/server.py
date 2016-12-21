@@ -33,8 +33,8 @@ def registerCard():
 		if data["isNew"]:
 			return database.insertUser(data)
 		# modify if not new to ACM
-		elif database.existingUser(data):
-			print("ID updated")
+		else:
+			database.existingUser(data)
 			return arduinoStatus
 	else:
 		return str(0)
