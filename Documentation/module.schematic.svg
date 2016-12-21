@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="446.07396"
-     inkscape:cy="523.47567"
+     inkscape:zoom="1.4"
+     inkscape:cx="355.25437"
+     inkscape:cy="428.83154"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -725,8 +725,9 @@
     <path
        inkscape:connector-curvature="0"
        id="path4351"
-       d="m 358.14984,586.10875 21.63229,0 0,201.3793 208.082,0"
-       style="fill:none;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.02499461px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="m 363.93719,586.10875 4.84558,0 0,201.3793 219.08136,0"
+       style="fill:none;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.05173671px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       sodipodi:nodetypes="cccc" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot4353"

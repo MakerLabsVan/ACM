@@ -5,4 +5,6 @@ Each machine connected to the system has a module consisting of an Arduino with 
 and WiFi capabilities. Every member receives a FOB programmed with their access conditions 
 read from a Google Sheet.
 
-__Diagram__ 
+__Diagram__  
+![alt text][blockdiagram]
+[blockdiagram]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/blockdiagram.PNG
