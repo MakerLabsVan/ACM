@@ -51,15 +51,17 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	};
 
 	$scope.time = new laserTime(123456);
+	var SECONDS_IN_HOUR = 3600;
+	var SECONDS_IN_MINUTE = 60;
 	function laserTime(rawTime) {
 		this.rawTime = rawTime;
 		this.set = function(newTime) { this.rawTime = newTime };
 
-		this.hours = function() { return parseInt(this.rawTime / 3600) };
-		this.minutes = function() { return parseInt(this.rawTime % 3600 / 60) };
-		this.seconds = function() { return this.rawTime % 60 };
+		this.hours = function() { return parseInt(this.rawTime / SECONDS_IN_HOUR) };
+		this.minutes = function() { return parseInt(this.rawTime % SECONDS_IN_HOUR / SECONDS_IN_MINUTE) };
+		this.seconds = function() { return this.rawTime % SECONDS_IN_MINUTE };
 
-		this.charge = function() { return (1.5 * parseFloat(this.rawTime / 60)).toFixed(2) };
+		this.charge = function() { return (1.5 * parseFloat(this.rawTime / SECONDS_IN_MINUTE)).toFixed(2) };
 	};
 
 	// Initialize the summary tables
@@ -102,7 +104,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 
 	$scope.registerCard = function(isNew) {			
 		if ($scope.user.uid && $scope.user.memberName && $scope.user.startDay) {
-			console.log(JSON.stringify($scope.user));
 			var input = $scope.user.uid;
 			$scope.user.isNew = isNew;
 			
@@ -134,6 +135,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	}
 
 	// Refresh summary every hour
+	var MILLISECONDS_PER_HOUR = 60*60*1000;
 	$interval(function() {
 		console.log("Refreshing Laser Data");
 		$http.get("../laserData/A").success(function(res) {
@@ -142,7 +144,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		$http.get("../laserData/B").success(function(res) {
 			$scope.laserBData = res;
 		})
-	}, 60*60*1000);
+	}, MILLISECONDS_PER_HOUR);
 
 	// socket for pushing data from server to web page
 	var socket = io.connect("http://localhost:5000");
@@ -168,8 +170,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 				$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 			}
 
-			$scope.display.lifeTime = (parseInt(msg[16]) / 60).toFixed(0);
-			$scope.display.monthTime = (parseInt(msg[17]) / 60).toFixed(0);	
+			$scope.display.lifeTime = (parseInt(msg[16]) / SECONDS_IN_MINUTE).toFixed(0);
+			$scope.display.monthTime = (parseInt(msg[17]) / SECONDS_IN_MINUTE).toFixed(0);	
 
 			$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
 			$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
@@ -180,9 +182,5 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		
 		$scope.$apply();
     });
-	socket.on('refresh', function(msg) {
-		$scope.refresh = msg;
-		$scope.$apply();
-	});
 
 }]);

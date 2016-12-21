@@ -79,11 +79,9 @@ class Database:
         try:
             user = self.user_data.find(data["memberName"])
             self.user_data.update_cell(user.row, user.col - 1, data["uid"])
-            found = True
+            return True
         except:
-            found = False
-      
-        return found
+            return False
     
     def scanLog(self, id):
         print("Logging User %d at Front Desk" % id)
