@@ -16,8 +16,8 @@ LPD8806 LED strip
 
 # Software Required
 Arduino IDE  
-..* SoftwareSerial library  
-..* LPD8806 library
+  * SoftwareSerial library  
+  * LPD8806 library
   
 # Schematic  
 ![alt text][schematic]
