@@ -36,7 +36,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			name: "",
 			image: PATH + "GUEST.jpg",
 			startDay: "",
-			studio: "",		
+			studio: "",
 			access: ["red", "red", "red", "red", "red", "red", "red"],
 			lifeTime: "",
 			monthTime: ""
