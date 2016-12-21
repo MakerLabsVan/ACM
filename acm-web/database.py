@@ -183,7 +183,7 @@ class Database:
                 break
             # if IDs are the same, accumulate the time
             if newLog[1] == cell[row][constant.COL_ID_LOG]:
-                newLog[2] = newLog[2] + int(cell[row][constant.COL_ELAPSED_TIME])
+                newLog[2] += int(cell[row][constant.COL_ELAPSED_TIME])
                 # end of spreadsheet is reached
                 if row == len(cell) - 1:
                     newLog[2] = int(newLog[2] / constant.SECONDS_IN_MIN)
