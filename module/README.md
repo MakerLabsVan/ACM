@@ -36,5 +36,7 @@ update the command set. The baud rate used here was 9600 for reliable performanc
 Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
 # How It Works
+<center>
 ![alt text][modulestate]
 [modulestate]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/module.state.PNG
+</center>
