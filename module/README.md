@@ -16,8 +16,8 @@ LPD8806 LED strip
 
 # Software Required
 Arduino IDE  
-- SoftwareSerial library  
-- LPD8806 library
+..* SoftwareSerial library  
+..* LPD8806 library
   
 # Schematic  
 ![alt text][schematic]
@@ -38,8 +38,8 @@ A level shifter is required. Here is an example using a voltage divider. Any val
 the current going into the RX pin of the WiFi module does not exceed 12 mA.
 
 __WiFi Serial Communication__  
-The baud rate of the WiFi module varies with the supplier. Depending on the firmware version, the baud rate can
-be changed through the command set. Otherwise, firmware can be flashed to update the command set. The baud rate used here
-was 9600 for reliable performance with SoftwareSerial. YMMV.    
+The baud rate of the WiFi module varies with the supplier. Depending on the firmware version, 
+the baud rate can be changed through the command set. Otherwise, firmware can be flashed to 
+update the command set. The baud rate used here was 9600 for reliable performance with SoftwareSerial. YMMV.    
 Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
