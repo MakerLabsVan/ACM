@@ -23,14 +23,6 @@ Arduino IDE
 ![alt text][schematic]
 [Schematic]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/schematic.PNG
 
-__RDM880__  
-Antenna Pins  
-<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/rdm8800.PNG">  
-5 pin Header -> 5V GND TX RX RST
-
-__ESP8266__  
-<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/esp8266.PNG" height="150" width="400">
-
 # Other Parts and Notes  
 __Level Shifter__  
 <img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG" height="300" width="300">  
