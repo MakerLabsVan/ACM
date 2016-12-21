@@ -4,14 +4,14 @@ is attached through a serial connection to the application. This app can run on 
 
 # Requirements  
 Flask (http://flask.pocoo.org)  
-  * SocketIO extension (https://flask-socketio.readthedocs.io/en/latest/)  
+* SocketIO extension (https://flask-socketio.readthedocs.io/en/latest/)  
 
 AngularJS  
-  * SocketIO (https://socket.io)  
+* SocketIO (https://socket.io)  
 
 Python 3 (https://www.python.org/downloads/) 
-  * PySerial (https://pythonhosted.org/pyserial/)  
-  * GSpread (https://gspread.readthedocs.io/en/latest/)  
+* PySerial (https://pythonhosted.org/pyserial/)  
+* GSpread (https://gspread.readthedocs.io/en/latest/)  
 
 # Installation  
 1. Install Python 3 and Flask
