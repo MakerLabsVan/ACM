@@ -11,7 +11,7 @@ database = Database()
 
 @app.route("/")
 def index():
-	return render_template("dashboardv2.html")
+	return render_template("acm.html")
 
 @app.route("/getTime")
 def getTime():
