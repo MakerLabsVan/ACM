@@ -40,7 +40,7 @@ Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 [modulestate]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/module.state.PNG  
 In the stopwatch state, the module is monitoring the **LASER PLS-** signals of the X and Y motor controllers.
 The state of the signals are polled approximately every second (defined as pollInterval) and stored in a circular 
-buffer. The  If 5 (defined as sampleSize) valid signals in a row are detected, the module starts a stopwatch. 
+buffer. If 5 (defined as sampleSize) valid signals in a row are detected, the module starts a stopwatch. 
 When 5 invalid signals in a row are detected, the module ends the stopwatch and returns back to the main loop, 
 where a log is sent to the Flask server.  
 
