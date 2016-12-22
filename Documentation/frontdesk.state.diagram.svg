@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="190.4803"
-     inkscape:cy="191.36798"
+     inkscape:zoom="1.4"
+     inkscape:cx="206.84537"
+     inkscape:cy="285.69068"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -340,7 +340,7 @@
          y="388.69199" />
     </g>
     <flowRoot
-       transform="matrix(1.3001112,0,0,1.3001112,1.7394611,560.31936)"
+       transform="matrix(1.3001112,0,0,1.3001112,36.429769,561.35477)"
        style="font-style:normal;font-weight:normal;font-size:8.56183434px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot6333"
        xml:space="preserve"><flowRegion
@@ -350,7 +350,7 @@
            height="49.497475"
            width="213.14218"
            id="rect6337" /></flowRegion><flowPara
-         id="flowPara6339">Card Operations</flowPara></flowRoot>    <rect
+         id="flowPara6339">Idle</flowPara></flowRoot>    <rect
        style="opacity:1;fill:none;stroke:#000000;stroke-width:0.93087965;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect6341"
        width="110.97475"
