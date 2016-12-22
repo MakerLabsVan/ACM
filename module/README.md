@@ -45,6 +45,6 @@ buffer. If 5 (defined as sampleSize) valid signals in a row are detected, the mo
 When 5 invalid signals in a row are detected, the module ends the stopwatch and returns back to the main loop, 
 where a log is sent to the Flask server.  
 
-Note that there is a period of time between the job end and the start of the next loop when the laser
-cutter is **locked**. This period of time is approximately 5 seconds (calculated by pollInterval * sampleSize) 
-plus the time it takes to send a log, which is about 3 - 4 seconds depending on the network.
+Note that there is a period of time where the log is happening between the job end and the start of the next 
+loop when the laser cutter is **locked**. This period of time is approximately 3 - 4 seconds depending on 
+the network.
