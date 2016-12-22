@@ -11,7 +11,7 @@ Arduino
 RDM880 (RFID reader)  
 ESP8266 (WiFi module)      
 LM1117 (3.3V linear regulator)   
-IRL530 (MOSFET)     
+IRL530 (n-channel MOSFET)     
 LPD8806 LED strip
 
 # Software Required
@@ -25,7 +25,8 @@ Arduino IDE
 
 # Other Parts and Notes  
 __Level Shifter__  
-<img src="https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG">  
+[!alt text][levelshift]
+[levelshift]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/levelshifter.PNG  
 A level shifter is required. Here is an example using a voltage divider. Any value for R can be used as long as
 the current going into the RX pin of the WiFi module does not exceed 12 mA.
 
@@ -45,5 +46,5 @@ When 5 invalid signals in a row are detected, the module ends the stopwatch and 
 where a log is sent to the Flask server.  
 
 Note that there is a period of time between the job end and the start of the next loop when the laser
-cutter is **locked**. This period of time is approximately 5 seconds (due to the polling interval and 
-sampleSize) plus the time it takes to send a log, which is about 3 - 4 seconds depending on the network.
+cutter is **locked**. This period of time is approximately 5 seconds (calculated by pollInterval * sampleSize) 
+plus the time it takes to send a log, which is about 3 - 4 seconds depending on the network.
