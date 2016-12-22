@@ -38,4 +38,10 @@ Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 # How It Works
 ![alt text][modulestate]
 [modulestate]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/module.state.PNG  
-
+In the stopwatch state, the module is monitoring the LASER PLS- signals of the X and Y motor controllers.
+The state of the signals are stored in a circular buffer. If 5 (defined as sampleSize) valid signals in a
+row are detected, the module starts a stopwatch. When 5 invalid signals in a row are detected, the module
+ends the stopwatch and returns back to the main loop, where a log is sent to the Flask server.  
+Note that there is a period of time between the job end and the start of the next loop when the laser
+cutter is **locked**. This period of time is approximately 5 seconds (due to the polling interval and 
+sampleSize) plus the time it takes to send a log, which is about 3 - 4 seconds depending on the network.
