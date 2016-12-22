@@ -40,7 +40,9 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			id: "",
 			name: "",
 			image: PATH + "GUEST.jpg",
+			type: "",
 			startDay: "",
+			axis: "",
 			studio: "",
 			access: ["red", "red", "red", "red", "red", "red", "red"],
 			lifeTime: "",
@@ -117,14 +119,14 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 				headers: { 'Content-Type': 'application/json' },
 				data: JSON.stringify($scope.user)})
 				.success(function(data) {
-					
-					if (data != input) {
-						$scope.entered = "Error";
-						console.log($scope.entered);
+					if (data == 0) {
+						$scope.entered = "Error with RFID registration. Try again.";
+					}
+					else if (data != input) {
+						$scope.entered = "Error with database registration. Try again.";
 					}
 					else {
-						$scope.entered = "User " + data + " registered.";
-						console.log("ID registered: " + parseInt(data));				
+						$scope.entered = "User " + data + " registered.";				
 					}
 
 				});
@@ -166,7 +168,9 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			$scope.display.id = msg[1];
 			$scope.display.name = msg[2];
 			$scope.display.image = PATH + msg[2] + ".jpg";
+			$scope.display.type = msg[3];
 			$scope.display.startDay = msg[4];
+			$scope.display.axis = parseInt(msg[6]) ? "Yes" : "No";
 			$scope.display.studio = msg[8];
 
 			for (var i = 0; i < $scope.display.access.length; i++) {
