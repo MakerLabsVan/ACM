@@ -358,6 +358,8 @@ void supportSystem(unsigned long lastOn) {
 		// since the last card was scanned
 		if (timeSince(lastOn) > supportTimeout) {
 			digitalWrite(supportPin, LOW);
+		}
+		if (timeSince(lastOn) > interlockTimeout) {
 			digitalWrite(interlock, LOW);
 		}
 	}

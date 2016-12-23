@@ -18,6 +18,7 @@
 #define maximumValue 12
 #define maxTime 18000
 #define supportTimeout 120000
+#define interlockTimeout 60000
 #define ASCII_OFFSET 48
 
 // Start and End bytes for command/response packets
