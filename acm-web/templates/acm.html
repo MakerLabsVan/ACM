@@ -184,7 +184,7 @@
 
                       </div>
                       <center>
-                        <input type="submit" ng-click="registerCard(true)" value="New User"> <input type="submit" ng-click="registerCard(false)" value="Existing User">
+                        <input type="submit" ng-click="registerCard(true)" value="New User" ng-hide="progress.IsWaiting"> <input type="submit" ng-click="registerCard(false)" value="Existing User" ng-hide="progress.IsWaiting">
                         <!--<button type="button" class="btn btn-success">New User</button> <button type="button" class="btn btn-primary">Existing User</button>-->
                       </center>
                     </form>

@@ -112,6 +112,8 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		if ($scope.user.uid && $scope.user.memberName && $scope.user.startDay) {
 			var input = $scope.user.uid;
 			$scope.user.isNew = isNew;
+			$scope.progress.isWaiting = true;
+			$scope.entered = "Registering...";
 			
 			$http({
 				url: "../registerCard",
@@ -129,6 +131,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 						$scope.entered = "User " + data + " registered.";				
 					}
 
+					$scope.progress.isWaiting = false;
 				});
 
 			$scope.user.uid = "";
@@ -178,7 +181,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			else {
 				$scope.display.type = "N/A"
 			}
-			
+
 			$scope.display.startDay = msg[4];
 			$scope.display.axis = parseInt(msg[6]) ? "Yes" : "No";
 			$scope.display.studio = (msg[8] == "") ? "N/A" : msg[8];
