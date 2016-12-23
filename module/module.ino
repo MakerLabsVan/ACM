@@ -75,6 +75,7 @@ void loop() {
 	if (!isValidResponse) {
 		red();		
 		playDeath();
+		digitalWrite(interlock, LOW);
 		getStringFromMem(readUnsuccessful);
 	}
 	// These statements run if a valid RFID tag is detected
@@ -85,6 +86,7 @@ void loop() {
 		if ( !userID || !isAuthorized ) {
 			red();
 			playDeath();
+			digitalWrite(interlock, LOW);
 			getStringFromMem(notAuthorized);
 		}
 		// Check if the user has reached the 60 min quota, skip if staff member
@@ -116,9 +118,8 @@ void loop() {
 			elapsedTime = accumulator(readData, elapsedTime);
 			totalTime = elapsedTime + existingTime;
 
-			// Job done, lock laser cutter, get time
+			// Job done
 			lastOn = millis();
-			digitalWrite(interlock, LOW);
 			getStringFromMem(displayNewTime);
 			Serial.println(totalTime);
 		}
@@ -357,6 +358,7 @@ void supportSystem(unsigned long lastOn) {
 		// since the last card was scanned
 		if (timeSince(lastOn) > supportTimeout) {
 			digitalWrite(supportPin, LOW);
+			digitalWrite(interlock, LOW);
 		}
 	}
 }

@@ -77,7 +77,7 @@
 // Delays (WiFi)
 #define resetTime 501
 #define waitForIP 5000
-#define waitForFlush 1000
+#define waitForFlush 1500
 #define waitForConnect 500
 #define waitForGET 2000
 #define waitForGETResponse 5000

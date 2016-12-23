@@ -36,6 +36,11 @@ the baud rate can be changed through the command set. Otherwise, firmware can be
 update the command set. The baud rate used here was 9600 for reliable performance with SoftwareSerial. YMMV.    
 Tutorial: http://www.instructables.com/id/Intro-Esp-8266-firmware-update/
 
+__Setting up the ESP8266__  
+In Documentation/tests/wifi_test, there is a sketch that allows direct access to the ESP8266's serial console.
+Upload it to the Arduino, open the serial monitor at 9600 baud and you will be able to use the AT command set as
+shown in the command sheet under Documentation/datasheets.
+
 # How It Works
 ![alt text][modulestate]
 [modulestate]: https://github.com/MakerLabsVan/ACM/blob/master/Documentation/imgs/module.state.PNG  
