@@ -112,7 +112,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		if ($scope.user.uid && $scope.user.memberName && $scope.user.startDay) {
 			var input = $scope.user.uid;
 			$scope.user.isNew = isNew;
-			$scope.progress.isWaiting = true;
 			$scope.entered = "Registering...";
 			
 			$http({
@@ -131,7 +130,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 						$scope.entered = "User " + data + " registered.";				
 					}
 
-					$scope.progress.isWaiting = false;
 				});
 
 			$scope.user.uid = "";
