@@ -168,10 +168,20 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			$scope.display.id = msg[1];
 			$scope.display.name = msg[2];
 			$scope.display.image = PATH + msg[2] + ".jpg";
-			$scope.display.type = msg[3];
+
+			if (msg[3] == 0) {
+				$scope.display.type = "Member";
+			}
+			else if (msg[3] == 1) {
+				$scope.display.type = "Staff";
+			}
+			else {
+				$scope.display.type = "N/A"
+			}
+			
 			$scope.display.startDay = msg[4];
 			$scope.display.axis = parseInt(msg[6]) ? "Yes" : "No";
-			$scope.display.studio = msg[8];
+			$scope.display.studio = (msg[8] == "") ? "N/A" : msg[8];
 
 			for (var i = 0; i < $scope.display.access.length; i++) {
 				$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
