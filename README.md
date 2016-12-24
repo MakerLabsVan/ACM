@@ -11,4 +11,5 @@ read from a Google Sheet.
 # Database
 A Google Spreadsheet is used by this app. There is a script (Tools->Script Editor) that runs 
 every morning at 1am that goes through each member and determines if his/her membership cycle 
-has completed. an email notification is then sent with the member's laser cutter time for that cycle.
+has completed. an email notification is then sent with the member's laser cutter time for that 
+cycle. A daily summary is also included in this notification.
