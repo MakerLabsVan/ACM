@@ -180,7 +180,7 @@ class Database:
             # slice the timestamp string to only take in the date portion
             if not self.isWeek(newLog[0][0:10]):
                 newLog[2] = int(newLog[2] / constant.SECONDS_IN_MIN)
-                consolidatedLogs.append(newLog)
+                consolidatedLogs.append(newLog) 
                 break
             # if IDs are the same, accumulate the time
             if newLog[1] == cell[row][constant.COL_ID_LOG]:
