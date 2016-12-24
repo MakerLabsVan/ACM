@@ -79,7 +79,7 @@ class Database:
         try:
             user = self.user_data.find(data["memberName"])
             self.user_data.update_cell(user.row, user.col - 1, data["uid"])
-   			print("ID updated")
+            print("ID updated")
             return True
         except:
             return False
