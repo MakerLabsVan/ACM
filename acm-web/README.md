@@ -17,7 +17,8 @@ Python 3 (https://www.python.org/downloads/)
 1. Install Python 3 and Flask
 2. Install PySerial, GSpread, and Flask-SocketIO modules
 3. Follow OAuth2 procedure in GSpread documentation UNLESS still using original spreadsheet.  
-   Email Brian for authorization.  
+   You will still need to install oauth2client `pip install --upgrade oauth2client` and PyOpenSSL `pip install PyOpenSSL`    
+   Email Brian for authorization file. See OAuth2 procedure for details on how authorization is obtained.    
    In the database.py file, adjust the relative path to the JSON keyfile if needed.  
    `credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)`
 4. App is started by running `python3 server.py`
