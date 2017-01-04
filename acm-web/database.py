@@ -179,7 +179,7 @@ class Database:
                 # replace with name
                 entry[constant.COL_UID] = memberNames[row]
             except:
-                entry[constant.COL_UID] += " - Unknown user!"
+                entry[constant.COL_UID] += " - Unknown!"
             
         return log
     
