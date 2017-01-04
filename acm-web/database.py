@@ -164,6 +164,25 @@ class Database:
         else:
             return str(userRow)
     
+    def getName(self, log):
+        # Google Sheets indexes starting at 1
+        userIDs = self.user_data.col_values(constant.COL_UID + 1)
+        memberNames = self.user_data.col_values(constant.COL_MEMBER_NAME + 1)
+
+        # go through each log entry
+        for entry in log:
+            # get current id
+            id = entry[constant.COL_UID]
+            # find corresponding row
+            try:
+                row = userIDs.index(id)
+                # replace with name
+                entry[constant.COL_UID] = memberNames[row]
+            except:
+                entry[constant.COL_UID] += " - Unknown user!"
+            
+        return log
+    
     # laser data retrieval
     def retrieveData(self, type):
         self.authorize()
@@ -195,7 +214,7 @@ class Database:
                 consolidatedLogs.append(newLog)
                 newLog = [ cell[row][constant.COL_DATE], cell[row][constant.COL_ID_LOG], int(cell[row][constant.COL_ELAPSED_TIME]) ]
 
-        return consolidatedLogs
+        return self.getName(consolidatedLogs)
     
     # helper that takes in a date string and determines if a week has passed
     def isWeek(self, referenceDate):
