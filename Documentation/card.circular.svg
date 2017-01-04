@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.2050695"
-     inkscape:cx="338.19045"
+     inkscape:cx="172.63983"
      inkscape:cy="328.74097"
      inkscape:document-units="in"
      inkscape:current-layer="layer1"
@@ -46,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -93,23 +93,7 @@
            height="156.66939"
            x="-16.429749"
            y="-6.5123029" /></flowRegion><flowPara
-         id="flowPara3343" /></flowRoot>    <path
-       id="path4441"
-       d="m 63.442308,425.28834 c -1.68507,-0.011 -3.373322,0.035 -5.058596,0.08 -30.747644,0.8422 -56.156146,44.4309 -55.072265,75.1406 -0.353226,30.4846 26.579895,58.2307 57.287111,58.5977 30.00853,1.6294 58.737562,-23.1372 61.267582,-53.0606 4.009,-30.8361 -22.369052,-80.2566 -53.382822,-80.4882 -1.67485,-0.1886 -3.35594,-0.258 -5.04101,-0.2696 z"
-       style="fill:none;fill-rule:evenodd;stroke:#ffff00;stroke-width:1.12606657px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:connector-curvature="0" />
-    <path
-       sodipodi:nodetypes="ssssssssssss"
-       inkscape:connector-curvature="0"
-       id="path4443"
-       d="m 52.042545,440.82371 20.817407,0 c 1.075572,0 4.075397,0.33269 6.004089,1.91243 1.874,1.53495 2.693258,4.29797 2.693258,5.64743 l 0,5.82707 c 0,2.7383 -0.755669,4.77641 -2.794701,3.8443 -4.82752,-2.2068 -10.13551,-3.43339 -16.801647,-3.29879 -5.917012,0.11948 -10.976339,1.25556 -16.179156,3.26321 -2.086597,0.80517 -2.359304,-1.15767 -2.359304,-3.89597 l 0,-5.82706 c 0,-1.28801 0.348803,-4.10676 2.092666,-5.57758 1.963604,-1.65615 5.404221,-1.89504 6.527388,-1.89504 z"
-       style="fill:none;fill-rule:evenodd;stroke:#ffff00;stroke-width:1.08847058px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    <path
-       id="path4445"
-       d="m 108.83814,501.95704 a 46.062992,46.062992 0 0 1 -46.062992,46.063 46.062992,46.062992 0 0 1 -46.062997,-46.063 46.062992,46.062992 0 0 1 46.062997,-46.063 46.062992,46.062992 0 0 1 46.062992,46.063 z"
-       style="fill:none;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.12606657px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:connector-curvature="0" />
-    <text
+         id="flowPara3343" /></flowRoot>    <text
        transform="scale(-1,1)"
        sodipodi:linespacing="125%"
        id="text4447"
