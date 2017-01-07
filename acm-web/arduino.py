@@ -14,7 +14,7 @@ class Arduino:
 		if (host == "Windows"):
 			PATH = 'COM'
 		else:
-			PATH = '/dev/tty.usbmodem'
+			PATH = '/dev/cu.usbmodem'
 
 		while True:
 			try:
@@ -24,8 +24,8 @@ class Arduino:
 				break
 			except:
 				i += 1
-				if i == 1000:
-					print("Scanner not detected")
+				if i == 1500:
+					print("Scanner not detected, trying to connect on" + ": " + COM)
 					break
 		
 

@@ -9,7 +9,7 @@ app.config(function($interpolateProvider) {
 });
 
 app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval', function($scope, $http, $interpolate, $interval) {
-	var PATH = "../static/img/users/";
+	var PATH = "https://s3-us-west-2.amazonaws.com/makerlabs.acm/user_images/";
 	var DROP_IN_RATE = 1.5;
 	var SECONDS_IN_MINUTE = 60;		
 	var SECONDS_IN_HOUR = 3600;
@@ -39,7 +39,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	$scope.display = {
 			id: "",
 			name: "",
-			image: PATH + "GUEST.jpg",
+			image: PATH + "guest",
 			type: "",
 			startDay: "",
 			axis: "",
@@ -57,7 +57,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		$scope.tabPane[clicked] += " " + $scope.tab[clicked];
 	};
 
-	$scope.time = new laserTime(123456);
+	$scope.time = new laserTime(0);
 	
 	function laserTime(rawTime) {
 		this.rawTime = rawTime;
@@ -97,7 +97,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	$scope.resetTime = function() {
 		$scope.progress.isWaiting = true;
 		$http.get("../resetTime").success(function(res) {
-			if (res[0] == 1) {
+			if (res == 1) {
 				$scope.isError = false;
 				$scope.time.set(0);
 			}
@@ -155,8 +155,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	}, MILLISECONDS_PER_HOUR);
 
 	// socket for pushing data from server to web page
-	var socket = io.connect("http://localhost:5000");
-	console.log("Socket Connected.");
+	var socket = io.connect("http://localhost:5000/");
 	socket.on('scan', function(msg) {
 		$scope.activeTab(0);
 		$scope.display.id = msg;
@@ -170,7 +169,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		if (msg) {
 			$scope.display.id = msg[1];
 			$scope.display.name = msg[2];
-			$scope.display.image = PATH + msg[2] + ".jpg";
+			$scope.display.image = PATH + msg[1]; //images are named by the user's id number.
 
 			if (msg[3] == 0) {
 				$scope.display.type = "Member";

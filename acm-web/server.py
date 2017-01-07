@@ -48,11 +48,13 @@ def laserLog(laser, id, elapsedTime, existingTime):
 @app.route("/scanTest/<int:id>")
 def serialTest(id):
 	# need to figure out why large ids are being sent randomly - probably from bad reads
+	print("ID: " + str(id));
 	if 0 < id and id < 50000:
 		# ignore guest cards
 		if id not in constant.GUEST_IDS:
 			# immediately send ID to web app
 			socketio.emit('scan', id)
+			print("SCANNED")
 
 			# once data is received, send to web app
 			data = database.retrieveUser(id)

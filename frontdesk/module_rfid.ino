@@ -135,3 +135,4 @@ unsigned long getTime (unsigned char readData[], unsigned int numBytes, unsigned
 
 	return existingTime;
 }
+

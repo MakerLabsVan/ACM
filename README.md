@@ -13,3 +13,6 @@ A Google Spreadsheet is used by this app. There is a script (Tools->Script Edito
 every morning at 1am that goes through each member and determines if his/her membership cycle 
 has completed. an email notification is then sent with the member's laser cutter time for that 
 cycle. A daily summary is also included in this notification.
+
+# Bugs
+Arduino only sends out user information and updates webpage to specific ip address. In this case, the mac mini at the front desk's IP address is 192.168.0.200. To configure which IP address the arduino talks to, modify the IP adress in /ACM/frontdesk/module.wifi.ino
