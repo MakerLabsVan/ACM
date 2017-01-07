@@ -169,7 +169,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		if (msg) {
 			$scope.display.id = msg[1];
 			$scope.display.name = msg[2];
-			$scope.display.image = PATH + msg[1]; //images are named by the user's id number.
+			$scope.display.image = PATH + msg[1] + ".jpg"; //images are named by the user's id number. Must end in .jpg, cannot be .JPG
 
 			if (msg[3] == 0) {
 				$scope.display.type = "Member";
