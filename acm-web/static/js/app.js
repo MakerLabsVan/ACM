@@ -39,7 +39,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	$scope.display = {
 			id: "",
 			name: "",
-			image: PATH + "guest",
+			image: PATH + "guest.jpg",
 			type: "",
 			startDay: "",
 			axis: "",
@@ -160,7 +160,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		$scope.activeTab(0);
 		$scope.display.id = msg;
 		$scope.display.name = "";
-		$scope.display.image = PATH + "GUEST.jpg";
+		$scope.display.image = PATH + "guest.jpg";
 		$scope.refresh = "";
 		$scope.$apply();
 	});
@@ -189,11 +189,9 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 				$scope.display.access[i] = parseInt(msg[i + 9]) ? "green" : "red";
 			}
 
-			$scope.display.lifeTime = (parseInt(msg[16]) / SECONDS_IN_MINUTE).toFixed(0);
-			$scope.display.monthTime = (parseInt(msg[17]) / SECONDS_IN_MINUTE).toFixed(0);	
+			$scope.display.lifeTime = (parseInt(msg[16]) / SECONDS_IN_MINUTE).toFixed(0).toString() + " minutes";
+			$scope.display.monthTime = (parseInt(msg[17]) / SECONDS_IN_MINUTE).toFixed(0).toString() + " minutes";	
 
-			$scope.display.lifeTime = $scope.display.lifeTime.toString() + " minutes"
-			$scope.display.monthTime = $scope.display.monthTime.toString() + " minutes"
 		}
 		else {
 			$scope.refresh = "User does not exist and/or is no longer a member";

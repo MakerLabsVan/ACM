@@ -54,7 +54,6 @@ def serialTest(id):
 		if id not in constant.GUEST_IDS:
 			# immediately send ID to web app
 			socketio.emit('scan', id)
-			print("SCANNED")
 
 			# once data is received, send to web app
 			data = database.retrieveUser(id)

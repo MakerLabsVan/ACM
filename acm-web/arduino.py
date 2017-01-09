@@ -14,7 +14,7 @@ class Arduino:
 		if (host == "Windows"):
 			PATH = 'COM'
 		else:
-			PATH = '/dev/cu.usbmodem'
+			PATH = '/dev/tty.usbmodem'
 
 		while True:
 			try:
