@@ -24,4 +24,4 @@ Python 3 (https://www.python.org/downloads/)
 4. App is started by running `python3 server.py`
 
 # Notes
-* Photos are uploaded to amazon s3. Photo naming scheme is <id>.jpg
+* Photos are uploaded to amazon s3. Photo naming scheme is "id".jpg
