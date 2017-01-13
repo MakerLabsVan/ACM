@@ -22,3 +22,6 @@ Python 3 (https://www.python.org/downloads/)
    In the database.py file, adjust the relative path to the JSON keyfile if needed.  
    `credentials = ServiceAccountCredentials.from_json_keyfile_name('../../acm-dashboard.json', scope)`
 4. App is started by running `python3 server.py`
+
+# Notes
+* Photos are uploaded to amazon s3. Photo naming scheme is <id>.jpg
