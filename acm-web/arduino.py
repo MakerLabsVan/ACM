@@ -41,6 +41,8 @@ class Arduino:
 		
 		return bytesToNum(rxbuffer)
 
+	# This only writes data up to the Laser A. For future expansion, 
+	# add more lines here for each additional machine.
 	def registerCard(self, data):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
 		self.serial.write( str(len(data["uid"])).encode() )
