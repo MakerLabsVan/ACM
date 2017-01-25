@@ -45,7 +45,6 @@ void loop() {
 	// ----------------------------------------------------------------------
 	// Turn LED off, lock laser cutter
 	digitalWrite(ledPin, LOW);
-  	digitalWrite(interlock, LOW);
 	// ----------------------------------------------------------------------
 	// Scan for RFID tags and see if support systems need to be off
 	getStringFromMem(scan);
