@@ -48,7 +48,11 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 			lifeTime: "",
 			monthTime: ""
 	};
+	$scope.search = {
+		id: ""
+	};
 
+	// controls the tab shown to the user
 	$scope.activeTab = function(clicked) {
 		// reset then add active class to clicked tab
 		$scope.tab = [ "", "", "", "" ];
@@ -58,7 +62,6 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 	};
 
 	$scope.time = new laserTime(0);
-	
 	function laserTime(rawTime) {
 		this.rawTime = rawTime;
 		this.set = function(newTime) { this.rawTime = newTime };
@@ -72,7 +75,7 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 
 	// Initialize the summary tables
 	$http.get("../laserData/A").success(function(res) {
-			$scope.laserAData = res;				
+		$scope.laserAData = res;				
 	});
 	$http.get("../laserData/B").success(function(res) {
 		$scope.laserBData = res;
@@ -199,5 +202,17 @@ app.controller('ACM-Controller', ['$scope', '$http', '$interpolate', '$interval'
 		
 		$scope.$apply();
     });
+
+	$scope.searchID = function() {
+		if ($scope.search.id) {
+			$http.get("../lookUp/" + $scope.search.id).success(function(res) {
+				if (res == 0) {
+					$scope.refresh = "User does not exist and/or is no longer a member";
+				}
+				
+				$scope.search.id = "";
+			});
+		}
+	}
 
 }]);

@@ -19,6 +19,8 @@ class Arduino:
 		while True:
 			try:
 				COM = PATH + str(i)
+
+				# exception will occur here
 				self.serial = serial.Serial(COM)
 				print("Successfully connected to %s" % COM)				
 				break
@@ -45,6 +47,7 @@ class Arduino:
 	# add more lines here for each additional machine.
 	def registerCard(self, data):
 		self.serial.write(constant.COMMAND_REGISTER.encode())
+		# send the number of digits, so that Arduino can reconstruct the ID from ASCII characters
 		self.serial.write( str(len(data["uid"])).encode() )
 		self.serial.write(data["uid"].encode())
 		self.serial.write(data["memberType"].encode())

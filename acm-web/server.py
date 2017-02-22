@@ -72,6 +72,17 @@ def refresh(id, data):
 	userData.extend( data[constant.COL_USES_LASER_A:constant.COL_USES_3D+1] )
 	return arduino.refreshUser(userData)
 
+@app.route("/lookUp/<int:id>")
+def lookUp(id):
+	data = database.retrieveUser(id)
+
+	if data != 0:
+		socketio.emit('data', data)
+		return str(1)
+		
+	return data
+
+
 @app.route("/laserData/<type>")
 def laserData(type):
 	data = database.retrieveData(type)
