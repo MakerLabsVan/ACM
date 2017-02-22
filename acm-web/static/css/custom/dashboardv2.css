@@ -121,10 +121,15 @@ th, td {
 }
 
 #search-id {
-  margin-left: 50%;
+  margin-left: 60%;
   font-size: 10pt;
   height: 1%;
   width: 15%;
+}
+
+.btn-primary {
+  font-size: 10pt;
+  height: 3%;
 }
 
 .red {
