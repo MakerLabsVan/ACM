@@ -57,7 +57,8 @@ def serialTest(id):
 
 			# once data is received, send to web app
 			data = database.retrieveUser(id)
-			socketio.emit('data', data)
+			if data != 0:
+				socketio.emit('data', data)
 
 			# send data to arduino
 			refresh(id, data)
