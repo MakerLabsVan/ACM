@@ -16,4 +16,5 @@ cycle. A daily summary is also included in this notification.
 
 # Critical
 All WiFi modules are configured to communicate to 192.168.0.200 on MakerLabs-Admin.  
-The computer running the ACM app should have a static IP of 192.168.0.200 on MakerLabs-Admin.
+The computer running the ACM app should have a static IP of 192.168.0.200 on MakerLabs-Admin.  
+Documentation/wifitest/wifitest.ino should be used to reconfigure the WiFi modules.
