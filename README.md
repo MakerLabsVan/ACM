@@ -14,5 +14,6 @@ every morning at 1am that goes through each member and determines if his/her mem
 has completed. an email notification is then sent with the member's laser cutter time for that 
 cycle. A daily summary is also included in this notification.
 
-# Bugs
-Arduino only sends out user information and updates webpage to specific ip address. In this case, the mac mini at the front desk's IP address is 192.168.0.200. To configure which IP address the arduino talks to, modify the IP adress in /ACM/frontdesk/module.wifi.ino
+# Critical
+All WiFi modules are configured to communicate to 192.168.0.200 on MakerLabs-Admin.  
+The computer running the ACM app should have a static IP of 192.168.0.200 on MakerLabs-Admin.
